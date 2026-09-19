@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Orario e aule</title>
+  <link rel="stylesheet" href="../stile.css?v=2">
+
+  <style>
+    /* -------------------------------------------------------------
+       Qui c'e' solo la DISPOSIZIONE delle cose sulla pagina.
+       I colori arrivano tutti da stile.css: si usano i loro nomi
+       (var(--verde) e simili), mai i codici scritti a mano.
+       ------------------------------------------------------------- */
+
+    .ritorno {
+      max-width: var(--massimo);
+      margin: 0 auto 0.6rem;
+    }
+
+    /* Il riquadro dell'orario e' piu' largo degli altri:
+       cinque giorni per otto ore non stanno in 60rem. */
+    .riquadro-largo { max-width: 78rem; }
+
+    /* ----- ricerca ----- */
+
+    .cerca-campo { margin-bottom: 0.8rem; }
+
+    .risultati {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 18rem;
+      overflow-y: auto;
+      border: 2px solid var(--verde);
+      border-radius: var(--raggio);
+      background: #FFFFFF;
+    }
+
+    .risultati:empty { display: none; }
+
+    .risultati li + li { border-top: 1px solid #D5D5D5; }
+
+    .risultati button {
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 0.6em 0.8em;
+      text-align: left;
+      font-weight: normal;
+      color: var(--testo);
+      background: none;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .risultati button:hover,
+    .risultati button:focus-visible {
+      background: var(--crema);
+    }
+
+    .risultati .tipo {
+      display: inline-block;
+      min-width: 7.5em;
+      font-size: 0.85rem;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .risultati .nome { font-weight: bold; color: var(--verde); }
+
+    /* ----- tabella dell'orario ----- */
+
+    .intestazione-orario {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1rem;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+    }
+
+    .intestazione-orario h2 { margin: 0; }
+
+    .sotto-titolo {
+      margin: 0;
+      color: var(--teal);
+    }
+
+    .contenitore-tabella { overflow-x: auto; }
+
+    table.orario {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    table.orario th,
+    table.orario td {
+      border: 1px solid #C3C3C3;
+      padding: 0.45em 0.55em;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    table.orario thead th {
+      background: var(--blu-notte);
+      color: var(--testo-su-scuro);
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    table.orario th.ora {
+      width: 6.5rem;
+      background: var(--crema);
+      color: var(--verde);
+      white-space: nowrap;
+    }
+
+    table.orario th.ora .numero { display: block; }
+
+    table.orario th.ora .minuti {
+      display: block;
+      font-weight: normal;
+      font-size: 0.85rem;
+      color: var(--teal);
+    }
+
+    tr.pausa td {
+      background: #E7E7E7;
+      color: var(--testo);
+      text-align: center;
+      font-size: 0.85rem;
+      padding: 0.25em;
+    }
+
+    td.vuota { background: #F4F4F4; }
+
+    .materia {
+      display: block;
+      font-weight: bold;
+      color: var(--verde);
+    }
+
+    .chi { display: block; }
+
+    .compresenza {
+      display: block;
+      font-size: 0.88rem;
+      color: var(--teal);
+    }
+
+    .aula {
+      display: inline-block;
+      margin-top: 0.3em;
+      padding: 0.1em 0.5em;
+      font-size: 0.88rem;
+      color: var(--testo-su-scuro);
+      background: var(--verde);
+      border-radius: var(--raggio);
+    }
+
+    .aula-mancante {
+      display: inline-block;
+      margin-top: 0.3em;
+      padding: 0.1em 0.5em;
+      font-size: 0.88rem;
+      color: var(--testo);
+      background: #FFFFFF;
+      border: 1px dashed #7A7A7A;
+      border-radius: var(--raggio);
+    }
+
+    /* ----- avvisi ----- */
+
+    .avviso {
+      margin-top: var(--spazio);
+      padding: 0.8rem 1rem;
+      background: #FFFFFF;
+      border-left: 6px solid var(--verde);
+      border-radius: var(--raggio);
+      color: var(--testo);
+    }
+
+    .avviso p:last-child { margin-bottom: 0; }
+
+    .avviso ul { margin: 0.4em 0 0; padding-left: 1.2em; }
+
+    /* ----- caricamento del proprio file ----- */
+
+    details.mio-file { margin-top: var(--spazio); }
+
+    details.mio-file summary {
+      font-weight: bold;
+      color: var(--verde);
+      cursor: pointer;
+      padding: 0.3em 0;
+    }
+
+    .nota-piccola {
+      font-size: 0.9rem;
+      color: var(--teal);
+    }
+
+    /* La riga che dice quale orario si sta guardando. Quando si
+       carica un file diventa un riquadro, altrimenti passa
+       inosservata. */
+    .stato-fatto {
+      margin-top: 0.8rem;
+      padding: 0.6em 0.8em;
+      font-size: 1rem;
+      color: var(--testo);
+      background: #FFFFFF;
+      border-left: 6px solid var(--verde);
+      border-radius: var(--raggio);
+    }
+
+    /* -----------------------------------------------------------
+       TELEFONO
+       Su uno schermo stretto la griglia a cinque colonne non si
+       legge: al suo posto la pagina costruisce un elenco giorno
+       per giorno. Il cambio avviene da solo.
+       ----------------------------------------------------------- */
+
+    .giorno {
+      margin-bottom: 1.1rem;
+      border: 1px solid #C3C3C3;
+      border-radius: var(--raggio);
+      overflow: hidden;
+    }
+
+    .giorno h3 {
+      margin: 0;
+      padding: 0.45em 0.7em;
+      color: var(--testo-su-scuro);
+      background: var(--blu-notte);
+    }
+
+    .giorno ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .giorno li {
+      padding: 0.6em 0.7em;
+      border-top: 1px solid #DEDEDE;
+    }
+
+    .giorno li:first-child { border-top: 0; }
+
+    .quando {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--teal);
+    }
+
+    @media (max-width: 55rem) {
+      .riquadro-largo { max-width: var(--massimo); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <p class="ritorno su-scuro"><a href="../index.html">&larr; Torna alla pagina iniziale</a></p>
+
+  <h1 class="titolo-pagina">Orario e aule</h1>
+  <p class="titolo-pagina">Cerca una classe o un insegnante e vedi la settimana, con l'aula di ogni ora.</p>
+
+  <main class="riquadro riquadro-largo">
+
+    <div class="cerca-campo">
+      <label for="cerca">Classe o insegnante</label>
+      <input type="text" id="cerca" autocomplete="off"
+             placeholder="per esempio 1A oppure Rossi"
+             aria-describedby="aiuto-cerca">
+      <p id="aiuto-cerca" class="nota-piccola">
+        Scrivi qualche lettera: sotto compaiono le classi e gli insegnanti
+        che corrispondono. Poi scegli quello che ti interessa.
+      </p>
+    </div>
+
+    <p id="quale-orario" class="nota-piccola"></p>
+
+    <ul class="risultati" id="risultati" aria-label="Risultati della ricerca"></ul>
+
+    <div id="orario" aria-live="polite"></div>
+
+    <div id="segnalazioni"></div>
+
+    <details class="mio-file">
+      <summary>Carica il tuo orario</summary>
+
+      <p>
+        L'orario pubblicato nel sito e' un <strong>esempio inventato</strong>:
+        questo sito e' pubblico, e i nomi veri degli insegnanti non possono
+        starci dentro.
+      </p>
+      <p>
+        Se hai il file dell'orario vero, puoi caricarlo qui: viene letto dal
+        tuo computer e resta sul tuo computer. <strong>Non viene inviato da
+        nessuna parte</strong> e nessun altro lo vede.
+      </p>
+
+      <p>
+        <label for="file">Scegli il file dell'orario (un file di testo .txt)</label>
+        <input type="file" id="file" accept=".txt,text/plain">
+      </p>
+
+      <p class="nota-piccola">
+        Appena scegli il file l'orario e' pronto: non c'e' nessun altro
+        pulsante da premere.
+      </p>
+
+      <p>
+        <label for="ricorda" style="display:inline; font-weight:normal;">
+          <input type="checkbox" id="ricorda" style="width:auto; margin-right:0.4em;">
+          Ricorda questo orario su questo computer, cosi' non devo ricaricarlo ogni volta
+        </label>
+      </p>
+
+      <p class="nota-piccola">
+        Per togliere l'orario da questo computer basta togliere la spunta
+        qui sopra: torna quello di esempio.
+      </p>
+
+      <p class="nota-piccola" id="stato-file"></p>
+    </details>
+
+  </main>
+
+  <p class="ritorno su-scuro">
+    Le ore e gli intervalli seguono la circolare interna n. 12 dell'IIS Giulio Natta.
+  </p>
+
+  <script>
+  (function () {
+    "use strict";
+
+    /* =========================================================
+       Questa pagina non contiene nessun orario: legge tutto dal
+       file orario.txt che sta in questa stessa cartella, oppure
+       dal file che l'utente carica dal suo computer.
+       Per cambiare l'orario non si tocca questo codice.
+       ========================================================= */
+
+    var CHIAVE_SALVATAGGIO = "liceo-digitale-orario";
+
+    var campoCerca   = document.getElementById("cerca");
+    var elencoRis    = document.getElementById("risultati");
+    var zonaOrario   = document.getElementById("orario");
+    var zonaAvvisi   = document.getElementById("segnalazioni");
+    var campoFile    = document.getElementById("file");
+    var casellaRic   = document.getElementById("ricorda");
+    var statoFile    = document.getElementById("stato-file");
+    var quale        = document.getElementById("quale-orario");
+
+    var dati = null;          /* l'orario letto dal file */
+    var seleziona = null;     /* cosa si sta guardando adesso */
+    var testoAttuale = null;  /* il testo dell'orario che si sta usando */
+    var daFile = false;       /* vero se arriva da un file dell'utente */
+
+    /* ---------------------------------------------------------
+       LETTURA DEL FILE DI TESTO
+       --------------------------------------------------------- */
+
+    function senzaAccenti(testo) {
+      return testo
+        .toLowerCase()
+        .replace(/[àáâä]/g, "a")
+        .replace(/[èéêë]/g, "e")
+        .replace(/[ìíîï]/g, "i")
+        .replace(/[òóôö]/g, "o")
+        .replace(/[ùúûü]/g, "u")
+        .trim();
+    }
+
+    /* "9.50" e "9:50" diventano un numero di minuti, per poter
+       mettere ore e intervalli nell'ordine giusto. */
+    function inMinuti(testo) {
+      var pezzi = String(testo).split(/[.:]/);
+      var ore = parseInt(pezzi[0], 10);
+      var min = pezzi.length > 1 ? parseInt(pezzi[1], 10) : 0;
+      if (isNaN(ore) || isNaN(min)) { return null; }
+      return ore * 60 + min;
+    }
+
+    function leggiOrario(testo) {
+      var risultato = {
+        ore: [],
+        pause: [],
+        giorni: [],
+        auleClasse: {},
+        lezioni: [],
+        scartate: []
+      };
+
+      testo.split(/\r?\n/).forEach(function (rigaIntera, indice) {
+        var numeroRiga = indice + 1;
+        var riga = rigaIntera.trim();
+
+        if (riga === "" || riga.charAt(0) === "#") { return; }
+
+        var duePunti = riga.indexOf(":");
+        if (duePunti < 0) {
+          risultato.scartate.push({ n: numeroRiga, testo: riga,
+            motivo: "manca la parola in maiuscolo seguita dai due punti" });
+          return;
+        }
+
+        var etichetta = riga.slice(0, duePunti).trim().toUpperCase();
+        var campi = riga.slice(duePunti + 1).split("|").map(function (c) {
+          return c.trim();
+        });
+
+        if (etichetta === "ORA") {
+          if (campi.length < 3 || inMinuti(campi[1]) === null) {
+            risultato.scartate.push({ n: numeroRiga, testo: riga,
+              motivo: "servono numero, ora di inizio e ora di fine" });
+            return;
+          }
+          risultato.ore.push({
+            numero: campi[0],
+            inizio: campi[1],
+            fine: campi[2],
+            minuti: inMinuti(campi[1])
+          });
+
+        } else if (etichetta === "PAUSA") {
+          if (campi.length < 2 || inMinuti(campi[0]) === null) {
+            risultato.scartate.push({ n: numeroRiga, testo: riga,
+              motivo: "servono ora di inizio e ora di fine" });
+            return;
+          }
+          risultato.pause.push({
+            inizio: campi[0],
+            fine: campi[1],
+            nome: campi[2] || "Intervallo",
+            minuti: inMinuti(campi[0])
+          });
+
+        } else if (etichetta === "GIORNI") {
+          campi.forEach(function (g) {
+            if (g !== "") { risultato.giorni.push(g); }
+          });
+
+        } else if (etichetta === "AULA") {
+          if (campi[0] === "") {
+            risultato.scartate.push({ n: numeroRiga, testo: riga,
+              motivo: "manca il nome della classe" });
+            return;
+          }
+          /* Un'aula lasciata in bianco va benissimo: vuol dire
+             che non si sa ancora. */
+          risultato.auleClasse[campi[0]] = campi[1] || "";
+
+        } else if (etichetta === "LEZIONE") {
+          if (campi.length < 4 || campi[0] === "" || campi[1] === "" || campi[2] === "") {
+            risultato.scartate.push({ n: numeroRiga, testo: riga,
+              motivo: "servono almeno classe, giorno, ora e materia" });
+            return;
+          }
+          risultato.lezioni.push({
+            riga: numeroRiga,
+            classe: campi[0],
+            giorno: campi[1],
+            ora: campi[2],
+            materia: campi[3] || "",
+            insegnante: campi[4] || "",
+            aula: campi[5] || "",
+            compresenza: campi[6] || ""
+          });
+
+        } else {
+          risultato.scartate.push({ n: numeroRiga, testo: riga,
+            motivo: "parola in maiuscolo non riconosciuta (" + etichetta + ")" });
+        }
+      });
+
+      return risultato;
+    }
+
+    /* Dopo la lettura mettiamo in ordine ore e intervalli, e
+       prepariamo gli elenchi per la ricerca. */
+    function prepara(letto) {
+      letto.ore.sort(function (a, b) { return a.minuti - b.minuti; });
+
+      /* Se il file non dice quali sono i giorni, li ricaviamo
+         dalle lezioni, nell'ordine in cui compaiono. */
+      if (letto.giorni.length === 0) {
+        letto.lezioni.forEach(function (l) {
+          if (letto.giorni.indexOf(l.giorno) < 0) { letto.giorni.push(l.giorno); }
+        });
+      }
+
+      letto.giorniChiave = letto.giorni.map(senzaAccenti);
+
+      /* Una lezione che indica un giorno o un'ora che non
+         esistono non comparirebbe da nessuna parte: meglio
+         toglierla e dirlo, che farla sparire in silenzio. */
+      var numeriOra = letto.ore.map(function (o) { return o.numero; });
+      letto.lezioni = letto.lezioni.filter(function (l) {
+        if (letto.giorniChiave.indexOf(senzaAccenti(l.giorno)) < 0) {
+          letto.scartate.push({ n: l.riga,
+            motivo: "il giorno \"" + l.giorno + "\" non e' fra i giorni indicati in cima al file" });
+          return false;
+        }
+        if (numeriOra.length > 0 && numeriOra.indexOf(l.ora) < 0) {
+          letto.scartate.push({ n: l.riga,
+            motivo: "l'ora \"" + l.ora + "\" non e' fra le ore indicate in cima al file" });
+          return false;
+        }
+        return true;
+      });
+
+      letto.scartate.sort(function (a, b) { return a.n - b.n; });
+
+      var classi = [];
+      var insegnanti = [];
+
+      letto.lezioni.forEach(function (l) {
+        if (classi.indexOf(l.classe) < 0) { classi.push(l.classe); }
+        [l.insegnante, l.compresenza].forEach(function (nome) {
+          if (nome && insegnanti.indexOf(nome) < 0) { insegnanti.push(nome); }
+        });
+      });
+
+      classi.sort(function (a, b) { return a.localeCompare(b, "it"); });
+      insegnanti.sort(function (a, b) { return a.localeCompare(b, "it"); });
+
+      letto.classi = classi;
+      letto.insegnanti = insegnanti;
+
+      /* La fila di righe della tabella: ore e intervalli insieme,
+         in ordine di orologio. */
+      var righe = [];
+      letto.ore.forEach(function (o) { righe.push({ tipo: "ora", dato: o }); });
+      letto.pause.forEach(function (p) { righe.push({ tipo: "pausa", dato: p }); });
+      righe.sort(function (a, b) { return a.dato.minuti - b.dato.minuti; });
+      letto.righe = righe;
+
+      return letto;
+    }
+
+    /* ---------------------------------------------------------
+       RICERCA
+       --------------------------------------------------------- */
+
+    function voci() {
+      var elenco = [];
+      dati.classi.forEach(function (c) {
+        elenco.push({ tipo: "classe", nome: c });
+      });
+      dati.insegnanti.forEach(function (i) {
+        elenco.push({ tipo: "insegnante", nome: i });
+      });
+      return elenco;
+    }
+
+    function mostraRisultati(testo) {
+      elencoRis.textContent = "";
+      if (!dati) { return; }
+
+      var cercato = senzaAccenti(testo);
+      if (cercato === "") { return; }
+
+      var trovati = voci().filter(function (v) {
+        return senzaAccenti(v.nome).indexOf(cercato) > -1;
+      }).slice(0, 40);
+
+      if (trovati.length === 0) {
+        var li = document.createElement("li");
+        var p = document.createElement("p");
+        p.style.padding = "0.6em 0.8em";
+        p.style.margin = "0";
+        p.textContent = "Nessuna classe e nessun insegnante con questo nome.";
+        li.appendChild(p);
+        elencoRis.appendChild(li);
+        return;
+      }
+
+      trovati.forEach(function (v) {
+        var li = document.createElement("li");
+        var bottone = document.createElement("button");
+        bottone.type = "button";
+
+        var tipo = document.createElement("span");
+        tipo.className = "tipo";
+        tipo.textContent = v.tipo;
+        bottone.appendChild(tipo);
+
+        var nome = document.createElement("span");
+        nome.className = "nome";
+        nome.textContent = v.nome;
+        bottone.appendChild(nome);
+
+        bottone.addEventListener("click", function () {
+          seleziona = v;
+          elencoRis.textContent = "";
+          campoCerca.value = v.nome;
+          disegnaOrario();
+          zonaOrario.scrollIntoView({ block: "nearest" });
+        });
+
+        li.appendChild(bottone);
+        elencoRis.appendChild(li);
+      });
+    }
+
+    /* ---------------------------------------------------------
+       COSTRUZIONE DELLA TABELLA
+       --------------------------------------------------------- */
+
+    function lezioniDi(v) {
+      return dati.lezioni.filter(function (l) {
+        if (v.tipo === "classe") { return l.classe === v.nome; }
+        return l.insegnante === v.nome || l.compresenza === v.nome;
+      });
+    }
+
+    function auleDi(lezione) {
+      if (lezione.aula) { return lezione.aula; }
+      var base = dati.auleClasse[lezione.classe];
+      return base || "";
+    }
+
+    function cella(lezione, vista) {
+      var td = document.createElement("td");
+
+      var materia = document.createElement("span");
+      materia.className = "materia";
+      materia.textContent = lezione.materia || "(materia non indicata)";
+      td.appendChild(materia);
+
+      var chi = document.createElement("span");
+      chi.className = "chi";
+      if (vista === "classe") {
+        chi.textContent = lezione.insegnante || "(insegnante non indicato)";
+      } else {
+        chi.textContent = "Classe " + lezione.classe;
+      }
+      td.appendChild(chi);
+
+      if (vista === "classe" && lezione.compresenza) {
+        var comp = document.createElement("span");
+        comp.className = "compresenza";
+        comp.textContent = "con " + lezione.compresenza;
+        td.appendChild(comp);
+      }
+      if (vista === "insegnante" && lezione.compresenza) {
+        var altro = lezione.compresenza;
+        if (seleziona && seleziona.nome === lezione.compresenza) {
+          altro = lezione.insegnante;
+        }
+        if (altro) {
+          var comp2 = document.createElement("span");
+          comp2.className = "compresenza";
+          comp2.textContent = "con " + altro;
+          td.appendChild(comp2);
+        }
+      }
+
+      var aula = auleDi(lezione);
+      var etichetta = document.createElement("span");
+      if (aula) {
+        etichetta.className = "aula";
+        etichetta.textContent = "Aula " + aula;
+      } else {
+        etichetta.className = "aula-mancante";
+        etichetta.textContent = "aula da definire";
+      }
+      td.appendChild(etichetta);
+
+      return td;
+    }
+
+    function schermoStretto() {
+      return window.matchMedia("(max-width: 55rem)").matches;
+    }
+
+    /* L'elenco giorno per giorno, per gli schermi stretti. */
+    function disegnaGiorni(mie) {
+      var contenitore = document.createElement("div");
+
+      dati.giorni.forEach(function (giorno, indice) {
+        var chiave = dati.giorniChiave[indice];
+
+        var delGiorno = [];
+        dati.righe.forEach(function (riga) {
+          if (riga.tipo !== "ora") { return; }
+          mie.forEach(function (l) {
+            if (l.ora === riga.dato.numero && senzaAccenti(l.giorno) === chiave) {
+              delGiorno.push({ ora: riga.dato, lezione: l });
+            }
+          });
+        });
+
+        if (delGiorno.length === 0) { return; }
+
+        var sezione = document.createElement("section");
+        sezione.className = "giorno";
+
+        var h3 = document.createElement("h3");
+        h3.textContent = giorno;
+        sezione.appendChild(h3);
+
+        var ol = document.createElement("ol");
+        delGiorno.forEach(function (voce) {
+          var li = document.createElement("li");
+
+          var quando = document.createElement("span");
+          quando.className = "quando";
+          quando.textContent = voce.ora.numero + "ª ora  "
+            + voce.ora.inizio + " - " + voce.ora.fine;
+          li.appendChild(quando);
+
+          var provvisorio = cella(voce.lezione, seleziona.tipo);
+          while (provvisorio.firstChild) { li.appendChild(provvisorio.firstChild); }
+
+          ol.appendChild(li);
+        });
+        sezione.appendChild(ol);
+
+        contenitore.appendChild(sezione);
+      });
+
+      return contenitore;
+    }
+
+    function disegnaOrario() {
+      zonaOrario.textContent = "";
+      if (!dati || !seleziona) { return; }
+
+      var mie = lezioniDi(seleziona);
+
+      var testata = document.createElement("div");
+      testata.className = "intestazione-orario";
+
+      var h2 = document.createElement("h2");
+      h2.textContent = (seleziona.tipo === "classe" ? "Classe " : "") + seleziona.nome;
+      testata.appendChild(h2);
+
+      var sotto = document.createElement("p");
+      sotto.className = "sotto-titolo";
+      if (seleziona.tipo === "classe") {
+        var base = dati.auleClasse[seleziona.nome];
+        sotto.textContent = base
+          ? "Aula della classe: " + base
+          : "Aula della classe non ancora indicata";
+      } else {
+        sotto.textContent = mie.length + (mie.length === 1 ? " ora di lezione" : " ore di lezione") + " alla settimana";
+      }
+      testata.appendChild(sotto);
+
+      zonaOrario.appendChild(testata);
+
+      if (mie.length === 0) {
+        var vuoto = document.createElement("div");
+        vuoto.className = "avviso";
+        var pv = document.createElement("p");
+        pv.textContent = "Non c'e' nessuna lezione per " + seleziona.nome + ".";
+        vuoto.appendChild(pv);
+        zonaOrario.appendChild(vuoto);
+        return;
+      }
+
+      /* Schermo stretto: elenco giorno per giorno.
+         Schermo largo: la griglia della settimana. */
+      if (schermoStretto()) {
+        zonaOrario.appendChild(disegnaGiorni(mie));
+        return;
+      }
+
+      var contenitore = document.createElement("div");
+      contenitore.className = "contenitore-tabella";
+
+      var tabella = document.createElement("table");
+      tabella.className = "orario";
+
+      var thead = document.createElement("thead");
+      var rigaTesta = document.createElement("tr");
+      var angolo = document.createElement("th");
+      angolo.scope = "col";
+      angolo.textContent = "Ora";
+      rigaTesta.appendChild(angolo);
+      dati.giorni.forEach(function (g) {
+        var th = document.createElement("th");
+        th.scope = "col";
+        th.textContent = g;
+        rigaTesta.appendChild(th);
+      });
+      thead.appendChild(rigaTesta);
+      tabella.appendChild(thead);
+
+      var tbody = document.createElement("tbody");
+
+      /* Quali ore hanno almeno una lezione: le altre non si
+         mostrano, altrimenti restano righe vuote in fondo. */
+      function oraPiena(ora) {
+        return mie.some(function (l) { return l.ora === ora.numero; });
+      }
+
+      dati.righe.forEach(function (riga, posizione) {
+        var tr = document.createElement("tr");
+
+        if (riga.tipo === "pausa") {
+          /* Un intervallo si mostra solo se c'e' lezione sia
+             prima sia dopo: altrimenti e' un intervallo fra il
+             nulla e il nulla. */
+          var prima = dati.righe.slice(0, posizione).some(function (r) {
+            return r.tipo === "ora" && oraPiena(r.dato);
+          });
+          var dopo = dati.righe.slice(posizione + 1).some(function (r) {
+            return r.tipo === "ora" && oraPiena(r.dato);
+          });
+          if (!prima || !dopo) { return; }
+
+          tr.className = "pausa";
+          var td = document.createElement("td");
+          td.colSpan = dati.giorni.length + 1;
+          td.textContent = riga.dato.nome + "  " + riga.dato.inizio + " - " + riga.dato.fine;
+          tr.appendChild(td);
+          tbody.appendChild(tr);
+          return;
+        }
+
+        var ora = riga.dato;
+        if (!oraPiena(ora)) { return; }
+
+        tr.className = "riga-ora";
+
+        var th = document.createElement("th");
+        th.scope = "row";
+        th.className = "ora";
+        var numero = document.createElement("span");
+        numero.className = "numero";
+        numero.textContent = ora.numero + "ª ora";
+        th.appendChild(numero);
+        var minuti = document.createElement("span");
+        minuti.className = "minuti";
+        minuti.textContent = ora.inizio + " - " + ora.fine;
+        th.appendChild(minuti);
+        tr.appendChild(th);
+
+        dati.giorni.forEach(function (giorno, indice) {
+          var chiave = dati.giorniChiave[indice];
+          var trovate = mie.filter(function (l) {
+            return l.ora === ora.numero && senzaAccenti(l.giorno) === chiave;
+          });
+
+          if (trovate.length === 0) {
+            var vuota = document.createElement("td");
+            vuota.className = "vuota";
+            vuota.setAttribute("data-giorno", giorno);
+            tr.appendChild(vuota);
+            return;
+          }
+
+          /* Normalmente ce n'e' una sola. Se il file ne contiene
+             due nella stessa ora, si mostrano tutte e due invece
+             di nasconderne una. */
+          var td = cella(trovate[0], seleziona.tipo);
+          trovate.slice(1).forEach(function (altra) {
+            var separatore = document.createElement("hr");
+            td.appendChild(separatore);
+            var extra = cella(altra, seleziona.tipo);
+            while (extra.firstChild) { td.appendChild(extra.firstChild); }
+          });
+          td.setAttribute("data-giorno", giorno);
+          tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+      });
+
+      tabella.appendChild(tbody);
+      contenitore.appendChild(tabella);
+      zonaOrario.appendChild(contenitore);
+    }
+
+    /* ---------------------------------------------------------
+       AVVISI SULLE RIGHE SALTATE
+       --------------------------------------------------------- */
+
+    function mostraSegnalazioni() {
+      zonaAvvisi.textContent = "";
+      if (!dati || dati.scartate.length === 0) { return; }
+
+      var box = document.createElement("div");
+      box.className = "avviso";
+
+      var p = document.createElement("p");
+      p.textContent = dati.scartate.length === 1
+        ? "Una riga del file dell'orario non e' stata capita ed e' stata saltata:"
+        : dati.scartate.length + " righe del file dell'orario non sono state capite e sono state saltate:";
+      box.appendChild(p);
+
+      var ul = document.createElement("ul");
+      dati.scartate.slice(0, 20).forEach(function (s) {
+        var li = document.createElement("li");
+        li.textContent = "riga " + s.n + ": " + s.motivo;
+        ul.appendChild(li);
+      });
+      box.appendChild(ul);
+
+      if (dati.scartate.length > 20) {
+        var altre = document.createElement("p");
+        altre.textContent = "(e altre " + (dati.scartate.length - 20) + ")";
+        box.appendChild(altre);
+      }
+
+      zonaAvvisi.appendChild(box);
+    }
+
+    function erroreGrave(messaggio, dettaglio) {
+      zonaAvvisi.textContent = "";
+      var box = document.createElement("div");
+      box.className = "avviso";
+      [messaggio, dettaglio].forEach(function (testo) {
+        if (!testo) { return; }
+        var p = document.createElement("p");
+        p.textContent = testo;
+        box.appendChild(p);
+      });
+      zonaAvvisi.appendChild(box);
+    }
+
+    /* ---------------------------------------------------------
+       DA DOVE ARRIVA L'ORARIO
+       --------------------------------------------------------- */
+
+    function usa(testo, provenienza, proprio) {
+      dati = prepara(leggiOrario(testo));
+      seleziona = null;
+      testoAttuale = testo;
+      daFile = !!proprio;
+      zonaOrario.textContent = "";
+      elencoRis.textContent = "";
+      campoCerca.value = "";
+      mostraSegnalazioni();
+      statoFile.textContent = provenienza;
+      statoFile.className = daFile ? "stato-fatto" : "nota-piccola";
+
+      /* Una riga sempre visibile che dice quale orario si sta
+         guardando: senza, riaprendo la pagina non si capisce se
+         e' quello di esempio o il proprio. */
+      quale.textContent = daFile
+        ? "Orario in uso: il tuo, " + dati.classi.length + " classi e "
+          + dati.insegnanti.length + " insegnanti."
+        : "Orario in uso: l'esempio del sito, con nomi inventati. "
+          + "Il tuo si carica qui sotto.";
+
+      if (dati.lezioni.length === 0) {
+        erroreGrave("Il file non contiene nessuna lezione.",
+          "Controlla che le righe comincino con la parola LEZIONE seguita dai due punti.");
+      }
+    }
+
+    function leggiSalvato() {
+      try {
+        return window.localStorage.getItem(CHIAVE_SALVATAGGIO);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function salva(testo) {
+      try {
+        window.localStorage.setItem(CHIAVE_SALVATAGGIO, testo);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function cancellaSalvato() {
+      try {
+        window.localStorage.removeItem(CHIAVE_SALVATAGGIO);
+      } catch (e) { /* niente da fare */ }
+    }
+
+    function caricaEsempio() {
+      /* L'orario si aggiunge in fondo all'indirizzo cosi' il
+         browser rilegge davvero il file invece di mostrare
+         quello vecchio tenuto in memoria. */
+      return fetch("orario.txt?aggiornato=" + Date.now(), { cache: "no-store" })
+        .then(function (risposta) {
+          if (!risposta.ok) { throw new Error("file non trovato"); }
+          return risposta.text();
+        })
+        .then(function (testo) {
+          usa(testo, "Stai vedendo l'orario di esempio del sito.");
+        })
+        .catch(function (errore) {
+          erroreGrave(
+            "L'orario di esempio non e' stato caricato.",
+            "Se hai aperto la pagina con un doppio clic e' normale: il browser non lascia leggere i file della cartella. Usa l'anteprima locale oppure la pagina pubblicata. Dettaglio tecnico: " + errore.message
+          );
+        });
+    }
+
+    /* ---------------------------------------------------------
+       COLLEGAMENTI FRA PAGINA E CODICE
+       --------------------------------------------------------- */
+
+    campoCerca.addEventListener("input", function () {
+      mostraRisultati(campoCerca.value);
+    });
+
+    /* Se si gira il telefono o si allarga la finestra, la pagina
+       ridisegna l'orario nella forma giusta. */
+    var eraStretto = schermoStretto();
+    window.addEventListener("resize", function () {
+      var adesso = schermoStretto();
+      if (adesso !== eraStretto) {
+        eraStretto = adesso;
+        disegnaOrario();
+      }
+    });
+
+    campoFile.addEventListener("change", function () {
+      var file = campoFile.files && campoFile.files[0];
+      if (!file) { return; }
+      var lettore = new FileReader();
+      lettore.onload = function () {
+        var testo = String(lettore.result);
+        usa(testo, "", true);
+        statoFile.textContent = "Fatto: e' caricato il tuo orario (" + file.name
+          + "), con " + dati.classi.length + " classi e "
+          + dati.insegnanti.length + " insegnanti. Resta su questo computer.";
+        if (casellaRic.checked) {
+          statoFile.textContent += salva(testo)
+            ? " E' stato salvato su questo computer."
+            : " Non e' stato possibile salvarlo su questo computer.";
+        }
+        /* Il campo di ricerca e' in cima e la tabella pure: senza
+           questo salto sembra che non sia successo niente. */
+        campoCerca.scrollIntoView({ block: "center" });
+        campoCerca.focus();
+      };
+      lettore.onerror = function () {
+        erroreGrave("Il file non e' stato letto.", "Controlla che sia un file di testo.");
+      };
+      lettore.readAsText(file, "utf-8");
+    });
+
+    /* La spunta si puo' mettere anche dopo aver scelto il file:
+       in quel caso si salva quello che si sta gia' guardando. */
+    casellaRic.addEventListener("change", function () {
+      if (casellaRic.checked) {
+        if (!daFile || !testoAttuale) {
+          casellaRic.checked = false;
+          statoFile.className = "nota-piccola";
+          statoFile.textContent = "Prima scegli il file del tuo orario, poi lo si puo' ricordare.";
+          return;
+        }
+        statoFile.className = "stato-fatto";
+        statoFile.textContent = salva(testoAttuale)
+          ? "Il tuo orario e' salvato su questo computer: la prossima volta lo ritrovi gia' caricato."
+          : "Non e' stato possibile salvarlo su questo computer.";
+      } else {
+        /* Togliendo la spunta l'orario sparisce da questo
+           computer e si torna a quello di esempio. */
+        cancellaSalvato();
+        campoFile.value = "";
+        caricaEsempio();
+      }
+    });
+
+    /* All'apertura: se c'e' un orario salvato su questo computer
+       si usa quello, altrimenti quello di esempio del sito. */
+    var salvato = leggiSalvato();
+    if (salvato) {
+      casellaRic.checked = true;
+      usa(salvato, "Stai vedendo il tuo orario, salvato su questo computer.", true);
+    } else {
+      caricaEsempio();
+    }
+
+  }());
+  </script>
+
+</body>
+</html>

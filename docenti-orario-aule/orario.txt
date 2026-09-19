@@ -1,0 +1,222 @@
+#  ===========================================================
+#  ORARIO E AULE - I DATI
+#
+#  Questo file contiene tutto l'orario. La pagina lo legge e
+#  costruisce le tabelle: per cambiare l'orario non si tocca
+#  mai il codice, si cambia soltanto questo file.
+#
+#  Si apre con il Blocco note (o con qualunque programma che
+#  scriva testo semplice) e si salva con lo stesso nome.
+#
+#  COME SI LEGGE UNA RIGA
+#  - le righe che iniziano con # sono note: non si vedono mai
+#    sul sito e si possono aggiungere o togliere liberamente
+#  - le PAROLE IN MAIUSCOLO seguite dai due punti non si
+#    toccano: dicono alla pagina che cosa sta leggendo
+#  - i campi sono separati dalla barra verticale |
+#    (sulla tastiera italiana: AltGr e il tasto del backslash)
+#  - le righe vuote non danno fastidio
+#
+#  SE UNA RIGA E' SCRITTA MALE non si blocca niente: la pagina
+#  la salta e scrive in fondo quale riga ha saltato, cosi' si
+#  trova subito.
+#
+#  ATTENZIONE: questo file finisce su internet insieme al sito.
+#  I nomi scritti qui sotto sono INVENTATI, e devono restare
+#  inventati. Per usare l'orario vero non si modifica questo
+#  file: si usa il pulsante "Carica il tuo orario" nella
+#  pagina, che legge un file dal tuo computer senza mandarlo
+#  da nessuna parte.
+#  ===========================================================
+
+
+#  -----------------------------------------------------------
+#  1. LE ORE DELLA GIORNATA
+#
+#     ORA: numero | inizio | fine
+#     PAUSA: inizio | fine | come si chiama
+#
+#     Si scrivono una volta sola e valgono per tutte le classi.
+#     Se la scuola cambia la scansione oraria, si correggono
+#     qui e basta.
+#  -----------------------------------------------------------
+
+ORA: 1 | 8.00 | 9.00
+ORA: 2 | 9.00 | 9.50
+PAUSA: 9.50 | 10.00 | Primo intervallo
+ORA: 3 | 10.00 | 11.00
+ORA: 4 | 11.00 | 11.50
+PAUSA: 11.50 | 12.00 | Secondo intervallo
+ORA: 5 | 12.00 | 13.00
+ORA: 6 | 13.00 | 14.00
+PAUSA: 14.00 | 14.15 | Terzo intervallo
+ORA: 7 | 14.15 | 15.00
+ORA: 8 | 15.00 | 16.00
+
+
+#  -----------------------------------------------------------
+#  2. I GIORNI
+#
+#     GIORNI: i giorni separati dalla barra, nell'ordine in cui
+#     devono comparire nella tabella.
+#
+#     Se la scuola fa anche il sabato, si aggiunge | sabato in
+#     fondo alla riga qui sotto.
+#  -----------------------------------------------------------
+
+GIORNI: Lunedì | Martedì | Mercoledì | Giovedì | Venerdì
+
+
+#  -----------------------------------------------------------
+#  3. L'AULA DI OGNI CLASSE
+#
+#     AULA: classe | aula
+#
+#     E' l'aula dove la classe sta normalmente. Serve perche'
+#     nell'orario l'aula si scrive solo quando la lezione si
+#     sposta altrove (laboratorio, palestra): per tutte le
+#     altre ore la pagina usa l'aula scritta qui.
+#
+#     Una classe senza la sua riga qui funziona lo stesso: al
+#     posto dell'aula la pagina scrive "da definire".
+#  -----------------------------------------------------------
+
+AULA: 1A | A6
+AULA: 2A | A7
+AULA: 1B | A11
+
+
+#  -----------------------------------------------------------
+#  4. LE LEZIONI
+#
+#     LEZIONE: classe | giorno | ora | materia | insegnante | aula | compresenza
+#
+#     classe       come deve comparire sul sito (1A, 2B...)
+#     giorno       uno dei giorni scritti al punto 2
+#     ora          il numero dell'ora (1, 2, 3...)
+#     materia      il nome della materia
+#     insegnante   cognome e nome
+#     aula         SI LASCIA VUOTO se la lezione si fa nell'aula
+#                  della classe; si scrive solo quando si va da
+#                  un'altra parte (palestra, L41_INFO...)
+#     compresenza  il secondo insegnante, se c'e'; altrimenti
+#                  si lascia vuoto
+#
+#     Gli ultimi campi vuoti si possono anche non scrivere: una
+#     riga che finisce dopo l'insegnante va benissimo.
+#
+#     PER AGGIUNGERE UNA LEZIONE si copia una riga esistente e
+#     si cambiano i campi. PER TOGLIERNE UNA si cancella la
+#     riga, oppure si mette un # davanti per metterla da parte
+#     senza perderla.
+#  -----------------------------------------------------------
+
+
+#  ----- CLASSE 1A -----
+
+LEZIONE: 1A | lunedi | 1 | Lingua italiana | Rossi Maria
+LEZIONE: 1A | lunedi | 2 | Lingua italiana | Rossi Maria
+LEZIONE: 1A | lunedi | 3 | Matematica | Bianchi Paolo
+LEZIONE: 1A | lunedi | 4 | Scienze naturali | Ferrari Luca
+LEZIONE: 1A | lunedi | 5 | Lingua inglese | Verdi Anna
+LEZIONE: 1A | lunedi | 6 | Storia e geografia | Rossi Maria
+
+LEZIONE: 1A | martedi | 1 | Matematica | Bianchi Paolo
+LEZIONE: 1A | martedi | 2 | Informatica | Greco Davide | L41_INFO
+LEZIONE: 1A | martedi | 3 | Lingua italiana | Rossi Maria
+LEZIONE: 1A | martedi | 4 | Lingua inglese | Verdi Anna
+LEZIONE: 1A | martedi | 5 | Scienze motorie | Marino Sara | palestra
+LEZIONE: 1A | martedi | 6 | Scienze motorie | Marino Sara | palestra
+
+LEZIONE: 1A | mercoledi | 1 | Storia e geografia | Rossi Maria
+LEZIONE: 1A | mercoledi | 2 | Matematica | Bianchi Paolo
+LEZIONE: 1A | mercoledi | 3 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
+LEZIONE: 1A | mercoledi | 4 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
+LEZIONE: 1A | mercoledi | 5 | Lingua italiana | Rossi Maria
+LEZIONE: 1A | mercoledi | 6 | Lingua italiana | Rossi Maria
+
+LEZIONE: 1A | giovedi | 1 | Lingua inglese | Verdi Anna
+LEZIONE: 1A | giovedi | 2 | Scienze naturali | Ferrari Luca
+LEZIONE: 1A | giovedi | 3 | Lingua italiana | Rossi Maria
+LEZIONE: 1A | giovedi | 4 | Matematica | Bianchi Paolo
+LEZIONE: 1A | giovedi | 5 | Informatica | Greco Davide | L41_INFO | Costa Marco
+
+LEZIONE: 1A | venerdi | 1 | Scienze naturali | Ferrari Luca
+LEZIONE: 1A | venerdi | 2 | Lingua italiana | Rossi Maria
+LEZIONE: 1A | venerdi | 3 | Storia e geografia | Rossi Maria
+LEZIONE: 1A | venerdi | 4 | Matematica | Bianchi Paolo
+LEZIONE: 1A | venerdi | 5 | Lingua inglese | Verdi Anna
+
+
+#  ----- CLASSE 2A -----
+
+LEZIONE: 2A | lunedi | 1 | Matematica | Bianchi Paolo
+LEZIONE: 2A | lunedi | 2 | Fisica | Rizzo Franco | L59_FISICA
+LEZIONE: 2A | lunedi | 3 | Lingua inglese | Verdi Anna
+LEZIONE: 2A | lunedi | 4 | Lingua italiana | Rossi Maria
+LEZIONE: 2A | lunedi | 5 | Storia e geografia | Esposito Chiara
+LEZIONE: 2A | lunedi | 6 | Fisica | Rizzo Franco
+
+LEZIONE: 2A | martedi | 1 | Lingua italiana | Rossi Maria
+LEZIONE: 2A | martedi | 2 | Storia e geografia | Esposito Chiara
+LEZIONE: 2A | martedi | 3 | Fisica | Rizzo Franco
+LEZIONE: 2A | martedi | 4 | Matematica | Bianchi Paolo
+LEZIONE: 2A | martedi | 5 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
+LEZIONE: 2A | martedi | 6 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
+
+LEZIONE: 2A | mercoledi | 1 | Lingua inglese | Verdi Anna
+LEZIONE: 2A | mercoledi | 2 | Lingua italiana | Rossi Maria
+LEZIONE: 2A | mercoledi | 3 | Matematica | Bianchi Paolo
+LEZIONE: 2A | mercoledi | 4 | Storia e geografia | Esposito Chiara
+LEZIONE: 2A | mercoledi | 5 | Fisica | Rizzo Franco | L59_FISICA
+LEZIONE: 2A | mercoledi | 6 | Religione cattolica | Moretti Elena
+
+LEZIONE: 2A | giovedi | 1 | Storia e geografia | Esposito Chiara
+LEZIONE: 2A | giovedi | 2 | Matematica | Bianchi Paolo
+LEZIONE: 2A | giovedi | 3 | Fisica | Rizzo Franco
+LEZIONE: 2A | giovedi | 4 | Lingua inglese | Verdi Anna
+LEZIONE: 2A | giovedi | 5 | Lingua italiana | Rossi Maria
+LEZIONE: 2A | giovedi | 7 | Educazione civica | Esposito Chiara
+
+LEZIONE: 2A | venerdi | 1 | Lingua italiana | Rossi Maria
+LEZIONE: 2A | venerdi | 2 | Matematica | Bianchi Paolo
+LEZIONE: 2A | venerdi | 3 | Scienze motorie | Marino Sara | palestra
+LEZIONE: 2A | venerdi | 4 | Scienze motorie | Marino Sara | palestra
+LEZIONE: 2A | venerdi | 5 | Storia e geografia | Esposito Chiara
+
+
+#  ----- CLASSE 1B -----
+
+LEZIONE: 1B | lunedi | 1 | Lingua inglese | Verdi Anna
+LEZIONE: 1B | lunedi | 2 | Matematica | Bianchi Paolo
+LEZIONE: 1B | lunedi | 3 | Lingua italiana | Esposito Chiara
+LEZIONE: 1B | lunedi | 4 | Lingua italiana | Esposito Chiara
+LEZIONE: 1B | lunedi | 5 | Scienze naturali | Ferrari Luca
+LEZIONE: 1B | lunedi | 6 | Informatica | Greco Davide | L41_INFO
+
+LEZIONE: 1B | martedi | 1 | Lingua italiana | Esposito Chiara
+LEZIONE: 1B | martedi | 2 | Storia e geografia | Esposito Chiara
+LEZIONE: 1B | martedi | 3 | Matematica | Bianchi Paolo
+LEZIONE: 1B | martedi | 4 | Scienze naturali | Ferrari Luca
+LEZIONE: 1B | martedi | 5 | Lingua inglese | Verdi Anna
+LEZIONE: 1B | martedi | 6 | Religione cattolica | Moretti Elena
+
+LEZIONE: 1B | mercoledi | 1 | Matematica | Bianchi Paolo
+LEZIONE: 1B | mercoledi | 2 | Lingua inglese | Verdi Anna
+LEZIONE: 1B | mercoledi | 3 | Lingua italiana | Esposito Chiara
+LEZIONE: 1B | mercoledi | 4 | Scienze naturali | Ferrari Luca
+LEZIONE: 1B | mercoledi | 5 | Scienze motorie | Marino Sara | palestra
+LEZIONE: 1B | mercoledi | 6 | Scienze motorie | Marino Sara | palestra
+
+LEZIONE: 1B | giovedi | 1 | Informatica | Greco Davide | L41_INFO
+LEZIONE: 1B | giovedi | 2 | Lingua italiana | Esposito Chiara
+LEZIONE: 1B | giovedi | 3 | Matematica | Bianchi Paolo
+LEZIONE: 1B | giovedi | 4 | Storia e geografia | Esposito Chiara
+LEZIONE: 1B | giovedi | 5 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
+LEZIONE: 1B | giovedi | 6 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
+
+LEZIONE: 1B | venerdi | 1 | Matematica | Bianchi Paolo
+LEZIONE: 1B | venerdi | 2 | Scienze naturali | Ferrari Luca
+LEZIONE: 1B | venerdi | 3 | Lingua inglese | Verdi Anna
+LEZIONE: 1B | venerdi | 4 | Lingua italiana | Esposito Chiara
+LEZIONE: 1B | venerdi | 5 | Informatica | Greco Davide | L41_INFO | Costa Marco
