@@ -20,7 +20,7 @@ TITOLO: Liceo digitale
 
 
 # Una riga breve sotto il titolo. Puoi anche lasciarla vuota.
-SOTTOTITOLO: Materiali e attività delle mie classi
+SOTTOTITOLO: Materiali e attività del liceo digitale
 
 
 # La presentazione del sito. Scrivi quanto vuoi.
