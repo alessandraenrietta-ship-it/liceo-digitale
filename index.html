@@ -63,6 +63,22 @@
       font-size: 1.15rem;
     }
 
+    /* Dentro il riquadro in evidenza gli strumenti non sono un elenco
+       ma riquadri affiancati, uno per strumento. Su schermo stretto
+       si incolonnano da soli. */
+    .disciplina.rilievo .elenco-artefatti {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+      gap: 0.8rem;
+      padding: 1em;
+    }
+
+    .disciplina.rilievo .elenco-artefatti li {
+      padding: 0.9em 1em;
+      border: 2px solid var(--verde);
+      border-radius: var(--raggio);
+    }
+
     /* La testata è un pulsante: si raggiunge e si apre con la tastiera */
     .disciplina-testata {
       display: block;
