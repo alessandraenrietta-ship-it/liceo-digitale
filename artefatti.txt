@@ -26,6 +26,8 @@
 
 # ARTEFATTI PER GLI STUDENTI
 
+La rivoluzione francese | Storia | studenti | storia-la-rivoluzione-francese | Una linea del tempo interattiva con gli eventi principali dal 1789 al 1799.
+
 DA COMPILARE | Lingua e letteratura italiana | studenti | italiano-DACOMPILARE | DA COMPILARE
 DA COMPILARE | Lingua e cultura straniera | studenti | inglese-DACOMPILARE | DA COMPILARE
 DA COMPILARE | Scienze naturali | studenti | scienze-DACOMPILARE | DA COMPILARE
@@ -40,8 +42,13 @@ DA COMPILARE | Diritto | studenti | diritto-DACOMPILARE | DA COMPILARE
 
 # ARTEFATTI PER I DOCENTI
 
-Costruisci il tuo tema argomentativo | Lingua e letteratura italiana | docenti | docenti-tema-argomentativo | Prototipo: guida alla costruzione di una scaletta argomentativa. Richiede una chiave personale di accesso al servizio, inserita da chi usa la pagina.
-Annotazioni sul registro | | docenti | docenti-annotazioni | Prototipo: compone annotazioni disciplinari e di merito nel rispetto del regolamento d'istituto. Il nome dello studente resta sul computer di chi la usa. Richiede una chiave personale di accesso al servizio.
+# Cartella prevista: docenti-tema-argomentativo
+# Da riscrivere al posto di DA COMPILARE quando l'artefatto viene consegnato.
+Costruisci il tuo tema argomentativo | Lingua e letteratura italiana | docenti | DA COMPILARE | Prototipo: guida alla costruzione di una scaletta argomentativa. Richiede una chiave personale di accesso al servizio, inserita da chi usa la pagina.
+
+# Cartella prevista: docenti-annotazioni
+# Da riscrivere al posto di DA COMPILARE quando l'artefatto viene consegnato.
+Annotazioni sul registro | | docenti | DA COMPILARE | Prototipo: compone annotazioni disciplinari e di merito nel rispetto del regolamento d'istituto. Il nome dello studente resta sul computer di chi la usa. Richiede una chiave personale di accesso al servizio.
 DA COMPILARE | | docenti | docenti-orario | DA COMPILARE
 
 # Il campo disciplina resta vuoto per gli strumenti che non
@@ -59,6 +66,11 @@ DA COMPILARE | | docenti | docenti-orario | DA COMPILARE
 # in costruzione. Per rendere attiva una disciplina basta aggiungere
 # una riga qui sopra.
 #
+# Le due righe INIZIO e FINE servono al sito per capire dove comincia
+# e dove finisce l'elenco: non vanno cancellate. Per aggiungere una
+# disciplina si scrive una riga in mezzo, con il cancelletto davanti.
+#
+# INIZIO ELENCO DISCIPLINE
 # Lingua e letteratura italiana
 # Lingua e cultura straniera
 # Storia
@@ -75,6 +87,7 @@ DA COMPILARE | | docenti | docenti-orario | DA COMPILARE
 # Religione cattolica
 # Attivita' alternative
 # Educazione civica
+# FINE ELENCO DISCIPLINE
 #
 # Educazione civica e' un insegnamento trasversale: compare
 # nell'elenco insieme alle altre, e la sua pagina lo specifica.
