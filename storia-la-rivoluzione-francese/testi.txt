@@ -1,0 +1,84 @@
+# ===========================================================
+#  I TESTI DI QUESTO ARTEFATTO
+#
+#  Funziona come gli altri file di testo del sito:
+#  - le PAROLE IN MAIUSCOLO seguite dai due punti non si toccano
+#  - si cambia quello che viene dopo i due punti
+#  - le righe che iniziano con # sono note e non si vedono mai
+#
+#  Gli eventi della linea del tempo sono blocchetti separati da
+#  una riga con tre trattini. Per aggiungerne uno, copia un
+#  blocchetto esistente e cambia i testi. Per toglierne uno,
+#  cancella il blocchetto e la sua riga di trattini.
+# ===========================================================
+
+
+TITOLO: La rivoluzione francese
+
+SOTTOTITOLO: Dieci anni che hanno cambiato l'Europa
+
+# La riga piccola in fondo alla pagina.
+PIEDE: Esempio costruito per mostrare come funziona un artefatto.
+
+INTRODUZIONE:
+Clicca su un evento per leggere che cosa è successo.
+
+Questa linea del tempo raccoglie i passaggi principali fra il 1789 e
+il 1799. Non è un riassunto completo: è una traccia per orientarsi e
+per capire in che ordine sono andate le cose.
+
+
+---
+ANNO: 1789
+EVENTO: La presa della Bastiglia
+RACCONTO: Il 14 luglio una folla parigina assalta la Bastiglia, una
+prigione-fortezza che era diventata il simbolo del potere arbitrario del
+re. Dentro ci sono soltanto sette prigionieri, ma non è questo che
+conta: conta che il popolo abbia preso le armi e vinto. Quella data
+diventerà la festa nazionale francese.
+
+---
+ANNO: 1789
+EVENTO: La Dichiarazione dei diritti dell'uomo e del cittadino
+RACCONTO: Ad agosto l'Assemblea proclama che gli uomini nascono liberi e
+uguali nei diritti. È un testo breve, diciassette articoli, ma rovescia
+l'idea stessa su cui si reggeva la società: non si nasce più nobili o
+plebei, si nasce cittadini.
+
+---
+ANNO: 1791
+EVENTO: La fuga a Varennes
+RACCONTO: Luigi XVI tenta di scappare dalla Francia travestito, per
+raggiungere gli eserciti stranieri e tornare con la forza. Viene
+riconosciuto e fermato a Varennes. Da quel momento moltissimi smettono
+di credere che si possa tenere insieme il re e la rivoluzione.
+
+---
+ANNO: 1792
+EVENTO: Nasce la Repubblica
+RACCONTO: A settembre la monarchia viene abolita e la Francia diventa
+una repubblica. Pochi mesi dopo il re, processato come un cittadino
+qualunque, viene condannato a morte e ghigliottinato.
+
+---
+ANNO: 1793
+EVENTO: Il Terrore
+RACCONTO: Con la guerra alle porte e le rivolte interne, il Comitato di
+salute pubblica guidato da Robespierre risponde con le esecuzioni di
+massa. In poco più di un anno migliaia di persone finiscono sotto la
+ghigliottina, spesso con processi sommari.
+
+---
+ANNO: 1794
+EVENTO: La caduta di Robespierre
+RACCONTO: A luglio gli stessi rivoluzionari si rivoltano contro
+Robespierre, che viene arrestato e giustiziato il giorno dopo. Il Terrore
+finisce, ma la rivoluzione esce esausta e diffidente verso se stessa.
+
+---
+ANNO: 1799
+EVENTO: Il colpo di stato di Napoleone
+RACCONTO: Un generale giovane e popolarissimo prende il potere con un
+colpo di stato. La rivoluzione è finita: molte delle sue idee
+sopravvivranno, ma la libertà politica lascia il posto a un uomo solo al
+comando.

@@ -156,3 +156,104 @@ footer {
     --colore-accento: #d9a06a;
   }
 }
+
+/* ------------------------------------------------------------
+   Pagina di un artefatto: ritorno all'elenco e linea del tempo
+   ------------------------------------------------------------ */
+
+.ritorno {
+  margin: 0 0 18px;
+  font-family: system-ui, "Segoe UI", sans-serif;
+  font-size: 0.85rem;
+  font-style: normal;
+}
+
+.ritorno a {
+  color: var(--colore-testo-tenue);
+  text-decoration: none;
+}
+
+.ritorno a::before {
+  content: "\2190\00a0";
+}
+
+.ritorno a:hover,
+.ritorno a:focus {
+  color: var(--colore-accento);
+  text-decoration: underline;
+}
+
+.linea-tempo {
+  padding: 8px 0 40px;
+  border-left: 2px solid var(--colore-bordo);
+  margin-left: 10px;
+}
+
+.evento {
+  position: relative;
+  padding-left: 26px;
+  margin-bottom: 6px;
+}
+
+.evento::before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 20px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--colore-sfondo);
+  border: 2px solid var(--colore-bordo);
+}
+
+.evento.aperto::before {
+  background: var(--colore-accento);
+  border-color: var(--colore-accento);
+}
+
+.evento-testata {
+  display: block;
+  width: 100%;
+  padding: 12px 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  font-size: 1.05rem;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
+.evento-testata:hover .evento-nome,
+.evento-testata:focus .evento-nome {
+  color: var(--colore-accento);
+  text-decoration: underline;
+}
+
+.evento-anno {
+  display: block;
+  font-family: system-ui, "Segoe UI", sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--colore-testo-tenue);
+}
+
+.evento-nome {
+  display: block;
+  margin-top: 2px;
+  font-weight: bold;
+}
+
+.evento-racconto {
+  padding: 0 0 16px;
+  font-size: 0.97rem;
+}
+
+.evento-racconto p {
+  margin: 0 0 12px;
+}
+
+.evento-racconto p:last-child {
+  margin: 0;
+}

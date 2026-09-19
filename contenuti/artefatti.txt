@@ -29,12 +29,19 @@
 # ===========================================================
 
 
-# ----- MODELLO DA COPIARE -----
-# Togli il cancelletto e lo spazio all'inizio delle cinque righe
-# qui sotto, poi cambia i testi con i tuoi.
+# ----- GLI ARTEFATTI -----
+# Qui sotto c'è il primo artefatto, già attivo e visibile sul sito.
 #
-# ---
-# TITOLO: La rivoluzione francese
-# DISCIPLINA: Storia
-# CARTELLA: storia-la-rivoluzione-francese
-# DESCRIZIONE: Una linea del tempo interattiva con gli eventi principali dal 1789 al 1799.
+# Per aggiungerne un altro: copia le cinque righe che seguono
+# (compresa quella con i tre trattini), incollale qui in fondo e
+# cambia i testi con i tuoi.
+#
+# Per togliere un artefatto dall'elenco: cancella le sue cinque
+# righe. La cartella con il lavoro resta al suo posto, sparisce
+# solo la scheda dalla pagina principale.
+
+---
+TITOLO: La rivoluzione francese
+DISCIPLINA: Storia
+CARTELLA: storia-la-rivoluzione-francese
+DESCRIZIONE: Una linea del tempo interattiva con gli eventi principali dal 1789 al 1799.
