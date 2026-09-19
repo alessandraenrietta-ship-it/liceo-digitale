@@ -1,0 +1,195 @@
+/* =================================================================
+   STILE COMUNE - SITO LICEO DIGITALE
+   IIS Giulio Natta
+
+   Tutte le pagine del sito si collegano a questo file.
+   Per cambiare l'aspetto dell'intero sito basta modificare i valori
+   qui sotto, nella sezione COLORI. Non serve toccare altro.
+   ================================================================= */
+
+
+/* -----------------------------------------------------------------
+   COLORI
+   I nomi qui sotto vanno usati nelle pagine al posto dei codici.
+   Esempio: color: var(--verde);
+   ----------------------------------------------------------------- */
+
+:root {
+
+  /* Colori dell'identita' */
+  --verde:         #026C37;  /* verde scuro del logo: titoli, pulsanti, link */
+  --verde-chiaro:  #8DC73C;  /* verde lime del logo: SOLO decorativo */
+  --blu-notte:     #00193C;  /* testo e fondi scuri */
+  --teal:          #00596B;  /* fasce e sfondi intermedi */
+  --crema:         #FFFBCD;  /* fondo delle aree di lettura */
+  --giallo:        #FFF33F;  /* accento: bordi, evidenziazioni, testo su fondo scuro */
+
+  /* Ruoli */
+  --testo:            var(--blu-notte);
+  --testo-su-scuro:   #FFFFFF;
+  --fondo-lettura:    var(--crema);
+  --bordo:            var(--giallo);
+
+  /* Sfondo generale: gradiente verde-blu, sostituisce l'immagine */
+  --sfondo: linear-gradient(135deg, #4E9A5A 0%, var(--teal) 45%, var(--blu-notte) 100%);
+
+  /* Caratteri */
+  --carattere: Arial, Helvetica, sans-serif;
+
+  /* Misure */
+  --raggio:  10px;
+  --spazio:  1.25rem;
+  --massimo: 60rem;   /* larghezza massima del testo */
+}
+
+/* ATTENZIONE alla leggibilita'.
+   Il verde chiaro e il giallo NON vanno mai usati per il testo su
+   fondo crema o bianco: il contrasto e' troppo basso e il testo
+   diventa illeggibile. Su fondo blu notte invece funzionano bene. */
+
+
+/* -----------------------------------------------------------------
+   BASE
+   ----------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: var(--spazio);
+  min-height: 100vh;
+  font-family: var(--carattere);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--testo-su-scuro);
+  background: var(--sfondo);
+  background-attachment: fixed;
+}
+
+
+/* -----------------------------------------------------------------
+   AREE DI LETTURA
+   Ogni blocco di testo va dentro un riquadro chiaro: sul gradiente
+   il testo non si legge.
+   ----------------------------------------------------------------- */
+
+.riquadro {
+  max-width: var(--massimo);
+  margin: 0 auto var(--spazio);
+  padding: calc(var(--spazio) * 1.5);
+  background: var(--fondo-lettura);
+  border: 3px solid var(--bordo);
+  border-radius: var(--raggio);
+  color: var(--testo);
+}
+
+
+/* -----------------------------------------------------------------
+   TITOLI E TESTO
+   ----------------------------------------------------------------- */
+
+h1, h2, h3 {
+  margin: 0 0 0.6em;
+  line-height: 1.2;
+  color: var(--verde);
+}
+
+h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); }
+h2 { font-size: clamp(1.4rem, 3.5vw, 2rem); }
+h3 { font-size: 1.2rem; }
+
+/* Titolo principale della pagina, fuori dai riquadri */
+.titolo-pagina {
+  max-width: var(--massimo);
+  margin: 0 auto var(--spazio);
+  color: var(--testo-su-scuro);
+  text-align: center;
+}
+
+p { margin: 0 0 1em; }
+
+strong { color: var(--verde); }
+
+a { color: var(--verde); }
+a:hover { text-decoration: none; }
+
+/* Sui fondi scuri i link cambiano colore, altrimenti spariscono */
+.su-scuro a { color: var(--giallo); }
+
+
+/* -----------------------------------------------------------------
+   PULSANTI
+   ----------------------------------------------------------------- */
+
+button,
+.pulsante {
+  display: inline-block;
+  padding: 0.7em 1.4em;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--testo-su-scuro);
+  background: var(--verde);
+  border: none;
+  border-radius: var(--raggio);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+button:hover,
+.pulsante:hover { background: var(--teal); }
+
+button:disabled {
+  background: #9A9A9A;
+  cursor: not-allowed;
+}
+
+
+/* -----------------------------------------------------------------
+   CAMPI DA COMPILARE
+   ----------------------------------------------------------------- */
+
+input, textarea, select {
+  width: 100%;
+  padding: 0.6em;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--testo);
+  background: #FFFFFF;
+  border: 2px solid var(--verde);
+  border-radius: var(--raggio);
+}
+
+label {
+  display: block;
+  margin-bottom: 0.3em;
+  font-weight: bold;
+  color: var(--verde);
+}
+
+
+/* -----------------------------------------------------------------
+   ACCESSIBILITA'
+   Il contorno di messa a fuoco serve a chi naviga con la tastiera:
+   non va tolto.
+   ----------------------------------------------------------------- */
+
+:focus-visible {
+  outline: 3px solid var(--giallo);
+  outline-offset: 3px;
+}
+
+/* Riduce le animazioni per chi le ha disattivate nel sistema */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+
+/* -----------------------------------------------------------------
+   TELEFONO
+   ----------------------------------------------------------------- */
+
+@media (max-width: 40rem) {
+  body { padding: 0.75rem; }
+  .riquadro { padding: 1.1rem; }
+}

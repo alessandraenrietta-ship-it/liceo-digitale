@@ -1,0 +1,81 @@
+# REGISTRO DEGLI ARTEFATTI - SITO LICEO DIGITALE
+# ------------------------------------------------------------------
+# Questo file governa il sito. La home legge da qui e costruisce le
+# pagine. Per aggiungere un artefatto si scrive una riga: non serve
+# toccare il codice.
+#
+# Le righe che iniziano con # sono commenti e vengono ignorate.
+#
+# COME SI SCRIVE UNA RIGA
+# Cinque campi separati dalla barra verticale |, sempre in quest'ordine:
+#
+#   titolo | disciplina | destinatario | cartella | descrizione
+#
+#   titolo        come lo strumento si chiama sul sito
+#   disciplina    va scritta esattamente come compare nell'elenco in fondo
+#   destinatario  studenti, docenti oppure entrambi
+#   cartella      nome della cartella che contiene l'artefatto,
+#                 nella forma disciplina-titolo, tutto minuscolo,
+#                 con il trattino, senza spazi e senza accenti
+#   descrizione   una riga che spiega cosa fa, per chi apre il sito
+#
+# I campi segnati DA COMPILARE vanno riempiti da chi costruisce
+# l'artefatto, prima della consegna.
+# ------------------------------------------------------------------
+
+
+# ARTEFATTI PER GLI STUDENTI
+
+DA COMPILARE | Lingua e letteratura italiana | studenti | italiano-DACOMPILARE | DA COMPILARE
+DA COMPILARE | Lingua e cultura straniera | studenti | inglese-DACOMPILARE | DA COMPILARE
+DA COMPILARE | Scienze naturali | studenti | scienze-DACOMPILARE | DA COMPILARE
+DA COMPILARE | Disegno e storia dell'arte | studenti | arte-DACOMPILARE | DA COMPILARE
+DA COMPILARE | Informatica | studenti | informatica-DACOMPILARE | DA COMPILARE
+DA COMPILARE | Religione cattolica | studenti | religione-DACOMPILARE | DA COMPILARE
+DA COMPILARE | Educazione civica | studenti | edcivica-DACOMPILARE | DA COMPILARE
+
+# Riga non confermata: da togliere se la disciplina non viene coperta.
+DA COMPILARE | Diritto | studenti | diritto-DACOMPILARE | DA COMPILARE
+
+
+# ARTEFATTI PER I DOCENTI
+
+Costruisci il tuo tema argomentativo | Lingua e letteratura italiana | docenti | docenti-tema-argomentativo | Prototipo: guida alla costruzione di una scaletta argomentativa. Richiede una chiave personale di accesso al servizio, inserita da chi usa la pagina.
+Annotazioni sul registro | | docenti | docenti-annotazioni | Prototipo: compone annotazioni disciplinari e di merito nel rispetto del regolamento d'istituto. Il nome dello studente resta sul computer di chi la usa. Richiede una chiave personale di accesso al servizio.
+DA COMPILARE | | docenti | docenti-orario | DA COMPILARE
+
+# Il campo disciplina resta vuoto per gli strumenti che non
+# appartengono a una disciplina.
+#
+# Gestione aule: prevista, non assegnata a nessuno.
+# Finche' non ha un responsabile la riga non va scritta.
+
+
+# ------------------------------------------------------------------
+# ELENCO DELLE DISCIPLINE
+#
+# La home mostra tutte le discipline. Sono attive quelle che hanno
+# almeno un artefatto in questo registro, le altre compaiono come
+# in costruzione. Per rendere attiva una disciplina basta aggiungere
+# una riga qui sopra.
+#
+# Lingua e letteratura italiana
+# Lingua e cultura straniera
+# Storia
+# Geografia
+# Filosofia
+# Matematica
+# Informatica
+# Fisica
+# Scienze naturali
+# Disegno e storia dell'arte
+# Diritto
+# Laboratorio del pensiero critico
+# Scienze motorie e sportive
+# Religione cattolica
+# Attivita' alternative
+# Educazione civica
+#
+# Educazione civica e' un insegnamento trasversale: compare
+# nell'elenco insieme alle altre, e la sua pagina lo specifica.
+# ------------------------------------------------------------------

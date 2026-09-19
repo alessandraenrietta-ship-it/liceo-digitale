@@ -4,36 +4,164 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Liceo digitale</title>
-  <link rel="stylesheet" href="css/stile.css">
+  <link rel="stylesheet" href="stile.css">
+
+  <style>
+    /* -------------------------------------------------------------
+       Solo la DISPOSIZIONE degli elementi di questa pagina.
+       I colori arrivano tutti da stile.css: qui si usano i loro nomi
+       (var(--verde) e simili), mai i codici scritti a mano.
+       ------------------------------------------------------------- */
+
+    .sottotitolo-sito {
+      max-width: var(--massimo);
+      margin: 0 auto calc(var(--spazio) * 1.5);
+      text-align: center;
+    }
+
+    .griglia {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+      gap: 0.8rem;
+      margin-top: var(--spazio);
+    }
+
+    .disciplina {
+      border: 2px solid var(--verde);
+      border-radius: var(--raggio);
+      background: var(--fondo-lettura);
+      overflow: hidden;
+    }
+
+    .disciplina.spenta {
+      border-style: dashed;
+      border-color: var(--teal);
+    }
+
+    /* La testata è un pulsante: si raggiunge e si apre con la tastiera */
+    .disciplina-testata {
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 0.8em 1em;
+      text-align: left;
+      font-weight: normal;
+      color: var(--testo);
+      background: none;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .disciplina-testata:hover { background: none; }
+
+    .disciplina-spenta-testo {
+      padding: 0.8em 1em;
+    }
+
+    .disciplina-nome {
+      display: block;
+      font-weight: bold;
+      color: var(--verde);
+    }
+
+    .disciplina.spenta .disciplina-nome { color: var(--teal); }
+
+    .disciplina-stato {
+      display: block;
+      margin-top: 0.15em;
+      font-size: 0.9rem;
+      color: var(--teal);
+    }
+
+    .disciplina-testata .disciplina-nome { text-decoration: underline; }
+    .disciplina-testata[aria-expanded="true"] .disciplina-nome { text-decoration: none; }
+
+    .elenco-artefatti {
+      margin: 0;
+      padding: 0 1em 0.9em;
+      list-style: none;
+      border-top: 2px solid var(--verde);
+    }
+
+    .elenco-artefatti li { padding-top: 0.8em; }
+
+    .artefatto-titolo { font-weight: bold; }
+
+    .artefatto-descrizione {
+      margin: 0.15em 0 0;
+      font-size: 0.92rem;
+    }
+
+    .artefatto-stato {
+      display: inline-block;
+      margin-top: 0.15em;
+      font-size: 0.85rem;
+      color: var(--teal);
+    }
+
+    .gruppo-docenti { margin-top: var(--spazio); }
+
+    .accesso-docenti { max-width: 22rem; }
+    .accesso-docenti button { margin-top: 0.6em; }
+
+    .messaggio-errore {
+      margin-top: 0.6em;
+      font-weight: bold;
+      color: var(--verde);
+    }
+
+    .segnalazioni li { margin-bottom: 0.5em; }
+  </style>
 </head>
+
 <body>
 
   <!--
-    ATTENZIONE: qui dentro non c'è nessun testo del sito.
-    Tutti i testi che si leggono sulla pagina stanno nella cartella
-    "contenuti", nei file home.txt e artefatti.txt.
-    Per cambiare quello che si vede, apri quei file, non questo.
+    Questa pagina non contiene l'elenco degli artefatti: lo legge dal
+    file artefatti.txt, che sta in questa stessa cartella. Per
+    aggiungere o togliere qualcosa dal sito si modifica quel file.
   -->
 
-  <header class="intestazione">
-    <h1 id="titolo">&nbsp;</h1>
-    <p id="sottotitolo"></p>
-  </header>
+  <h1 class="titolo-pagina">Liceo digitale</h1>
 
-  <main>
-    <section id="presentazione" class="presentazione"></section>
+  <!-- TESTO MODIFICABILE: puoi cambiare le righe qui sotto -->
+  <p class="titolo-pagina sottotitolo-sito">
+    Gli strumenti digitali costruiti dai docenti dell'IIS Giulio Natta.
+    Scegli una disciplina per vedere che cosa c'è.
+  </p>
+  <!-- FINE TESTO MODIFICABILE -->
 
-    <section class="artefatti">
-      <h2>Artefatti</h2>
-      <div id="elenco-artefatti"></div>
-    </section>
-  </main>
+  <section class="riquadro" aria-labelledby="titolo-studenti">
+    <h2 id="titolo-studenti">Per gli studenti</h2>
+    <p id="riassunto-studenti"></p>
+    <div id="discipline-studenti" class="griglia"></div>
+  </section>
 
-  <footer>
-    <p id="piede"></p>
-  </footer>
+  <section class="riquadro" aria-labelledby="titolo-docenti">
+    <h2 id="titolo-docenti">Per i docenti</h2>
 
-  <script src="js/sito.js"></script>
+    <div id="accesso-docenti" class="accesso-docenti">
+      <p>Questa sezione raccoglie gli strumenti di lavoro dei docenti.</p>
+      <form id="modulo-accesso">
+        <label for="parola">Parola d'ordine</label>
+        <input type="password" id="parola" name="parola" autocomplete="off">
+        <button type="submit">Entra</button>
+        <p id="errore-accesso" class="messaggio-errore" role="alert"></p>
+      </form>
+    </div>
+
+    <div id="area-docenti" hidden></div>
+  </section>
+
+  <section class="riquadro segnalazioni" id="segnalazioni" hidden
+           aria-labelledby="titolo-segnalazioni">
+    <h2 id="titolo-segnalazioni">Righe del registro da controllare</h2>
+    <p>Queste righe di <strong>artefatti.txt</strong> non sono state capite
+       e sono state saltate. Il resto del sito funziona lo stesso.</p>
+    <ul id="elenco-segnalazioni"></ul>
+  </section>
+
+  <script src="js/home.js"></script>
 
 </body>
 </html>
