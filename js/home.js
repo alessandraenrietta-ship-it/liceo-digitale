@@ -188,14 +188,18 @@
       collegamento.textContent = artefatto.titolo;
       voce.appendChild(collegamento);
     } else {
+      /* Non è ancora apribile, ma se il titolo c'è lo mostriamo lo
+         stesso: chi guarda il sito sa già cosa sta arrivando. */
       var titolo = document.createElement("span");
       titolo.className = "artefatto-titolo";
-      titolo.textContent = "Artefatto in preparazione";
+      titolo.textContent = daCompilare(artefatto.titolo)
+        ? "Artefatto in preparazione"
+        : artefatto.titolo;
       voce.appendChild(titolo);
 
       var stato = document.createElement("span");
       stato.className = "artefatto-stato";
-      stato.textContent = " — non ancora consegnato";
+      stato.textContent = "— non ancora consegnato";
       voce.appendChild(stato);
     }
 
