@@ -1,9 +1,11 @@
 # ===========================================================
 #  L'ELENCO DEGLI ARTEFATTI
 #
-#  Ogni artefatto è un blocchetto di quattro righe.
-#  I blocchetti sono separati da una riga con tre trattini:
+#  Ogni artefatto è un blocchetto di cinque righe: prima una riga
+#  con tre trattini
 #  ---
+#  che serve a separarlo dal precedente, poi quattro righe con le
+#  informazioni del lavoro.
 #
 #  Per aggiungerne uno: copia il modello che trovi in fondo,
 #  incollalo sopra, togli il cancelletto dalle sue righe e
