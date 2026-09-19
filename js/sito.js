@@ -142,8 +142,13 @@
 
   /* -------------------------------------------------------- */
 
+  /* Il browser tiene in memoria una copia dei file per qualche minuto.
+     Aggiungendo l'orario alla richiesta lo costringiamo a riscaricarli
+     davvero: così le modifiche ai testi si vedono subito, senza dover
+     aspettare o svuotare la cronologia. */
   function prendiFile(percorso) {
-    return fetch(percorso).then(function (risposta) {
+    var richiesta = percorso + "?aggiornato=" + Date.now();
+    return fetch(richiesta, { cache: "no-store" }).then(function (risposta) {
       if (!risposta.ok) {
         throw new Error("File non trovato: " + percorso);
       }
