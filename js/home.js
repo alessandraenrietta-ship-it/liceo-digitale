@@ -213,9 +213,9 @@
     return voce;
   }
 
-  function schedaDisciplina(nome, artefatti, identificativo) {
+  function schedaDisciplina(nome, artefatti, identificativo, inRilievo) {
     var scheda = document.createElement("article");
-    scheda.className = "disciplina";
+    scheda.className = inRilievo ? "disciplina rilievo" : "disciplina";
 
     /* Nessun artefatto: la disciplina compare comunque, spenta. */
     if (artefatti.length === 0) {
@@ -294,18 +294,10 @@
     var riassunto = document.getElementById("riassunto-" + prefisso);
     var suoi = per(prefisso, artefatti);
 
-    discipline.forEach(function (nome, indice) {
-      var della = suoi.filter(function (artefatto) {
-        return artefatto.disciplina === nome;
-      });
-      contenitore.appendChild(
-        schedaDisciplina(nome, della, prefisso + "-disciplina-" + indice)
-      );
-    });
-
     /* Gli strumenti che non appartengono a nessuna disciplina hanno il
-       secondo campo vuoto: finiscono in un riquadro a parte, che
-       compare solo se ce n'è almeno uno. */
+       secondo campo vuoto. Stanno in un riquadro a parte, messo per
+       primo e in evidenza perché valgono per tutti, e non solo per chi
+       insegna una certa materia. Compare solo se ce n'è almeno uno. */
     var senzaDisciplina = suoi.filter(function (artefatto) {
       return artefatto.disciplina === "";
     });
@@ -314,10 +306,20 @@
         schedaDisciplina(
           "Strumenti generali",
           senzaDisciplina,
-          prefisso + "-strumenti-generali"
+          prefisso + "-strumenti-generali",
+          true
         )
       );
     }
+
+    discipline.forEach(function (nome, indice) {
+      var della = suoi.filter(function (artefatto) {
+        return artefatto.disciplina === nome;
+      });
+      contenitore.appendChild(
+        schedaDisciplina(nome, della, prefisso + "-disciplina-" + indice)
+      );
+    });
 
     var disponibili = suoi.filter(function (artefatto) {
       return artefatto.pronto;

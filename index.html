@@ -38,6 +38,33 @@
       border-color: var(--teal);
     }
 
+    /* Riquadro degli strumenti che valgono per tutte le discipline:
+       occupa tutta la riga e ha la testata piena, per distinguersi
+       dalle materie. */
+    .disciplina.rilievo {
+      grid-column: 1 / -1;
+      border-width: 3px;
+    }
+
+    .disciplina.rilievo .disciplina-testata {
+      background: var(--verde);
+      color: var(--testo-su-scuro);
+      padding: 1em;
+    }
+
+    .disciplina.rilievo .disciplina-testata:hover {
+      background: var(--teal);
+    }
+
+    .disciplina.rilievo .disciplina-nome {
+      color: var(--testo-su-scuro);
+      font-size: 1.1rem;
+    }
+
+    .disciplina.rilievo .disciplina-stato {
+      color: var(--giallo);
+    }
+
     /* La testata è un pulsante: si raggiunge e si apre con la tastiera */
     .disciplina-testata {
       display: block;
