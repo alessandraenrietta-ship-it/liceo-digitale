@@ -48,7 +48,7 @@ Costruisci il tuo tema argomentativo | Lingua e letteratura italiana | docenti |
 
 # Cartella prevista: docenti-annotazioni
 # Da riscrivere al posto di DA COMPILARE quando l'artefatto viene consegnato.
-Annotazioni sul registro | | docenti | DA COMPILARE | Prototipo: compone annotazioni disciplinari e di merito nel rispetto del regolamento d'istituto. Il nome dello studente resta sul computer di chi la usa. Richiede una chiave personale di accesso al servizio.
+Annotazioni sul registro | | docenti | docenti-annotazioni | Compone annotazioni disciplinari e di merito nel rispetto del regolamento d'istituto. Il nome dello studente resta sul computer di chi la usa. Richiede una chiave personale di accesso al servizio.
 # Cartella prevista: docenti-orario-aule
 # Da riscrivere al posto di DA COMPILARE quando l'artefatto viene consegnato.
 Orario e aule | | docenti | DA COMPILARE | DA COMPILARE
