@@ -18,8 +18,8 @@ Repository: https://github.com/alessandraenrietta-ship-it/liceo-digitale
 ## 2. Struttura dei file
 
 - `index.html` sta nella **cartella principale** ed è la pagina di ingresso.
-- Si usano **solo percorsi relativi** (per esempio `css/stile.css` oppure
-  `../index.html`, mai `/css/stile.css` e mai indirizzi completi che
+- Si usano **solo percorsi relativi** (per esempio `stile.css` oppure
+  `../index.html`, mai `/stile.css` e mai indirizzi completi che
   iniziano con `http`). Questo è necessario perché su GitHub Pages il sito
   non si trova alla radice del dominio.
 - Prima di dare per buono un collegamento, si controlla che il file
