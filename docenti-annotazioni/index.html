@@ -227,9 +227,21 @@
     </div>
   </fieldset>
 
+  <fieldset class="studente-only">
+    <legend>Genere</legend>
+    <!-- TESTO MODIFICABILE: puoi cambiare le righe qui sotto -->
+    <p style="margin:0 0 .5rem;font-size:.9rem;">Serve solo per scrivere "lo studente" o "la studentessa" nella nota: il nome resta comunque nel tuo browser.</p>
+    <div class="opts">
+      <input type="radio" name="genere" id="genere-m" value="m" checked>
+      <label for="genere-m">Studente</label>
+      <input type="radio" name="genere" id="genere-f" value="f">
+      <label for="genere-f">Studentessa</label>
+    </div>
+  </fieldset>
+
   <div class="riga2">
     <div class="campo">
-      <label for="nome" id="nomeLabel">Nome studente</label>
+      <label for="nome" id="nomeLabel">Nome studente (promemoria per te)</label>
       <input type="text" id="nome" placeholder="Nome Cognome">
     </div>
     <div class="campo">
@@ -265,7 +277,7 @@
 
   <div class="campo">
     <label for="fatto">Descrizione dell'episodio</label>
-    <textarea id="fatto" rows="5"></textarea>
+    <textarea id="fatto" rows="5" placeholder="Racconta qui cosa è successo, con parole tue. Esempio: durante la spiegazione ha continuato a parlare ad alta voce con un compagno nonostante due richiami."></textarea>
   </div>
 
   <button type="button" id="generaBtn">Genera annotazione</button>
@@ -400,13 +412,16 @@ function refreshVisibility(){
     el.classList.toggle("hidden", tipo !== "infrazione");
   });
   const soggetto = document.querySelector('input[name="soggetto"]:checked').value;
+  document.querySelectorAll(".studente-only").forEach(el=>{
+    el.classList.toggle("hidden", soggetto !== "studente");
+  });
   const nomeLabel = document.getElementById("nomeLabel");
   const nomeInput = document.getElementById("nome");
   if(soggetto === "classe"){
-    nomeLabel.textContent = "Classe";
+    nomeLabel.textContent = "Classe (promemoria per te)";
     nomeInput.placeholder = "es. 3A LM";
   } else {
-    nomeLabel.textContent = "Nome studente";
+    nomeLabel.textContent = "Nome studente (promemoria per te)";
     nomeInput.placeholder = "Nome Cognome";
   }
 }
@@ -438,7 +453,7 @@ const SYSTEM_PROMPT = `Scrivi note per il registro elettronico di una scuola sup
 - Varia i connettivi tra una nota e l'altra, evita di ripetere sempre la stessa struttura o le stesse formule di chiusura.
 - Nessun burocratese, nessuna frase da regolamento riportata pari pari: spiega con parole semplici perché il comportamento conta e chi altro ne risente (il gruppo classe, il clima di lavoro), non limitarti a citare la regola violata.
 - Tono inclusivo e mai punitivo nella sostanza: il richiamo ha una funzione educativa, non giudicante sulla persona.
-- Non conosci e non devi usare il nome di chi è coinvolto: se riguarda un singolo studente scrivi "lo studente" o "la studentessa", se riguarda l'intera classe scrivi "la classe" come soggetto.
+- Non conosci e non devi usare il nome di chi è coinvolto: il messaggio ti dice se scrivere "lo studente" o "la studentessa" (usa quella forma esatta come soggetto, con i participi e gli aggettivi concordati di conseguenza), oppure se riguarda l'intera classe, nel qual caso scrivi "la classe" come soggetto.
 - Se il tipo è "merito", non citare alcun riferimento normativo: chiudi spiegando perché il comportamento va valorizzato.
 - Se il tipo è "infrazione": in base alla descrizione, individua a quale delle mancanze specifiche elencate qui sotto il fatto corrisponde meglio (ogni voce ha un codice, es. a3 o b2):
 ${buildElencoMancanze()}
@@ -463,7 +478,7 @@ document.getElementById("generaBtn").addEventListener("click", async function(){
 
   const tipo = document.querySelector('input[name="tipo"]:checked').value;
   const soggetto = document.querySelector('input[name="soggetto"]:checked').value;
-  const nome = document.getElementById("nome").value.trim();
+  const genere = document.querySelector('input[name="genere"]:checked').value;
   const materia = document.getElementById("materia").value.trim();
   const data = formatData(document.getElementById("data").value);
   const fatto = document.getElementById("fatto").value.trim();
@@ -479,10 +494,14 @@ document.getElementById("generaBtn").addEventListener("click", async function(){
   generaBtn.disabled = true;
   generaBtn.textContent = "Genero...";
 
-  // Il nome o la classe NON vengono inclusi qui: restano nel browser e
-  // vengono riaggiunti al testo dopo che la risposta è tornata.
+  // Il nome dello studente non viene mai incluso qui: resta nel browser,
+  // eventualmente solo come promemoria per chi compila.
+  const riguardaTesto = soggetto === "classe"
+    ? "l'intera classe (scrivi \"la classe\" come soggetto)"
+    : `un singolo studente (usa "${genere === "f" ? "la studentessa" : "lo studente"}" come soggetto)`;
+
   const userMessage = `Tipo di annotazione: ${tipo}
-Riguarda: ${soggetto === "classe" ? "l'intera classe" : "un singolo studente"}
+Riguarda: ${riguardaTesto}
 Materia: ${materia || "(non indicata)"}
 Data: ${data || "(non indicata)"}
 Comportamento reiterato: ${reiterato ? "sì" : "no"}
@@ -507,7 +526,10 @@ Descrizione dell'episodio fornita dal docente: ${fatto}`;
             parts: [{ text: SYSTEM_PROMPT }]
           },
           generationConfig: {
-            maxOutputTokens: 1000
+            maxOutputTokens: 2000,
+            thinkingConfig: {
+              thinkingLevel: "MINIMAL"
+            }
           }
         })
       }
@@ -529,11 +551,8 @@ Descrizione dell'episodio fornita dal docente: ${fatto}`;
       throw new Error("nessun testo ricevuto");
     }
 
-    const meta = `${nome || (soggetto === "classe" ? "Classe" : "Studente")} — ${data}${materia ? " — " + materia : ""}`;
-    const testoFinale = `${meta}\n\n${testoGenerato}`;
-
-    document.getElementById("noteText").textContent = testoFinale;
-    document.getElementById("noteText").dataset.raw = testoFinale;
+    document.getElementById("noteText").textContent = testoGenerato;
+    document.getElementById("noteText").dataset.raw = testoGenerato;
     document.getElementById("output").classList.add("visibile");
     document.getElementById("copiedMsg").style.display = "none";
     document.getElementById("output").scrollIntoView({behavior:"smooth", block:"start"});
