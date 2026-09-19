@@ -213,7 +213,7 @@
     return voce;
   }
 
-  function schedaDisciplina(nome, artefatti, indice) {
+  function schedaDisciplina(nome, artefatti, identificativo) {
     var scheda = document.createElement("article");
     scheda.className = "disciplina";
 
@@ -236,8 +236,6 @@
       scheda.appendChild(spento);
       return scheda;
     }
-
-    var identificativo = "artefatti-disciplina-" + indice;
 
     var testata = document.createElement("button");
     testata.className = "disciplina-testata";
@@ -286,71 +284,49 @@
     return scheda;
   }
 
-  function costruisciStudenti(discipline, artefatti) {
-    var contenitore = document.getElementById("discipline-studenti");
-    var perStudenti = per("studenti", artefatti);
+  /* Le due sezioni, studenti e docenti, sono costruite allo stesso
+     modo: tutte le discipline dell'elenco, quelle con almeno un
+     artefatto si aprono, le altre restano spente.
+     Il prefisso serve a non dare lo stesso nome a due riquadri
+     diversi, uno per sezione. */
+  function costruisciSezione(prefisso, discipline, artefatti) {
+    var contenitore = document.getElementById("discipline-" + prefisso);
+    var riassunto = document.getElementById("riassunto-" + prefisso);
+    var suoi = per(prefisso, artefatti);
 
     discipline.forEach(function (nome, indice) {
-      var suoi = perStudenti.filter(function (artefatto) {
+      var della = suoi.filter(function (artefatto) {
         return artefatto.disciplina === nome;
       });
-      contenitore.appendChild(schedaDisciplina(nome, suoi, indice));
+      contenitore.appendChild(
+        schedaDisciplina(nome, della, prefisso + "-disciplina-" + indice)
+      );
     });
 
-    var disponibili = perStudenti.filter(function (artefatto) {
+    /* Gli strumenti che non appartengono a nessuna disciplina hanno il
+       secondo campo vuoto: finiscono in un riquadro a parte, che
+       compare solo se ce n'è almeno uno. */
+    var senzaDisciplina = suoi.filter(function (artefatto) {
+      return artefatto.disciplina === "";
+    });
+    if (senzaDisciplina.length > 0) {
+      contenitore.appendChild(
+        schedaDisciplina(
+          "Strumenti generali",
+          senzaDisciplina,
+          prefisso + "-strumenti-generali"
+        )
+      );
+    }
+
+    var disponibili = suoi.filter(function (artefatto) {
       return artefatto.pronto;
     }).length;
 
-    document.getElementById("riassunto-studenti").textContent =
-      discipline.length + " discipline, "
+    riassunto.textContent = discipline.length + " discipline, "
       + (disponibili === 1
         ? "1 artefatto già disponibile."
         : disponibili + " artefatti già disponibili.");
-  }
-
-  function costruisciDocenti(artefatti) {
-    var area = document.getElementById("area-docenti");
-    area.textContent = "";
-
-    var perDocenti = per("docenti", artefatti);
-
-    if (perDocenti.length === 0) {
-      var vuoto = document.createElement("p");
-      vuoto.textContent = "Non c'è ancora nessuno strumento per i docenti.";
-      area.appendChild(vuoto);
-      return;
-    }
-
-    /* Gli strumenti che non appartengono a una disciplina hanno il
-       secondo campo vuoto: li raccogliamo in un gruppo a parte. */
-    var gruppi = [];
-    perDocenti.forEach(function (artefatto) {
-      var nome = artefatto.disciplina || "Strumenti generali";
-      var gruppo = gruppi.filter(function (g) { return g.nome === nome; })[0];
-      if (!gruppo) {
-        gruppo = { nome: nome, artefatti: [] };
-        gruppi.push(gruppo);
-      }
-      gruppo.artefatti.push(artefatto);
-    });
-
-    gruppi.forEach(function (gruppo) {
-      var sezione = document.createElement("div");
-      sezione.className = "gruppo-docenti";
-
-      var titolo = document.createElement("h3");
-      titolo.textContent = gruppo.nome;
-      sezione.appendChild(titolo);
-
-      var elenco = document.createElement("ul");
-      elenco.className = "elenco-artefatti";
-      gruppo.artefatti.forEach(function (artefatto) {
-        elenco.appendChild(vocePerArtefatto(artefatto));
-      });
-      sezione.appendChild(elenco);
-
-      area.appendChild(sezione);
-    });
   }
 
   function mostraSegnalazioni(problemi) {
@@ -458,8 +434,8 @@
       });
     }
 
-    costruisciStudenti(discipline, lettura.artefatti);
-    costruisciDocenti(lettura.artefatti);
+    costruisciSezione("studenti", discipline, lettura.artefatti);
+    costruisciSezione("docenti", discipline, lettura.artefatti);
     mostraSegnalazioni(lettura.problemi);
     preparaAccesso();
   }).catch(function (errore) {
