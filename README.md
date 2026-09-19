@@ -60,6 +60,19 @@ parola d'ordine, e tutte e due le parole si trovano in cima a
 file è leggibile da chiunque. Servono solo a tenere separati i due
 pubblici: non vanno usate per nascondere qualcosa di riservato.
 
+## Quando si modifica stile.css o un file js
+
+Nelle pagine i due file sono richiamati con un numero in fondo, per
+esempio `stile.css?v=2`. Quel numero va **aumentato di uno** ogni volta
+che il file cambia.
+
+Serve a costringere il browser a riscaricarli: senza, chi ha già
+visitato il sito continua a vedere la versione vecchia per una decina
+di minuti, e sembra che la modifica non sia stata pubblicata.
+
+I file di testo dei contenuti non hanno questo problema: si aggiornano
+da soli.
+
 ## Per vedere le modifiche prima di pubblicarle
 
 Doppio clic su `anteprima.bat`: si apre il sito letto dalla cartella di

@@ -4,7 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Liceo digitale</title>
-  <link rel="stylesheet" href="stile.css">
+
+  <!--
+    Il numero dopo ?v= serve a far riscaricare il file quando cambia.
+    Senza, il browser continua a usare per qualche minuto la copia
+    vecchia e le modifiche non si vedono.
+    QUANDO SI MODIFICA stile.css O js/home.js, SI AUMENTA IL NUMERO
+    DI UNO anche qui sotto.
+  -->
+  <link rel="stylesheet" href="stile.css?v=2">
 
   <style>
     /* -------------------------------------------------------------
@@ -197,7 +205,7 @@
     <ul id="elenco-segnalazioni"></ul>
   </section>
 
-  <script src="js/home.js"></script>
+  <script src="js/home.js?v=2"></script>
 
 </body>
 </html>
