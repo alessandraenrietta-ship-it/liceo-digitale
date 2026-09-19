@@ -1,0 +1,21 @@
+# ------------------------------------------------------------
+#  Cose che NON devono finire online.
+#
+#  git ignora tutto quello che e' scritto qui dentro: anche se
+#  un file di questi si trova nella cartella, non viene mai
+#  pubblicato per sbaglio.
+#
+#  Per proteggere un altro file basta scriverne il nome su una
+#  riga nuova.
+# ------------------------------------------------------------
+
+# La cartella dove l'app di Claude salva i file che mi manda.
+Claude outputs/
+
+# L'orario vero della scuola, con i nomi degli insegnanti.
+orario-vero*.txt
+orario_vero*.txt
+
+# File temporanei di Windows.
+Thumbs.db
+desktop.ini
