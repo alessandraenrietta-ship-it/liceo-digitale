@@ -1,0 +1,38 @@
+# ===========================================================
+#  L'ELENCO DEGLI ARTEFATTI
+#
+#  Ogni artefatto è un blocchetto di quattro righe.
+#  I blocchetti sono separati da una riga con tre trattini:
+#  ---
+#
+#  Per aggiungerne uno: copia il modello che trovi in fondo,
+#  incollalo sopra, togli il cancelletto dalle sue righe e
+#  riempilo con i tuoi dati.
+#
+#  Che cosa scrivere in ogni riga:
+#
+#  TITOLO ....... il nome del lavoro, come lo leggeranno gli
+#                 studenti sul sito
+#  DISCIPLINA ... la materia (Storia, Matematica, Italiano...)
+#  CARTELLA ..... il nome esatto della cartella che contiene il
+#                 lavoro. Deve essere tutto minuscolo, con i
+#                 trattini al posto degli spazi, senza accenti:
+#                 per esempio  storia-la-rivoluzione-francese
+#  DESCRIZIONE .. una o due righe che spiegano di che cosa si
+#                 tratta
+#
+#  Attenzione: se la cartella scritta qui non esiste davvero,
+#  cliccando sul titolo si aprirà una pagina di errore. Il nome
+#  deve corrispondere in tutto, maiuscole comprese.
+# ===========================================================
+
+
+# ----- MODELLO DA COPIARE -----
+# Togli il cancelletto e lo spazio all'inizio delle cinque righe
+# qui sotto, poi cambia i testi con i tuoi.
+#
+# ---
+# TITOLO: La rivoluzione francese
+# DISCIPLINA: Storia
+# CARTELLA: storia-la-rivoluzione-francese
+# DESCRIZIONE: Una linea del tempo interattiva con gli eventi principali dal 1789 al 1799.

@@ -1,0 +1,38 @@
+# ===========================================================
+#  I TESTI DELLA PAGINA PRINCIPALE
+#
+#  Questo file lo puoi modificare tu, senza saper programmare.
+#  Si apre con il Blocco note (o con qualsiasi editor di testo).
+#
+#  Tre regole, poi sei libera:
+#
+#  1. Le PAROLE IN MAIUSCOLO seguite dai due punti dicono al
+#     sito dove mettere ogni testo. Non cancellarle e non
+#     cambiarle.
+#  2. Puoi cambiare tutto quello che sta DOPO i due punti.
+#  3. Le righe che iniziano con il cancelletto (#), come queste,
+#     sono note per te: sul sito non si vedono mai.
+# ===========================================================
+
+
+# Il titolo grande in cima alla pagina.
+TITOLO: Liceo digitale
+
+
+# Una riga breve sotto il titolo. Puoi anche lasciarla vuota.
+SOTTOTITOLO: Materiali e attività delle mie classi
+
+
+# La presentazione del sito. Scrivi quanto vuoi.
+# Per separare due paragrafi, lascia una riga vuota in mezzo.
+PRESENTAZIONE:
+Benvenuti. In questo sito raccolgo i materiali e le attività che
+costruiamo insieme in classe: schede di lavoro, esercizi,
+ricostruzioni e piccoli esperimenti digitali.
+
+Ogni lavoro ha una sua pagina, raggiungibile dall'elenco qui sotto.
+Il sito cresce un po' alla volta, durante l'anno.
+
+
+# La riga in fondo alla pagina, scritta piccola.
+PIEDE: Sito didattico realizzato in classe.
