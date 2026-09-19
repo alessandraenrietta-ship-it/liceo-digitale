@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Annotazioni sul registro</title>
+<link rel="stylesheet" href="../stile.css?v=2">
+
+<style>
+  /* -------------------------------------------------------------
+     Solo la DISPOSIZIONE degli elementi di questa pagina.
+     I colori arrivano tutti da stile.css: qui si usano i loro nomi
+     (var(--verde) e simili), mai i codici scritti a mano.
+     ------------------------------------------------------------- */
+
+  .ritorno {
+    max-width: var(--massimo);
+    margin: 0 auto 0.6rem;
+  }
+
+  fieldset {
+    border: 0;
+    margin: 0 0 1.3rem;
+    padding: 0;
+  }
+  legend {
+    font-weight: bold;
+    color: var(--verde);
+    margin-bottom: 0.4rem;
+    padding: 0;
+  }
+  .opts {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .opts input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+  .opts label {
+    display: inline-block;
+    width: auto;
+    margin: 0;
+    font-weight: normal;
+    color: var(--testo);
+    border: 2px solid var(--verde);
+    border-radius: 999px;
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    background: #FFFFFF;
+  }
+  .opts input[type="radio"]:checked + label {
+    background: var(--verde);
+    color: var(--testo-su-scuro);
+  }
+  .opts input[type="radio"]:focus-visible + label {
+    outline: 3px solid var(--giallo);
+    outline-offset: 2px;
+  }
+
+  .riga2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spazio);
+  }
+  @media (max-width: 40rem) {
+    .riga2 { grid-template-columns: 1fr; }
+  }
+
+  .campo {
+    margin-bottom: 1.3rem;
+  }
+
+  .data-riga {
+    display: flex;
+    gap: 0.6rem;
+    align-items: stretch;
+  }
+  .data-riga input {
+    flex: 1;
+  }
+  .data-riga button {
+    white-space: nowrap;
+  }
+
+  .checkbox-riga {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 0.8rem;
+  }
+  .checkbox-riga input {
+    width: auto;
+    margin-top: 0.3rem;
+  }
+  .checkbox-riga label {
+    margin: 0;
+    font-weight: normal;
+    color: var(--testo);
+  }
+
+  details.guida {
+    border: 2px solid var(--verde);
+    border-radius: var(--raggio);
+    background: #FFFFFF;
+    padding: 0.2rem 1rem;
+    margin-bottom: 1.3rem;
+  }
+  details.guida summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--verde);
+    padding: 0.6rem 0;
+  }
+  .guida-cat {
+    font-weight: bold;
+    color: var(--teal);
+    margin: 0.7rem 0 0.3rem;
+  }
+  .guida-voce {
+    padding: 0.35rem 0;
+    border-top: 1px solid var(--verde);
+    font-size: 0.95rem;
+  }
+  .guida-voce:first-of-type {
+    border-top: none;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .chiave-riga {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+  .chiave-riga input {
+    flex: 1;
+    min-width: 14rem;
+  }
+  .chiave-stato {
+    margin-top: 0.6rem;
+    font-size: 0.95rem;
+  }
+
+  .messaggio-errore {
+    background: #FFFFFF;
+    border: 3px solid var(--giallo);
+    border-radius: var(--raggio);
+    padding: 0.9rem 1.1rem;
+    margin-top: 1rem;
+    display: none;
+  }
+
+  .output {
+    display: none;
+  }
+  .output.visibile {
+    display: block;
+  }
+  .testo-generato {
+    background: #FFFFFF;
+    border: 2px solid var(--verde);
+    border-radius: var(--raggio);
+    padding: 1.1rem 1.2rem;
+    white-space: pre-wrap;
+  }
+  .azioni {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .copiato {
+    color: var(--verde);
+    font-weight: bold;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<p class="ritorno su-scuro"><a href="../index.html">&larr; Torna alla pagina iniziale</a></p>
+
+<h1 class="titolo-pagina">Annotazioni sul registro</h1>
+<p class="titolo-pagina">Compila i campi e genera il testo da incollare sul registro elettronico.</p>
+
+<section class="riquadro" id="chiaveBox" aria-labelledby="chiaveTitolo">
+  <h2 id="chiaveTitolo">Chiave di accesso personale</h2>
+  <!-- TESTO MODIFICABILE: puoi cambiare le righe qui sotto -->
+  <p>Questa pagina genera il testo chiedendo aiuto a un servizio esterno (Anthropic, l'azienda che fa il modello Claude), e quel servizio richiede una chiave personale per funzionare. La chiave resta soltanto in questo browser: non viene mai scritta nel codice del sito e non passa da nessun'altra parte. Chi non ha una chiave può richiederla sul sito di Anthropic.</p>
+  <div class="chiave-riga">
+    <label for="chiaveInput" class="sr-only" style="display:none;">Chiave di accesso</label>
+    <input type="password" id="chiaveInput" placeholder="Incolla qui la tua chiave (inizia con sk-ant-...)" autocomplete="off">
+    <button type="button" id="salvaChiaveBtn">Salva chiave</button>
+    <button type="button" id="rimuoviChiaveBtn">Rimuovi chiave salvata</button>
+  </div>
+  <p class="chiave-stato" id="chiaveStato"></p>
+</section>
+
+<form class="riquadro" id="noteForm">
+
+  <fieldset>
+    <legend>Tipo di annotazione</legend>
+    <div class="opts">
+      <input type="radio" name="tipo" id="tipo-infrazione" value="infrazione" checked>
+      <label for="tipo-infrazione">Infrazione</label>
+      <input type="radio" name="tipo" id="tipo-merito" value="merito">
+      <label for="tipo-merito">Merito</label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Riguarda</legend>
+    <div class="opts">
+      <input type="radio" name="soggetto" id="sogg-studente" value="studente" checked>
+      <label for="sogg-studente">Singolo studente</label>
+      <input type="radio" name="soggetto" id="sogg-classe" value="classe">
+      <label for="sogg-classe">Intera classe</label>
+    </div>
+  </fieldset>
+
+  <div class="riga2">
+    <div class="campo">
+      <label for="nome" id="nomeLabel">Nome studente</label>
+      <input type="text" id="nome" placeholder="Nome Cognome">
+    </div>
+    <div class="campo">
+      <label for="materia">Materia</label>
+      <input type="text" id="materia" placeholder="es. Italiano">
+    </div>
+  </div>
+
+  <div class="campo">
+    <label for="data">Data dell'episodio</label>
+    <div class="data-riga">
+      <input type="date" id="data">
+      <button type="button" id="oggiBtn">Oggi</button>
+    </div>
+  </div>
+
+  <div class="campo infrazione-only">
+    <details class="guida">
+      <summary>Consulta le mancanze specifiche</summary>
+      <div id="guidaVoci"></div>
+    </details>
+  </div>
+
+  <div class="checkbox-riga infrazione-only">
+    <input type="checkbox" id="reiterato">
+    <label for="reiterato">Comportamento reiterato rispetto a episodi già annotati in precedenza</label>
+  </div>
+
+  <div class="checkbox-riga infrazione-only">
+    <input type="checkbox" id="convocazione">
+    <label for="convocazione">Aggiungi menzione della convocazione dei genitori</label>
+  </div>
+
+  <div class="campo">
+    <label for="fatto">Descrizione dell'episodio</label>
+    <textarea id="fatto" rows="5"></textarea>
+  </div>
+
+  <button type="button" id="generaBtn">Genera annotazione</button>
+  <p class="messaggio-errore" id="errorMsg"></p>
+</form>
+
+<section class="riquadro output" id="output" aria-labelledby="outputTitolo">
+  <h2 id="outputTitolo">Testo generato</h2>
+  <div class="testo-generato" id="noteText"></div>
+  <div class="azioni">
+    <button type="button" id="copyBtn">Copia negli appunti</button>
+    <span class="copiato" id="copiedMsg">Copiato.</span>
+  </div>
+</section>
+
+<p class="ritorno su-scuro" style="text-align:center;">
+  <!-- TESTO MODIFICABILE: puoi cambiare le righe qui sotto -->
+  Riferimenti tratti dal Regolamento di disciplina degli studenti, approvato dal Consiglio d'Istituto con delibera n. 81 del 20 novembre 2025 (<a href="https://www.itisgiulionatta.it/pagine/regolamento-disciplinare-degli-studenti" target="_blank" rel="noopener">testo integrale sul sito dell'istituto</a>), e dal DPR 249/98 come modificato dal DPR 134/2025.<br>
+  Il testo è generato al momento da un modello linguistico e non viene salvato: chiudendo o ricaricando la pagina, tutto viene perso.
+</p>
+
+<script>
+/* -------------------------------------------------------------
+   CHIAVE DI ACCESSO
+   Resta solo nel browser di chi usa la pagina (localStorage),
+   non viene mai scritta qui nel codice.
+   ------------------------------------------------------------- */
+const CHIAVE_STORAGE = "liceo-digitale-chiave-annotazioni";
+
+function leggiChiave(){
+  try {
+    return localStorage.getItem(CHIAVE_STORAGE) || "";
+  } catch(e){
+    return "";
+  }
+}
+
+function aggiornaStatoChiave(){
+  const stato = document.getElementById("chiaveStato");
+  if(leggiChiave()){
+    stato.textContent = "Chiave salvata in questo browser.";
+  } else {
+    stato.textContent = "Nessuna chiave salvata: serve per generare le annotazioni.";
+  }
+}
+
+document.getElementById("salvaChiaveBtn").addEventListener("click", function(){
+  const valore = document.getElementById("chiaveInput").value.trim();
+  if(!valore){
+    return;
+  }
+  try {
+    localStorage.setItem(CHIAVE_STORAGE, valore);
+  } catch(e){
+    // Se il browser blocca la memoria locale, la chiave resta solo nel campo per questa visita.
+  }
+  document.getElementById("chiaveInput").value = "";
+  aggiornaStatoChiave();
+});
+
+document.getElementById("rimuoviChiaveBtn").addEventListener("click", function(){
+  try {
+    localStorage.removeItem(CHIAVE_STORAGE);
+  } catch(e){}
+  aggiornaStatoChiave();
+});
+
+aggiornaStatoChiave();
+
+/* -------------------------------------------------------------
+   ELENCO DELLE MANCANZE SPECIFICHE
+   Riprende l'art. 13 del regolamento di disciplina. Ogni voce ha
+   un codice (es. a3, b2) usato sia nella guida consultabile sia
+   nel testo che viene passato al modello linguistico.
+   ------------------------------------------------------------- */
+const mancanze = {
+  a: {
+    label: "Inosservanza delle disposizioni organizzative",
+    voci: [
+      "Frequenza non regolare, ritardi sistematici, assenze non giustificate, mancata osservanza delle consegne",
+      "Uso o presenza accertata di materiale estraneo all'attività didattica",
+      "Possesso o uso di oggetti pericolosi",
+      "Possesso o consumo di alcol, sigarette (anche elettroniche), sostanze stupefacenti a scuola",
+      "Uso non autorizzato del telefono cellulare o di altri dispositivi elettronici a scuola",
+      "Allontanamento non autorizzato dall'aula, dal laboratorio o dal gruppo durante un'uscita",
+      "Acquisizione, comunicazione o diffusione non autorizzata di dati personali tramite telefono cellulare o altri dispositivi elettronici",
+      "Sostituzione di persona tramite piattaforme o dispositivi informatici; falsificazione di documenti; uso improprio della piattaforma informatica",
+      "Violazione delle norme igienico-sanitarie, antincendio, dei regolamenti di laboratorio o di altre norme di sicurezza"
+    ]
+  },
+  b: {
+    label: "Comportamento non rispettoso verso personale o compagni",
+    voci: [
+      "Disturbo del regolare svolgimento delle attività didattiche a scuola o in uscita; linguaggio o comportamento irrispettoso o non appropriato all'ambiente",
+      "Comportamenti violenti e/o pericolosi per l'incolumità di personale o studenti",
+      "Divulgazione di contenuti offensivi, violenti, lesivi della dignità personale, discriminatori o pornografici tramite social media, piattaforme informatiche o altra forma di comunicazione",
+      "Comportamenti offensivi o intimidatori verso studenti e personale scolastico",
+      "Bullismo e cyberbullismo",
+      "Danneggiamento o sottrazione di beni della scuola, di altri studenti, del personale o di terzi"
+    ]
+  }
+};
+
+function popolaGuida(){
+  const box = document.getElementById("guidaVoci");
+  box.innerHTML = "";
+  ["a","b"].forEach(catKey=>{
+    const cat = mancanze[catKey];
+    const catTitle = document.createElement("div");
+    catTitle.className = "guida-cat";
+    catTitle.textContent = cat.label;
+    box.appendChild(catTitle);
+    cat.voci.forEach((v, i)=>{
+      const item = document.createElement("div");
+      item.className = "guida-voce";
+      item.textContent = `${catKey}${i+1}. ${v}`;
+      box.appendChild(item);
+    });
+  });
+}
+popolaGuida();
+
+function formatData(iso){
+  if(!iso) return "";
+  const [y,m,d] = iso.split("-");
+  return `${d}/${m}/${y}`;
+}
+
+function refreshVisibility(){
+  const tipo = document.querySelector('input[name="tipo"]:checked').value;
+  document.querySelectorAll(".infrazione-only").forEach(el=>{
+    el.classList.toggle("hidden", tipo !== "infrazione");
+  });
+  const soggetto = document.querySelector('input[name="soggetto"]:checked').value;
+  const nomeLabel = document.getElementById("nomeLabel");
+  const nomeInput = document.getElementById("nome");
+  if(soggetto === "classe"){
+    nomeLabel.textContent = "Classe";
+    nomeInput.placeholder = "es. 3A LM";
+  } else {
+    nomeLabel.textContent = "Nome studente";
+    nomeInput.placeholder = "Nome Cognome";
+  }
+}
+document.querySelectorAll('input[name="tipo"], input[name="soggetto"]').forEach(el=>{
+  el.addEventListener("change", refreshVisibility);
+});
+refreshVisibility();
+
+document.getElementById("oggiBtn").addEventListener("click", function(){
+  const today = new Date();
+  document.getElementById("data").value = today.toISOString().split("T")[0];
+});
+
+function buildElencoMancanze(){
+  let testo = "";
+  ["a","b"].forEach(catKey=>{
+    const cat = mancanze[catKey];
+    testo += `\nLettera ${catKey}) — ${cat.label}:\n`;
+    cat.voci.forEach((v, i)=>{ testo += `${catKey}${i+1}. ${v}\n`; });
+  });
+  return testo;
+}
+
+const SYSTEM_PROMPT = `Scrivi note per il registro elettronico di una scuola superiore italiana, da parte di un docente. Segui con precisione queste regole di stile, maturate in un lungo lavoro editoriale:
+
+- Registro fattuale: descrivi il comportamento osservato, mai il carattere o le intenzioni della persona.
+- Il fatto va in terza persona, forma attiva (es. "ha interrotto la lezione"); la risposta o l'esito va in forma impersonale (es. "è stato richiamato verbalmente").
+- Mai i due punti come scorciatoia esplicativa tra due parti della frase: usa connettivi (poiché, così da, in modo da, perché) che leghino fatto e conseguenza in un'unica frase coesa.
+- Varia i connettivi tra una nota e l'altra, evita di ripetere sempre la stessa struttura o le stesse formule di chiusura.
+- Nessun burocratese, nessuna frase da regolamento riportata pari pari: spiega con parole semplici perché il comportamento conta e chi altro ne risente (il gruppo classe, il clima di lavoro), non limitarti a citare la regola violata.
+- Tono inclusivo e mai punitivo nella sostanza: il richiamo ha una funzione educativa, non giudicante sulla persona.
+- Non conosci e non devi usare il nome di chi è coinvolto: se riguarda un singolo studente scrivi "lo studente" o "la studentessa", se riguarda l'intera classe scrivi "la classe" come soggetto.
+- Se il tipo è "merito", non citare alcun riferimento normativo: chiudi spiegando perché il comportamento va valorizzato.
+- Se il tipo è "infrazione": in base alla descrizione, individua a quale delle mancanze specifiche elencate qui sotto il fatto corrisponde meglio (ogni voce ha un codice, es. a3 o b2):
+${buildElencoMancanze()}
+Poi chiudi la nota con una riga separata, dopo una riga vuota, nel formato:
+"Riferimento: Art. 13, comma 1, lett. [a o b]), n. [numero], Regolamento di disciplina d'istituto (del. C.I. n. 81/2025)."
+- Se ti viene segnalato che il comportamento è reiterato, aggiungi prima della riga di riferimento un breve paragrafo che richiama l'art. 13, comma 1 (la reiterazione e il quadro delle sanzioni pregresse concorrono a determinare la sanzione).
+- Se ti viene segnalato che è stata disposta la convocazione dei genitori, aggiungi una frase che lo dice, integrata nel discorso.
+
+Rispondi SOLO con il testo della nota, senza premesse, senza titoli, senza virgolette che la racchiudano, senza spiegazioni del tuo lavoro.`;
+
+document.getElementById("generaBtn").addEventListener("click", async function(){
+  const chiave = leggiChiave();
+  const errorBox = document.getElementById("errorMsg");
+  errorBox.style.display = "none";
+
+  if(!chiave){
+    errorBox.textContent = "Manca la chiave di accesso: inseriscila nel riquadro in cima alla pagina.";
+    errorBox.style.display = "block";
+    document.getElementById("chiaveBox").scrollIntoView({behavior:"smooth", block:"start"});
+    return;
+  }
+
+  const tipo = document.querySelector('input[name="tipo"]:checked').value;
+  const soggetto = document.querySelector('input[name="soggetto"]:checked').value;
+  const nome = document.getElementById("nome").value.trim();
+  const materia = document.getElementById("materia").value.trim();
+  const data = formatData(document.getElementById("data").value);
+  const fatto = document.getElementById("fatto").value.trim();
+  const reiterato = document.getElementById("reiterato").checked;
+  const convocazione = document.getElementById("convocazione").checked;
+
+  if(!fatto){
+    document.getElementById("fatto").focus();
+    return;
+  }
+
+  const generaBtn = document.getElementById("generaBtn");
+  generaBtn.disabled = true;
+  generaBtn.textContent = "Genero...";
+
+  // Il nome o la classe NON vengono inclusi qui: restano nel browser e
+  // vengono riaggiunti al testo dopo che la risposta è tornata.
+  const userMessage = `Tipo di annotazione: ${tipo}
+Riguarda: ${soggetto === "classe" ? "l'intera classe" : "un singolo studente"}
+Materia: ${materia || "(non indicata)"}
+Data: ${data || "(non indicata)"}
+Comportamento reiterato: ${reiterato ? "sì" : "no"}
+Convocazione dei genitori disposta: ${convocazione ? "sì" : "no"}
+Descrizione dell'episodio fornita dal docente: ${fatto}`;
+
+  try{
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": chiave,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true"
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-5",
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: [
+          { role: "user", content: userMessage }
+        ]
+      })
+    });
+
+    if(!response.ok){
+      if(response.status === 401){
+        throw new Error("la chiave non è valida o non ha i permessi: controllala nel riquadro in cima alla pagina");
+      }
+      throw new Error("risposta non valida dal servizio (" + response.status + ")");
+    }
+
+    const dataResp = await response.json();
+    const testoBlocks = (dataResp.content || []).filter(b => b.type === "text").map(b => b.text);
+    const testoGenerato = testoBlocks.join("\n").trim();
+
+    if(!testoGenerato){
+      throw new Error("nessun testo ricevuto");
+    }
+
+    const meta = `${nome || (soggetto === "classe" ? "Classe" : "Studente")} — ${data}${materia ? " — " + materia : ""}`;
+    const testoFinale = `${meta}\n\n${testoGenerato}`;
+
+    document.getElementById("noteText").textContent = testoFinale;
+    document.getElementById("noteText").dataset.raw = testoFinale;
+    document.getElementById("output").classList.add("visibile");
+    document.getElementById("copiedMsg").style.display = "none";
+    document.getElementById("output").scrollIntoView({behavior:"smooth", block:"start"});
+
+  } catch(err){
+    errorBox.textContent = "Non sono riuscita a generare la nota (" + err.message + "). Riprova.";
+    errorBox.style.display = "block";
+  } finally {
+    generaBtn.disabled = false;
+    generaBtn.textContent = "Genera annotazione";
+  }
+});
+
+document.getElementById("copyBtn").addEventListener("click", function(){
+  const text = document.getElementById("noteText").dataset.raw || "";
+  navigator.clipboard.writeText(text).then(function(){
+    const msg = document.getElementById("copiedMsg");
+    msg.style.display = "inline";
+    setTimeout(()=>{ msg.style.display = "none"; }, 2000);
+  });
+});
+</script>
+</body>
+</html>
