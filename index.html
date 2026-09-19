@@ -129,8 +129,8 @@
 
     .gruppo-docenti { margin-top: var(--spazio); }
 
-    .accesso-docenti { max-width: 22rem; }
-    .accesso-docenti button { margin-top: 0.6em; }
+    .accesso { max-width: 22rem; }
+    .accesso button { margin-top: 0.6em; }
 
     .messaggio-errore {
       margin-top: 0.6em;
@@ -161,20 +161,35 @@
 
   <section class="riquadro" aria-labelledby="titolo-studenti">
     <h2 id="titolo-studenti">Per gli studenti</h2>
-    <p id="riassunto-studenti"></p>
-    <div id="discipline-studenti" class="griglia"></div>
+
+    <div id="accesso-studenti" class="accesso">
+      <p>Questa sezione raccoglie gli strumenti da usare in classe e a casa.</p>
+      <form id="modulo-studenti">
+        <label for="parola-studenti">Parola d'ordine</label>
+        <input type="password" id="parola-studenti" name="parola-studenti"
+               autocomplete="off">
+        <button type="submit">Entra</button>
+        <p id="errore-studenti" class="messaggio-errore" role="alert"></p>
+      </form>
+    </div>
+
+    <div id="area-studenti" hidden>
+      <p id="riassunto-studenti"></p>
+      <div id="discipline-studenti" class="griglia"></div>
+    </div>
   </section>
 
   <section class="riquadro" aria-labelledby="titolo-docenti">
     <h2 id="titolo-docenti">Per i docenti</h2>
 
-    <div id="accesso-docenti" class="accesso-docenti">
+    <div id="accesso-docenti" class="accesso">
       <p>Questa sezione raccoglie gli strumenti di lavoro dei docenti.</p>
-      <form id="modulo-accesso">
-        <label for="parola">Parola d'ordine</label>
-        <input type="password" id="parola" name="parola" autocomplete="off">
+      <form id="modulo-docenti">
+        <label for="parola-docenti">Parola d'ordine</label>
+        <input type="password" id="parola-docenti" name="parola-docenti"
+               autocomplete="off">
         <button type="submit">Entra</button>
-        <p id="errore-accesso" class="messaggio-errore" role="alert"></p>
+        <p id="errore-docenti" class="messaggio-errore" role="alert"></p>
       </form>
     </div>
 

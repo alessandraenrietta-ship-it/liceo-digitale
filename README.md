@@ -52,12 +52,13 @@ Mostra tutte le discipline dell'elenco. Quelle che hanno almeno una
 riga nel registro si aprono; le altre compaiono spente, con la scritta
 "in costruzione".
 
-Ci sono due sezioni, studenti e docenti. La sezione docenti chiede una
-parola d'ordine che si trova in cima a `js/home.js`.
+Ci sono due sezioni, studenti e docenti. Tutte e due chiedono una
+parola d'ordine, e tutte e due le parole si trovano in cima a
+`js/home.js`.
 
-**Quella parola non protegge niente.** Il repository è pubblico e il
-file è leggibile da chiunque. Serve solo a tenere separati i due
-pubblici: non va usata per nascondere qualcosa di riservato.
+**Quelle parole non proteggono niente.** Il repository è pubblico e il
+file è leggibile da chiunque. Servono solo a tenere separati i due
+pubblici: non vanno usate per nascondere qualcosa di riservato.
 
 ## Per vedere le modifiche prima di pubblicarle
 

@@ -10,20 +10,21 @@
   "use strict";
 
   /* ------------------------------------------------------------------
-     PAROLA D'ORDINE DELLA SEZIONE DOCENTI
+     LE DUE PAROLE D'ORDINE
 
-     Cambiala scrivendo quello che vuoi fra le virgolette, qui sotto.
+     Cambiale scrivendo quello che vuoi fra le virgolette, qui sotto.
 
-     ATTENZIONE, e' importante che sia chiaro: questa parola NON
-     protegge niente. Il sito e' pubblico e questo file e' leggibile
-     da chiunque, quindi chiunque puo' trovarla in pochi secondi.
-     Serve soltanto a tenere separati i due pubblici, perche' uno
+     ATTENZIONE, e' importante che sia chiaro: queste parole NON
+     proteggono niente. Il sito e' pubblico e questo file e' leggibile
+     da chiunque, quindi chiunque puo' trovarle in pochi secondi.
+     Servono soltanto a tenere separati i due pubblici, perche' uno
      studente non finisca per sbaglio fra gli strumenti dei docenti.
 
-     Non mettere mai dietro questa parola qualcosa di riservato.
+     Non mettere mai dietro queste parole qualcosa di riservato.
      ------------------------------------------------------------------ */
 
-  var PAROLA_DOCENTI = "docenti2026";
+  var PAROLA_STUDENTI = "studente";
+  var PAROLA_DOCENTI = "docente";
 
 
   /* ------------------------------------------------------------------
@@ -364,38 +365,41 @@
      ACCESSO ALLA SEZIONE DOCENTI
      ------------------------------------------------------------------ */
 
-  function ricorda(valore) {
+  /* Una sezione gia' aperta resta aperta finche' la finestra del
+     browser non viene chiusa: cosi' tornando indietro da un artefatto
+     non si deve riscrivere la parola. */
+  function ricorda(prefisso) {
     try {
-      window.sessionStorage.setItem("docenti-aperta", valore);
+      window.sessionStorage.setItem(prefisso + "-aperta", "si");
     } catch (errore) {
       /* Se il browser non lo permette pazienza: si riscrive la parola. */
     }
   }
 
-  function giaAperta() {
+  function giaAperta(prefisso) {
     try {
-      return window.sessionStorage.getItem("docenti-aperta") === "si";
+      return window.sessionStorage.getItem(prefisso + "-aperta") === "si";
     } catch (errore) {
       return false;
     }
   }
 
-  function apriAreaDocenti() {
-    document.getElementById("accesso-docenti").hidden = true;
-    document.getElementById("area-docenti").hidden = false;
+  function apriArea(prefisso) {
+    document.getElementById("accesso-" + prefisso).hidden = true;
+    document.getElementById("area-" + prefisso).hidden = false;
   }
 
-  function preparaAccesso() {
-    var modulo = document.getElementById("modulo-accesso");
-    var campo = document.getElementById("parola");
-    var errore = document.getElementById("errore-accesso");
+  function preparaAccesso(prefisso, parola) {
+    var modulo = document.getElementById("modulo-" + prefisso);
+    var campo = document.getElementById("parola-" + prefisso);
+    var errore = document.getElementById("errore-" + prefisso);
 
     modulo.addEventListener("submit", function (evento) {
       evento.preventDefault();
-      if (campo.value.trim() === PAROLA_DOCENTI) {
+      if (campo.value.trim() === parola) {
         errore.textContent = "";
-        ricorda("si");
-        apriAreaDocenti();
+        ricorda(prefisso);
+        apriArea(prefisso);
       } else {
         errore.textContent = "Parola d'ordine non corretta.";
         campo.value = "";
@@ -403,7 +407,7 @@
       }
     });
 
-    if (giaAperta()) { apriAreaDocenti(); }
+    if (giaAperta(prefisso)) { apriArea(prefisso); }
   }
 
 
@@ -439,7 +443,8 @@
     costruisciSezione("studenti", discipline, lettura.artefatti);
     costruisciSezione("docenti", discipline, lettura.artefatti);
     mostraSegnalazioni(lettura.problemi);
-    preparaAccesso();
+    preparaAccesso("studenti", PAROLA_STUDENTI);
+    preparaAccesso("docenti", PAROLA_DOCENTI);
   }).catch(function (errore) {
     var sezione = document.getElementById("segnalazioni");
     var elenco = document.getElementById("elenco-segnalazioni");
