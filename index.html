@@ -64,19 +64,27 @@
     }
 
     /* Dentro il riquadro in evidenza gli strumenti non sono un elenco
-       ma riquadri affiancati, uno per strumento. Su schermo stretto
-       si incolonnano da soli. */
+       ma riquadri affiancati, uno per strumento, della stessa misura
+       di quelli delle discipline. Su schermo stretto si incolonnano
+       da soli. */
     .disciplina.rilievo .elenco-artefatti {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
       gap: 0.8rem;
-      padding: 1em;
+      padding: 0.8em 1em 1em;
     }
 
     .disciplina.rilievo .elenco-artefatti li {
-      padding: 0.9em 1em;
+      padding: 0.8em 1em;
       border: 2px solid var(--verde);
       border-radius: var(--raggio);
+    }
+
+    /* Qui la descrizione non si mostra: serve a tenere i riquadri
+       della stessa misura di quelli delle discipline. Per rimetterla,
+       si cancellano le tre righe qui sotto. */
+    .disciplina.rilievo .artefatto-descrizione {
+      display: none;
     }
 
     /* La testata è un pulsante: si raggiunge e si apre con la tastiera */
