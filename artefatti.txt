@@ -49,9 +49,7 @@ Costruisci il tuo tema argomentativo | Lingua e letteratura italiana | docenti |
 # Cartella prevista: docenti-annotazioni
 # Da riscrivere al posto di DA COMPILARE quando l'artefatto viene consegnato.
 Annotazioni sul registro | | docenti | docenti-annotazioni | Compone annotazioni disciplinari e di merito nel rispetto del regolamento d'istituto. Il nome dello studente resta sul computer di chi la usa. Richiede una chiave personale di accesso al servizio.
-# Cartella prevista: docenti-orario-aule
-# Da riscrivere al posto di DA COMPILARE quando l'artefatto viene consegnato.
-Orario e aule | | docenti | DA COMPILARE | DA COMPILARE
+Orario e aule | | docenti | docenti-orario-aule | Cerca una classe o un insegnante e mostra l'orario della settimana con l'aula di ogni ora. L'orario pubblicato e' di esempio: chi usa la pagina puo' caricare il proprio, che resta sul suo computer.
 
 # Il campo disciplina resta vuoto per gli strumenti che non
 # appartengono a una disciplina.
@@ -60,10 +58,9 @@ Orario e aule | | docenti | DA COMPILARE | DA COMPILARE
 # aule dipende dall'orario, e separarli vorrebbe dire scrivere due
 # volte le stesse informazioni.
 #
-# E' scritto qui anche se non e' ancora assegnato a nessuno: compare
-# sul sito come non ancora consegnato, cosi' si vede che e' previsto.
-# Alla consegna si sostituisce DA COMPILARE con il nome della cartella
-# e con la descrizione.
+# L'orario vero non sta dentro al sito, perche' il repository e'
+# pubblico. Nella cartella c'e' un orario inventato, e la pagina ha
+# un pulsante per caricare il proprio file dal proprio computer.
 
 
 # ------------------------------------------------------------------
