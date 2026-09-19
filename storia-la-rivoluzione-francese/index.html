@@ -4,8 +4,85 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>La rivoluzione francese</title>
-  <link rel="stylesheet" href="../css/stile.css">
+  <link rel="stylesheet" href="../stile.css">
+
+  <style>
+    /* -------------------------------------------------------------
+       Solo la DISPOSIZIONE della linea del tempo.
+       I colori arrivano tutti da stile.css: qui si usano i loro nomi
+       (var(--verde) e simili), mai i codici scritti a mano.
+       ------------------------------------------------------------- */
+
+    .ritorno {
+      max-width: var(--massimo);
+      margin: 0 auto 0.6rem;
+    }
+
+    .linea-tempo {
+      margin-top: var(--spazio);
+      padding-left: 0.6rem;
+      border-left: 3px solid var(--verde);
+    }
+
+    .evento {
+      position: relative;
+      padding-left: 1.4rem;
+    }
+
+    .evento::before {
+      content: "";
+      position: absolute;
+      left: -0.72rem;
+      top: 1.3rem;
+      width: 0.85rem;
+      height: 0.85rem;
+      border-radius: 50%;
+      background: var(--fondo-lettura);
+      border: 3px solid var(--verde);
+    }
+
+    .evento.aperto::before { background: var(--verde); }
+
+    .evento-testata {
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 0.8em 0;
+      text-align: left;
+      font-weight: normal;
+      color: var(--testo);
+      background: none;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .evento-testata:hover { background: none; }
+
+    .evento-anno {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--teal);
+    }
+
+    .evento-nome {
+      display: block;
+      font-weight: bold;
+      color: var(--verde);
+      text-decoration: underline;
+    }
+
+    .evento-testata[aria-expanded="true"] .evento-nome {
+      text-decoration: none;
+    }
+
+    .evento-racconto {
+      padding: 0 0 1em;
+    }
+
+    .evento-racconto p:last-child { margin-bottom: 0; }
+  </style>
 </head>
+
 <body>
 
   <!--
@@ -13,23 +90,20 @@
     sono tutti nel file testi.txt, in questa stessa cartella.
   -->
 
-  <header class="intestazione">
-    <p class="ritorno"><a href="../index.html">Torna all'elenco</a></p>
-    <h1 id="titolo">&nbsp;</h1>
-    <p id="sottotitolo"></p>
-  </header>
+  <p class="ritorno su-scuro"><a href="../index.html">&larr; Torna alla pagina iniziale</a></p>
 
-  <main>
-    <section id="introduzione" class="presentazione"></section>
+  <h1 class="titolo-pagina" id="titolo">&nbsp;</h1>
+  <p class="titolo-pagina" id="sottotitolo"></p>
 
-    <section class="linea-tempo">
+  <main class="riquadro">
+    <div id="introduzione"></div>
+
+    <section class="linea-tempo" aria-label="Linea del tempo">
       <div id="eventi"></div>
     </section>
   </main>
 
-  <footer>
-    <p id="piede"></p>
-  </footer>
+  <p class="ritorno su-scuro" id="piede"></p>
 
   <script src="../js/artefatto.js"></script>
 
