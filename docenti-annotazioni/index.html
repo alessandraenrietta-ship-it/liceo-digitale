@@ -194,10 +194,11 @@
 <section class="riquadro" id="chiaveBox" aria-labelledby="chiaveTitolo">
   <h2 id="chiaveTitolo">Chiave di accesso personale</h2>
   <!-- TESTO MODIFICABILE: puoi cambiare le righe qui sotto -->
-  <p>Questa pagina genera il testo chiedendo aiuto a un servizio esterno (Anthropic, l'azienda che fa il modello Claude), e quel servizio richiede una chiave personale per funzionare. La chiave resta soltanto in questo browser: non viene mai scritta nel codice del sito e non passa da nessun'altra parte. Chi non ha una chiave può richiederla sul sito di Anthropic.</p>
+  <p>Questa pagina genera il testo chiedendo aiuto al servizio Gemini di Google, che richiede una chiave personale gratuita per funzionare. La chiave resta soltanto in questo browser: non viene mai scritta nel codice del sito e non passa da nessun'altra parte. Si ottiene gratuitamente su <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>, con un account Google.</p>
+  <p><strong>Da sapere:</strong> con la chiave gratuita, Google può usare il testo che scrivi nella "Descrizione dell'episodio" per migliorare i suoi servizi (il nome dello studente non c'entra: quello non viene mai inviato). Chi preferisce evitarlo può usare una chiave a pagamento, che costa pochi centesimi a nota e non ha questo effetto.</p>
   <div class="chiave-riga">
     <label for="chiaveInput" class="sr-only" style="display:none;">Chiave di accesso</label>
-    <input type="password" id="chiaveInput" placeholder="Incolla qui la tua chiave (inizia con sk-ant-...)" autocomplete="off">
+    <input type="password" id="chiaveInput" placeholder="Incolla qui la tua chiave (inizia con AIza...)" autocomplete="off">
     <button type="button" id="salvaChiaveBtn">Salva chiave</button>
     <button type="button" id="rimuoviChiaveBtn">Rimuovi chiave salvata</button>
   </div>
@@ -489,34 +490,40 @@ Convocazione dei genitori disposta: ${convocazione ? "sì" : "no"}
 Descrizione dell'episodio fornita dal docente: ${fatto}`;
 
   try{
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-api-key": chiave,
-        "anthropic-version": "2023-06-01",
-        "anthropic-dangerous-direct-browser-access": "true"
-      },
-      body: JSON.stringify({
-        model: "claude-sonnet-5",
-        max_tokens: 1000,
-        system: SYSTEM_PROMPT,
-        messages: [
-          { role: "user", content: userMessage }
-        ]
-      })
-    });
+    const modello = "gemini-3.5-flash";
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${modello}:generateContent`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-goog-api-key": chiave
+        },
+        body: JSON.stringify({
+          contents: [
+            { parts: [{ text: userMessage }] }
+          ],
+          systemInstruction: {
+            parts: [{ text: SYSTEM_PROMPT }]
+          },
+          generationConfig: {
+            maxOutputTokens: 1000
+          }
+        })
+      }
+    );
 
     if(!response.ok){
-      if(response.status === 401){
+      if(response.status === 400 || response.status === 403){
         throw new Error("la chiave non è valida o non ha i permessi: controllala nel riquadro in cima alla pagina");
       }
       throw new Error("risposta non valida dal servizio (" + response.status + ")");
     }
 
     const dataResp = await response.json();
-    const testoBlocks = (dataResp.content || []).filter(b => b.type === "text").map(b => b.text);
-    const testoGenerato = testoBlocks.join("\n").trim();
+    const primaCandidata = (dataResp.candidates || [])[0];
+    const parti = (primaCandidata && primaCandidata.content && primaCandidata.content.parts) || [];
+    const testoGenerato = parti.map(p => p.text || "").join("\n").trim();
 
     if(!testoGenerato){
       throw new Error("nessun testo ricevuto");
