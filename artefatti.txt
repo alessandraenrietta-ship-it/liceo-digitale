@@ -13,7 +13,28 @@
 #
 #   titolo        come lo strumento si chiama sul sito
 #   disciplina    va scritta esattamente come compare nell'elenco in fondo
-#   destinatario  studenti, docenti oppure entrambi
+#   destinatario  studenti, docenti oppure entrambi.
+#                 La regola del progetto e' questa:
+#                 - se l'artefatto usa l'intelligenza artificiale, e
+#                   quindi chiede una chiave di accesso personale,
+#                   si scrive  docenti
+#                 - se non la usa, si scrive  entrambi , cosi' compare
+#                   in tutte e due le sezioni e possono usarlo anche
+#                   gli studenti
+#                 Il motivo: la chiave e' personale e a pagamento
+#                 oltre la quota gratuita. Non si puo' dare a una
+#                 classe intera, e un codice scritto nella pagina non
+#                 la proteggerebbe, perche' il sito e' pubblico e il
+#                 suo codice e' leggibile da chiunque.
+#                 Un artefatto nuovo si carica come  docenti , e
+#                 diventa  entrambi  quando si e' visto che funziona
+#                 senza chiave.
+#
+#                 UN'ECCEZIONE: gli strumenti generali, cioe' quelli
+#                 con il campo disciplina vuoto, restano sempre
+#                 docenti , anche quando non usano l'intelligenza
+#                 artificiale. Sono strumenti di lavoro nostri e non
+#                 riguardano gli studenti.
 #   cartella      nome della cartella che contiene l'artefatto,
 #                 nella forma disciplina-titolo, tutto minuscolo,
 #                 con il trattino, senza spazi e senza accenti
@@ -24,23 +45,27 @@
 # ------------------------------------------------------------------
 
 
-# ARTEFATTI PER GLI STUDENTI
+# ARTEFATTI LEGATI A UNA DISCIPLINA
+#
+# Attenzione: questi titoli servono solo a tenere in ordine il file.
+# Chi vede un artefatto sul sito lo decide il TERZO CAMPO della sua
+# riga, non il blocco in cui si trova.
 
-La rivoluzione francese | Storia | studenti | storia-la-rivoluzione-francese | Una linea del tempo interattiva con gli eventi principali dal 1789 al 1799.
+La rivoluzione francese | Storia | entrambi | storia-la-rivoluzione-francese | Una linea del tempo interattiva con gli eventi principali dal 1789 al 1799.
 
-DA COMPILARE | Lingua e letteratura italiana | studenti | italiano-DACOMPILARE | DA COMPILARE
-DA COMPILARE | Lingua e cultura straniera | studenti | inglese-DACOMPILARE | DA COMPILARE
-DA COMPILARE | Scienze naturali | studenti | scienze-DACOMPILARE | DA COMPILARE
-DA COMPILARE | Disegno e storia dell'arte | studenti | arte-DACOMPILARE | DA COMPILARE
-DA COMPILARE | Informatica | studenti | informatica-DACOMPILARE | DA COMPILARE
-DA COMPILARE | Religione cattolica | studenti | religione-DACOMPILARE | DA COMPILARE
-DA COMPILARE | Educazione civica | studenti | edcivica-DACOMPILARE | DA COMPILARE
+DA COMPILARE | Lingua e letteratura italiana | docenti | italiano-DACOMPILARE | DA COMPILARE
+DA COMPILARE | Lingua e cultura straniera | docenti | inglese-DACOMPILARE | DA COMPILARE
+DA COMPILARE | Scienze naturali | docenti | scienze-DACOMPILARE | DA COMPILARE
+DA COMPILARE | Disegno e storia dell'arte | docenti | arte-DACOMPILARE | DA COMPILARE
+DA COMPILARE | Informatica | docenti | informatica-DACOMPILARE | DA COMPILARE
+DA COMPILARE | Religione cattolica | docenti | religione-DACOMPILARE | DA COMPILARE
+DA COMPILARE | Educazione civica | docenti | edcivica-DACOMPILARE | DA COMPILARE
 
 # Riga non confermata: da togliere se la disciplina non viene coperta.
-DA COMPILARE | Diritto | studenti | diritto-DACOMPILARE | DA COMPILARE
+DA COMPILARE | Diritto | docenti | diritto-DACOMPILARE | DA COMPILARE
 
 
-# ARTEFATTI PER I DOCENTI
+# STRUMENTI DI LAVORO
 
 Costruisci il tuo tema argomentativo | Lingua e letteratura italiana | docenti | italiano-tema-argomentativo | Prototipo: guida alla costruzione di una scaletta argomentativa. Richiede una chiave personale di accesso al servizio, inserita da chi usa la pagina.
 

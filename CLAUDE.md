@@ -48,6 +48,32 @@ Repository: https://github.com/alessandraenrietta-ship-it/liceo-digitale
 - Esempi da evitare: `Storia/La Rivoluzione Francese`, `mate_frazioni`,
   `italiano analisi`.
 
+### Chi può usare un artefatto
+
+Ogni artefatto si carica nella **sezione docenti**. Poi vale questa regola,
+scritta nel terzo campo della sua riga in `artefatti.txt`:
+
+- **usa l'intelligenza artificiale** (quindi chiede una chiave di accesso
+  personale) → `docenti`
+- **non la usa** → `entrambi`, così lo vedono anche gli studenti
+
+**Eccezione:** gli **strumenti generali**, cioè quelli con il campo
+disciplina vuoto, restano **sempre** `docenti`, anche quando non usano
+l'intelligenza artificiale. Sono strumenti di lavoro dei docenti e non
+riguardano gli studenti. Questo vale a prescindere dalla regola qui sopra.
+
+Il motivo non è didattico ma tecnico, e non ha aggiramenti: la chiave è
+personale, ha una quota gratuita pensata per una persona sola, e oltre
+quella si paga. Non si può distribuire a una classe. E non serve inventare
+un "codice per gli studenti": il sito è pubblico e il suo codice è leggibile
+da chiunque, quindi qualunque codice o chiave scritta nella pagina sarebbe
+visibile in pochi secondi. Sarebbe una tenda, non una serratura.
+
+Se un artefatto per gli studenti deve usare l'intelligenza artificiale,
+serve un programma intermedio che tenga la chiave nascosta: è una scelta
+che cambia la natura del progetto e va discussa con Alessandra, non decisa
+da sola.
+
 ## 5. Commit piccoli e frequenti
 
 - Si fa un commit per **ogni cambiamento compiuto e sensato**, senza
