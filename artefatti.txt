@@ -42,9 +42,7 @@ DA COMPILARE | Diritto | studenti | diritto-DACOMPILARE | DA COMPILARE
 
 # ARTEFATTI PER I DOCENTI
 
-# Cartella prevista: docenti-tema-argomentativo
-# Da riscrivere al posto di DA COMPILARE quando l'artefatto viene consegnato.
-Costruisci il tuo tema argomentativo | Lingua e letteratura italiana | docenti | DA COMPILARE | Prototipo: guida alla costruzione di una scaletta argomentativa. Richiede una chiave personale di accesso al servizio, inserita da chi usa la pagina.
+Costruisci il tuo tema argomentativo | Lingua e letteratura italiana | docenti | italiano-tema-argomentativo | Prototipo: guida alla costruzione di una scaletta argomentativa. Richiede una chiave personale di accesso al servizio, inserita da chi usa la pagina.
 
 # Cartella prevista: docenti-annotazioni
 # Da riscrivere al posto di DA COMPILARE quando l'artefatto viene consegnato.
