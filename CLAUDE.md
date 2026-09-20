@@ -70,9 +70,30 @@ da chiunque, quindi qualunque codice o chiave scritta nella pagina sarebbe
 visibile in pochi secondi. Sarebbe una tenda, non una serratura.
 
 Se un artefatto per gli studenti deve usare l'intelligenza artificiale,
-serve un programma intermedio che tenga la chiave nascosta: è una scelta
-che cambia la natura del progetto e va discussa con Alessandra, non decisa
-da sola.
+ci sono due strade, e nessuna delle due si imbocca da sola:
+
+1. **Un programma intermedio** che tenga la chiave nascosta. Cambia la
+   natura del progetto: non è più una cartella di file.
+2. **La chiave la fornisce la famiglia.** Ogni studente incolla sul
+   proprio dispositivo la chiave creata da un genitore. Tecnicamente
+   funziona e non richiede niente di nuovo: basta il riquadro condiviso
+   descritto qui sotto.
+
+La seconda strada è **preparata ma non attiva**. Prima di usarla servono
+tre cose, che non sono decisioni tecniche: il via libera del dirigente o
+del responsabile privacy (i testi dei minori finiscono a un servizio
+esterno), un'alternativa per chi non ha la chiave (altrimenti l'attività
+esclude qualcuno), e l'informativa alle famiglie. Vanno verificate prima,
+non dopo.
+
+### Il riquadro della chiave: uno solo, condiviso
+
+Gli artefatti che chiedono una chiave **non se la costruiscono da soli**:
+usano `js/chiave.js`, che disegna il riquadro, salva la chiave nel browser
+di chi la usa e la rilegge. Le istruzioni per usarlo sono scritte in cima
+a quel file.
+
+Non si scrive mai una chiave dentro il codice, nemmeno per prova.
 
 ## 5. Commit piccoli e frequenti
 
