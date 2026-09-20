@@ -160,6 +160,26 @@
       color: var(--teal);
     }
 
+    /* Collegamento per richiudere una sezione rimasta aperta */
+    .riga-esci {
+      margin: var(--spazio) 0 0;
+      text-align: right;
+    }
+
+    .collegamento-esci {
+      padding: 0;
+      background: none;
+      color: var(--teal);
+      font-size: 0.85rem;
+      font-weight: normal;
+      text-decoration: underline;
+    }
+
+    .collegamento-esci:hover {
+      background: none;
+      color: var(--verde);
+    }
+
     .messaggio-errore {
       margin-top: 0.6em;
       font-weight: bold;
@@ -240,7 +260,7 @@
     <ul id="elenco-segnalazioni"></ul>
   </section>
 
-  <script src="js/home.js?v=3"></script>
+  <script src="js/home.js?v=4"></script>
 
 </body>
 </html>

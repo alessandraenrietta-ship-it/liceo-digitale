@@ -365,20 +365,43 @@
      ACCESSO ALLA SEZIONE DOCENTI
      ------------------------------------------------------------------ */
 
-  /* Una sezione gia' aperta resta aperta finche' la finestra del
-     browser non viene chiusa: cosi' tornando indietro da un artefatto
-     non si deve riscrivere la parola. */
+  /* Una sezione aperta resta aperta su questo computer: la parola
+     d'ordine si scrive una volta sola e non la si richiede piu', nemmeno
+     dopo aver chiuso il browser.
+
+     Si puo' fare perche' queste parole non proteggono niente: sono
+     scritte in chiaro nel codice del sito, servono solo a tenere
+     separate le due sezioni. Chi vuole richiuderle usa il collegamento
+     "esci" in fondo alla pagina. */
   function ricorda(prefisso) {
     try {
-      window.sessionStorage.setItem(prefisso + "-aperta", "si");
+      window.localStorage.setItem(prefisso + "-aperta", "si");
     } catch (errore) {
       /* Se il browser non lo permette pazienza: si riscrive la parola. */
     }
   }
 
+  function dimentica(prefisso) {
+    try {
+      window.localStorage.removeItem(prefisso + "-aperta");
+      window.sessionStorage.removeItem(prefisso + "-aperta");
+    } catch (errore) {
+      /* niente da fare */
+    }
+  }
+
   function giaAperta(prefisso) {
     try {
-      return window.sessionStorage.getItem(prefisso + "-aperta") === "si";
+      if (window.localStorage.getItem(prefisso + "-aperta") === "si") {
+        return true;
+      }
+      /* Chi aveva gia' aperto la sezione prima di questa modifica non
+         deve riscrivere la parola: si sposta il ricordo. */
+      if (window.sessionStorage.getItem(prefisso + "-aperta") === "si") {
+        ricorda(prefisso);
+        return true;
+      }
+      return false;
     } catch (errore) {
       return false;
     }
@@ -393,7 +416,27 @@
 
   function apriArea(prefisso) {
     document.getElementById("accesso-" + prefisso).hidden = true;
-    document.getElementById("area-" + prefisso).hidden = false;
+    var area = document.getElementById("area-" + prefisso);
+    area.hidden = false;
+
+    /* Un modo per richiudere la sezione, utile su un computer usato da
+       altri. Si aggiunge una volta sola. */
+    if (!document.getElementById("esci-" + prefisso)) {
+      var riga = document.createElement("p");
+      riga.className = "riga-esci";
+      var esci = document.createElement("button");
+      esci.type = "button";
+      esci.id = "esci-" + prefisso;
+      esci.className = "collegamento-esci";
+      esci.textContent = "Chiudi questa sezione su questo computer";
+      esci.addEventListener("click", function () {
+        dimentica(prefisso);
+        document.getElementById("accesso-" + prefisso).hidden = false;
+        area.hidden = true;
+      });
+      riga.appendChild(esci);
+      area.appendChild(riga);
+    }
   }
 
   function preparaAccesso(prefisso, parola) {
