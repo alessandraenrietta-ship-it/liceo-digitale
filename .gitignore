@@ -13,8 +13,9 @@
 Claude outputs/
 
 # L'orario vero della scuola, con i nomi degli insegnanti.
-orario-vero*.txt
-orario_vero*.txt
+# Vale per qualunque tipo di file: .txt, .html, .pdf e tutti gli altri.
+orario-vero*
+orario_vero*
 
 # File temporanei di Windows.
 Thumbs.db

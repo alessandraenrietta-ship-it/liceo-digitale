@@ -137,6 +137,21 @@
 
     td.vuota { background: #F4F4F4; }
 
+    /* Le ore buche: quelle senza lezione fra due lezioni dello
+       stesso giorno. Sono scritte a parole, non segnalate solo
+       da un colore. */
+    .buca {
+      display: inline-block;
+      padding: 0.1em 0.5em;
+      font-size: 0.88rem;
+      color: var(--testo);
+      background: #FFFFFF;
+      border: 1px dashed var(--teal);
+      border-radius: var(--raggio);
+    }
+
+    td.ora-buca { background: #F0F5F5; }
+
     .materia {
       display: block;
       font-weight: bold;
@@ -676,6 +691,41 @@
       return td;
     }
 
+    /* Le ore buche: per ogni giorno, le ore senza lezione che
+       stanno FRA la prima e l'ultima lezione di quel giorno.
+       Le ore prima di entrare e dopo essere usciti non sono
+       buche: sono semplicemente fuori servizio. */
+    function calcolaBuche(mie) {
+      var posizione = {};
+      dati.ore.forEach(function (o, i) { posizione[o.numero] = i; });
+
+      var buche = {};
+
+      dati.giorniChiave.forEach(function (chiave) {
+        var occupate = [];
+        mie.forEach(function (l) {
+          if (senzaAccenti(l.giorno) === chiave && posizione[l.ora] !== undefined) {
+            occupate.push(posizione[l.ora]);
+          }
+        });
+        if (occupate.length < 2) { return; }
+
+        var prima = Math.min.apply(null, occupate);
+        var ultima = Math.max.apply(null, occupate);
+        for (var i = prima + 1; i < ultima; i += 1) {
+          if (occupate.indexOf(i) < 0) {
+            buche[chiave + "|" + dati.ore[i].numero] = true;
+          }
+        }
+      });
+
+      return buche;
+    }
+
+    function quanteBuche(buche) {
+      return Object.keys(buche).length;
+    }
+
     function schermoStretto() {
       return window.matchMedia("(max-width: 55rem)").matches;
     }
@@ -683,6 +733,7 @@
     /* L'elenco giorno per giorno, per gli schermi stretti. */
     function disegnaGiorni(mie) {
       var contenitore = document.createElement("div");
+      var buche = calcolaBuche(mie);
 
       dati.giorni.forEach(function (giorno, indice) {
         var chiave = dati.giorniChiave[indice];
@@ -690,11 +741,16 @@
         var delGiorno = [];
         dati.righe.forEach(function (riga) {
           if (riga.tipo !== "ora") { return; }
+          var trovata = false;
           mie.forEach(function (l) {
             if (l.ora === riga.dato.numero && senzaAccenti(l.giorno) === chiave) {
               delGiorno.push({ ora: riga.dato, lezione: l });
+              trovata = true;
             }
           });
+          if (!trovata && buche[chiave + "|" + riga.dato.numero]) {
+            delGiorno.push({ ora: riga.dato, lezione: null });
+          }
         });
 
         if (delGiorno.length === 0) { return; }
@@ -716,8 +772,15 @@
             + voce.ora.inizio + " - " + voce.ora.fine;
           li.appendChild(quando);
 
-          var provvisorio = cella(voce.lezione, seleziona.tipo);
-          while (provvisorio.firstChild) { li.appendChild(provvisorio.firstChild); }
+          if (voce.lezione) {
+            var provvisorio = cella(voce.lezione, seleziona.tipo);
+            while (provvisorio.firstChild) { li.appendChild(provvisorio.firstChild); }
+          } else {
+            var vuota = document.createElement("span");
+            vuota.className = "buca";
+            vuota.textContent = "ora buca";
+            li.appendChild(vuota);
+          }
 
           ol.appendChild(li);
         });
@@ -734,6 +797,7 @@
       if (!dati || !seleziona) { return; }
 
       var mie = lezioniDi(seleziona);
+      var buche = calcolaBuche(mie);
 
       var testata = document.createElement("div");
       testata.className = "intestazione-orario";
@@ -750,7 +814,12 @@
           ? "Aula della classe: " + base
           : "Aula della classe non ancora indicata";
       } else {
-        sotto.textContent = mie.length + (mie.length === 1 ? " ora di lezione" : " ore di lezione") + " alla settimana";
+        var n = quanteBuche(buche);
+        sotto.textContent = mie.length
+          + (mie.length === 1 ? " ora di lezione" : " ore di lezione")
+          + " alla settimana"
+          + (n === 0 ? ", nessuna ora buca"
+             : n === 1 ? ", 1 ora buca" : ", " + n + " ore buche");
       }
       testata.appendChild(sotto);
 
@@ -799,7 +868,12 @@
       /* Quali ore hanno almeno una lezione: le altre non si
          mostrano, altrimenti restano righe vuote in fondo. */
       function oraPiena(ora) {
-        return mie.some(function (l) { return l.ora === ora.numero; });
+        if (mie.some(function (l) { return l.ora === ora.numero; })) { return true; }
+        /* Anche un'ora buca va mostrata: se la riga sparisse, la
+           buca non si vedrebbe da nessuna parte. */
+        return dati.giorniChiave.some(function (chiave) {
+          return buche[chiave + "|" + ora.numero];
+        });
       }
 
       dati.righe.forEach(function (riga, posizione) {
@@ -852,8 +926,16 @@
 
           if (trovate.length === 0) {
             var vuota = document.createElement("td");
-            vuota.className = "vuota";
             vuota.setAttribute("data-giorno", giorno);
+            if (buche[chiave + "|" + ora.numero]) {
+              vuota.className = "ora-buca";
+              var segno = document.createElement("span");
+              segno.className = "buca";
+              segno.textContent = "ora buca";
+              vuota.appendChild(segno);
+            } else {
+              vuota.className = "vuota";
+            }
             tr.appendChild(vuota);
             return;
           }
