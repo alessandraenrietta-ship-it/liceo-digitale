@@ -154,6 +154,12 @@
     .accesso { max-width: 22rem; }
     .accesso button { margin-top: 0.6em; }
 
+    .aiuto-parola {
+      margin: 0 0 0.5em;
+      font-size: 0.88rem;
+      color: var(--teal);
+    }
+
     .messaggio-errore {
       margin-top: 0.6em;
       font-weight: bold;
@@ -188,6 +194,8 @@
       <p>Questa sezione raccoglie gli strumenti da usare in classe e a casa.</p>
       <form id="modulo-studenti">
         <label for="parola-studenti">Parola d'ordine</label>
+        <p class="aiuto-parola">Una sola parola, quella che ti è stata
+           comunicata.</p>
         <input type="password" id="parola-studenti" name="parola-studenti"
                autocomplete="off">
         <button type="submit">Entra</button>
@@ -208,6 +216,9 @@
       <p>Questa sezione raccoglie gli strumenti di lavoro dei docenti.</p>
       <form id="modulo-docenti">
         <label for="parola-docenti">Parola d'ordine</label>
+        <p class="aiuto-parola">Una sola parola, quella che ti è stata
+           comunicata. <strong>Non è la chiave di Google:</strong> quella
+           si incolla dentro lo strumento, dopo essere entrati.</p>
         <input type="password" id="parola-docenti" name="parola-docenti"
                autocomplete="off">
         <button type="submit">Entra</button>
@@ -229,7 +240,7 @@
     <ul id="elenco-segnalazioni"></ul>
   </section>
 
-  <script src="js/home.js?v=2"></script>
+  <script src="js/home.js?v=3"></script>
 
 </body>
 </html>
