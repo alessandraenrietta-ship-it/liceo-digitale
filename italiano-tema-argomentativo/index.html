@@ -225,23 +225,9 @@
   </div>
   <p class="ritorno"><a href="../index.html">&larr; Torna alla pagina iniziale</a></p>
 
-  <div class="box" id="chiaveBox">
-    <h2>Chiave di accesso personale</h2>
-    <p>Questa pagina costruisce lo schema chiedendo aiuto al servizio Gemini
-       di Google, che richiede una chiave personale gratuita per funzionare.
-       La chiave resta soltanto in questo browser: non viene mai scritta nel
-       codice del sito e non passa da nessun'altra parte. Si ottiene
-       gratuitamente su
-       <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>,
-       con un account Google.</p>
-    <div class="chiave-riga">
-      <input type="password" id="chiaveInput" autocomplete="off"
-             placeholder="Incolla qui la tua chiave (inizia con AIza...)">
-      <button type="button" id="salvaChiaveBtn">Salva chiave</button>
-      <button type="button" id="rimuoviChiaveBtn">Rimuovi chiave salvata</button>
-    </div>
-    <p class="chiave-stato" id="chiaveStato"></p>
-  </div>
+  <!-- Il riquadro della chiave lo costruisce js/chiave.js, uguale in
+       tutti gli artefatti che ne chiedono una. -->
+  <div class="box" id="chiaveBox"></div>
 
   <div class="box" style="text-align:center;">
     <p class="titolo-pagina">Costruisci il tuo tema argomentativo</p>
@@ -303,62 +289,24 @@
 
 </div>
 
+<script src="../js/chiave.js?v=1"></script>
 <script>
 /* ------------------------------------------------------------------
    LA CHIAVE DI ACCESSO PERSONALE
 
-   Non c'è nessuna chiave scritta qui dentro, ed è voluto: il sito è
-   pubblico, e una chiave scritta nel codice sarebbe leggibile da
-   chiunque. Ognuno incolla la propria nel riquadro in cima alla
-   pagina; resta solo nel browser di chi la usa (localStorage) e non
-   viene mandata da nessun'altra parte se non a Google.
+   Il riquadro e tutta la sua gestione stanno in js/chiave.js, uguali
+   per ogni artefatto che chiede una chiave. Qui si dice soltanto dove
+   va messo e con che nome ricordare la chiave in questo browser.
    ------------------------------------------------------------------ */
 
 const CHIAVE_STORAGE = "liceo-digitale-chiave-tema-argomentativo";
 
-function leggiChiave() {
-  try {
-    return localStorage.getItem(CHIAVE_STORAGE) || "";
-  } catch (e) {
-    return "";
-  }
-}
+ChiavePersonale.prepara({
+  dove: "chiaveBox",
+  nome: CHIAVE_STORAGE,
+  aCosaServe: "costruisce lo schema"
+});
 
-function aggiornaStatoChiave() {
-  const stato = document.getElementById('chiaveStato');
-  if (leggiChiave()) {
-    stato.textContent = "Chiave salvata in questo browser: puoi generare lo schema.";
-  } else {
-    stato.textContent = "Nessuna chiave salvata: serve per generare lo schema.";
-  }
-}
-
-function salvaChiave() {
-  const campo = document.getElementById('chiaveInput');
-  const valore = campo.value.trim();
-  if (!valore) { return; }
-  try {
-    localStorage.setItem(CHIAVE_STORAGE, valore);
-  } catch (e) {
-    /* Se il browser blocca la memoria locale, pazienza: la chiave va
-       reinserita alla prossima visita. */
-  }
-  campo.value = "";
-  aggiornaStatoChiave();
-}
-
-function rimuoviChiave() {
-  try {
-    localStorage.removeItem(CHIAVE_STORAGE);
-  } catch (e) {
-    /* niente da fare */
-  }
-  aggiornaStatoChiave();
-}
-
-document.getElementById('salvaChiaveBtn').addEventListener('click', salvaChiave);
-document.getElementById('rimuoviChiaveBtn').addEventListener('click', rimuoviChiave);
-aggiornaStatoChiave();
 
 
 async function generaStruttura() {
@@ -366,7 +314,7 @@ async function generaStruttura() {
   const errore = document.getElementById('errore-msg');
   const tesi = input.value.trim();
 
-  const chiave = leggiChiave();
+  const chiave = ChiavePersonale.leggi(CHIAVE_STORAGE);
   if (!chiave) {
     errore.textContent = "Manca la chiave di accesso: inseriscila nel riquadro in cima alla pagina.";
     errore.style.display = 'block';

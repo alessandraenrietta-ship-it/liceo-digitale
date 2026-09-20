@@ -191,19 +191,9 @@
 <h1 class="titolo-pagina">Annotazioni sul registro</h1>
 <p class="titolo-pagina">Compila i campi e genera il testo da incollare sul registro elettronico.</p>
 
-<section class="riquadro" id="chiaveBox" aria-labelledby="chiaveTitolo">
-  <h2 id="chiaveTitolo">Chiave di accesso personale</h2>
-  <!-- TESTO MODIFICABILE: puoi cambiare le righe qui sotto -->
-  <p>Questa pagina genera il testo chiedendo aiuto al servizio Gemini di Google, che richiede una chiave personale gratuita per funzionare. La chiave resta soltanto in questo browser: non viene mai scritta nel codice del sito e non passa da nessun'altra parte. Si ottiene gratuitamente su <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>, con un account Google.</p>
-  <p><strong>Da sapere:</strong> con la chiave gratuita, Google può usare il testo che scrivi nella "Descrizione dell'episodio" per migliorare i suoi servizi (il nome dello studente non c'entra: quello non viene mai inviato). Chi preferisce evitarlo può usare una chiave a pagamento, che costa pochi centesimi a nota e non ha questo effetto.</p>
-  <div class="chiave-riga">
-    <label for="chiaveInput" class="sr-only" style="display:none;">Chiave di accesso</label>
-    <input type="password" id="chiaveInput" placeholder="Incolla qui la tua chiave (inizia con AIza...)" autocomplete="off">
-    <button type="button" id="salvaChiaveBtn">Salva chiave</button>
-    <button type="button" id="rimuoviChiaveBtn">Rimuovi chiave salvata</button>
-  </div>
-  <p class="chiave-stato" id="chiaveStato"></p>
-</section>
+<!-- Il riquadro della chiave lo costruisce js/chiave.js, uguale in
+     tutti gli artefatti che ne chiedono una. -->
+<section class="riquadro" id="chiaveBox"></section>
 
 <form class="riquadro" id="noteForm">
 
@@ -299,53 +289,23 @@
   Il testo è generato al momento da un modello linguistico e non viene salvato: chiudendo o ricaricando la pagina, tutto viene perso.
 </p>
 
+<script src="../js/chiave.js?v=1"></script>
 <script>
-/* -------------------------------------------------------------
-   CHIAVE DI ACCESSO
-   Resta solo nel browser di chi usa la pagina (localStorage),
-   non viene mai scritta qui nel codice.
-   ------------------------------------------------------------- */
+/* ------------------------------------------------------------------
+   LA CHIAVE DI ACCESSO PERSONALE
+
+   Il riquadro e tutta la sua gestione stanno in js/chiave.js, uguali
+   per ogni artefatto che chiede una chiave. Qui si dice soltanto dove
+   va messo e con che nome ricordare la chiave in questo browser.
+   ------------------------------------------------------------------ */
+
 const CHIAVE_STORAGE = "liceo-digitale-chiave-annotazioni";
 
-function leggiChiave(){
-  try {
-    return localStorage.getItem(CHIAVE_STORAGE) || "";
-  } catch(e){
-    return "";
-  }
-}
-
-function aggiornaStatoChiave(){
-  const stato = document.getElementById("chiaveStato");
-  if(leggiChiave()){
-    stato.textContent = "Chiave salvata in questo browser.";
-  } else {
-    stato.textContent = "Nessuna chiave salvata: serve per generare le annotazioni.";
-  }
-}
-
-document.getElementById("salvaChiaveBtn").addEventListener("click", function(){
-  const valore = document.getElementById("chiaveInput").value.trim();
-  if(!valore){
-    return;
-  }
-  try {
-    localStorage.setItem(CHIAVE_STORAGE, valore);
-  } catch(e){
-    // Se il browser blocca la memoria locale, la chiave resta solo nel campo per questa visita.
-  }
-  document.getElementById("chiaveInput").value = "";
-  aggiornaStatoChiave();
+ChiavePersonale.prepara({
+  dove: "chiaveBox",
+  nome: CHIAVE_STORAGE,
+  aCosaServe: "compone il testo"
 });
-
-document.getElementById("rimuoviChiaveBtn").addEventListener("click", function(){
-  try {
-    localStorage.removeItem(CHIAVE_STORAGE);
-  } catch(e){}
-  aggiornaStatoChiave();
-});
-
-aggiornaStatoChiave();
 
 /* -------------------------------------------------------------
    ELENCO DELLE MANCANZE SPECIFICHE
@@ -465,7 +425,7 @@ Poi chiudi la nota con una riga separata, dopo una riga vuota, nel formato:
 Rispondi SOLO con il testo della nota, senza premesse, senza titoli, senza virgolette che la racchiudano, senza spiegazioni del tuo lavoro.`;
 
 document.getElementById("generaBtn").addEventListener("click", async function(){
-  const chiave = leggiChiave();
+  const chiave = ChiavePersonale.leggi(CHIAVE_STORAGE);
   const errorBox = document.getElementById("errorMsg");
   errorBox.style.display = "none";
 
