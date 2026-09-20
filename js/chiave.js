@@ -43,6 +43,18 @@
 window.ChiavePersonale = (function () {
   "use strict";
 
+  /* Tutti gli strumenti che usano Gemini condividono la stessa chiave:
+     si incolla una volta e vale per tutti. Prima ognuno se la ricordava
+     con un nome suo, e bisognava reinserirla in ogni strumento. */
+  var NOME_CONDIVISO = "liceo-digitale-chiave-google";
+
+  /* I nomi usati prima. Se qualcuno ha gia' la chiave salvata sotto uno
+     di questi, la si sposta sul nome nuovo: cosi' non deve reinserirla. */
+  var NOMI_VECCHI = [
+    "liceo-digitale-chiave-annotazioni",
+    "liceo-digitale-chiave-tema-argomentativo"
+  ];
+
   function leggi(nome) {
     try {
       return localStorage.getItem(nome) || "";
@@ -70,12 +82,25 @@ window.ChiavePersonale = (function () {
     }
   }
 
+  function recuperaDaiNomiVecchi(nome) {
+    if (leggi(nome)) { return; }
+    for (var i = 0; i < NOMI_VECCHI.length; i += 1) {
+      var vecchia = leggi(NOMI_VECCHI[i]);
+      if (vecchia) {
+        salva(nome, vecchia);
+        return;
+      }
+    }
+  }
+
   function prepara(opzioni) {
     var contenitore = document.getElementById(opzioni.dove);
     if (!contenitore) { return; }
 
-    var nome = opzioni.nome;
+    var nome = opzioni.nome || NOME_CONDIVISO;
     var aCosaServe = opzioni.aCosaServe || "funziona";
+
+    recuperaDaiNomiVecchi(nome);
 
     contenitore.innerHTML =
       '<h2>Chiave di accesso personale</h2>' +
