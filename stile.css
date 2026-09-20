@@ -193,3 +193,33 @@ label {
   body { padding: 0.75rem; }
   .riquadro { padding: 1.1rem; }
 }
+
+
+/* -----------------------------------------------------------------
+   RIQUADRO DELLA CHIAVE DI ACCESSO PERSONALE
+   Lo disegna js/chiave.js, uguale in tutti gli artefatti che
+   chiedono una chiave. Va dentro un .riquadro.
+   ----------------------------------------------------------------- */
+
+.chiave-riga {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.chiave-etichetta {
+  flex: 1 0 100%;
+  margin: 0;
+}
+
+.chiave-riga input {
+  flex: 1 1 15rem;
+  min-width: 0;
+}
+
+.chiave-stato {
+  margin: 0.7em 0 0;
+  font-weight: bold;
+  color: var(--verde);
+}
