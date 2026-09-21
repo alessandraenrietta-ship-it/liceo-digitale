@@ -53,8 +53,7 @@
 
 La rivoluzione francese | Storia | entrambi | storia-la-rivoluzione-francese | Una linea del tempo interattiva con gli eventi principali dal 1789 al 1799.
 
-DA COMPILARE | Lingua e letteratura italiana | docenti | italiano-DACOMPILARE | DA COMPILARE
-DA COMPILARE | Lingua e cultura straniera | docenti | inglese-DACOMPILARE | DA COMPILARE
+DA COMPILARE | Lingua e cultura straniera - inglese | docenti | inglese-DACOMPILARE | DA COMPILARE
 DA COMPILARE | Scienze naturali | docenti | scienze-DACOMPILARE | DA COMPILARE
 DA COMPILARE | Disegno e storia dell'arte | docenti | arte-DACOMPILARE | DA COMPILARE
 DA COMPILARE | Informatica | docenti | informatica-DACOMPILARE | DA COMPILARE
@@ -100,7 +99,7 @@ Orario e aule | | docenti | docenti-orario-aule | Cerca una classe o un insegnan
 #
 # INIZIO ELENCO DISCIPLINE
 # Lingua e letteratura italiana
-# Lingua e cultura straniera
+# Lingua e cultura straniera - inglese
 # Storia
 # Geografia
 # Filosofia
