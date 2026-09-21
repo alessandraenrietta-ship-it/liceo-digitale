@@ -1,0 +1,834 @@
+# ============================================================
+# I CASI DEL DETECTIVE DEGLI ESPERIMENTI
+# ============================================================
+#
+# Questo file contiene tutti i casi. Puoi modificarlo con un
+# qualsiasi editor di testo (Blocco note va benissimo) e salvarlo:
+# il sito cambia subito, non serve toccare il codice.
+#
+# COME SI SCRIVE UN CASO
+# ----------------------
+# Ogni caso comincia con la riga [CASO] e contiene:
+#
+#   titolo:  il nome del caso, breve
+#   icona:   una emoji (facoltativa)
+#   storia:  la situazione da cui si parte
+#
+# Poi vengono i passi, uno dopo l'altro. Ogni passo comincia
+# con la riga [PASSO] e contiene:
+#
+#   titolo:   il nome del passo (es. L'ipotesi)
+#   premessa: un testo che compare prima della domanda (facoltativo)
+#   tipo:     scrivi "multipla" se le risposte giuste sono più di una
+#   domanda:  la domanda vera e propria
+#
+# e infine le risposte, una per riga:
+#
+#   + risposta giusta     | spiegazione che appare quando la si sceglie
+#   - risposta sbagliata  | spiegazione che appare quando la si sceglie
+#
+# Il segno + indica la risposta giusta, il segno - una sbagliata.
+# La barra verticale | separa la risposta dalla sua spiegazione.
+#
+# ALTRE COSE DA SAPERE
+# --------------------
+# - Le righe che iniziano con # sono commenti: il sito le ignora.
+# - Le righe vuote servono solo a rendere il file leggibile.
+# - Se un testo è lungo puoi andare a capo: le righe che non
+#   iniziano con una parola chiave si attaccano alla precedente.
+# - Se sbagli a scrivere una riga il sito non si blocca: la salta
+#   e ti dice quale riga rivedere.
+# - I passi possono essere quanti vuoi, e ogni caso può averne
+#   un numero diverso.
+#
+# ============================================================
+
+
+[CASO]
+titolo: Le piante sul davanzale
+icona: 🌱
+storia: Marco dice che le piante sul davanzale della cucina crescono
+più in fretta di quelle che tiene in corridoio. Sua sorella non gli
+crede: secondo lei la differenza sta nel fatto che in cucina le
+annaffia più spesso, perché passa di lì tutti i giorni. Progetta
+l'esperimento che può dare ragione a uno dei due.
+
+[PASSO]
+titolo: L'ipotesi
+domanda: Quale di queste frasi è una buona ipotesi scientifica?
++ Le piante che ricevono più luce crescono di più in altezza in tre settimane | Questa si può mettere alla prova: dice qual è la causa sospettata (la luce), quale effetto guardare (l'altezza) e in quanto tempo. E soprattutto potrebbe risultare falsa. Un'ipotesi che non può essere smentita da nessuna misura non è scientifica.
+- Le piante stanno meglio in cucina | "Stare meglio" non si misura. Prima di partire devi trasformarlo in qualcosa che si conta: i centimetri di altezza, il numero di foglie, il peso.
+- Le piante hanno bisogno di luce per vivere | È vero, ma è una conoscenza che hai già: non è la risposta alla domanda che ti sei posto. L'ipotesi deve riguardare il caso specifico che stai indagando.
+- La cucina è l'ambiente migliore della casa per le piante | Troppo vaga e troppo ampia. Fra cucina e corridoio cambiano insieme luce, temperatura, umidità e anche l'acqua: non riusciresti a dire quale delle quattro conta.
+
+[PASSO]
+titolo: Che cosa cambio
+domanda: Che cosa fai variare di proposito fra i due gruppi di piante?
++ La quantità di luce che ricevono | Questa è la variabile indipendente: l'unica cosa che decidi tu di cambiare. Se è davvero l'unica, alla fine potrai attribuire a lei la differenza.
+- L'altezza delle piante | L'altezza non la decidi tu: è quello che vuoi scoprire alla fine. È la variabile dipendente, cioè quella che "dipende" da ciò che hai cambiato.
+- La quantità d'acqua | Se cambi anche l'acqua, alla fine non potrai dire se la differenza viene dalla luce o dall'acqua. È esattamente il dubbio della sorella di Marco: non risolverlo sarebbe un peccato.
+- Il tipo di pianta | Cambiando pianta introduci una seconda differenza, e le due si confondono. Le piante devono essere il più possibile identiche fra loro.
+
+[PASSO]
+titolo: Che cosa misuro
+domanda: Che cosa misuri per sapere se l'ipotesi regge?
++ L'altezza del fusto in centimetri, misurata ogni tre giorni | Un numero, con la sua unità di misura, preso a intervalli regolari. Così puoi confrontare i gruppi e disegnare un grafico. Meglio ancora: misura sempre alla stessa ora, con lo stesso righello.
+- Se le piante sembrano più rigogliose | "Sembrare rigogliose" dipende da chi guarda e dall'umore del giorno. Due persone darebbero due risposte diverse, e questo in un esperimento è un guaio.
+- Quanta luce arriva sul davanzale | È la causa che stai già facendo variare, non l'effetto. Misurarla è utile per descrivere bene le condizioni, ma non ti dice se le piante sono cresciute.
+- Quante volte le hai annaffiate | È una delle cose che devi tenere uguali fra i gruppi, non il risultato che stai cercando.
+
+[PASSO]
+titolo: Che cosa tengo uguale
+tipo: multipla
+domanda: Quali di queste cose devi tenere identiche nei due gruppi? Le risposte giuste sono più di una.
++ La quantità d'acqua e ogni quanto la dai | Se non la tieni uguale, alla fine non saprai se ha contato la luce o l'acqua. Questa è proprio l'obiezione da smontare.
++ Il vaso, il terriccio e la loro quantità | Più terra significa più nutrimento e più spazio per le radici: sarebbe una seconda causa nascosta.
++ La specie della pianta e la sua altezza di partenza | Piante diverse crescono con velocità diverse. Devono essere il più possibile gemelle.
++ La temperatura della stanza | Il calore influenza la crescita quanto la luce, e in cucina di solito fa più caldo. È una delle cause che rischiano di confondersi con quella che ti interessa.
+- La quantità di luce | No: la luce è proprio ciò che stai facendo variare. Se la tieni uguale nei due gruppi, non stai più facendo nessun esperimento.
+- L'altezza raggiunta dopo tre settimane | Non si può "tenere uguale" un risultato. Quello è ciò che misuri alla fine, e la speranza è proprio che venga diverso.
+
+[PASSO]
+titolo: Il gruppo di controllo
+domanda: Qual è il gruppo di controllo di questo esperimento?
++ Un gruppo di piante identiche, curate allo stesso modo, ma lasciate nella luce normale del corridoio | Il controllo è il metro di paragone: serve a sapere come sarebbero andate le cose senza il trattamento. Senza di lui una crescita di 9 cm non significa niente: 9 cm rispetto a che cosa?
+- Una pianta che non annaffi mai | Così hai cambiato due cose insieme, la luce e l'acqua. Un gruppo di controllo deve essere identico in tutto tranne che nella variabile che stai studiando.
+- Il gruppo che metti in piena luce | Quello è il gruppo sperimentale, cioè quello che riceve il trattamento. Il controllo è l'altro.
+- Non serve: basta misurare le stesse piante prima e dopo | È l'errore più comune di tutti. Le piante crescono comunque, col passare del tempo: senza un gruppo di paragone non puoi sapere quanto di quella crescita è merito della luce.
+
+[PASSO]
+titolo: La conclusione
+premessa: Dopo tre settimane hai i risultati. Le dieci piante in piena luce sono cresciute in media di 9,2 cm, le dieci in corridoio di 3,1 cm. Dentro ciascun gruppo, però, le singole piante vanno da 2 a 12 cm.
+domanda: Che cosa puoi concludere onestamente?
++ In queste condizioni le piante con più luce sono cresciute di più; per esserne sicuri serve ripetere la prova con più piante | Questa è la formula onesta: descrive che cosa hai osservato, dice in quali condizioni, e riconosce che un esperimento solo non basta. La scienza diventa solida quando i risultati si ripetono.
+- È dimostrato che la luce fa crescere le piante | "Dimostrato" è una parola grossa per venti piante su un davanzale. Un singolo esperimento sostiene un'ipotesi, non la dimostra una volta per tutte.
+- L'esperimento è fallito, perché alcune piante in piena luce sono cresciute solo 2 cm | Non è un fallimento: è variabilità, e c'è sempre. Nessun essere vivente è identico a un altro. Per questo si guardano le medie e si usano molti individui, non uno solo.
+- Marco aveva ragione: la cucina è il posto migliore della casa per le piante | Hai messo alla prova la luce, non "la cucina". Un esperimento risponde alla domanda che gli hai fatto, non a una domanda più grande.
+
+
+[CASO]
+titolo: La muffa sul pane
+icona: 🍞
+storia: In classe qualcuno sostiene che il pane ammuffisce prima se
+lo chiudi in un sacchetto di plastica; qualcun altro dice che conta
+solo il frigorifero. Tu vuoi scoprire se è l'umidità intrappolata
+nel sacchetto a far comparire la muffa più in fretta.
+
+[PASSO]
+titolo: L'ipotesi
+domanda: Quale ipotesi metti alla prova?
++ Il pane chiuso in un sacchetto sviluppa la muffa in meno giorni di quello lasciato all'aria | Precisa e verificabile: c'è una causa (il sacchetto chiuso, quindi l'umidità), un effetto misurabile (dopo quanti giorni compare la muffa) e un confronto. Se le fette nel sacchetto ammuffissero dopo, l'ipotesi sarebbe smentita.
+- La muffa è una schifezza che rovina il pane | È un giudizio, non un'ipotesi. La scienza parte da affermazioni che si possono controllare con una misura.
+- Il pane ammuffisce | Vero, ma non dice niente sul perché né sul quando. Un'ipotesi deve mettere in relazione due cose, non constatarne una.
+- Se metto il pane in frigorifero non ammuffirà mai | "Mai" è una parola che nessun esperimento può verificare: dovresti aspettare all'infinito. Meglio: "ammuffisce più tardi che a temperatura ambiente".
+
+[PASSO]
+titolo: Che cosa cambio
+domanda: Che cosa fai variare fra i gruppi di fette?
++ Se la fetta sta in un sacchetto chiuso oppure all'aria aperta | È l'unica differenza voluta. Tutto il resto delle fette deve essere il più possibile identico.
+- Il tipo di pane | Pani diversi hanno umidità e conservanti diversi: è una seconda causa che si mescolerebbe alla prima.
+- Il numero di giorni che aspetti | Il tempo non è una cosa che cambi fra i gruppi: è la stessa attesa per tutti, ed è proprio ciò che misuri.
+- La temperatura della stanza | Se un gruppo sta al caldo e uno al freddo, alla fine non saprai se ha contato l'umidità o il calore.
+
+[PASSO]
+titolo: Che cosa misuro
+domanda: Come registri il risultato in modo che due persone diverse ottengano lo stesso dato?
++ I giorni trascorsi fino alla comparsa della prima macchia di muffa visibile, controllando ogni giorno alla stessa ora | È un numero, ha una regola chiara ("prima macchia visibile") e un momento fisso di osservazione. Chiunque seguirebbe la stessa procedura e otterrebbe lo stesso dato.
+- Quanto è brutta la fetta alla fine della settimana | Non è misurabile e cambia da persona a persona. Se due osservatori non sono d'accordo, il dato non serve.
+- L'odore del pane | Difficile da misurare e molto soggettivo. Potresti farne un dato serio solo con una scala precisa e più osservatori "alla cieca", ed è complicato.
+- Il peso del sacchetto | Il peso cambia soprattutto per l'acqua che evapora, non per la muffa. Misureresti un'altra cosa senza accorgertene.
+
+[PASSO]
+titolo: Che cosa tengo uguale
+tipo: multipla
+domanda: Quali condizioni devono essere identiche per tutte le fette? Le risposte giuste sono più di una.
++ Lo stesso pane, comprato insieme, tagliato in fette uguali | Fette dello stesso filone hanno la stessa umidità di partenza e gli stessi ingredienti.
++ La stessa stanza e la stessa temperatura | Il calore accelera la crescita della muffa: se cambia fra i gruppi, non saprai a chi dare la colpa.
++ Lo stesso momento di partenza per tutte | Se una fetta parte due giorni dopo, i giorni contati non sono confrontabili.
++ Toccare tutte le fette allo stesso modo, o meglio non toccarle affatto | Sulle mani ci sono spore e umidità: una fetta maneggiata di più parte svantaggiata senza che tu lo sappia.
+- Se il sacchetto è aperto o chiuso | È l'unica cosa che deve essere diversa: è la variabile che stai studiando.
+- Il giorno in cui compare la muffa | È il risultato. Non si decide, si osserva.
+
+[PASSO]
+titolo: Il gruppo di controllo
+domanda: Come costruisci il gruppo di controllo?
++ Fette identiche, nella stessa stanza e nello stesso momento, lasciate semplicemente all'aria | Identiche in tutto tranne che nel sacchetto. Sono il paragone che dice come vanno le cose "senza trattamento".
+- Una fetta tenuta in frigorifero | Cambieresti insieme umidità e temperatura, e alla fine non sapresti quale delle due ha contato.
+- Nessuna fetta: basta guardare quella nel sacchetto | Senza confronto non puoi dire se quattro giorni sono tanti o pochi. Il numero da solo non significa nulla.
+- Una fetta di un altro tipo di pane, lasciata all'aria | Due differenze insieme, il pane e il sacchetto. Il controllo deve differire per una cosa sola.
+
+[PASSO]
+titolo: Il dato strano
+premessa: Al terzo giorno noti che una fetta del gruppo "all'aria" ha già una macchia di muffa, molto prima di tutte le altre. Ti ricordi che quella fetta ti era caduta sul pavimento mentre la sistemavi.
+domanda: Che cosa fai?
++ La escludi dal calcolo, ma scrivi nel quaderno che l'hai esclusa e perché | Si può scartare un dato quando sai che qualcosa è andato storto nella procedura. Ciò che non si può fare è scartarlo di nascosto: la nota nel quaderno permette a chiunque di controllare la tua scelta e di non fidarsi ciecamente.
+- La cancelli e non ne parli con nessuno | Questo si chiama truccare i dati, anche quando lo si fa in buona fede. Chi legge il tuo esperimento deve poter vedere tutte le scelte che hai fatto.
+- La tieni nel conteggio come se niente fosse | Sai che quella fetta ha subito un trattamento diverso dalle altre: tenerla dentro senza dire nulla sporca il risultato allo stesso modo.
+- Butti via tutto l'esperimento e ricominci | Una fetta storta su venti non rovina il lavoro. Si annota, si esclude, si va avanti: ricominciare ogni volta renderebbe impossibile qualunque ricerca.
+
+
+[CASO]
+titolo: Studiare con la musica
+icona: 🎧
+storia: Metà della classe giura di ricordare meglio studiando con
+la musica nelle orecchie; l'altra metà dice che è una scusa.
+Decidete di scoprirlo con un esperimento fatto in classe, su di voi.
+Attenzione: quando i soggetti sono persone, le trappole sono di più.
+
+[PASSO]
+titolo: L'ipotesi
+domanda: Quale ipotesi vi permette di arrivare a una risposta?
++ Chi memorizza un elenco di parole ascoltando musica ne ricorda un numero diverso rispetto a chi lo fa in silenzio | Precisa: dice che cosa si fa (memorizzare un elenco), che cosa cambia (musica o silenzio) e che cosa si conta (quante parole). E ammette entrambi gli esiti, anche quello che vi smentisce.
+- La musica aiuta a concentrarsi | "Concentrarsi" non si conta. Bisogna scegliere un compito preciso e un risultato numerabile, altrimenti alla fine ognuno resterà della propria idea.
+- La musica classica è la migliore per studiare | Introduce un confronto fra generi che non avete previsto, e "migliore" non è definito. Una domanda alla volta.
+- Chi ascolta musica mentre studia prende voti più bassi | I voti dipendono da decine di cose: quanto uno studia, la materia, l'insegnante, il caso. Troppe cause per un esperimento di classe.
+
+[PASSO]
+titolo: Che cosa cambio
+domanda: Qual è la variabile indipendente?
++ La presenza o l'assenza della musica durante i dieci minuti di studio | Una sola differenza, chiara e sotto il vostro controllo.
+- Quante parole ricorda ciascuno | È il risultato che misurate alla fine, non la causa che decidete voi.
+- La bravura degli studenti | Non è una cosa che potete "cambiare": è una differenza che esiste già fra le persone. Proprio per questo va distribuita a caso fra i due gruppi.
+- Il volume della musica | Sarebbe un secondo esperimento, interessante ma diverso. Per ora la domanda è solo: musica sì o musica no.
+
+[PASSO]
+titolo: Chi va in quale gruppo
+domanda: Come dividete la classe nei due gruppi?
++ A sorte, per esempio estraendo i nomi da un sacchetto | L'estrazione a sorte sparpaglia fra i due gruppi tutte le differenze che non potete controllare: memoria, stanchezza, abitudini di studio. È il modo più semplice per impedire che un gruppo parta avvantaggiato.
+- Chi vuole la musica si mette nel gruppo con la musica | È la trappola più insidiosa. Chi sceglie la musica probabilmente è già abituato a studiare così: alla fine misurereste l'abitudine, non l'effetto della musica.
+- Da una parte i più bravi, dall'altra gli altri, per bilanciare | Così costruite di proposito due gruppi diversi in partenza, e la differenza finale sarà soprattutto la loro.
+- Prima metà dell'elenco in un gruppo, seconda metà nell'altro | L'elenco è alfabetico, quindi non è casuale: fratelli, cugini e compagni di banco finiscono spesso vicini. Meglio l'estrazione vera.
+
+[PASSO]
+titolo: Che cosa tengo uguale
+tipo: multipla
+domanda: Che cosa deve essere identico per i due gruppi? Le risposte giuste sono più di una.
++ L'elenco di parole da memorizzare | Elenchi diversi hanno difficoltà diverse: sarebbe una seconda causa nascosta.
++ Il tempo a disposizione per studiare | Più minuti significano più parole ricordate, indipendentemente dalla musica.
++ Il momento della giornata e il luogo | Alla settima ora si ricorda meno che alla prima: se un gruppo prova la mattina e l'altro il pomeriggio, la differenza potrebbe essere solo stanchezza.
++ Il test finale e il modo in cui viene corretto | Se un gruppo viene corretto con più indulgenza, il risultato è falsato senza che nessuno lo voglia.
+- La musica nelle orecchie | È l'unica cosa che deve cambiare: è ciò che state studiando.
+- Il numero di parole ricordate | È il risultato. Se fosse uguale per forza, non ci sarebbe niente da scoprire.
+
+[PASSO]
+titolo: Il gruppo di controllo
+domanda: Chi è il gruppo di controllo, e perché serve?
++ Il gruppo che studia lo stesso elenco, nello stesso tempo e nello stesso posto, ma in silenzio | È il paragone: dice quante parole si ricordano normalmente. Solo confrontando i due numeri la musica diventa una risposta e non un'impressione.
+- Il gruppo con la musica, perché è quello che state osservando | Quello è il gruppo sperimentale. Il controllo è sempre quello che non riceve il trattamento.
+- Nessuno: basta chiedere a ognuno se secondo lui la musica lo ha aiutato | Le impressioni personali sono proprio ciò che l'esperimento deve superare. Se bastassero, non servirebbe misurare niente.
+- Gli studenti di un'altra classe | Un'altra classe ha insegnanti, orari e abitudini diversi: troppe differenze in una volta. Il controllo deve venire dallo stesso gruppo di partenza, diviso a sorte.
+
+[PASSO]
+titolo: La conclusione
+premessa: Ecco i risultati. Gruppo con musica: 12,4 parole ricordate in media. Gruppo in silenzio: 13,1. Ma dentro ciascun gruppo si va da 6 a 19 parole, e in ogni gruppo ci sono dodici persone.
+domanda: Che cosa concludete?
++ La differenza fra i gruppi è piccola rispetto a quanto variano le persone dentro ciascun gruppo: questo esperimento non permette di decidere | È la conclusione più difficile da accettare e la più onesta. Quando la differenza fra i gruppi è molto minore della variabilità interna, può essere solo effetto del caso. Servono più persone e prove ripetute.
+- È dimostrato che la musica fa ricordare meno | Sette decimi di parola di differenza, con persone che vanno da 6 a 19: quel distacco può nascere dal caso. Sarebbe come dire chi è più alto fra due classi confrontando due studenti a testa.
+- L'esperimento è sbagliato, perché doveva venire una differenza netta | Un esperimento non è sbagliato quando non conferma l'ipotesi. Anzi: i risultati "negativi" sono informazioni preziose, e nella ricerca vera vengono pubblicati troppo poco.
+- Chi ha ricordato 19 parole dimostra che la musica funziona | Un singolo caso non dimostra niente: in ogni gruppo c'è sempre qualcuno che va molto bene. Per questo si guardano le medie e quanto sono sparpagliati i dati.
+
+
+[CASO]
+titolo: La ruggine sui chiodi
+icona: 🔩
+storia: Un chiodo dimenticato sul balcone per un mese si è coperto
+di ruggine. Un chiodo identico, rimasto nella scatola in cantina, è
+ancora lucido. Che cosa serve davvero perché il ferro arrugginisca:
+l'acqua, l'aria, o tutte e due?
+
+[PASSO]
+titolo: L'ipotesi
+domanda: Da quale ipotesi conviene partire?
++ Un chiodo di ferro immerso nell'acqua sviluppa ruggine in meno giorni di un chiodo tenuto all'asciutto | Una causa sola alla volta: l'acqua. Verificabile, misurabile e smentibile. All'aria e all'ossigeno penserai in un secondo momento.
+- Il ferro si arrugginisce | Vero ma inutile: non dice a quali condizioni, né quanto in fretta. Non c'è niente da confrontare.
+- L'acqua e l'aria insieme fanno arrugginire il ferro | È la risposta giusta dal punto di vista chimico, ma come ipotesi di partenza mette in gioco due cause in una volta. Prima si isola una causa, poi si aggiunge l'altra.
+- Il balcone è un posto che fa male ai chiodi | Sul balcone cambiano insieme umidità, pioggia, sbalzi di temperatura e polvere. Non isola niente.
+
+[PASSO]
+titolo: Che cosa cambio
+domanda: Che cosa fai variare fra i barattoli?
++ Se il chiodo è a contatto con l'acqua oppure no | Una differenza sola, decisa da te. È il cuore dell'esperimento.
+- Il tipo di chiodo | Chiodi di metalli diversi arrugginiscono in modi diversi: aggiungeresti una causa e perderesti la risposta.
+- Il tempo che aspetti | Il tempo scorre uguale per tutti i barattoli: è la cornice dell'esperimento, non una variabile.
+- La grandezza del barattolo | Non è ciò che vuoi studiare, e se cambia introduce differenze di aria e di evaporazione.
+
+[PASSO]
+titolo: Che cosa misuro
+domanda: Come registri quanto è arrugginito un chiodo?
++ I giorni fino alla prima macchia arancione, e alla fine la frazione di superficie coperta, confrontando con una scala di riferimento sempre uguale | Un tempo e una quantità, con un criterio fisso. Se fotografi i chiodi ogni giorno alla stessa distanza e con la stessa luce, chiunque può ricontrollare le tue valutazioni.
+- Quanto è brutto il chiodo alla fine | Giudizio personale: due osservatori darebbero due risposte. Un dato che non si può ricontrollare non serve a nessuno.
+- Se il chiodo si è rotto | La ruggine superficiale non spezza un chiodo in poche settimane. Misureresti un effetto che non arriva mai.
+- Il colore dell'acqua nel barattolo | Cambia anche per la polvere e per la luce. È un indizio, non una misura della ruggine sul chiodo.
+
+[PASSO]
+titolo: Che cosa tengo uguale
+tipo: multipla
+domanda: Che cosa deve essere identico in tutti i barattoli? Le risposte giuste sono più di una.
++ Chiodi nuovi, dello stesso tipo e della stessa scatola | Chiodi già usati o di leghe diverse partono da condizioni diverse.
++ Barattoli uguali, nello stesso posto | Luce, temperatura e aria devono essere le stesse per tutti.
++ Il momento in cui parte l'esperimento | Se un barattolo parte una settimana dopo, i giorni contati non sono confrontabili.
++ La pulizia iniziale dei chiodi e il modo di maneggiarli | Il grasso delle dita protegge il metallo: un chiodo toccato molto parte avvantaggiato senza che tu lo sappia.
+- La presenza dell'acqua | È l'unica cosa che deve cambiare: è la variabile che stai studiando.
+- La quantità di ruggine alla fine | È il risultato dell'esperimento, non una condizione da imporre.
+
+[PASSO]
+titolo: Il gruppo di controllo
+domanda: Qual è il controllo?
++ Un chiodo identico in un barattolo asciutto, nello stesso posto e per lo stesso tempo | Uguale in tutto tranne che nell'acqua. Se resta lucido mentre l'altro arrugginisce, la differenza si può attribuire all'acqua.
+- Il chiodo nell'acqua, perché è quello che osservi di più | Quello è il gruppo sperimentale: riceve il trattamento di cui vuoi conoscere l'effetto.
+- Un chiodo lasciato fuori sul balcone | Sul balcone cambiano insieme troppe cose. Il controllo deve stare nelle stesse condizioni del gruppo sperimentale, meno una.
+- Una vite di plastica in acqua | La plastica non arrugginisce in nessun caso: il confronto non dice niente sul ferro.
+
+[PASSO]
+titolo: Un passo più in là
+premessa: Dopo due settimane il chiodo nell'acqua è coperto di ruggine, quello asciutto è intatto. A questo punto ti chiedi se all'acqua serva anche l'ossigeno dell'aria per fare il suo effetto.
+domanda: Quale terzo barattolo aggiungi per rispondere?
++ Un chiodo in acqua fatta bollire e raffreddata, coperta da uno strato d'olio che impedisce all'aria di tornare dentro | La bollitura caccia via quasi tutto l'ossigeno disciolto e l'olio gli impedisce di rientrare. Così hai acqua senza ossigeno: se il chiodo resta lucido, hai scoperto che l'acqua da sola non basta. È così che si isola una causa alla volta.
+- Un chiodo in acqua salata | Interessante, ma risponde a un'altra domanda: se il sale acceleri la ruggine. Il sale non toglie l'ossigeno, anzi rende tutto più veloce.
+- Un chiodo in un barattolo chiuso senza niente dentro | Chiuso o no, dentro c'è aria umida. E soprattutto manca l'acqua, quindi non stai isolando l'ossigeno.
+- Un chiodo in frigorifero dentro l'acqua | Cambieresti la temperatura, non l'ossigeno. Il freddo rallenta tutto e confonderebbe la risposta.
+
+
+[CASO]
+titolo: La bevanda energetica
+icona: 🥤
+storia: In palestra gira una bevanda energetica che "fa correre più
+veloce". Tre compagni giurano di aver migliorato il tempo sui 60 metri
+da quando la bevono. Tu vuoi capire se l'effetto viene dalla bevanda
+o dall'idea di averla bevuta.
+
+[PASSO]
+titolo: L'ipotesi
+domanda: Da quale ipotesi parti?
++ Chi beve la bevanda energetica corre i 60 metri in un tempo minore di chi beve una bevanda senza principi attivi | Chiara, misurabile in secondi, e con il confronto già dentro. Nota che il paragone non è con "chi non beve niente": fra poco vedrai perché è decisivo.
+- La bevanda energetica dà energia | "Dare energia" non si misura con nessuno strumento. In un esperimento servono un compito preciso e un numero: i secondi sui 60 metri, per esempio.
+- La bevanda energetica fa bene agli sportivi | "Fare bene" è un giudizio complessivo, non un dato. E riguarda la salute, che è una domanda diversa dalla velocità.
+- Chi beve la bevanda si sente più carico | Il "sentirsi carichi" è proprio l'impressione che rischia di ingannarti. È la cosa che questo esperimento deve smascherare, non quella da misurare.
+
+[PASSO]
+titolo: La bevanda finta
+domanda: Che cosa fai bere al gruppo di controllo?
++ Una bevanda uguale nell'aspetto, nel colore e nel sapore, ma senza gli ingredienti attivi | Si chiama placebo. Serve perché la convinzione di aver preso qualcosa migliora davvero le prestazioni: senza placebo confronteresti "bevanda più aspettativa" contro "niente", e non sapresti quale delle due ha agito.
+- Niente: corrono e basta | Chi non beve sa di non aver preso nulla, chi beve sa di aver preso qualcosa. Alla differenza finale contribuirebbero due cose insieme.
+- Acqua in una bottiglia trasparente | Si vede subito che non è la stessa cosa. Perché il placebo funzioni deve essere indistinguibile dall'originale.
+- La stessa bevanda, ma in quantità minore | Così confronti due dosi della stessa bevanda: è un altro esperimento, e nessuno dei due gruppi fa da controllo.
+
+[PASSO]
+titolo: Chi sa che cosa
+domanda: Chi deve sapere quale bevanda ha ricevuto ciascun atleta?
++ Nessuno: né chi corre né chi cronometra. I codici si aprono solo alla fine | Si chiama prova in doppio cieco. Chi corre non può essere influenzato dall'aspettativa, e chi cronometra non può, senza accorgersene, fermare il cronometro un istante prima per quelli del gruppo "vero". Il secondo effetto è reale e sorprende sempre.
+- Solo chi corre | Se lo sa, torna il problema dell'aspettativa: spingerà di più perché si crede avvantaggiato.
+- Solo chi cronometra | Chi misura sapendo tende, senza volerlo, a favorire il risultato che si aspetta. Per questo nelle ricerche serie chi raccoglie i dati è tenuto all'oscuro.
+- Tutti, per correttezza | La trasparenza qui si ottiene diversamente: si scrivono le regole prima e si aprono i codici dopo, davanti a tutti.
+
+[PASSO]
+titolo: Che cosa tengo uguale
+tipo: multipla
+domanda: Che cosa deve essere identico per i due gruppi? Le risposte giuste sono più di una.
++ La distanza, la pista e il tipo di partenza | Su una pista diversa i tempi non sono confrontabili.
++ Il riscaldamento e i minuti di attesa fra la bevanda e la corsa | Se un gruppo corre subito e l'altro dopo mezz'ora, la differenza potrebbe essere solo quella.
++ L'ora del giorno e le condizioni del tempo | Con il vento a favore si corre più veloce, qualunque cosa si sia bevuta.
++ Lo stesso cronometro e la stessa persona che lo usa | Strumenti e mani diverse introducono differenze sistematiche fra i gruppi.
+- Il tipo di bevanda ricevuta | È l'unica cosa che deve cambiare: è la variabile in studio.
+- Il tempo ottenuto sui 60 metri | È il risultato. Se fosse uguale per imposizione, non ci sarebbe niente da misurare.
+
+[PASSO]
+titolo: La conclusione
+premessa: Ecco i risultati. Gruppo con la bevanda vera: 9,12 secondi di media. Gruppo con il placebo: 9,15 secondi. Il cronometro lo avete fermato a mano, e i riflessi di una persona valgono circa due decimi di secondo.
+domanda: Che cosa puoi concludere?
++ La differenza fra i gruppi è più piccola dell'incertezza dello strumento: questo esperimento non riesce a distinguerla da zero | Tre centesimi di differenza misurati con uno strumento che sbaglia di due decimi non significano nulla. È la lezione più importante sulle misure: un numero senza la sua incertezza non dice se una differenza è reale.
+- La bevanda funziona, anche se di poco | Tre centesimi sono molto meno dell'errore del cronometro. Otterresti lo stesso distacco cronometrando due volte la stessa identica corsa.
+- La bevanda non serve a niente, è dimostrato | Più prudente: il vostro esperimento non rileva alcun effetto. Un effetto piccolissimo potrebbe esistere e sfuggirvi, perché lo strumento è troppo grossolano per vederlo.
+- Bisognava far bere più bevanda | Forse, ma sarebbe un altro esperimento. Prima si risponde alla domanda che ci si è posti, poi se ne pone un'altra.
+
+
+[CASO]
+titolo: L'altalena in cortile
+icona: ⏱️
+storia: In cortile ci sono due altalene, una con le catene corte e una
+con le catene lunghe. Discutete su che cosa renda più lenta
+un'oscillazione: il peso di chi è seduto, o la lunghezza delle catene.
+Un'altalena è un pendolo, e un pendolo si misura.
+
+[PASSO]
+titolo: L'ipotesi
+domanda: Quale ipotesi metti alla prova?
++ La durata di un'oscillazione dipende dalla lunghezza delle catene e non dal peso di chi è seduto | Dice due cose, ma sono le due facce della stessa domanda e le verifichi una per volta: prima cambi la lunghezza, poi il peso.
+- Le altalene lunghe sono più divertenti | Nessuno strumento misura il divertimento. Non è una domanda a cui un esperimento possa rispondere.
+- Chi pesa di più va più veloce, perché le cose pesanti cadono più in fretta | È un'idea diffusa, ed è proprio quella che l'esperimento può smentire. Ma come ipotesi va scritta in modo misurabile: "la durata di un'oscillazione diminuisce all'aumentare del peso".
+- L'altalena va più veloce se la spingi più forte | Spingere più forte allarga l'oscillazione, che è una terza variabile. Per oscillazioni piccole la durata quasi non cambia: proprio per questo conviene tenere la spinta piccola e sempre uguale.
+
+[PASSO]
+titolo: Come misuro
+domanda: Come misuri la durata di un'oscillazione con l'errore più piccolo possibile?
++ Cronometri dieci oscillazioni di fila e dividi per dieci, e ripeti la prova tre volte | I tuoi riflessi sbagliano di circa due decimi di secondo. Cronometrando dieci oscillazioni quell'errore si spalma su dieci e scende a due centesimi. È il trucco più semplice e più potente di tutto il laboratorio.
+- Cronometri una sola oscillazione | Un'oscillazione dura un paio di secondi e il tuo errore vale due decimi: sbaglieresti di circa il dieci per cento. Troppo per distinguere le due altalene.
+- Conti a mente "mille-uno, mille-due" | Il conteggio mentale non è tarato su nulla e cambia da persona a persona. Serve uno strumento, e sempre lo stesso.
+- Guardi l'orologio del telefono e stimi a occhio | Una stima a occhio non è una misura: non sai nemmeno di quanto stai sbagliando, e senza incertezza il numero non serve.
+
+[PASSO]
+titolo: Che cosa tengo uguale
+tipo: multipla
+domanda: Mentre confronti le due lunghezze, che cosa deve restare identico? Le risposte giuste sono più di una.
++ La persona seduta sull'altalena | Se cambi persona cambi anche il peso, e le due cause si confondono.
++ Una spinta iniziale piccola e sempre uguale | Con oscillazioni molto ampie la durata cambia un poco: meglio partire sempre dallo stesso punto.
++ Il punto in cui fai partire e fermare il conteggio | Se una volta conti da fermo e una volta a metà corsa, i numeri non sono confrontabili.
++ La persona che tiene il cronometro | Riflessi diversi introducono differenze sistematiche fra una prova e l'altra.
+- La lunghezza delle catene | È la cosa che stai facendo variare: è tutto l'esperimento.
+- Il tempo che misuri | È il risultato, non una condizione da imporre.
+
+[PASSO]
+titolo: La seconda metà dell'ipotesi
+domanda: Come verifichi l'altra parte, cioè che il peso non conta?
++ Sulla stessa altalena fai sedere persone di peso diverso, misurando sempre allo stesso modo | Cambi una cosa sola, il peso, tenendo ferma la lunghezza. È di nuovo il principio di isolare una variabile per volta.
+- Confronti un bambino sull'altalena corta e un adulto su quella lunga | Due differenze in una volta. Qualunque risultato venga, non saprai a chi attribuirlo.
+- Non serve provarlo: sul peso si sa già come vanno le cose | È esattamente il punto in cui l'intuizione inganna quasi tutti. Vale la pena misurarlo e vederlo con i propri occhi.
+- Metti uno zaino pesante e allunghi anche un po' le catene | Cambiando due cose insieme l'esperimento non risponde più a nessuna delle due domande.
+
+[PASSO]
+titolo: La conclusione
+premessa: Ecco le vostre misure. Altalena corta, circa 1,5 m: 2,46 s — 2,44 s — 2,47 s. Altalena lunga, circa 2,5 m: 3,18 s — 3,16 s — 3,17 s. Sulla stessa altalena, con persone da 35 a 70 kg: 2,45 s — 2,46 s — 2,44 s.
+domanda: Che cosa dicono questi numeri?
++ La lunghezza cambia la durata in modo netto; il peso no, perché le differenze restano dentro l'incertezza delle vostre misure | Fra le due altalene ci sono sette decimi di differenza, trenta volte più grandi del vostro errore. Fra i pesi ci sono due centesimi, cioè niente. Confrontare la differenza con l'incertezza è il modo giusto di leggere dei dati.
+- Anche il peso conta un pochino, perché i numeri non vengono identici | Differenze di uno o due centesimi sono più piccole dell'errore dello strumento: è rumore, non segnale.
+- Le misure sono sbagliate, perché ripetendo non vengono mai uguali | Nessuna misura ripetuta viene mai identica: è normale, e proprio da quella dispersione si capisce quanto ci si può fidare del risultato.
+- Bisogna rifare tutto con uno strumento più preciso | Non serve: il vostro è già abbastanza preciso per rispondere alla domanda. Si cerca di meglio solo quando l'effetto cercato è più piccolo dell'errore.
+
+
+[CASO]
+titolo: Gelati e annegamenti
+icona: 🍦
+storia: Un sito riporta dei dati veri: nei mesi in cui si vendono più
+gelati aumentano anche gli annegamenti. Il titolo dell'articolo dice
+"Il gelato è pericoloso". I dati sono giusti. Il titolo no.
+
+[PASSO]
+titolo: Che cosa dicono davvero i dati
+domanda: Che cosa mostrano esattamente questi numeri?
++ Che le due quantità crescono e calano insieme, cioè sono correlate | Correlazione significa soltanto questo: si muovono insieme. Non dice nulla su chi causa che cosa, né se esista un legame diretto.
+- Che mangiare il gelato provoca annegamenti | È il salto che fa il titolo, e i dati non lo autorizzano. Da due cose che vanno insieme non si ricava quale spinga l'altra, né se una spinga l'altra.
+- Che gli annegamenti fanno vendere più gelati | È la stessa conclusione al contrario, e infatti è altrettanto infondata. Il fatto che suoni assurda aiuta a capire quanto sia fragile anche l'altra.
+- Che i dati sono stati falsificati | I dati possono benissimo essere corretti. Il problema non sta nei numeri, sta nel modo in cui vengono interpretati.
+
+[PASSO]
+titolo: La causa nascosta
+domanda: Quale terza causa spiega tutte e due le cose insieme?
++ Il caldo dell'estate: fa vendere più gelati e porta più persone in acqua | Si chiama variabile confondente: una causa comune che muove le due quantità senza che fra loro ci sia alcun legame. Cercarla è il primo esercizio davanti a qualsiasi correlazione.
+- Il prezzo del gelato | Anche se cambiasse, non avrebbe effetto su quante persone entrano in acqua. Una buona spiegazione deve rendere conto di entrambe le quantità.
+- La pubblicità delle marche di gelato | Spiegherebbe al massimo le vendite, non gli annegamenti.
+- Il fatto che d'estate si dorme meno | Andrebbe comunque sostenuto con dei dati, e soprattutto non spiega perché si vendano più gelati.
+
+[PASSO]
+titolo: Osservare non è sperimentare
+domanda: Perché questi dati, da soli, non possono dimostrare una causa?
++ Perché nessuno ha deciso chi mangia il gelato e chi no: ci si è limitati a guardare quello che succedeva | È la differenza fra uno studio osservazionale e un esperimento. Nell'esperimento sei tu ad assegnare il trattamento, di solito a sorte, e questo taglia fuori le cause nascoste. Nell'osservazione se le porta dentro tutte.
+- Perché i dati raccolti sono troppo pochi | Il problema non è la quantità: anche con dieci milioni di dati una correlazione resterebbe una correlazione.
+- Perché il gelato è innocuo, e si sa | Partire dalla conclusione che sembra giusta è proprio l'errore da evitare. Il ragionamento deve reggere prima di sapere come va a finire.
+- Perché mancano i dati dei mesi invernali | Ci sono, e mostrano poche vendite e pochi annegamenti: è esattamente ciò che crea la correlazione.
+
+[PASSO]
+titolo: L'esperimento che non si può fare
+domanda: Quale esperimento risponderebbe davvero, e perché nessuno lo farà mai?
++ Assegnare a sorte a metà delle persone di mangiare un gelato prima di entrare in acqua: non si può, perché metterebbe deliberatamente qualcuno in pericolo | L'etica pone agli esperimenti un limite che non si aggira. Per questo in medicina e negli studi sulle popolazioni si lavora spesso per osservazione, con molte cautele per compensare.
+- Nessuno: è una domanda senza risposta possibile | Una risposta si può cercare, per altre strade: confronti a parità di temperatura, dati di luoghi e anni diversi, esclusione delle altre spiegazioni.
+- Chiedere alle persone se secondo loro il gelato sia pericoloso | Le opinioni non misurano il mondo. Mille persone convinte della stessa cosa sbagliata restano mille persone che sbagliano.
+- Vietare il gelato per un anno e contare gli annegamenti | Mancherebbe il gruppo di confronto nello stesso periodo: se quell'estate piovesse in continuazione, attribuiresti al divieto un calo dovuto al tempo.
+
+[PASSO]
+titolo: Che cosa si può fare allora
+tipo: multipla
+domanda: Senza poter fare l'esperimento, come si ragiona su questi dati? Le risposte giuste sono più di una.
++ Confrontare i numeri a parità di temperatura | Se il legame sparisce quando tieni fermo il caldo, hai trovato il vero responsabile.
++ Elencare le altre spiegazioni possibili e provare a escluderle una per una | È il lavoro paziente che sostituisce l'esperimento quando l'esperimento non si può fare.
++ Controllare se la relazione regge anche in altri paesi e in altri anni | Una relazione che ricompare ovunque è più solida di una trovata in un posto solo.
+- Tenere solo i mesi che confermano il titolo | Scegliere i dati che fanno comodo è il modo più rapido per dimostrare qualsiasi cosa, e per non capire niente.
+- Fidarsi del titolo, visto che i dati sono autentici | I dati autentici sono il punto di partenza, non la conclusione. A essere sbagliata è l'interpretazione.
+
+[PASSO]
+titolo: La conclusione
+domanda: Come riassumeresti la faccenda a un compagno?
++ I dati sono corretti, la conclusione del titolo no: due cose che crescono insieme non sono per forza l'una la causa dell'altra | Questa frase, tenuta a mente, smonta una quantità sorprendente di notizie. Quando leggi che qualcosa "aumenta il rischio" di qualcos'altro, la prima domanda è: chi ha deciso chi riceve che cosa?
+- I dati sono inventati e il giornale mente | Prendersela con i numeri quando il problema è il ragionamento porta fuori strada. I dati erano giusti.
+- Il gelato è pericoloso, ma molto meno di quanto dica il titolo | Non hai alcun elemento per attribuire al gelato un pericolo, né grande né piccolo.
+- Dai dati osservati non si può mai concludere niente | Troppo pessimista: si può concludere molto, con cautela, confronti e altre prove. Gran parte di ciò che sappiamo sulla salute viene da studi osservazionali fatti bene.
+
+
+[CASO]
+titolo: Il gatto schizzinoso
+icona: 🐱
+storia: A casa tua si discute se il gatto preferisca il cibo della
+marca A o quello della marca B. Tua madre mette da sempre la ciotola
+di A a sinistra e quella di B a destra, e A finisce sempre per prima.
+Caso chiuso? Non ancora.
+
+[PASSO]
+titolo: Il difetto di quella prova
+domanda: Che cosa non va nel modo in cui è stata fatta finora?
++ Non si riesce a distinguere la preferenza per il cibo da quella per la posizione della ciotola | Si chiama errore sistematico: una differenza che si ripete sempre nello stesso verso e si somma alla variabile che ti interessa. Il gatto potrebbe semplicemente mangiare sempre da sinistra.
+- Che il gatto non ha abbastanza fame | Con poca fame mangerebbe poco da entrambe, e non si spiegherebbe perché finisce sempre proprio quella.
+- Che due ciotole insieme sono troppe | Due ciotole sono il modo giusto per farlo scegliere. Il problema è dove le metti, non quante sono.
+- Che serve più di un gatto | Servirebbe per parlare dei gatti in generale, ma non è questo a rendere sbagliata la prova su questo gatto.
+
+[PASSO]
+titolo: Come si toglie di mezzo la posizione
+domanda: Che cosa cambi nel modo di fare la prova?
++ Scambi le due ciotole di posto a sorte a ogni pasto, per esempio con una monetina | Sorteggiare la posizione fa sì che, sui molti pasti, la sinistra tocchi in egual misura ai due cibi. L'effetto della posizione si distribuisce e smette di falsare il confronto.
+- Metti sempre A a destra, d'ora in avanti | Sposti il problema, non lo elimini: se il gatto preferisce un lato, continuerai a non sapere quanto pesi quel lato.
+- Metti le due ciotole una dietro l'altra | Ne crei una vicina e una lontana: hai solo sostituito un vantaggio con un altro.
+- Lasci che sia il gatto a scegliere dove mangiare | È quello che succede già adesso, ed è il motivo per cui non si capisce niente.
+
+[PASSO]
+titolo: Che cosa misuro
+domanda: Qual è il dato migliore da raccogliere?
++ I grammi mangiati di ciascun cibo, pesando le ciotole prima e dopo | Un numero preciso, ottenuto con uno strumento. Due persone diverse otterrebbero lo stesso dato, ed è confrontabile fra un pasto e l'altro.
+- Quale ciotola tocca per prima | Dice solo che cosa ha annusato per primo, il che dipende molto da dove si trovava. Di quanto ne mangia non dice nulla.
+- Se fa le fusa mentre mangia | Le fusa sono difficili da interpretare e impossibili da contare allo stesso modo per tutti.
+- Quanto tempo resta vicino alla ciotola | Potrebbe restare lì per abitudine o per stare al caldo. È un indizio indiretto quando ne hai a disposizione uno diretto.
+
+[PASSO]
+titolo: Che cosa tengo uguale
+tipo: multipla
+domanda: Che cosa deve essere identico nelle due ciotole e nei due pasti? Le risposte giuste sono più di una.
++ La quantità di cibo messa in ciascuna ciotola | Se in una ce n'è di più, il confronto sui grammi mangiati non regge.
++ Ciotole identiche per forma, colore e altezza | I gatti sono sensibili alla forma del recipiente più di quanto si immagini.
++ La stessa ora del pasto e lo stesso tempo trascorso dal precedente | Un gatto affamato mangia tutto ciò che trova, e la preferenza scompare.
++ Nessuna persona in piedi accanto a una delle due ciotole | La presenza di qualcuno da un lato basta a spostare le scelte dell'animale.
+- La marca del cibo nelle due ciotole | È l'unica cosa che deve essere diversa: è la variabile in studio.
+- La quantità mangiata alla fine | È il risultato che stai cercando, non un vincolo da imporre.
+
+[PASSO]
+titolo: Quante volte
+domanda: Quante prove servono prima di trarre una conclusione?
++ Molte, in giorni diversi, guardando la media di tutte | Un pasto solo può andare in un verso per mille motivi casuali. Ripetere serve a distinguere una preferenza vera da una coincidenza.
+- Una sola, se il risultato è netto | Un risultato netto ottenuto una volta sola può essere puro caso, e più è sorprendente più questo è probabile.
+- Due, una per ogni posizione | Meglio di una, ma ancora troppo poche per dire qualcosa sul caso.
+- Quante ne servono finché non esce il risultato che ti aspetti | Questo è il modo più elegante di ingannare sé stessi: fermandosi al momento giusto si "dimostra" qualunque cosa. Il numero di prove si decide prima di cominciare.
+
+[PASSO]
+titolo: La conclusione
+premessa: Dopo venti pasti con le posizioni sorteggiate ogni volta, il tuo gatto ha mangiato il 62% del cibo A e il 38% del cibo B. Il gatto è uno solo: il vostro.
+domanda: Che cosa puoi affermare?
++ Che questo gatto preferisce A; per dire che "i gatti preferiscono A" servirebbero molti gatti diversi | Un esperimento vale per ciò su cui è stato fatto. Allargare la conclusione a tutta la specie richiede un campione che rappresenti la specie, non un solo animale.
+- Che i gatti preferiscono il cibo A | È il salto dal singolo al generale, uno degli errori più frequenti. Il tuo gatto potrebbe essere l'unico al mondo con quel gusto.
+- Che il risultato non vale niente, perché il gatto è uno solo | Vale eccome, per quel gatto: la domanda di partenza era proprio sulle sue preferenze. Il limite riguarda solo quanto lontano puoi estendere la risposta.
+- Che il cibo A è più buono del cibo B | "Più buono" per chi? Hai misurato una preferenza, non una qualità del cibo.
+
+
+[CASO]
+titolo: Il rimedio della nonna
+icona: 🤧
+storia: Tua nonna è convinta che il suo sciroppo di limone e miele
+faccia passare il raffreddore in tre giorni. E in effetti, ogni volta
+che lo prendi, dopo tre giorni stai meglio. Lei considera la cosa
+dimostrata. Tu vuoi vederci chiaro.
+
+[PASSO]
+titolo: Perché la prova della nonna non basta
+domanda: Qual è il difetto di quel ragionamento?
++ Il raffreddore passa da solo in pochi giorni, con o senza sciroppo | Si chiama guarigione spontanea, ed è la ragione per cui quasi tutti i rimedi casalinghi sembrano funzionare. Senza un confronto non puoi distinguere l'effetto della cura dal decorso naturale della malattia.
+- Che tua nonna non è un medico | Non è questione di chi lo dice: lo stesso ragionamento sarebbe debole anche in bocca a un medico. Conta come è stata raccolta la prova.
+- Che il limone non contiene principi attivi | Potrebbe anche contenerne. Il difetto del ragionamento resta identico nei due casi.
+- Che tre giorni sono un tempo troppo lungo | Tre giorni vanno benissimo come tempo da misurare. Manca il termine di paragone, non la durata.
+
+[PASSO]
+titolo: Il gruppo di confronto
+domanda: Con chi confronti chi prende lo sciroppo?
++ Con persone raffreddate nello stesso periodo, che prendono uno sciroppo finto uguale di aspetto e di sapore | Identico in tutto tranne che nei principi attivi. Così il confronto riguarda solo quelli, e non anche la convinzione di essersi curati.
+- Con chi non prende niente | Meglio di niente, ma chi sa di non essere curato racconta i propri sintomi in modo diverso. Il finto sciroppo serve proprio a togliere di mezzo questa differenza.
+- Con chi ha l'influenza invece del raffreddore | Sono malattie diverse, con durate diverse. Staresti confrontando cose non confrontabili.
+- Con le stesse persone l'anno prossimo, senza sciroppo | Un anno dopo circolano virus diversi e le persone sono cambiate. Il confronto deve avvenire nello stesso periodo.
+
+[PASSO]
+titolo: Come misuro la guarigione
+domanda: Come registri se e quando le persone stanno meglio?
++ Un diario in cui ognuno dà ogni sera un voto da 0 a 10 a naso chiuso, mal di gola e tosse | Una scala uguale per tutti, compilata sempre allo stesso modo e alla stessa ora, trasforma una sensazione in un numero confrontabile. Non è perfetta, ma è ripetibile.
+- Chiedendo a ognuno "ti senti meglio?" | La risposta dipende dall'umore, dalla giornata e da chi fa la domanda. E non permette di confrontare due persone fra loro.
+- Guardando chi torna a scuola | Dipende dai genitori, dalle verifiche in programma e da mille altre cose che non riguardano il raffreddore.
+- Misurando la febbre | Il raffreddore spesso non dà febbre: misureresti qualcosa che nella maggior parte dei casi non c'è.
+
+[PASSO]
+titolo: Che cosa tengo uguale
+tipo: multipla
+domanda: Che cosa deve essere identico nei due gruppi? Le risposte giuste sono più di una.
++ Il periodo dell'anno in cui si svolge la prova | In mesi diversi circolano virus diversi, con durate diverse.
++ La scala dei sintomi e il modo di compilarla | Se i due gruppi valutano con criteri diversi, i numeri non sono confrontabili.
++ Le altre medicine: nessuna, oppure le stesse per tutti | Chi prende anche altro potrebbe guarire per merito di quello.
++ Il modo in cui si finisce in un gruppo o nell'altro: a sorte | Se scegliessero loro, i più convinti dello sciroppo finirebbero tutti dalla stessa parte.
+- Il contenuto dello sciroppo, vero o finto | È l'unica differenza voluta fra i due gruppi.
+- I giorni impiegati a guarire | È il risultato che state misurando.
+
+[PASSO]
+titolo: La conclusione
+premessa: Quaranta persone, venti per gruppo. Sciroppo vero: 6,2 giorni di media per guarire. Sciroppo finto: 6,4 giorni. Però chi ha preso quello vero dice di aver sofferto meno il mal di gola: un dato che avete annotato di sfuggita, senza averlo previsto all'inizio.
+domanda: Che cosa concludi?
++ Sulla durata la differenza è troppo piccola per contare; sul mal di gola potrebbe esserci qualcosa, ma va verificato con un nuovo esperimento pensato apposta | Un effetto notato per caso, che non era fra le domande di partenza, non è una scoperta: è un'idea per il prossimo esperimento. Chi fruga abbastanza a lungo dentro i propri dati finisce sempre per trovare qualcosa, anche quando non c'è niente.
+- Lo sciroppo della nonna funziona: fa passare prima il mal di gola | Quel dato è emerso dopo, non era previsto e non è stato misurato con la stessa cura degli altri. Prenderlo per buono è il modo classico di scambiare il rumore per un risultato.
+- Lo sciroppo non serve a niente | Sulla durata del raffreddore il vostro esperimento non trova alcun effetto, ed è già una risposta utile. Ma "non serve a niente" è più di quanto abbiate misurato.
+- Due decimi di giorno sono comunque un miglioramento | Con venti persone per gruppo, che guariscono chi in quattro giorni e chi in nove, due decimi di media sono indistinguibili dal caso.
+
+
+[CASO]
+titolo: Il sondaggio sulla merenda
+icona: 📊
+storia: La rappresentante di classe vuole convincere la scuola a
+cambiare i prodotti del distributore. Fa un sondaggio: durante
+l'intervallo chiede a venti compagni seduti al suo tavolo, e il 90%
+è d'accordo con lei. Porta il risultato alla preside, che non si
+convince affatto.
+
+[PASSO]
+titolo: Il difetto del sondaggio
+domanda: Che cosa non va in quel 90%?
++ Ha chiesto solo a persone che le somigliano: il campione non rappresenta la scuola | Chi siede al tuo tavolo la pensa spesso come te. Un campione serve a farsi un'idea di tutti, quindi deve assomigliare a tutti: classi diverse, età diverse, abitudini diverse.
+- Venti persone sono poche in assoluto | Il numero conta, ma non è il problema principale. Venti persone scelte bene dicono molto di più di venti amici scelti male.
+- Ha fatto le domande durante l'intervallo | L'orario non è il punto. Avrebbe ottenuto lo stesso risultato distorto a qualsiasi ora.
+- La preside non si fida dei sondaggi in generale | La preside ha ragione su questo sondaggio in particolare, e il motivo è tecnico, non caratteriale.
+
+[PASSO]
+titolo: Chi intervistare
+domanda: Come scegli le persone da sentire?
++ Sorteggiandole dall'elenco di tutti gli studenti della scuola | Il sorteggio è l'unico modo semplice per non favorire nessun gruppo. Ogni studente ha la stessa probabilità di finire nel campione, quindi il campione tende ad assomigliare alla scuola.
+- Chiedendo a chi si offre volontario | Chi risponde spontaneamente ha in genere opinioni più forti della media. Il campione risulterebbe pieno di persone molto motivate e vuoto di indifferenti.
+- Chiedendo a tutte le classi prime | Ottieni un ottimo ritratto delle prime e nessuna informazione sulle quinte.
+- Fermando chi esce dal distributore | Sentiresti solo chi il distributore lo usa già, cioè proprio quelli a cui va bene com'è.
+
+[PASSO]
+titolo: La domanda che orienta
+domanda: Quale formulazione non spinge verso una risposta?
++ "Quale di queste opzioni preferiresti trovare nel distributore?", con l'elenco completo e la voce "nessuna di queste" | Neutra, offre tutte le alternative e lascia la possibilità di non scegliere. Chi risponde non capisce quale risposta piacerebbe a chi domanda.
+- "Non sei stanco delle solite merendine industriali?" | La domanda contiene già la risposta desiderata. Formulazioni così possono spostare i risultati di venti o trenta punti.
+- "Vuoi una merenda più sana?" | Nessuno risponde di no a una domanda del genere. Una domanda a cui tutti rispondono allo stesso modo non porta alcuna informazione.
+- "Preferiresti la frutta fresca alle schifezze del distributore?" | Le parole caricano la risposta prima ancora che l'altro abbia pensato. È un sondaggio travestito da propaganda.
+
+[PASSO]
+titolo: Che cosa tengo uguale
+tipo: multipla
+domanda: Che cosa deve essere identico per tutti gli intervistati? Le risposte giuste sono più di una.
++ La domanda, letta con le stesse identiche parole | Basta cambiare un aggettivo perché cambino le risposte.
++ L'anonimato garantito a tutti allo stesso modo | Chi teme di essere riconosciuto risponde quello che si aspetta gli altri vogliano sentire.
++ Il modo di registrare le risposte | Se una parte viene trascritta a memoria e una parte su un modulo, i due pezzi non sono confrontabili.
++ L'ordine delle opzioni, mescolato a caso da un intervistato all'altro | Le prime opzioni di un elenco vengono scelte più spesso. Mescolare distribuisce questo vantaggio su tutte.
+- L'opinione degli intervistati | È proprio ciò che vuoi misurare: se fosse uguale per tutti non ci sarebbe niente da chiedere.
+- La risposta che speri di ottenere | Sperare un risultato è legittimo; farlo pesare sul metodo è il modo migliore per non scoprire mai niente.
+
+[PASSO]
+titolo: La conclusione
+premessa: Rifatto bene: 120 studenti sorteggiati su 600, di cui rispondono in 94. Il 46% sceglie frutta fresca, il 31% resta alle merendine, il 23% dice "nessuna di queste".
+domanda: Come riporti il risultato alla preside?
++ La frutta è l'opzione più votata ma non raccoglie la maggioranza, e va detto insieme al fatto che 26 persone non hanno risposto | Riportare anche chi non ha risposto è parte dell'onestà: quei 26 potrebbero non essere un gruppo qualunque. E 46% è il primo posto, non la maggioranza: sono due cose diverse che si confondono sempre.
+- La maggioranza della scuola vuole la frutta fresca | Il 46% non è la maggioranza. È l'opzione più scelta, che è un'affermazione più debole e più corretta.
+- Il sondaggio non vale, perché ha risposto solo il 78% degli interpellati | Un 78% di risposte è un ottimo risultato. Va dichiarato, non nascosto, ma non annulla il sondaggio.
+- Il risultato conferma il primo sondaggio, quindi si poteva evitare di rifarlo | Il primo diceva 90%, questo dice 46%: sono risultati molto diversi, ed è proprio la prova che il primo metodo non funzionava.
+
+
+[CASO]
+titolo: Il basilico e il fertilizzante
+icona: 🌿
+storia: Sulla confezione del fertilizzante c'è scritto "un tappo per
+litro d'acqua". Tuo fratello ne mette tre, convinto che di più sia
+meglio. Dopo due settimane il basilico ha le foglie gialle e cresce
+meno di quello sul balcone del vicino, che non lo concima affatto.
+
+[PASSO]
+titolo: L'ipotesi
+domanda: Quale ipotesi conviene mettere alla prova?
++ La crescita del basilico cambia al variare della dose di fertilizzante, e non è detto che cresca sempre di più | Lascia aperte tutte le forme possibili della relazione, compresa quella che sale e poi scende. È l'ipotesi giusta quando sospetti che il "di più" a un certo punto si ritorca contro.
+- Più fertilizzante si mette, più il basilico cresce | È una sola delle forme possibili, ed è proprio la convinzione di tuo fratello. Partire dando per scontato l'andamento ti farebbe provare solo due dosi e non accorgerti del resto.
+- Il fertilizzante fa crescere il basilico | Domanda da sì o no, mentre qui la domanda interessante è "quanto, e a quale dose".
+- Il fertilizzante è pericoloso per le piante | Nessuna dose è indicata, e "pericoloso" non è una misura. Così com'è non si può né confermare né smentire.
+
+[PASSO]
+titolo: Quanti gruppi
+domanda: Quanti gruppi diversi prepari?
++ Almeno cinque: nessun tappo, mezzo, uno, due e tre | Con cinque dosi vedi la forma dell'andamento: se sale, se scende, se sale e poi scende. Con due punti puoi solo tirare una retta, e la retta è l'unica cosa che due punti sanno dire.
+- Due: uno con fertilizzante e uno senza | Risponderesti alla domanda "serve o no", non a "quanto ne serve". E la risposta cambierebbe a seconda della dose scelta.
+- Due: la dose consigliata e la dose tripla | Vedresti che la tripla va peggio, senza sapere se il massimo sta a uno, a mezzo o a uno e mezzo.
+- Uno solo, cambiando la dose settimana dopo settimana | Gli effetti si accumulano nel terreno: alla terza settimana non sapresti a quale dose attribuire quello che vedi.
+
+[PASSO]
+titolo: Il gruppo di controllo
+domanda: Qual è il controllo?
++ Il gruppo che riceve zero tappi, cioè solo acqua | È il termine di paragone: dice quanto cresce il basilico senza alcun trattamento. Senza di lui non sapresti nemmeno se il fertilizzante serva a qualcosa.
+- Il gruppo con un tappo, cioè la dose consigliata | È un trattamento come gli altri, solo quello raccomandato dal produttore. Il controllo è chi non riceve nulla.
+- Non serve un controllo: basta confrontare le dosi fra loro | Vedresti quale dose è la migliore fra quelle provate, senza sapere se anche la migliore faccia meglio dell'acqua e basta.
+- Una pianta di una specie diversa, senza fertilizzante | Specie diverse crescono in modo diverso: il confronto non direbbe nulla sul basilico.
+
+[PASSO]
+titolo: Che cosa tengo uguale
+tipo: multipla
+domanda: Che cosa deve essere identico per tutti i gruppi? Le risposte giuste sono più di una.
++ La quantità totale di liquido che riceve ogni pianta | Se chi prende tre tappi riceve anche più acqua, stai cambiando due cose insieme.
++ Il terriccio, il vaso e la posizione rispetto alla luce | Sono tutte cause di crescita che rischiano di mescolarsi a quella che studi.
++ Piantine della stessa varietà e della stessa altezza di partenza, più di una per ogni dose | Una sola pianta per dose non permette di distinguere l'effetto dalla variabilità naturale.
++ Il giorno e l'ora delle innaffiature | Una pianta annaffiata con due giorni di ritardo parte svantaggiata per motivi che non c'entrano col fertilizzante.
+- La dose di fertilizzante | È l'unica cosa che deve cambiare: è tutto l'esperimento.
+- L'altezza raggiunta alla fine | È il risultato che stai misurando.
+
+[PASSO]
+titolo: La conclusione
+premessa: Altezza media dopo quattro settimane, cinque piante per dose. Zero tappi: 11 cm. Mezzo tappo: 15 cm. Un tappo: 19 cm. Due tappi: 17 cm. Tre tappi: 9 cm, con foglie gialle.
+domanda: Che cosa dicono questi numeri?
++ La crescita migliora fino a circa un tappo e peggiora oltre: "di più" non significa "meglio" | Si chiama relazione dose-effetto, e questa forma a campana è comunissima: vale per i fertilizzanti, per i farmaci, per le vitamine, per l'acqua stessa. Oltre un certo punto la stessa sostanza che aiutava comincia a fare danno.
+- Il fertilizzante fa male al basilico | A mezzo tappo e a un tappo il basilico cresce molto più che senza. Il danno compare solo alle dosi alte.
+- Il fertilizzante non serve: 19 cm contro 11 non è una gran differenza | Sono quasi il doppio, con cinque piante per gruppo. È la differenza più netta di tutto l'esperimento.
+- Bisognava provare anche con dieci tappi | L'andamento è già chiaro. Semmai converrebbe infittire le prove fra mezzo tappo e due, per trovare con precisione dove sta il massimo.
+
+
+[CASO]
+titolo: Sale o zucchero sul ghiaccio
+icona: 🧊
+storia: D'inverno si sparge il sale sulle strade ghiacciate. Un
+compagno sostiene che lo zucchero farebbe lo stesso effetto, visto
+che anche lui si scioglie in acqua. Decidete di provare con dei
+cubetti di ghiaccio.
+
+[PASSO]
+titolo: Il confronto equo
+domanda: Come dosi le due sostanze?
++ La stessa massa di entrambe, pesata con la bilancia | Se vuoi confrontare due sostanze devi partire dalla stessa quantità, e la quantità si pesa. È la definizione operativa del confronto: senza, staresti gareggiando con regole diverse per i due concorrenti.
+- Un cucchiaino per ciascuna | Un cucchiaino di sale e uno di zucchero non pesano uguale, perché i granuli hanno densità e forma diverse. Partiresti già sbilanciato senza saperlo.
+- Quanto basta a coprire il cubetto | "Quanto basta" non è una quantità: cambia da cubetto a cubetto e da persona a persona.
+- Il doppio di zucchero, perché è più leggero | Inventare una correzione senza averla misurata aggiunge un errore invece di toglierne uno. Prima si pesa, poi semmai si discute.
+
+[PASSO]
+titolo: Che cosa misuro
+domanda: Qual è il dato da raccogliere?
++ I minuti perché il cubetto si sciolga del tutto, oppure i grammi di acqua liquida dopo dieci minuti | Entrambi sono numeri, ottenuti con uno strumento, uguali per chiunque li rilevi. Il secondo ha un vantaggio: tutti i cubetti si misurano nello stesso istante.
+- Se il cubetto sembra più piccolo | "Sembrare" non è misurare. Due osservatori darebbero due risposte diverse, e nessuno saprebbe quale credere.
+- Il rumore che fa mentre si scioglie | Difficilissimo da misurare e senza alcun legame chiaro con la quantità di ghiaccio sciolto.
+- La temperatura dell'aria della stanza | È una condizione da tenere uguale per tutti, non il risultato dell'esperimento.
+
+[PASSO]
+titolo: Il gruppo di controllo
+domanda: Qual è il controllo?
++ Un terzo cubetto identico, con niente sopra | Il ghiaccio si scioglie anche da solo: senza questo cubetto non sapresti quanta parte dello scioglimento sia merito della sostanza e quanta del semplice passare del tempo.
+- Il cubetto con lo zucchero fa da controllo a quello con il sale | Sono due trattamenti diversi che si confrontano fra loro. Nessuno dei due dice come vanno le cose senza trattamento.
+- Non serve: si sa già che il ghiaccio si scioglie | Saperlo non basta: devi sapere in quanti minuti, in quella stanza, quel giorno. È un numero, e va misurato.
+- Un cubetto lasciato in freezer | Non si scioglie affatto, quindi non offre nessun termine di paragone utile.
+
+[PASSO]
+titolo: Che cosa tengo uguale
+tipo: multipla
+domanda: Che cosa deve essere identico per i tre cubetti? Le risposte giuste sono più di una.
++ Forma e massa dei cubetti, presi dallo stesso stampo | Un cubetto più grande impiega di più, qualunque cosa ci metti sopra.
++ La temperatura della stanza e il piano su cui appoggiano | Un piatto di metallo conduce il calore molto meglio di uno di legno.
++ Il momento in cui comincia la prova | Se uno parte dieci minuti dopo, i tempi non sono confrontabili.
++ La finezza dei granuli, per quanto possibile | Granuli fini hanno più superficie a contatto e agiscono più in fretta: è una differenza che si sommerebbe a quella fra le due sostanze.
+- La sostanza sparsa sopra | È l'unica cosa che deve cambiare.
+- Il tempo impiegato a sciogliersi | È il risultato che state misurando.
+
+[PASSO]
+titolo: La conclusione
+premessa: Con 5 grammi di sostanza su cubetti identici: senza niente 31 minuti, con lo zucchero 24 minuti, con il sale 13 minuti.
+domanda: Che cosa concludi?
++ A parità di massa il sale è molto più efficace, ma anche lo zucchero fa qualcosa rispetto al cubetto lasciato solo | Il controllo permette di dire entrambe le cose. Il motivo della differenza è bello: a parità di grammi il sale libera molte più particelle in soluzione, perché le sue molecole sono più leggere e per di più si spezzano in due. E ciò che abbassa il punto di fusione è il numero di particelle disciolte.
+- Lo zucchero non funziona affatto | Ventiquattro minuti contro trentuno è una differenza netta. Funziona, solo molto meno.
+- Sale e zucchero fanno la stessa cosa, come diceva il compagno | Tredici minuti contro ventiquattro: quasi il doppio. Su una strada ghiacciata è la differenza fra passare e non passare.
+- Il ghiaccio si scioglie comunque, quindi la prova non dimostra niente | È esattamente per questo che avete preparato il terzo cubetto: serve a misurare quel "comunque" e a toglierlo dal conto.
+
+
+[CASO]
+titolo: L'esperimento che non si ripete
+icona: 🔁
+storia: La vostra classe ha fatto germogliare i fagioli e ha trovato
+che al buio germogliano prima. La classe accanto rifà lo stesso
+esperimento e trova il contrario. I due cartelloni sono appesi uno
+accanto all'altro e si contraddicono.
+
+[PASSO]
+titolo: La prima reazione
+domanda: Che cosa concludi appena vedi i due cartelloni?
++ Per ora niente: prima bisogna confrontare come sono stati fatti i due esperimenti | Due risultati diversi non significano che qualcuno bara. Quasi sempre significano che i due esperimenti non erano lo stesso esperimento, e trovare la differenza è la parte interessante.
+- Che ha sbagliato la classe accanto, visto che il nostro risultato è arrivato prima | Chi arriva primo non ha per questo ragione. L'ordine cronologico non è un argomento.
+- Che abbiamo sbagliato noi, perché siamo in due contro una classe intera | Nemmeno il numero di persone è un argomento. Conta come sono stati raccolti i dati.
+- Che i fagioli sono imprevedibili e non ha senso studiarli | Se una cosa varia, la si studia con più semi e con le medie. La variabilità è un motivo per fare meglio gli esperimenti, non per smettere.
+
+[PASSO]
+titolo: Che cosa confrontate
+tipo: multipla
+domanda: Quali aspetti dei due esperimenti mettete a confronto? Le risposte giuste sono più di una.
++ La temperatura dei due ambienti | Un armadio chiuso è spesso più caldo di un davanzale, e il calore accelera la germinazione più della luce.
++ La quantità d'acqua e il tipo di supporto usato | Cotone fradicio e cotone appena umido danno risultati molto diversi.
++ Quanti semi per gruppo e da quale confezione venivano | Semi vecchi germogliano peggio, e con pochi semi il caso pesa moltissimo.
++ Come ciascuna classe ha definito "germogliato" | Se le due definizioni non coincidono, i due gruppi hanno contato due cose diverse.
+- Il nome delle due classi e chi è il docente | Non ha alcun effetto sui fagioli.
+- Il voto che i due gruppi hanno preso sul cartellone | Il voto arriva dopo e non fa parte dell'esperimento.
+
+[PASSO]
+titolo: La definizione operativa
+premessa: Confrontando i protocolli scoprite una cosa: voi contavate un seme come germogliato quando spuntava la radichetta, loro quando comparivano le prime foglioline.
+domanda: Che cosa significa questa differenza?
++ Che stavate misurando due cose diverse: senza una definizione condivisa i numeri non sono confrontabili | Si chiama definizione operativa: mettere nero su bianco che cosa si conta e quando. Sembra una formalità burocratica ed è invece il motivo per cui due laboratori possono confrontare i risultati.
+- Che la classe accanto ha contato male | Hanno contato benissimo, solo un'altra cosa. Nessuno dei due gruppi ha sbagliato: mancava l'accordo iniziale.
+- Che non cambia nulla, perché prima o poi germogliano tutti | Cambia eccome il tempo che misurate, ed era proprio il tempo la vostra variabile.
+- Che bisogna buttare via tutti e due gli esperimenti | I dati restano utili: basta ridefinire il criterio e, se necessario, ricontarli con quello.
+
+[PASSO]
+titolo: Che cosa fate adesso
+domanda: Qual è il passo successivo?
++ Vi accordate su una definizione, la scrivete in un protocollo comune, e rifate l'esperimento seguendolo entrambi | Un protocollo scritto è ciò che permette a due gruppi diversi di fare davvero lo stesso esperimento. È anche ciò che permette a chiunque, fra dieci anni, di controllarvi.
+- Fate la media fra i due risultati | Mediare due misure di cose diverse produce un numero che non misura niente.
+- Tenete il risultato che vi convince di più | Scegliere in base a ciò che piace è il contrario del metodo. Se lo si fa, tanto vale non misurare.
+- Lasciate perdere: tanto ognuno resta della sua idea | È il momento in cui l'esperimento diventa davvero interessante: la contraddizione è un'informazione, non un fallimento.
+
+[PASSO]
+titolo: Perché conta
+domanda: Perché nella scienza è importante che altri riescano a ripetere un esperimento?
++ Perché un risultato che nessuno riesce a riprodurre resta un'ipotesi, non una conoscenza | La riproducibilità è il filtro che separa le scoperte dalle coincidenze. Ed è un problema serio anche fra i ricercatori di professione: molti studi pubblicati, quando altri li rifanno, non danno lo stesso risultato.
+- Perché gli scienziati non si fidano l'uno dell'altro | Non è diffidenza personale: è che chiunque, in perfetta buona fede, può sbagliare o essere stato fortunato. Il controllo reciproco serve proprio a questo.
+- Perché ogni laboratorio deve avere il suo risultato da pubblicare | Ripetere l'esperimento di un altro è poco premiato e proprio per questo si fa troppo di rado.
+- Perché ripetendo deve venire sempre lo stesso identico numero | Identico non verrà mai. Deve venire un numero compatibile, cioè diverso di poco rispetto all'incertezza delle misure.
+
+
+[CASO]
+titolo: Il videogioco e i riflessi
+icona: 🎮
+storia: Volete misurare se giocare dieci minuti a un gioco d'azione
+migliori i riflessi. Il test è quello classico: un compagno lascia
+cadere un righello fra le vostre dita aperte e si guarda a quanti
+centimetri riuscite ad afferrarlo. Meno centimetri, riflessi migliori.
+
+[PASSO]
+titolo: Il primo tentativo
+premessa: Fate così: test, dieci minuti di gioco, test di nuovo. I risultati migliorano di quasi due centimetri.
+domanda: Che cosa non torna in questo esperimento?
++ Alla seconda prova si è anche più allenati al test in sé: il miglioramento può venire da lì | Si chiama effetto apprendimento, e compare ogni volta che la stessa persona ripete la stessa prova. Basta esercitarsi un poco con il righello per migliorare, senza aver toccato nessun videogioco.
+- Il righello non è uno strumento abbastanza serio | È uno strumento ottimo: costa niente, misura una grandezza vera e lo si può usare allo stesso modo con tutti.
+- Dieci minuti di gioco sono troppo pochi per fare effetto | Può darsi, ma non è questo a rendere sbagliato l'esperimento: il difetto ci sarebbe anche con due ore di gioco.
+- I riflessi non si possono misurare | Si misurano benissimo: quel righello misura un tempo, travestito da centimetri.
+
+[PASSO]
+titolo: Come si toglie di mezzo
+domanda: Come correggi l'esperimento?
++ Due gruppi sorteggiati: uno gioca, l'altro fa un'attività tranquilla per lo stesso tempo, ed entrambi fanno il test prima e dopo | Anche il gruppo tranquillo migliorerà, per il solo fatto di aver già provato. Confrontando i due miglioramenti, l'effetto dell'allenamento al test si elide e resta solo quello del gioco.
+- Si fa il test una volta sola, dopo il gioco | Senza la misura iniziale non sai da dove sei partito, e le persone hanno riflessi molto diversi fra loro.
+- Si ripete il test venti volte prima di cominciare, così l'allenamento è già finito | Idea non sciocca, ma venti prove stancano, e la stanchezza diventa una nuova variabile.
+- Si chiede ai partecipanti se si sentono più reattivi | Le sensazioni sono esattamente ciò che l'esperimento deve superare, soprattutto in chi ha appena giocato e si sente carico.
+
+[PASSO]
+titolo: L'ordine delle prove
+domanda: Se invece volete che ogni persona provi sia il gioco sia l'attività tranquilla, come organizzate?
++ Metà comincia dal gioco e metà dall'attività tranquilla, sorteggiando chi fa cosa per primo | Si chiama controbilanciamento. L'effetto dell'ordine esiste comunque, ma così colpisce in egual misura le due condizioni e non falsa più il confronto.
+- Tutti prima il gioco e poi l'attività tranquilla | L'attività tranquilla verrebbe sempre svolta da gente più allenata al test e più stanca: due svantaggi sistematici.
+- Ognuno sceglie da quale parte cominciare | Chi ama i videogiochi comincerebbe dal gioco, e le preferenze personali rientrerebbero dalla finestra.
+- Si fa tutto lo stesso giorno, di fila, senza pause | La stanchezza si accumula e ricade tutta sulla seconda condizione.
+
+[PASSO]
+titolo: Che cosa tengo uguale
+tipo: multipla
+domanda: Che cosa deve essere identico in tutte le prove? Le risposte giuste sono più di una.
++ Lo stesso righello e lo stesso modo di lasciarlo cadere | Un rilascio più esitante regala centimetri a chi lo riceve.
++ La stessa mano, per tutte le prove della stessa persona | La mano non dominante dà risultati peggiori: cambiarla a metà falserebbe tutto.
++ Lo stesso numero di tentativi, usando la media | Un tentativo solo dipende troppo dal caso; con cinque e la media il dato diventa stabile.
++ La stessa persona che lascia cadere il righello, tenuta all'oscuro di chi ha giocato | Chi sa che cosa aspettarsi può, senza volerlo, lasciar cadere il righello in modo leggermente diverso.
+- L'attività svolta nei dieci minuti | È l'unica cosa che deve cambiare fra i due gruppi.
+- I centimetri misurati | Sono il risultato dell'esperimento.
+
+[PASSO]
+titolo: La conclusione
+premessa: Gruppo che ha giocato: da 18,2 a 16,9 cm, cioè 1,3 cm di miglioramento. Gruppo tranquillo: da 18,0 a 17,1 cm, cioè 0,9 cm. Dentro ciascun gruppo le persone vanno da 12 a 25 cm.
+domanda: Che cosa concludete?
++ Migliorano entrambi i gruppi: la differenza fra i due miglioramenti è piccola rispetto a quanto variano le persone, e non basta per concludere | Notate però quanto avete guadagnato: senza il secondo gruppo avreste attribuito al videogioco tutti e 1,3 i centimetri, e avreste annunciato una scoperta che non c'è.
+- Il videogioco migliora i riflessi di 1,3 centimetri | Quei 1,3 cm comprendono l'allenamento al test, che da solo ne vale 0,9. Resterebbero 0,4 cm, in mezzo a persone che variano di tredici.
+- Il videogioco non serve a niente | Il vostro esperimento non riesce a vedere un effetto: è diverso dal dire che non esiste. Con più partecipanti potrebbe emergere.
+- Il test è sbagliato, perché migliorano tutti | Che migliorino tutti è il risultato più istruttivo dell'esperimento: è la prova che l'effetto apprendimento esiste ed è forte.

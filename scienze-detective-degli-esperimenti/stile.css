@@ -1,0 +1,1417 @@
+/* ============================================================
+   Il detective degli esperimenti — foglio di stile
+   Tutti i colori sono definiti una volta sola qui sotto:
+   per cambiare l'aspetto del sito basta modificare questi valori.
+   ============================================================ */
+
+:root {
+  --sfondo: #f4f2ed;
+  --sfondo-trama: #e9e5dc;
+  --superficie: #ffffff;
+  --superficie-alt: #faf8f4;
+  --testo: #1e1b16;
+  --testo-tenue: #6b645a;
+  --bordo: #ddd6c9;
+  --bordo-forte: #c4bbaa;
+  --accento: #1f5f8b;
+  --accento-chiaro: #e3eef6;
+  --giusto: #1d6b45;
+  --giusto-sfondo: #e2f2e9;
+  --sbagliato: #9b2f24;
+  --sbagliato-sfondo: #fbe8e5;
+  --testo-su-accento: #ffffff;
+  --ombra: 0 1px 2px rgba(30, 27, 22, .06), 0 4px 14px rgba(30, 27, 22, .06);
+  --raggio: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="chiaro"]) {
+    --sfondo: #16181c;
+    --sfondo-trama: #1d2026;
+    --superficie: #21252b;
+    --superficie-alt: #1a1d22;
+    --testo: #eceef1;
+    --testo-tenue: #a2a8b2;
+    --bordo: #333941;
+    --bordo-forte: #464e58;
+    --accento: #74b3dd;
+    --accento-chiaro: #1c2c38;
+    --giusto: #6fce9f;
+    --giusto-sfondo: #17301f;
+    --sbagliato: #f09287;
+    --sbagliato-sfondo: #351a18;
+    --testo-su-accento: #10151a;
+    --ombra: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 16px rgba(0, 0, 0, .3);
+  }
+}
+
+:root[data-tema="scuro"] {
+  --sfondo: #16181c;
+  --sfondo-trama: #1d2026;
+  --superficie: #21252b;
+  --superficie-alt: #1a1d22;
+  --testo: #eceef1;
+  --testo-tenue: #a2a8b2;
+  --bordo: #333941;
+  --bordo-forte: #464e58;
+  --accento: #74b3dd;
+  --accento-chiaro: #1c2c38;
+  --giusto: #6fce9f;
+  --giusto-sfondo: #17301f;
+  --sbagliato: #f09287;
+  --sbagliato-sfondo: #351a18;
+  --testo-su-accento: #10151a;
+  --ombra: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 16px rgba(0, 0, 0, .3);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--sfondo);
+  color: var(--testo);
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ---------- intestazione ---------- */
+
+.intestazione {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 16px;
+  background: var(--sfondo-trama);
+  border-bottom: 1px solid var(--bordo);
+}
+
+.intestazione-titolo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.lente { font-size: 28px; line-height: 1; }
+
+.intestazione h1 {
+  margin: 0;
+  font-size: 1.24rem;
+  letter-spacing: -.01em;
+}
+
+.sottotitolo {
+  margin: 2px 0 0;
+  font-size: .82rem;
+  color: var(--testo-tenue);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.bottone-icona {
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--bordo-forte);
+  background: var(--superficie);
+  color: var(--testo);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.bottone-icona:hover { border-color: var(--accento); }
+
+/* ---------- impianto generale ---------- */
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px 16px 48px;
+}
+
+.caricamento {
+  text-align: center;
+  color: var(--testo-tenue);
+  padding: 40px 0;
+}
+
+h2 { font-size: 1.3rem; margin: 0 0 10px; letter-spacing: -.01em; }
+
+/* ---------- avviso sugli errori del file ---------- */
+
+.avviso {
+  background: var(--sbagliato-sfondo);
+  border: 1px solid var(--sbagliato);
+  border-radius: var(--raggio);
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  font-size: .9rem;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.avviso strong { display: block; margin-bottom: 6px; }
+.avviso ul { margin: 6px 0 0; padding-left: 20px; }
+.avviso li { margin-bottom: 3px; }
+
+/* ---------- elenco dei casi ---------- */
+
+.introduzione {
+  background: var(--superficie);
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  padding: 20px;
+  margin-bottom: 22px;
+  box-shadow: var(--ombra);
+}
+
+.introduzione p { margin: 0 0 10px; }
+.introduzione p:last-child { margin-bottom: 0; }
+.introduzione strong { color: var(--accento); }
+
+.griglia-casi {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 620px) {
+  .griglia-casi { grid-template-columns: 1fr 1fr; }
+}
+
+.carta-caso {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--superficie);
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  padding: 18px;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  box-shadow: var(--ombra);
+  transition: border-color .15s, transform .15s;
+}
+
+.carta-caso:hover,
+.carta-caso:focus-visible {
+  border-color: var(--accento);
+  transform: translateY(-2px);
+}
+
+.carta-icona { font-size: 30px; line-height: 1; display: block; margin-bottom: 8px; }
+
+.carta-titolo { font-size: 1.08rem; font-weight: 700; margin-bottom: 6px; }
+
+.carta-riassunto {
+  font-size: .87rem;
+  color: var(--testo-tenue);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.carta-stato {
+  margin-top: 12px;
+  font-size: .78rem;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--giusto);
+  font-weight: 600;
+}
+
+.carta-passi {
+  margin-top: 12px;
+  font-size: .78rem;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--testo-tenue);
+}
+
+/* ---------- schermata di un passo ---------- */
+
+.barra-alta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.bottone-testo {
+  background: none;
+  border: none;
+  color: var(--accento);
+  font: inherit;
+  font-size: .9rem;
+  cursor: pointer;
+  padding: 6px 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.contatore {
+  font-size: .82rem;
+  color: var(--testo-tenue);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.avanzamento {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+}
+
+.avanzamento span {
+  flex: 1;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--bordo);
+}
+
+.avanzamento span.fatto { background: var(--accento); }
+.avanzamento span.attuale { background: var(--accento); opacity: .55; }
+
+.riquadro-caso {
+  background: var(--superficie-alt);
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.riquadro-caso summary {
+  cursor: pointer;
+  padding: 14px 18px;
+  font-weight: 700;
+  font-size: .95rem;
+  list-style: none;
+}
+
+.riquadro-caso summary::-webkit-details-marker { display: none; }
+.riquadro-caso summary::before { content: "📋 "; }
+.riquadro-caso[open] summary { border-bottom: 1px solid var(--bordo); }
+.riquadro-caso .storia { padding: 14px 18px; margin: 0; }
+
+.scheda-passo {
+  background: var(--superficie);
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  padding: 20px;
+  box-shadow: var(--ombra);
+}
+
+.etichetta-passo {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .74rem;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accento);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.premessa {
+  background: var(--accento-chiaro);
+  border-left: 3px solid var(--accento);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 14px;
+  margin: 0 0 16px;
+  font-size: .95rem;
+}
+
+.domanda { font-size: 1.12rem; font-weight: 700; margin: 0 0 4px; }
+
+.nota-multipla {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .82rem;
+  color: var(--testo-tenue);
+  margin: 0 0 14px;
+}
+
+/* ---------- risposte ---------- */
+
+.risposte { display: grid; gap: 10px; margin-top: 16px; }
+
+.risposta {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  width: 100%;
+  text-align: left;
+  background: var(--superficie-alt);
+  border: 1px solid var(--bordo-forte);
+  border-radius: 12px;
+  padding: 14px 15px;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color .12s, background .12s;
+}
+
+.risposta:hover:not(:disabled) { border-color: var(--accento); }
+.risposta:disabled { cursor: default; }
+
+.segno {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--bordo-forte);
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.risposta[aria-pressed="true"] .segno {
+  background: var(--accento);
+  border-color: var(--accento);
+  color: var(--testo-su-accento);
+}
+
+.risposta.giusta { border-color: var(--giusto); background: var(--giusto-sfondo); }
+.risposta.giusta .segno { background: var(--giusto); border-color: var(--giusto); color: var(--testo-su-accento); }
+.risposta.sbagliata { border-color: var(--sbagliato); background: var(--sbagliato-sfondo); }
+.risposta.sbagliata .segno { background: var(--sbagliato); border-color: var(--sbagliato); color: var(--testo-su-accento); }
+.risposta.spenta { opacity: .55; }
+
+.spiegazione {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .89rem;
+  line-height: 1.5;
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px dashed var(--bordo-forte);
+  color: var(--testo-tenue);
+}
+
+.esito {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .95rem;
+  font-weight: 600;
+}
+
+.esito.bene { background: var(--giusto-sfondo); color: var(--giusto); }
+.esito.male { background: var(--sbagliato-sfondo); color: var(--sbagliato); }
+
+/* ---------- bottoni principali ---------- */
+
+.bottoni { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+
+.bottone {
+  flex: 1 1 auto;
+  min-height: 48px;
+  padding: 12px 22px;
+  border-radius: 12px;
+  border: 1px solid var(--accento);
+  background: var(--accento);
+  color: var(--testo-su-accento);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.bottone:hover { filter: brightness(1.08); }
+.bottone:disabled { opacity: .45; cursor: not-allowed; filter: none; }
+
+.bottone.secondario {
+  background: transparent;
+  color: var(--accento);
+}
+
+/* ---------- schermata finale ---------- */
+
+.punteggio {
+  text-align: center;
+  background: var(--superficie);
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  padding: 26px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--ombra);
+}
+
+.punteggio-numero {
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--accento);
+  line-height: 1.1;
+}
+
+.punteggio-commento {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .95rem;
+  color: var(--testo-tenue);
+  margin-top: 8px;
+}
+
+.riepilogo {
+  background: var(--superficie);
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  padding: 20px;
+  box-shadow: var(--ombra);
+}
+
+.riepilogo h3 { margin: 0 0 4px; font-size: 1.15rem; }
+
+.riepilogo-nota {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .87rem;
+  color: var(--testo-tenue);
+  margin: 0 0 16px;
+}
+
+.voce-riepilogo {
+  border-top: 1px solid var(--bordo);
+  padding: 13px 0;
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+}
+
+.voce-esito { flex: none; font-size: 1.05rem; line-height: 1.4; }
+.voce-titolo { font-weight: 700; font-size: .93rem; margin-bottom: 2px; }
+.voce-testo {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .9rem;
+  color: var(--testo-tenue);
+}
+
+/* ---------- piede ---------- */
+
+.pie {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px 40px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .8rem;
+  color: var(--testo-tenue);
+  text-align: center;
+}
+
+.pie code {
+  background: var(--sfondo-trama);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: .95em;
+}
+
+:focus-visible { outline: 3px solid var(--accento); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+  .carta-caso:hover { transform: none; }
+}
+
+/* ============================================================
+   Barra per passare da uno strumento all'altro
+   ============================================================ */
+
+.navigazione {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  padding: 10px 12px 0;
+  background: var(--sfondo-trama);
+  border-bottom: 1px solid var(--bordo);
+}
+
+.navigazione button {
+  appearance: none;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  background: transparent;
+  color: var(--testo-tenue);
+  font: inherit;
+  font-size: .95rem;
+  padding: 10px 18px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+@media (max-width: 620px) {
+  .navigazione button { padding: 9px 11px; font-size: .86rem; }
+}
+
+.navigazione button:hover { color: var(--testo); }
+
+.navigazione button.attivo {
+  background: var(--sfondo);
+  border-color: var(--bordo);
+  color: var(--testo);
+  font-weight: 700;
+  margin-bottom: -1px;
+  padding-bottom: 11px;
+}
+
+/* schede interne (La scala / Allenamento) */
+
+.schede-interne {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--bordo);
+}
+
+.scheda-interna {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--testo-tenue);
+  font: inherit;
+  font-size: .98rem;
+  padding: 8px 4px 10px;
+  margin-bottom: -1px;
+  cursor: pointer;
+}
+
+.scheda-interna.attiva {
+  color: var(--accento);
+  border-bottom-color: var(--accento);
+  font-weight: 700;
+}
+
+/* ============================================================
+   La scala delle unità
+   ============================================================ */
+
+.scelte-grandezza {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.guida {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 1rem;
+  color: var(--testo);
+  background: var(--accento-chiaro);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 0 0 18px;
+}
+
+.pillola {
+  border: 1px solid var(--bordo-forte);
+  background: var(--superficie);
+  color: var(--testo);
+  border-radius: 999px;
+  min-height: 44px;
+  padding: 9px 18px;
+  font: inherit;
+  font-size: .98rem;
+  cursor: pointer;
+}
+
+.pillola:hover { border-color: var(--accento); }
+
+.pillola.attiva {
+  background: var(--accento);
+  border-color: var(--accento);
+  color: var(--testo-su-accento);
+  font-weight: 700;
+}
+
+.pillola-altre {
+  border-style: dashed;
+  color: var(--testo-tenue);
+  font-size: .9rem;
+}
+
+/* la domanda scritta come una frase */
+
+.frase {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+
+.frase-parola { color: var(--testo-tenue); }
+
+.campo-valore {
+  flex: 0 1 130px;
+  min-width: 90px;
+  min-height: 52px;
+  padding: 10px 14px;
+  border: 2px solid var(--accento);
+  border-radius: 12px;
+  background: var(--superficie);
+  color: var(--testo);
+  font: inherit;
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.scelta-unita {
+  flex: 0 1 190px;
+  min-height: 52px;
+  padding: 10px 12px;
+  border: 1px solid var(--bordo-forte);
+  border-radius: 12px;
+  background: var(--superficie);
+  color: var(--testo);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.campo-valore:focus,
+.scelta-unita:focus { border-color: var(--accento); }
+
+/* numeri pronti */
+
+.esempi {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 20px;
+}
+
+.esempi-etichetta {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .85rem;
+  color: var(--testo-tenue);
+}
+
+.bottone-esempio {
+  border: 1px solid var(--bordo-forte);
+  background: var(--superficie-alt);
+  color: var(--testo);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font: inherit;
+  font-size: .92rem;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.bottone-esempio:hover { border-color: var(--accento); color: var(--accento); }
+
+/* il risultato */
+
+.risultato-grande {
+  background: var(--superficie);
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  padding: 22px 20px;
+  box-shadow: var(--ombra);
+  text-align: center;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.risultato-partenza { font-size: 1.2rem; color: var(--testo-tenue); }
+.risultato-simbolo-piccolo { font-weight: 700; }
+
+.risultato-uguale {
+  font-size: 1.1rem;
+  color: var(--testo-tenue);
+  margin: 4px 0;
+}
+
+.risultato-valore { font-size: 2.3rem; font-weight: 700; color: var(--accento); }
+.risultato-unita { font-size: 1.4rem; font-weight: 700; color: var(--accento); }
+
+.risultato-nome {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .85rem;
+  color: var(--testo-tenue);
+  margin-top: 6px;
+}
+
+.risultato-vuoto { color: var(--testo-tenue); font-size: .95rem; }
+
+/* i due bottoni per muoversi di un gradino */
+
+.passi-gradino {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.bottone-passo {
+  flex: 1 1 0;
+  min-height: 48px;
+  border: 1px solid var(--bordo-forte);
+  border-radius: 12px;
+  background: var(--superficie);
+  color: var(--accento);
+  font: inherit;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .88rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 10px;
+}
+
+.bottone-passo:hover:not(:disabled) { border-color: var(--accento); }
+.bottone-passo:disabled { opacity: .35; cursor: not-allowed; color: var(--testo-tenue); }
+
+.spiegazione-scala {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .95rem;
+  color: var(--testo);
+  margin: 14px 0 22px;
+  text-align: center;
+}
+
+.suggerimento {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .82rem;
+  color: var(--testo-tenue);
+  text-align: center;
+  margin: 0 0 8px;
+}
+
+.titolo-blocco { font-size: 1.1rem; margin: 26px 0 4px; }
+
+.didascalia {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .85rem;
+  color: var(--testo-tenue);
+  margin: 0 0 14px;
+}
+
+.nota-grandezza {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .88rem;
+  color: var(--testo-tenue);
+  background: var(--superficie-alt);
+  border-left: 3px solid var(--bordo-forte);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 14px;
+  margin: 18px 0;
+}
+
+.nota-piccola {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .85rem;
+  color: var(--testo-tenue);
+  margin: 0 0 16px;
+}
+
+/* la striscia dei gradini */
+
+.involucro-gradini { overflow-x: auto; padding-bottom: 6px; margin-bottom: 20px; }
+
+.gradini {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  min-width: min-content;
+}
+
+.gradino {
+  position: relative;
+  flex: 1 0 auto;
+  min-width: 68px;
+  min-height: 62px;
+  border: 1px solid var(--bordo-forte);
+  border-radius: 12px;
+  background: var(--superficie);
+  color: var(--testo);
+  font: inherit;
+  padding: 12px 6px 9px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.gradino:hover { border-color: var(--accento); }
+.gradino-simbolo { display: block; font-weight: 700; font-size: 1.1rem; }
+.gradino-nome {
+  display: block;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .66rem;
+  line-height: 1.25;
+  color: var(--testo-tenue);
+  margin-top: 3px;
+}
+
+/* le targhette "da" e "a": l'informazione non è affidata al solo colore */
+.targhetta {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .64rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--testo-tenue);
+  color: var(--sfondo);
+}
+
+.gradino.partenza { border-color: var(--accento); border-width: 2px; }
+.gradino.arrivo {
+  background: var(--accento);
+  border-color: var(--accento);
+}
+.gradino.arrivo .gradino-simbolo,
+.gradino.arrivo .gradino-nome { color: var(--testo-su-accento); }
+.gradino.arrivo .targhetta { background: var(--testo); color: var(--sfondo); }
+
+.salto {
+  flex: none;
+  align-self: center;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .68rem;
+  color: var(--testo-tenue);
+  padding: 0 3px;
+}
+
+/* la tabella delle cifre */
+
+.involucro-tabella { overflow-x: auto; margin-bottom: 20px; }
+
+.tabella-cifre {
+  border-collapse: collapse;
+  margin: 0 auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.tabella-cifre th {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--testo-tenue);
+  padding: 4px 2px;
+  border: 1px solid var(--bordo);
+  background: var(--superficie-alt);
+  white-space: nowrap;
+}
+
+.tabella-cifre th.colonna-arrivo { background: var(--accento); color: var(--testo-su-accento); }
+.tabella-cifre th.colonna-partenza { color: var(--accento); }
+.tabella-cifre th.colonna-arrivo.colonna-partenza { color: var(--testo-su-accento); }
+.tabella-cifre th.colonna-extra { background: transparent; border-color: transparent; }
+
+.tabella-cifre td.cifra {
+  width: 34px;
+  min-width: 32px;
+  height: 46px;
+  text-align: center;
+  border: 1px solid var(--bordo);
+  background: var(--superficie);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* le cifre del numero scritto sono colorate, gli zeri di contorno no:
+   così si vede a colpo d'occhio che le cifre non si spostano mai */
+.tabella-cifre td.cifra-viva { color: var(--accento); }
+.tabella-cifre td.cifra-zero { color: var(--testo-tenue); opacity: .55; font-weight: 400; }
+
+.tabella-cifre td.cifra-virgola {
+  border-right: 3px solid var(--accento);
+  position: relative;
+}
+
+.tabella-cifre td.cifra-virgola::after {
+  content: ",";
+  position: absolute;
+  right: -7px;
+  bottom: -4px;
+  color: var(--accento);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* lo stesso valore in tutte le unità */
+
+.tutte-unita {
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  background: var(--superficie-alt);
+  margin-top: 22px;
+}
+
+.tutte-unita summary {
+  cursor: pointer;
+  padding: 14px 18px;
+  font-weight: 700;
+  font-size: .95rem;
+  list-style: none;
+}
+
+.tutte-unita summary::-webkit-details-marker { display: none; }
+.tutte-unita summary::before { content: "▸ "; color: var(--accento); }
+.tutte-unita[open] summary::before { content: "▾ "; }
+.tutte-unita[open] summary { border-bottom: 1px solid var(--bordo); }
+.tutte-unita .elenco-valori { padding: 14px 18px; }
+
+.elenco-valori {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 560px) {
+  .elenco-valori { grid-template-columns: 1fr 1fr; }
+}
+
+.valore-unita {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--bordo);
+  border-radius: 9px;
+  background: var(--superficie);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.valore-unita.evidenziato { border-color: var(--accento); background: var(--accento-chiaro); }
+.valore-simbolo { color: var(--testo-tenue); font-weight: 700; white-space: nowrap; }
+
+/* ============================================================
+   L'allenamento sulle conversioni
+   ============================================================ */
+
+.punteggio-allenamento {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .85rem;
+  color: var(--testo-tenue);
+  margin-bottom: 14px;
+}
+
+.scheda-esercizio {
+  background: var(--superficie);
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  padding: 20px;
+  box-shadow: var(--ombra);
+}
+
+.domanda-esercizio { font-size: 1.15rem; margin: 0 0 16px; }
+
+.riga-risposta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.riga-risposta .bottone { flex: 0 1 auto; }
+
+.unita-risposta {
+  font-weight: 700;
+  color: var(--testo-tenue);
+  min-width: 34px;
+}
+
+/* ============================================================
+   Il Sistema Internazionale
+   ------------------------------------------------------------
+   Ogni unità fondamentale ha il suo colore, sempre lo stesso in
+   tutta la sezione: nella mappa in alto, nelle schede e dentro
+   le formule delle grandezze derivate.
+   ============================================================ */
+
+:root {
+  --si-1: #1f5f8b;
+  --si-2: #8a5a12;
+  --si-3: #1d6b45;
+  --si-4: #6b3fa0;
+  --si-5: #a33528;
+  --si-6: #0f6e70;
+  --si-7: #a2447a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="chiaro"]) {
+    --si-1: #74b3dd;
+    --si-2: #e0ae5e;
+    --si-3: #6fce9f;
+    --si-4: #bb9bea;
+    --si-5: #f09287;
+    --si-6: #5fc6c8;
+    --si-7: #ef9ac8;
+  }
+}
+
+:root[data-tema="scuro"] {
+  --si-1: #74b3dd;
+  --si-2: #e0ae5e;
+  --si-3: #6fce9f;
+  --si-4: #bb9bea;
+  --si-5: #f09287;
+  --si-6: #5fc6c8;
+  --si-7: #ef9ac8;
+}
+
+.colore-1 { --colore: var(--si-1); }
+.colore-2 { --colore: var(--si-2); }
+.colore-3 { --colore: var(--si-3); }
+.colore-4 { --colore: var(--si-4); }
+.colore-5 { --colore: var(--si-5); }
+.colore-6 { --colore: var(--si-6); }
+.colore-7 { --colore: var(--si-7); }
+.colore-0 { --colore: var(--testo-tenue); }
+
+/* la mappa in alto */
+
+.mappa {
+  background: var(--superficie-alt);
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  padding: 16px;
+  margin-bottom: 8px;
+}
+
+.mappa .didascalia { margin: 0 0 12px; text-align: center; min-height: 2.4em; }
+
+.mappa-base {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+@media (min-width: 600px) {
+  .mappa-base { grid-template-columns: repeat(7, 1fr); }
+}
+
+/* i mattoncini colorati */
+
+.chip-base {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+  border: 2px solid var(--colore, var(--bordo-forte));
+  color: var(--colore, var(--testo));
+  background: var(--superficie);
+  border-radius: 9px;
+  padding: 3px 9px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.chip-base.grande {
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-height: 78px;
+  padding: 9px 4px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  position: relative;
+  transition: opacity .15s, box-shadow .15s;
+}
+
+.chip-icona { font-size: 1.1rem; line-height: 1; }
+.chip-simbolo { font-size: 1.05rem; }
+
+.chip-nome {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .6rem;
+  font-weight: 600;
+  color: var(--testo-tenue);
+  line-height: 1.15;
+}
+
+.chip-esponente { font-size: .78em; vertical-align: super; }
+
+.chip-base.grande.acceso {
+  box-shadow: 0 0 0 3px var(--colore);
+}
+
+.chip-base.grande.acceso .chip-esponente {
+  position: absolute;
+  top: 3px;
+  right: 6px;
+  font-size: .9rem;
+  vertical-align: baseline;
+}
+
+.chip-base.grande.spento { opacity: .3; }
+
+/* le schede delle grandezze */
+
+.griglia-si {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+  margin-bottom: 8px;
+}
+
+@media (min-width: 560px) {
+  .griglia-si { grid-template-columns: 1fr 1fr; }
+}
+
+.carta-si {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--superficie);
+  border: 1px solid var(--bordo);
+  border-left: 4px solid var(--colore, var(--bordo-forte));
+  border-radius: var(--raggio);
+  padding: 15px 16px;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  box-shadow: var(--ombra);
+}
+
+.carta-si:hover { border-color: var(--accento); border-left-color: var(--colore, var(--accento)); }
+
+.carta-si.selezionata {
+  border-color: var(--accento);
+  border-left-color: var(--colore, var(--accento));
+  box-shadow: 0 0 0 2px var(--accento), var(--ombra);
+  grid-column: 1 / -1;
+}
+
+.carta-si-testata {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.carta-si-icona { font-size: 1.5rem; line-height: 1; flex: none; }
+.carta-si-grandezza { font-weight: 700; font-size: 1.02rem; }
+
+.carta-si-nome {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .78rem;
+  color: var(--testo-tenue);
+}
+
+.carta-si-simbolo {
+  margin-left: auto;
+  flex: none;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--colore, var(--accento));
+}
+
+.carta-si-misura,
+.carta-si-assaggio {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .86rem;
+  color: var(--testo-tenue);
+  margin: 10px 0 0;
+}
+
+.carta-si-assaggio { font-style: italic; }
+
+.esempi-lista {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .9rem;
+  margin: 12px 0 0;
+  padding-left: 20px;
+}
+
+.esempi-lista li { margin-bottom: 5px; }
+
+.definizione {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .86rem;
+  color: var(--testo-tenue);
+  background: var(--superficie-alt);
+  border-radius: 9px;
+  padding: 12px 14px;
+  margin: 14px 0 0;
+}
+
+/* la formula disegnata come frazione */
+
+.formula {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin: 14px 0 2px;
+  min-height: 46px;
+}
+
+.frazione {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.frazione-sopra,
+.frazione-sotto {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 4px;
+}
+
+.frazione-linea {
+  align-self: stretch;
+  height: 2px;
+  background: var(--testo-tenue);
+  border-radius: 1px;
+}
+
+.punto { color: var(--testo-tenue); font-weight: 700; }
+.uno { font-weight: 700; font-size: 1.05rem; }
+
+/* i multipli e i sottomultipli */
+
+.involucro-prefissi { overflow-x: auto; padding-bottom: 6px; }
+
+.scala-prefissi {
+  display: flex;
+  align-items: stretch;
+  gap: 5px;
+  min-width: min-content;
+}
+
+.chip-prefisso {
+  flex: 1 0 auto;
+  min-width: 62px;
+  min-height: 72px;
+  border: 1px solid var(--bordo-forte);
+  border-radius: 11px;
+  background: var(--superficie);
+  color: var(--testo);
+  font: inherit;
+  padding: 8px 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.chip-prefisso.multiplo { --colore: var(--si-2); }
+.chip-prefisso.sottomultiplo { --colore: var(--si-1); }
+.chip-prefisso:hover { border-color: var(--colore); }
+
+.chip-prefisso.scelto {
+  border-color: var(--colore);
+  box-shadow: 0 0 0 2px var(--colore);
+}
+
+.prefisso-simbolo {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--colore);
+  line-height: 1.1;
+}
+
+.prefisso-nome {
+  display: block;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .64rem;
+  color: var(--testo-tenue);
+  margin-top: 2px;
+}
+
+.prefisso-potenza {
+  display: block;
+  font-size: .78rem;
+  font-weight: 700;
+  margin-top: 3px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* il confine fra multipli e sottomultipli */
+
+.divisore-unita {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 6px;
+}
+
+.divisore-linea {
+  flex: 1;
+  width: 2px;
+  background: var(--bordo-forte);
+  border-radius: 1px;
+}
+
+.divisore-testo {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .58rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--testo-tenue);
+  writing-mode: vertical-rl;
+}
+
+.scheda-prefisso {
+  background: var(--superficie);
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  padding: 16px 18px;
+  margin-top: 12px;
+  box-shadow: var(--ombra);
+}
+
+.scheda-prefisso .nota-piccola { margin: 0; }
+
+.prefisso-testata {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.prefisso-grande {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--accento);
+  line-height: 1;
+  min-width: 46px;
+  text-align: center;
+}
+
+.prefisso-titolo { font-size: 1.15rem; font-weight: 700; }
+
+.prefisso-valore {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .86rem;
+  color: var(--testo-tenue);
+  font-variant-numeric: tabular-nums;
+  margin-top: 2px;
+}
+
+/* ---------- ritorno al sito Liceo Digitale ----------
+   Aggiunto quando la pagina e' entrata nel sito Liceo Digitale:
+   disegna il collegamento "Torna alla pagina iniziale" in cima. */
+
+.ritorno {
+  margin: 0;
+  padding: 10px 16px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .9rem;
+  background: var(--sfondo-trama);
+}
+
+.ritorno a { color: var(--accento); }
