@@ -442,13 +442,6 @@
     }
   }
 
-  /* Le chiavi di Google cominciano con AIza o con AQ. e sono lunghe.
-     Le parole d'ordine sono una parola sola e corta. */
-  function sembraUnaChiave(testo) {
-    if (/^AIza/.test(testo) || /^AQ\./.test(testo)) { return true; }
-    return testo.length > 25 && testo.indexOf(" ") === -1;
-  }
-
   function apriArea(prefisso) {
     document.getElementById("accesso-" + prefisso).hidden = true;
     var area = document.getElementById("area-" + prefisso);
@@ -490,17 +483,7 @@
         return;
       }
 
-      /* Capita di incollare qui la chiave di Google invece della parola
-         d'ordine: le due caselle si somigliano. Se riconosciamo una
-         chiave lo diciamo, invece di ripetere "non corretta". */
-      if (sembraUnaChiave(scritto)) {
-        errore.textContent = "Questa sembra la chiave di Google, non la "
-          + "password. Qui va una sola parola, quella che ti è "
-          + "stata comunicata. La chiave si incolla dentro lo strumento, "
-          + "dopo essere entrati.";
-      } else {
-        errore.textContent = "Password non corretta.";
-      }
+      errore.textContent = "Password non corretta.";
       campo.value = "";
       campo.focus();
     });
