@@ -6,7 +6,7 @@
 # ------------------------------------------------------------
 
 $cartella = Split-Path -Parent $MyInvocation.MyCommand.Path
-$porta = 8123
+$porta = 8765
 $indirizzo = "http://localhost:$porta/"
 
 $listener = New-Object System.Net.HttpListener
