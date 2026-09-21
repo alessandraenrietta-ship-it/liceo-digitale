@@ -274,13 +274,17 @@
     var stato = document.createElement("span");
     stato.className = "disciplina-stato";
     if (pronti === 0) {
-      stato.textContent = artefatti.length === 1
-        ? "1 artefatto in preparazione"
-        : artefatti.length + " artefatti in preparazione";
+      /* Niente di pronto: basta dire che c'e' qualcosa in arrivo, senza
+         contare quanti. */
+      stato.textContent = "in preparazione";
     } else {
-      stato.textContent = pronti === 1
-        ? "1 artefatto disponibile"
-        : pronti + " artefatti disponibili";
+      /* Quando c'e' qualcosa di pronto si scrive il suo nome, non
+         "1 artefatto disponibile": si capisce subito che cosa c'e'
+         dentro senza dover aprire. Se sono piu' d'uno, compaiono tutti. */
+      stato.textContent = artefatti
+        .filter(function (artefatto) { return artefatto.pronto; })
+        .map(function (artefatto) { return artefatto.titolo; })
+        .join(" · ");
     }
     testata.appendChild(stato);
 
