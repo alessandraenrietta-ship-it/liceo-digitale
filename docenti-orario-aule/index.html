@@ -190,11 +190,37 @@
       border-radius: var(--raggio);
     }
 
+    /* Il riquadro dentro ogni casella della tabella. Serve a due
+       cose: dare a tutte le caselle la stessa altezza minima,
+       cosi' un'ora buca non si schiaccia, e tenere l'avviso
+       giallo appoggiato in fondo invece che subito sotto la
+       lezione. */
+    table.orario tbody td { height: 1px; }
+
+    table.orario .dentro {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      /* Quanto e' alta una casella con dentro una lezione
+         normale: materia, classe e aula su tre righe. Le caselle
+         vuote e le ore buche si tengono almeno cosi', per non
+         schiacciare la riga. */
+      min-height: 4.9rem;
+    }
+
+    /* Gli avvisi stanno in fondo alla casella: il margine
+       automatico in cima si mangia tutto lo spazio che avanza e
+       li spinge giu'. Il padding garantisce un filo di stacco
+       anche quando spazio non ne avanza. */
+    .avvisi {
+      margin-top: auto;
+      padding-top: 0.4em;
+    }
+
     /* L'avviso della sorveglianza: giallo, perche' e' una cosa
        da fare, non un'informazione sulla lezione. */
     .sorveglianza {
       display: block;
-      margin-top: 0.35em;
       padding: 0.4em 0.55em;
       font-size: 0.82rem;
       line-height: 1.35;
@@ -731,10 +757,17 @@
     function cella(lezione, vista) {
       var td = document.createElement("td");
 
+      /* Tutto il contenuto sta dentro un riquadro alto quanto la
+         casella: serve per tenere l'avviso giallo in fondo e per
+         dare a tutte le caselle la stessa altezza minima. */
+      var dentro = document.createElement("div");
+      dentro.className = "dentro";
+      td.appendChild(dentro);
+
       var materia = document.createElement("span");
       materia.className = "materia";
       materia.textContent = lezione.materia || "(materia non indicata)";
-      td.appendChild(materia);
+      dentro.appendChild(materia);
 
       var chi = document.createElement("span");
       chi.className = "chi";
@@ -743,13 +776,13 @@
       } else {
         chi.textContent = "Classe " + lezione.classe;
       }
-      td.appendChild(chi);
+      dentro.appendChild(chi);
 
       if (vista === "classe" && lezione.compresenza) {
         var comp = document.createElement("span");
         comp.className = "compresenza";
         comp.textContent = "con " + lezione.compresenza;
-        td.appendChild(comp);
+        dentro.appendChild(comp);
       }
       if (vista === "insegnante" && lezione.compresenza) {
         var altro = lezione.compresenza;
@@ -760,7 +793,7 @@
           var comp2 = document.createElement("span");
           comp2.className = "compresenza";
           comp2.textContent = "con " + altro;
-          td.appendChild(comp2);
+          dentro.appendChild(comp2);
         }
       }
 
@@ -773,17 +806,23 @@
         etichetta.className = "aula-mancante";
         etichetta.textContent = "aula da definire";
       }
-      td.appendChild(etichetta);
+      dentro.appendChild(etichetta);
 
       /* Le sorveglianze riguardano chi fa lezione, non la classe:
          compaiono solo nell'orario di un insegnante. */
       if (vista === "insegnante") {
-        avvisiDi(lezione).forEach(function (testo) {
-          var nota = document.createElement("span");
-          nota.className = "sorveglianza";
-          nota.textContent = testo;
-          td.appendChild(nota);
-        });
+        var testi = avvisiDi(lezione);
+        if (testi.length > 0) {
+          var zona = document.createElement("div");
+          zona.className = "avvisi";
+          testi.forEach(function (testo) {
+            var nota = document.createElement("span");
+            nota.className = "sorveglianza";
+            nota.textContent = testo;
+            zona.appendChild(nota);
+          });
+          dentro.appendChild(zona);
+        }
       }
 
       return td;
@@ -1025,12 +1064,18 @@
           if (trovate.length === 0) {
             var vuota = document.createElement("td");
             vuota.setAttribute("data-giorno", giorno);
+            /* Anche le caselle senza lezione hanno il riquadro
+               interno: cosi' sono alte come le altre e la riga
+               dell'ora buca non si schiaccia. */
+            var dentroVuota = document.createElement("div");
+            dentroVuota.className = "dentro";
+            vuota.appendChild(dentroVuota);
             if (buche[chiave + "|" + ora.numero]) {
               vuota.className = "ora-buca";
               var segno = document.createElement("span");
               segno.className = "buca";
               segno.textContent = "ora buca";
-              vuota.appendChild(segno);
+              dentroVuota.appendChild(segno);
             } else {
               vuota.className = "vuota";
             }
@@ -1043,10 +1088,10 @@
              di nasconderne una. */
           var td = cella(trovate[0], seleziona.tipo);
           trovate.slice(1).forEach(function (altra) {
-            var separatore = document.createElement("hr");
-            td.appendChild(separatore);
-            var extra = cella(altra, seleziona.tipo);
-            while (extra.firstChild) { td.appendChild(extra.firstChild); }
+            var dentro = td.firstChild;
+            dentro.appendChild(document.createElement("hr"));
+            var extra = cella(altra, seleziona.tipo).firstChild;
+            while (extra.firstChild) { dentro.appendChild(extra.firstChild); }
           });
           td.setAttribute("data-giorno", giorno);
           tr.appendChild(td);
