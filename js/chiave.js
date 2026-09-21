@@ -27,17 +27,20 @@
 
        ChiavePersonale.prepara({
          dove: 'riquadro-chiave',
-         nome: 'liceo-digitale-chiave-NOMEARTEFATTO',
          aCosaServe: 'costruisce lo schema'
        });
 
    e al momento di chiamare il servizio:
 
-       var chiave = ChiavePersonale.leggi('liceo-digitale-chiave-NOMEARTEFATTO');
+       var chiave = ChiavePersonale.leggi('liceo-digitale-chiave-google');
        if (!chiave) { ...avvisa e fermati... }
 
-   Il campo "nome" deve essere diverso per ogni artefatto: e' l'etichetta
-   con cui la chiave viene messa da parte nel browser.
+   ATTENZIONE: tutti gli strumenti che usano Gemini devono usare lo
+   STESSO nome, 'liceo-digitale-chiave-google'. E' quello che permette di
+   incollare la chiave una volta sola e ritrovarla in ogni strumento. Se
+   un artefatto nuovo ne usasse uno suo, chi lo apre dovrebbe incollarla
+   di nuovo. Il campo "nome" in prepara() si puo' omettere: vale gia'
+   quello condiviso.
    ================================================================== */
 
 window.ChiavePersonale = (function () {
