@@ -305,26 +305,32 @@
 
     <div id="segnalazioni"></div>
 
-    <details class="mio-file">
-      <summary>Carica il tuo orario</summary>
+    <!-- TESTO MODIFICABILE: puoi cambiare le frasi qui sotto.
+         Le parti che hanno un id vengono nascoste dalla pagina
+         quando l'orario proprio e' gia' caricato: a quel punto
+         le spiegazioni su come caricarlo non servono piu'. -->
+    <details class="mio-file" id="riquadro-file">
+      <summary id="riassunto-file">Carica il tuo orario</summary>
+
+      <div id="spiega-file">
+        <p>
+          L'orario pubblicato nel sito e' un <strong>esempio inventato</strong>:
+          questo sito e' pubblico, e i nomi veri degli insegnanti non possono
+          starci dentro.
+        </p>
+        <p>
+          Se hai il file dell'orario vero, puoi caricarlo qui: viene letto dal
+          tuo computer e resta sul tuo computer. <strong>Non viene inviato da
+          nessuna parte</strong> e nessun altro lo vede.
+        </p>
+      </div>
 
       <p>
-        L'orario pubblicato nel sito e' un <strong>esempio inventato</strong>:
-        questo sito e' pubblico, e i nomi veri degli insegnanti non possono
-        starci dentro.
-      </p>
-      <p>
-        Se hai il file dell'orario vero, puoi caricarlo qui: viene letto dal
-        tuo computer e resta sul tuo computer. <strong>Non viene inviato da
-        nessuna parte</strong> e nessun altro lo vede.
-      </p>
-
-      <p>
-        <label for="file">Scegli il file dell'orario (un file di testo .txt)</label>
+        <label for="file" id="etichetta-file">Scegli il file dell'orario (un file di testo .txt)</label>
         <input type="file" id="file" accept=".txt,text/plain">
       </p>
 
-      <p class="nota-piccola">
+      <p class="nota-piccola" id="nota-subito">
         Appena scegli il file l'orario e' pronto: non c'e' nessun altro
         pulsante da premere.
       </p>
@@ -336,13 +342,16 @@
         </label>
       </p>
 
-      <p class="nota-piccola">
+      <p class="nota-piccola" id="nota-spunta">
         Per togliere l'orario da questo computer basta togliere la spunta
         qui sopra: torna quello di esempio.
       </p>
-
-      <p class="nota-piccola" id="stato-file"></p>
     </details>
+
+    <!-- La riga che dice com'e' andata. Sta fuori dal riquadro
+         qui sopra, cosi' si legge anche quando il riquadro e'
+         chiuso. -->
+    <p class="nota-piccola" id="stato-file"></p>
 
   </main>
 
@@ -371,6 +380,11 @@
     var casellaRic   = document.getElementById("ricorda");
     var statoFile    = document.getElementById("stato-file");
     var quale        = document.getElementById("quale-orario");
+    var riquadroFile = document.getElementById("riquadro-file");
+    var riassunto    = document.getElementById("riassunto-file");
+    var spiegaFile   = document.getElementById("spiega-file");
+    var etichettaF   = document.getElementById("etichetta-file");
+    var notaSubito   = document.getElementById("nota-subito");
 
     var dati = null;          /* l'orario letto dal file */
     var seleziona = null;     /* cosa si sta guardando adesso */
@@ -1034,10 +1048,28 @@
         : "Orario in uso: l'esempio del sito, con nomi inventati. "
           + "Il tuo si carica qui sotto.";
 
+      aggiornaRiquadroFile();
+
       if (dati.lezioni.length === 0) {
         erroreGrave("Il file non contiene nessuna lezione.",
           "Controlla che le righe comincino con la parola LEZIONE seguita dai due punti.");
       }
+    }
+
+    /* Il riquadro "Carica il tuo orario" cambia a seconda di
+       cosa si sta guardando. Finche' c'e' l'esempio del sito
+       spiega tutto; quando l'orario proprio e' gia' caricato
+       quelle spiegazioni non servono piu' e restano soltanto il
+       modo per cambiare file e la spunta per ricordarlo. */
+    function aggiornaRiquadroFile() {
+      spiegaFile.hidden = daFile;
+      notaSubito.hidden = daFile;
+      riassunto.textContent = daFile
+        ? "Orario caricato: premi qui se devi cambiare file"
+        : "Carica il tuo orario";
+      etichettaF.textContent = daFile
+        ? "Se l'orario e' cambiato, scegli qui il file nuovo"
+        : "Scegli il file dell'orario (un file di testo .txt)";
     }
 
     function leggiSalvato() {
@@ -1117,6 +1149,10 @@
             ? " E' stato salvato su questo computer."
             : " Non e' stato possibile salvarlo su questo computer.";
         }
+        /* Il riquadro ha finito il suo lavoro: si richiude, cosi'
+           resta solo la riga che dice com'e' andata. */
+        riquadroFile.open = false;
+
         /* Il campo di ricerca e' in cima e la tabella pure: senza
            questo salto sembra che non sia successo niente. */
         campoCerca.scrollIntoView({ block: "center" });
