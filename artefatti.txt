@@ -56,7 +56,7 @@ DA COMPILARE | Lingua e cultura straniera - inglese | docenti | inglese-DACOMPIL
 DA COMPILARE | Scienze naturali | docenti | scienze-DACOMPILARE | DA COMPILARE
 DA COMPILARE | Disegno e storia dell'arte | docenti | arte-DACOMPILARE | DA COMPILARE
 DA COMPILARE | Informatica | docenti | informatica-DACOMPILARE | DA COMPILARE
-DA COMPILARE | Religione cattolica | docenti | religione-DACOMPILARE | DA COMPILARE
+Aureolissima - Punti Paradiso | Religione cattolica | docenti | religione-aureolissima | Gioco a punti per la classe: il docente assegna i Punti Paradiso, gli studenti li chiedono e li guadagnano con quiz e domande a sorpresa. Nomi veri non servono: si usano nickname. Tutto resta sul computer di chi la usa.
 Il Regolamento in Gioco | Educazione civica | entrambi | edcivica-regolamento-in-gioco | Gioco a squadre sul regolamento d'istituto: cinque casi da risolvere cercando sanzione, organo competente e procedura, con cronometro e bacheca delle risposte. Si conduce dallo schermo proiettato.
 
 # Riga non confermata: da togliere se la disciplina non viene coperta.

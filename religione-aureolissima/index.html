@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aureolissima — Punti Paradiso</title>
+<style>
+:root{
+  --cielo:#e9f1fb;
+  --cielo-scuro:#c8ddf3;
+  --notte:#111c33;
+  --notte-2:#1d2c4a;
+  --inchiostro:#16233c;
+  --azzurro:#2c6bad;
+  --azzurro-chiaro:#5b93cf;
+  --oro:#c4941f;
+  --oro-chiaro:#f2cf72;
+  --carta:#ffffff;
+  --bordo:#ccdcee;
+  --testo-soft:#5a6b82;
+  --rosso:#a33a3a;
+  --verde:#2f7a52;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--sans);
+  color:var(--inchiostro);
+  background:var(--cielo);
+  background-image:
+    radial-gradient(1100px 520px at 50% -180px, #ffffff 0%, rgba(255,255,255,0) 70%),
+    radial-gradient(700px 400px at 90% 110%, #dbe9f9 0%, rgba(219,233,249,0) 70%);
+  background-attachment:fixed;
+  min-height:100vh;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:18px 18px 64px}
+h1,h2,h3{font-family:var(--serif);font-weight:600;margin:0;letter-spacing:.2px}
+h1{font-size:clamp(28px,4.2vw,44px);line-height:1.08}
+h2{font-size:clamp(21px,2.6vw,30px);line-height:1.15}
+h3{font-size:19px}
+p{line-height:1.6;margin:.5em 0}
+a{color:var(--azzurro)}
+small{color:var(--testo-soft)}
+
+/* ---- intestazione ---- */
+.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 0 18px}
+.marchio{display:flex;align-items:center;gap:11px;margin-right:auto;min-width:0}
+.aureola-logo{width:38px;height:38px;flex:0 0 38px;border-radius:50%;
+  border:3px solid var(--oro);box-shadow:0 0 0 4px #fff,0 3px 12px rgba(196,148,31,.35);
+  background:linear-gradient(160deg,#fff,#eaf3ff)}
+.marchio b{font-family:var(--serif);font-size:22px;font-weight:600;letter-spacing:.3px}
+.marchio span{display:block;font-size:12.5px;color:var(--testo-soft);margin-top:1px}
+
+/* ---- bottoni ---- */
+button{font:inherit;cursor:pointer}
+.btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;
+  background:var(--carta);color:var(--inchiostro);border:1px solid var(--bordo);
+  border-radius:999px;padding:10px 18px;font-size:15px;font-weight:500;
+  box-shadow:0 1px 2px rgba(22,35,60,.06)}
+.btn:hover{border-color:var(--azzurro-chiaro)}
+.btn:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{
+  outline:3px solid var(--oro);outline-offset:2px}
+.btn.primario{background:var(--azzurro);border-color:var(--azzurro);color:#fff}
+.btn.primario:hover{background:#25598f}
+.btn.oro{background:linear-gradient(170deg,#f6dc98,#e0b44a);border-color:#cfa53c;color:#3b2c06}
+.btn.cupo{background:var(--notte);border-color:var(--notte);color:#e7ecf6}
+.btn.fantasma{background:transparent;border-color:transparent;color:var(--testo-soft);padding:10px 12px}
+.btn.piccolo{padding:7px 13px;font-size:13.5px}
+.btn.pieno{width:100%}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.barra-azioni{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+
+/* ---- superfici ---- */
+.pannello{background:var(--carta);border:1px solid var(--bordo);border-radius:var(--r);
+  padding:20px;box-shadow:0 10px 26px rgba(22,35,60,.07)}
+.griglia{display:grid;gap:14px}
+.g-classi{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.g-slot{grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.vuoto{border:1px dashed var(--bordo);border-radius:var(--r);padding:26px;text-align:center;color:var(--testo-soft);background:rgba(255,255,255,.6)}
+.riga{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tra{height:1px;background:var(--bordo);border:0;margin:18px 0}
+.pila{display:grid;gap:12px}
+
+/* ---- slot studente ---- */
+.slot{position:relative;background:var(--carta);border:1px solid var(--bordo);border-radius:var(--r);
+  padding:16px 16px 14px;display:flex;flex-direction:column;gap:9px;
+  box-shadow:0 8px 20px rgba(22,35,60,.06)}
+.slot .nome{font-family:var(--serif);font-size:20px;line-height:1.2;word-break:break-word}
+.slot .santo{font-size:12.5px;color:var(--testo-soft);line-height:1.35}
+.pp{display:flex;align-items:baseline;gap:6px;font-family:var(--serif)}
+.pp b{font-size:32px;color:var(--azzurro);letter-spacing:-.5px}
+.pp i{font-style:normal;font-size:12px;color:var(--testo-soft)}
+
+/* ---- aureola ---- */
+.aur{display:block;margin:0 auto;overflow:visible}
+.aur .arco{fill:none;stroke:#e1eaf5;stroke-width:4.5;stroke-linecap:round}
+.aur .prog{fill:none;stroke:#e0b44a;stroke-width:4.5;stroke-linecap:round;
+  filter:drop-shadow(0 0 4px rgba(216,168,44,.55))}
+.aur .ad{fill:#f1f5fa;stroke:#cddcec;stroke-width:1.4}
+.aur .ad.on{fill:#f7d987;stroke:#c69a2e}
+.aur .ad.tap.on{filter:drop-shadow(0 0 6px rgba(216,168,44,.9))}
+.aur .num{font-family:var(--serif);fill:var(--azzurro);font-weight:600}
+.aur .num.pieno{fill:#b98d1b}
+.aur .eti{font-family:var(--sans);fill:#8fa2b8;font-size:8px;letter-spacing:.6px}
+.aureolato{text-align:center}
+
+/* ---- bollini aureola ---- */
+.bollini{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.boll{width:14px;height:14px;border-radius:50%;background:#eef3f9;border:1.5px solid var(--bordo)}
+.boll.on{background:linear-gradient(160deg,#fbe6ac,#dcae3e);border-color:#c69a2e}
+.boll.tappa{width:19px;height:19px;border-width:2px}
+.boll.tappa.on{box-shadow:0 0 0 3px rgba(226,186,86,.35),0 0 10px rgba(216,168,44,.6)}
+.bollini.grandi .boll{width:19px;height:19px}
+.bollini.grandi .boll.tappa{width:26px;height:26px}
+
+/* ---- moduli ---- */
+label{display:block;font-size:13px;color:var(--testo-soft);margin:0 0 5px}
+input,select,textarea{font:inherit;width:100%;padding:11px 13px;border:1px solid var(--bordo);
+  border-radius:10px;background:#fbfdff;color:var(--inchiostro)}
+textarea{min-height:92px;resize:vertical;line-height:1.5}
+.campo{margin-bottom:14px}
+.due{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.due{grid-template-columns:1fr}}
+
+/* ---- etichette ---- */
+.tag{display:inline-block;font-size:12px;padding:3px 10px;border-radius:999px;
+  background:#eef4fb;color:var(--azzurro);border:1px solid var(--bordo)}
+.tag.attesa{background:#fdf4e0;color:#8a6a12;border-color:#ecd9a8}
+.tag.ok{background:#e8f4ec;color:var(--verde);border-color:#bfe0cc}
+.tag.no{background:#f9eaea;color:var(--rosso);border-color:#e8c9c9}
+.pallino{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;
+  padding:0 6px;border-radius:999px;background:var(--oro);color:#3b2c06;font-size:12.5px;font-weight:700}
+
+/* ---- registro ---- */
+.mov{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid #eef2f7}
+.mov:last-child{border-bottom:0}
+.mov .delta{font-family:var(--serif);font-size:19px;min-width:52px;text-align:right}
+.delta.su{color:var(--verde)}
+.delta.giu{color:var(--rosso)}
+.mov .causale{flex:1;min-width:0;font-size:14.5px;line-height:1.4}
+.mov .ora{font-size:12px;color:var(--testo-soft);white-space:nowrap}
+
+/* ---- mazzo di san pietro ---- */
+.tavolo{background:var(--notte);border-radius:22px;padding:26px;color:#e8eefb;
+  background-image:radial-gradient(600px 300px at 50% 0%,rgba(96,140,200,.35),rgba(0,0,0,0) 70%)}
+.tavolo h2{color:#fff}
+.tavolo .sottotitolo{color:#a9bbd8;font-size:14px;margin-top:4px}
+.carta{margin:22px auto 0;max-width:660px;border-radius:20px;padding:34px 30px;text-align:center;
+  border:2px solid transparent;min-height:260px;display:flex;flex-direction:column;justify-content:center;gap:14px}
+.carta .genere{font-family:var(--serif);font-size:15px;letter-spacing:2px;opacity:.85}
+.carta .testo{font-family:var(--serif);font-size:clamp(23px,3.4vw,34px);line-height:1.25}
+.carta .nota{font-size:15px;line-height:1.5;opacity:.9}
+.carta .valore{font-family:var(--serif);font-size:44px}
+.carta.grazia{background:linear-gradient(170deg,#fffdf6,#f7e7bd);border-color:var(--oro);color:#3b2c06;
+  box-shadow:0 0 0 6px rgba(244,214,140,.2),0 22px 40px rgba(0,0,0,.35)}
+.carta.domanda{background:linear-gradient(170deg,#ffffff,#e4effc);border-color:#9cc0e6;color:var(--inchiostro);
+  box-shadow:0 22px 40px rgba(0,0,0,.35)}
+.carta.malus{background:linear-gradient(170deg,#2a2036,#150f1f);border-color:#4a3a60;color:#e5dcf2;
+  box-shadow:0 22px 40px rgba(0,0,0,.45)}
+.carta.retro{background:linear-gradient(170deg,var(--notte-2),#0d1628);border-color:#31456c;color:#9fb4d6}
+.tavolo .barra-azioni{justify-content:center;margin-top:22px}
+
+/* ---- modale ---- */
+.velo{position:fixed;inset:0;background:rgba(12,22,40,.62);display:flex;align-items:flex-start;
+  justify-content:center;padding:22px;overflow:auto;z-index:50}
+.modale{background:var(--carta);border-radius:16px;padding:22px;width:100%;max-width:520px;
+  margin:auto;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.modale h3{margin-bottom:6px}
+
+/* ---- avviso ---- */
+#avviso{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);
+  background:var(--inchiostro);color:#fff;padding:12px 20px;border-radius:999px;font-size:14.5px;
+  opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:60;max-width:90vw;text-align:center}
+#avviso.vedi{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ---- ingresso ---- */
+.porte{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+@media(max-width:620px){.porte{grid-template-columns:1fr}}
+.porta{text-align:left;background:var(--carta);border:1px solid var(--bordo);border-radius:var(--r);
+  padding:24px;box-shadow:0 10px 26px rgba(22,35,60,.07);display:grid;gap:8px}
+.porta b{font-family:var(--serif);font-size:24px;font-weight:600}
+.porta span{color:var(--testo-soft);font-size:14.5px;line-height:1.5}
+.porta:hover{border-color:var(--azzurro-chiaro)}
+
+.testata{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap;margin-bottom:18px}
+.testata .btn{margin-left:auto}
+.nota-privacy{font-size:13px;color:var(--testo-soft);background:#f4f8fd;border:1px solid var(--bordo);
+  border-radius:10px;padding:10px 13px}
+@media print{.barra-azioni,.btn{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div id="modale-host"></div>
+<div id="avviso" role="status" aria-live="polite"></div>
+
+<!-- Collegamento per tornare alla pagina iniziale del sito. -->
+<p style="max-width:1120px;margin:0 auto;padding:0 18px 28px;font-size:15px">
+  <a href="../index.html" style="color:#2c6bad">&larr; Torna alla pagina iniziale</a>
+</p>
+
+<script>
+"use strict";
+
+/* ============================================================
+   1. CONTENUTI DI DEFAULT
+   ============================================================ */
+
+const SANTI = [
+ {n:"San Francesco d'Assisi", p:"del creato e della pace", s:"Figlio di un ricco mercante, lasciò tutto per vivere povero tra i poveri. Chiamava fratelli il sole, l'acqua e perfino la morte."},
+ {n:"San Tommaso d'Aquino", p:"dello studio e delle domande difficili", s:"I compagni lo chiamavano 'bue muto' per il suo silenzio. Divenne il pensatore che unì fede e ragione come due ali dello stesso volo."},
+ {n:"San Giovanni Bosco", p:"dei ragazzi e del cortile", s:"A Torino raccolse ragazzi di strada e inventò una scuola fatta di gioco, lavoro e fiducia. Diceva che bastava amarli e farglielo sapere."},
+ {n:"Santa Chiara d'Assisi", p:"della scelta libera", s:"Fuggì di casa a diciotto anni per seguire il Vangelo. Difese la sua comunità da un assedio presentandosi disarmata."},
+ {n:"San Filippo Neri", p:"dell'allegria", s:"Prete a Roma, educava con le battute e le passeggiate. 'State buoni, se potete': la santità non ha il muso lungo."},
+ {n:"Santa Teresa di Calcutta", p:"di chi non ha nessuno", s:"Lasciò l'insegnamento per le strade di Calcutta, raccogliendo morenti perché non se ne andassero soli."},
+ {n:"San Massimiliano Kolbe", p:"del dono di sé", s:"Ad Auschwitz si offrì di morire al posto di un padre di famiglia, un uomo che non conosceva."},
+ {n:"San Carlo Acutis", p:"di chi sta online", s:"Adolescente milanese appassionato di computer, costruì un sito sui miracoli eucaristici. Morì a quindici anni nel 2006."},
+ {n:"Santa Caterina da Siena", p:"del coraggio di parlare", s:"Figlia di un tintore, scriveva ai potenti del suo tempo senza timore e convinse il Papa a tornare a Roma."},
+ {n:"San Pier Giorgio Frassati", p:"dell'amicizia e della montagna", s:"Studente torinese, scalava vette e portava di nascosto medicine ai poveri. Al suo funerale la città scoprì chi aiutava."},
+ {n:"Sant'Agostino", p:"di chi cerca ancora", s:"Passò la giovinezza a inseguire ogni cosa prima di trovare pace. 'Ci hai fatti per te, e il nostro cuore è inquieto finché non riposa in te.'"},
+ {n:"San Benedetto da Norcia", p:"del lavoro ben fatto", s:"Scrisse una regola breve e ragionevole: prega e lavora, misura e accoglienza. Su quella regola si ricostruì l'Europa."},
+ {n:"Santa Giuseppina Bakhita", p:"della libertà riconquistata", s:"Rapita bambina in Sudan e venduta come schiava, arrivò in Italia e scelse di restare libera. Perdonò i suoi rapitori."},
+ {n:"San Giuseppe Moscati", p:"di chi cura", s:"Medico a Napoli, visitava gratis i poveri e pagava lui le medicine. Nella sala d'attesa non c'erano classi sociali."},
+ {n:"Beato Rosario Livatino", p:"della giustizia", s:"Giudice siciliano ucciso dalla mafia a 38 anni. Sull'agenda scriveva due lettere: S.T.D., sub tutela Dei."},
+ {n:"Santa Gianna Beretta Molla", p:"delle scelte che costano", s:"Medico, sciatrice, madre. Scelse di portare avanti la gravidanza sapendo il rischio per sé."},
+ {n:"San Paolo di Tarso", p:"di chi cambia idea", s:"Perseguitava i cristiani finché una luce sulla strada di Damasco lo rovesciò. Divenne il loro viaggiatore più instancabile."},
+ {n:"Santa Maria Maddalena", p:"di chi ricomincia", s:"La prima a trovare il sepolcro vuoto e la prima a raccontarlo: per questo è chiamata apostola degli apostoli."},
+ {n:"Martin Luther King", p:"dei diritti di tutti", s:"Pastore battista americano, guidò la lotta contro la segregazione razziale con la sola forza della parola e della nonviolenza.", t:"Cristianesimo protestante"},
+ {n:"Mohandas Gandhi", p:"della nonviolenza", s:"Avvocato indiano, liberò un continente senza sparare un colpo, usando il digiuno, la marcia e il rifiuto di obbedire all'ingiustizia.", t:"Induismo"},
+ {n:"Rosa Parks", p:"della dignità tranquilla", s:"Sarta di Montgomery, un giorno del 1955 restò seduta sull'autobus. Quel no educato fece partire un movimento intero.", t:"Cristianesimo protestante"},
+ {n:"Malala Yousafzai", p:"del diritto allo studio", s:"Ragazza pakistana, continuò ad andare a scuola quando le fu vietato. Sopravvissuta a un attentato, parla oggi per milioni di ragazze.", t:"Islam"},
+ {n:"Dietrich Bonhoeffer", p:"della coscienza", s:"Teologo tedesco, si oppose al nazismo e fu impiccato pochi giorni prima della fine della guerra. 'Il silenzio davanti al male è già male.'", t:"Cristianesimo luterano"},
+ {n:"Etty Hillesum", p:"della vita interiore", s:"Giovane ebrea olandese, tenne un diario luminoso fino al campo di Westerbork. Morì ad Auschwitz a 29 anni.", t:"Ebraismo"},
+ {n:"Nelson Mandela", p:"della riconciliazione", s:"Ventisette anni di carcere non lo resero un vendicatore: uscito, scelse di costruire un Paese insieme a chi lo aveva imprigionato.", t:"Etica laica"},
+ {n:"Giorgio Perlasca", p:"di chi si finge qualcun altro per il bene", s:"Commerciante italiano, a Budapest si spacciò per console spagnolo e salvò oltre cinquemila ebrei. Tacque per quarant'anni.", t:"Etica laica"}
+];
+
+const MAZZO = [
+ {t:"Chi racconta la parabola del buon samaritano, e a quale domanda risponde?", n:"Gesù, alla domanda «e chi è il mio prossimo?» (Luca 10).", pp:5},
+ {t:"Quali sono i due comandamenti che, secondo il Vangelo, riassumono tutti gli altri?", n:"Amare Dio con tutto il cuore e amare il prossimo come se stessi.", pp:4},
+ {t:"Che cosa significa la parola «Vangelo»?", n:"Buona notizia, dal greco eu-anghelion.", pp:3},
+ {t:"Nomina tre religioni monoteiste e un elemento che le accomuna.", n:"Ebraismo, Cristianesimo, Islam: un unico Dio, Abramo padre nella fede, un libro sacro.", pp:6},
+ {t:"Che cos'è il Concilio Vaticano II e in che anni si è svolto?", n:"L'assemblea dei vescovi che rinnovò la Chiesa cattolica, dal 1962 al 1965.", pp:6},
+ {t:"Che cosa afferma l'articolo 1 della Dichiarazione universale dei diritti umani?", n:"Tutti gli esseri umani nascono liberi ed eguali in dignità e diritti.", pp:5},
+ {t:"Spiega con parole tue la differenza tra giustizia e vendetta.", n:"Non c'è una risposta da manuale: valuta l'argomentazione, non le parole giuste.", pp:6},
+ {t:"Chi era un Samaritano per un ebreo del tempo di Gesù, e perché la parabola risulta scandalosa?", n:"Uno straniero disprezzato, considerato eretico: il nemico diventa il modello da imitare.", pp:6},
+ {t:"Che cosa si celebra nella Pasqua ebraica, e che rapporto ha con quella cristiana?", n:"La liberazione dall'Egitto; i cristiani la rileggono come passaggio dalla morte alla vita.", pp:6},
+ {t:"Quale articolo della Costituzione italiana garantisce la libertà di culto?", n:"L'articolo 19; l'articolo 8 afferma l'uguale libertà di tutte le confessioni.", pp:5},
+ {t:"Quali sono i cinque pilastri dell'Islam?", n:"Professione di fede, preghiera, elemosina, digiuno del Ramadan, pellegrinaggio alla Mecca.", pp:7},
+ {t:"Che cosa significa la parola «cattolico»?", n:"Universale, dal greco katholikos.", pp:4},
+ {t:"Chi ha scritto la maggior parte delle lettere del Nuovo Testamento?", n:"Paolo di Tarso.", pp:3},
+ {t:"Che differenza c'è tra la Bibbia ebraica e l'Antico Testamento cristiano?", n:"Stessi libri fondamentali, ordine diverso; i cattolici ne accolgono alcuni in più, detti deuterocanonici.", pp:7},
+ {t:"Che cos'è un'enciclica? Riesci a citarne una?", n:"Una lettera del Papa a tutta la Chiesa: per esempio Laudato si' o Pacem in terris.", pp:6},
+ {t:"Chi era Oscar Romero e perché venne ucciso?", n:"Arcivescovo di San Salvador, ucciso nel 1980 mentre celebrava, per aver denunciato la repressione dei poveri.", pp:7},
+ {t:"Che cosa significa «ecumenismo»?", n:"La ricerca dell'unità tra le Chiese cristiane divise.", pp:5},
+ {t:"Chi è il primo Papa secondo la tradizione cattolica? È anche il motivo del nome di questo mazzo.", n:"Pietro, l'apostolo a cui la tradizione affida le chiavi.", pp:4},
+ {t:"Che cos'è la Shoah e in quali anni si è consumata?", n:"Lo sterminio di sei milioni di ebrei europei, soprattutto tra il 1941 e il 1945.", pp:6},
+ {t:"Che cosa chiede oggi, tra pubblicità e social, il comandamento «non desiderare la roba d'altri»?", n:"Discussione aperta: premia chi porta esempi concreti.", pp:6},
+ {t:"Perché il Venerdì Santo si chiama così?", n:"Ricorda la morte di Gesù in croce; «santo» perché appartiene ai giorni centrali della Pasqua.", pp:4},
+ {t:"Che cos'è il Ramadan?", n:"Il mese del digiuno islamico dall'alba al tramonto, nono mese del calendario lunare.", pp:4},
+ {t:"Che cosa significa «laicità dello Stato»?", n:"Lo Stato non ha una religione propria e garantisce a tutte le fedi uguale libertà.", pp:6},
+ {t:"Nel Discorso della montagna, chi sono i «beati»? Citane almeno tre.", n:"Poveri in spirito, afflitti, miti, affamati di giustizia, misericordiosi, puri di cuore, operatori di pace, perseguitati.", pp:6},
+ {t:"Che cos'è il karma nelle religioni indiane?", n:"La legge per cui ogni azione produce conseguenze che ricadono su chi la compie.", pp:5},
+ {t:"Perché si dice che la Bibbia non è un libro ma una biblioteca?", n:"Raccoglie 73 libri scritti da autori diversi lungo più di mille anni, in generi diversi.", pp:5},
+ {t:"Che cosa distingue un'icona da un normale quadro religioso?", n:"Non è un ritratto ma una «finestra»: si scrive secondo regole precise e serve alla preghiera.", pp:6},
+ {t:"Chi era Francesco d'Assisi prima della conversione?", n:"Figlio di un ricco mercante di stoffe, festaiolo e aspirante cavaliere.", pp:4},
+ {t:"Che cos'è l'obiezione di coscienza? Porta un esempio storico.", n:"Rifiutare un ordine ingiusto accettandone le conseguenze: Franz Jägerstätter, gli obiettori al servizio militare.", pp:7},
+ {t:"Che cosa vuol dire «martire», alla lettera?", n:"Testimone, dal greco martys.", pp:4}
+];
+
+const CURIOSITA = [
+ "Nei primi secoli il segno della croce si faceva con un dito solo sulla fronte: piccolo e discreto, perché i cristiani erano perseguitati.",
+ "«Basilica» non è una parola cristiana: indicava la sala dove l'impero romano amministrava la giustizia.",
+ "Il calendario che usi ogni giorno fu riformato nel 1582: in Italia, quell'anno, al 4 ottobre seguì direttamente il 15.",
+ "«Pontefice» significa «costruttore di ponti»: era il titolo dei sacerdoti dell'antica Roma.",
+ "La più antica immagine di Gesù che conosciamo è un graffito di scherno inciso sul Palatino nel II secolo.",
+ "«Amen» è una delle pochissime parole che ebrei, cristiani e musulmani pronunciano quasi allo stesso modo.",
+ "Il Vaticano è lo Stato più piccolo del mondo: 0,44 km², meno di molti parchi cittadini.",
+ "Copiare un solo libro poteva costare a un monaco un anno di lavoro e un gregge intero di pecore per la pergamena.",
+ "La parola «ospedale» viene da hospitalitas: i primi nacquero accanto ai monasteri, per i pellegrini.",
+ "«Corano» significa «recitazione»: quel libro nasce per essere detto ad alta voce, non letto in silenzio.",
+ "Il Natale al 25 dicembre non è una data storica: fu scelta nel IV secolo, accanto alla festa romana del Sole.",
+ "Giovanni Paolo II è stato il primo papa a entrare in una sinagoga, nel 1986, e in una moschea, nel 2001.",
+ "Il comignolo della Cappella Sistina è provvisorio: viene montato solo per il conclave.",
+ "Il campanile nasce anche come torre civica: serviva a segnalare incendi, assemblee e nemici in arrivo.",
+ "«Pasqua» viene dall'ebraico pesach, cioè «passaggio».",
+ "Nella tradizione ebraica ogni sette anni la terra riposa: quell'anno sabbatico è l'antenato delle nostre pause di studio.",
+ "La cattedrale di Colonia fu finita 632 anni dopo la posa della prima pietra.",
+ "Il primo libro stampato da Gutenberg, intorno al 1455, fu una Bibbia.",
+ "Il rosario nasce come «salterio dei poveri»: serviva a chi non sapeva leggere i 150 salmi.",
+ "Hanukkah dura otto giorni per una questione di olio: ce n'era per un giorno solo e durò otto.",
+ "In molte chiese ortodosse non trovi statue, ma solo icone: l'immagine deve essere finestra, non corpo.",
+ "«Chiesa», in greco ekklesia, indicava l'assemblea dei cittadini convocata in piazza.",
+ "Il presepe come lo conosci lo inventò Francesco d'Assisi a Greccio, nel 1223.",
+ "Il digiuno esiste quasi ovunque: Quaresima, Ramadan, Yom Kippur, uposatha buddhista.",
+ "Tra le pietre del Muro occidentale di Gerusalemme si infilano da secoli bigliettini di preghiera.",
+ "Martin Luther King fu ucciso a Memphis nel 1968: era andato lì per sostenere lo sciopero dei netturbini.",
+ "«Diavolo» viene da diabolos, «colui che divide».",
+ "La parola «angelo» significa semplicemente messaggero.",
+ "I primi orologi meccanici d'Europa nacquero nei monasteri, per non sbagliare l'ora della preghiera notturna.",
+ "Il gesto della stretta di mano nasce come segno di pace: mostrava che la destra non impugnava armi.",
+ "Nel Medioevo le cattedrali erano dipinte a colori vivaci: il bianco delle pietre che vedi oggi è un caso, non una scelta.",
+ "Bartolomé de Las Casas fu tra i primi, nel Cinquecento, a scrivere che gli indigeni d'America erano persone con pieni diritti."
+];
+
+const QUIZ = [
+ {d:"Che cosa significa la parola «Vangelo»?", m:["Buona notizia","Legge antica","Libro dei re","Cammino"], r:"Buona notizia", sp:"Dal greco eu-anghelion, l'annuncio che un messaggero portava di corsa dopo una vittoria.", pp:3},
+ {d:"Quanti sono i Vangeli canonici?", m:["Due","Quattro","Sette","Dodici"], r:"Quattro", sp:"Matteo, Marco, Luca e Giovanni. I primi tre si chiamano sinottici perché si possono leggere in parallelo.", pp:3},
+ {d:"Chi scrisse la Regola «ora et labora»?", m:["San Benedetto","San Francesco","Sant'Agostino","San Paolo"], r:"San Benedetto", sp:"La Regola di Benedetto, nel VI secolo, alternava preghiera, lavoro manuale e studio: su quel ritmo si organizzò l'Europa monastica.", pp:4},
+ {d:"In quale città è nato Gesù secondo i Vangeli?", m:["Nazaret","Gerusalemme","Betlemme","Cafarnao"], r:"Betlemme", sp:"A Nazaret invece è cresciuto: per questo viene chiamato il Nazareno.", pp:3},
+ {d:"Il Corano è il libro sacro di quale religione?", m:["Ebraismo","Islam","Induismo","Buddhismo"], r:"Islam", sp:"È considerato dettato in arabo a Maometto nell'arco di ventitré anni.", pp:3},
+ {d:"Che cosa si celebra a Pentecoste?", m:["La nascita di Gesù","Il dono dello Spirito Santo","Il battesimo di Gesù","L'ultima cena"], r:"Il dono dello Spirito Santo", sp:"Cinquanta giorni dopo Pasqua: è considerata la festa di nascita della Chiesa.", pp:4},
+ {d:"Chi guidò il popolo ebraico fuori dall'Egitto?", m:["Abramo","Mosè","Davide","Isaia"], r:"Mosè", sp:"L'episodio si chiama Esodo e dà il nome al secondo libro della Bibbia.", pp:3},
+ {d:"Quanti anni durò il Concilio Vaticano II?", m:["Uno","Tre","Quattro","Dieci"], r:"Quattro", sp:"Dal 1962 al 1965, convocato da Giovanni XXIII e concluso da Paolo VI.", pp:4},
+ {d:"Come si chiama il luogo di culto ebraico?", m:["Moschea","Sinagoga","Tempio","Pagoda"], r:"Sinagoga", sp:"Il Tempio era uno solo, a Gerusalemme, e fu distrutto nel 70 d.C.: da allora la sinagoga è il luogo di raduno.", pp:3},
+ {d:"Chi ha scritto la lettera ai Romani?", m:["Pietro","Giovanni","Paolo","Luca"], r:"Paolo", sp:"È la più lunga e la più ragionata delle sue lettere, scritta prima ancora di arrivare a Roma.", pp:4},
+ {d:"Completa: «Ama il prossimo tuo come ___»", a:true, r:"te stesso", sp:"Non è una frase nuova del Vangelo: sta già nel libro del Levitico, nell'Antico Testamento.", pp:4},
+ {d:"Come si chiama la preghiera insegnata da Gesù ai discepoli? (due parole)", a:true, r:"Padre Nostro", sp:"In latino Pater Noster: la riportano il Vangelo di Matteo e, in forma più breve, quello di Luca.", pp:4},
+ {d:"Quale mese chiude di solito il tempo della Quaresima con la Pasqua? (nome del mese)", a:true, r:"aprile", sp:"La Pasqua cade la domenica dopo il primo plenilunio di primavera: quasi sempre tra fine marzo e aprile.", pp:3},
+ {d:"Chi era il giudice siciliano ucciso dalla mafia e beatificato nel 2021? (cognome)", a:true, r:"Livatino", sp:"Rosario Livatino, ucciso ad Agrigento nel 1990 a 38 anni. Sull'agenda annotava le lettere S.T.D., sub tutela Dei.", pp:5},
+ {d:"Come si chiama il pellegrinaggio alla Mecca?", a:true, r:"hajj", sp:"È il quinto pilastro dell'Islam: va compiuto almeno una volta nella vita, se si hanno salute e mezzi.", pp:5},
+ {d:"Qual è il primo libro della Bibbia?", a:true, r:"Genesi", sp:"Genesi significa origine: racconta la creazione, il diluvio e le storie dei patriarchi.", pp:3},
+ {d:"Che cosa significa la parola «cattolico»?", m:["Universale","Antico","Romano","Fedele"], r:"Universale", sp:"Dal greco katholikos, «secondo il tutto».", pp:4},
+ {d:"Chi scrisse l'enciclica Laudato si'?", m:["Giovanni XXIII","Paolo VI","Francesco","Benedetto XVI"], r:"Francesco", sp:"Pubblicata nel 2015, prende il titolo dal Cantico delle creature ed è dedicata alla cura della casa comune.", pp:5},
+ {d:"Che cosa significa, alla lettera, la parola «martire»?", m:["Vittima","Testimone","Eroe","Sacerdote"], r:"Testimone", sp:"Dal greco martys: chi testimonia in tribunale. Il senso di «ucciso per la fede» è arrivato dopo.", pp:5},
+ {d:"Chi guidò con la nonviolenza l'indipendenza dell'India?", m:["Nehru","Gandhi","Tagore","Ambedkar"], r:"Gandhi", sp:"Chiamava la sua strategia satyagraha, «forza della verità».", pp:4}
+];
+
+const SOGLIE = [10,20,30,45,55,65,80,100];
+
+const NICK_A = ["Pellicano","Cedro","Lanterna","Cometa","Falco","Ancora","Bussola","Cardellino","Zaffiro","Vespro",
+ "Ulivo","Airone","Nautilo","Quercia","Ginepro","Stella","Vela","Fiaccola","Rondine","Cervo","Fontana","Alabastro",
+ "Tamburo","Aquilone","Scoglio","Faro","Ghiaccio","Chiostro","Rovere","Delfino"];
+const NICK_B = ["Sereno","Ostinato","Gentile","Silenzioso","Curioso","Puntuale","Coraggioso","Paziente","Allegro",
+ "Tenace","Lucente","Discreto","Mattiniero","Instancabile","Sincero","Vigile","Tranquillo","Deciso","Leggero","Fedele"];
+
+function generaNick(cid){
+  const c = classe(cid);
+  const presi = new Set((c?c.studenti:[]).map(s=>s.nick.toLowerCase()));
+  for(let i=0;i<80;i++){
+    const n = NICK_A[Math.floor(Math.random()*NICK_A.length)] + " " + NICK_B[Math.floor(Math.random()*NICK_B.length)];
+    if(!presi.has(n.toLowerCase())) return n;
+  }
+  return "Pellegrino " + Math.floor(Math.random()*900+100);
+}
+
+const TAPPE = [30,65,100];
+const MOTIVI = [
+ {id:"merito", e:"Merito scolastico (compito, interrogazione, lavoro svolto bene)"},
+ {id:"partecipazione", e:"Partecipazione alla lezione"},
+ {id:"carita", e:"Gesto di carità o altruismo"},
+ {id:"quiz", e:"Quiz superato"}
+];
+
+/* ============================================================
+   2. DATI
+   ============================================================ */
+
+const CHIAVE = "aureolissima.v1";
+const vuoto = () => ({v:1, pinDocente:"1234", privacyLIM:false, classi:[], richieste:[]});
+let D = vuoto();
+
+function carica(){
+  try{
+    const g = localStorage.getItem(CHIAVE);
+    if(g) D = Object.assign(vuoto(), JSON.parse(g));
+  }catch(e){ D = vuoto(); }
+}
+function salva(){
+  try{ localStorage.setItem(CHIAVE, JSON.stringify(D)); }
+  catch(e){ avvisa("Memoria del browser piena o non disponibile: i dati non sono stati salvati."); }
+  programmaScrittura();
+}
+
+/* ---- archivio su file (cartella locale, chiavetta o Drive sincronizzato) ---- */
+let FH = null;                 // riferimento al file scelto dal docente
+let statoFile = "assente";     // assente | attivo | dapermettere | errore
+let ultimoSalvataggio = null;
+let timerScrittura = null;
+const supportaFile = () => typeof window.showSaveFilePicker === "function";
+
+function apriIdb(){
+  return new Promise((res,rej)=>{
+    const r = indexedDB.open("aureolissima", 1);
+    r.onupgradeneeded = () => r.result.createObjectStore("handle");
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+}
+function idbPut(k,v){ return apriIdb().then(db=>new Promise((res,rej)=>{
+  const t = db.transaction("handle","readwrite"); t.objectStore("handle").put(v,k);
+  t.oncomplete = res; t.onerror = ()=>rej(t.error); })); }
+function idbGet(k){ return apriIdb().then(db=>new Promise((res,rej)=>{
+  const t = db.transaction("handle","readonly"); const q = t.objectStore("handle").get(k);
+  q.onsuccess = ()=>res(q.result); q.onerror = ()=>rej(q.error); })); }
+function idbDel(k){ return apriIdb().then(db=>new Promise((res,rej)=>{
+  const t = db.transaction("handle","readwrite"); t.objectStore("handle").delete(k);
+  t.oncomplete = res; t.onerror = ()=>rej(t.error); })); }
+
+function programmaScrittura(){
+  if(!FH || statoFile !== "attivo") return;
+  clearTimeout(timerScrittura);
+  timerScrittura = setTimeout(scriviFile, 700);
+}
+async function scriviFile(){
+  if(!FH) return;
+  try{
+    const p = await FH.queryPermission({mode:"readwrite"});
+    if(p !== "granted"){ statoFile = "dapermettere"; disegna(); return; }
+    const w = await FH.createWritable();
+    await w.write(JSON.stringify(D, null, 2));
+    await w.close();
+    ultimoSalvataggio = Date.now();
+    aggiornaSpia();
+  }catch(e){
+    statoFile = "errore";
+    avvisa("Non riesco a scrivere sul file collegato. Controlla che la cartella sia raggiungibile.");
+    disegna();
+  }
+}
+async function leggiFile(){
+  const f = await FH.getFile();
+  const txt = await f.text();
+  if(txt.trim()){
+    const dati = JSON.parse(txt);
+    if(!dati || !Array.isArray(dati.classi)) throw new Error("struttura");
+    D = Object.assign(vuoto(), dati);
+    try{ localStorage.setItem(CHIAVE, JSON.stringify(D)); }catch(e){}
+  }
+  statoFile = "attivo";
+  ultimoSalvataggio = Date.now();
+}
+function nomeFile(){ return FH ? FH.name : ""; }
+function aggiornaSpia(){
+  const e = document.getElementById("spiaFile");
+  if(e) e.outerHTML = spiaFile();
+}
+function spiaFile(){
+  if(statoFile === "assente") return `<span id="spiaFile"></span>`;
+  const testo =
+    statoFile === "attivo" ? `${esc(nomeFile())}${ultimoSalvataggio?` · salvato alle ${new Date(ultimoSalvataggio).toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"})}`:""}`
+    : statoFile === "dapermettere" ? "file collegato, da riattivare"
+    : "file non raggiungibile";
+  return `<button id="spiaFile" class="btn piccolo ${statoFile==="attivo"?"":"oro"}"
+    data-act="${statoFile==="attivo"?"vaiImpostazioni":"riattivaFile"}"
+    title="Archivio su file">${statoFile==="attivo"?"Salvataggio automatico attivo":"Riattiva il file"} · ${testo}</button>`;
+}
+async function ripristinaFile(){
+  if(!supportaFile()) return;
+  try{
+    const h = await idbGet("file");
+    if(!h) return;
+    FH = h;
+    const p = await h.queryPermission({mode:"readwrite"});
+    if(p === "granted"){ await leggiFile(); }
+    else { statoFile = "dapermettere"; }
+  }catch(e){ FH = null; statoFile = "assente"; }
+  disegna();
+}
+const uid = () => Math.random().toString(36).slice(2,10);
+const classe = id => D.classi.find(c=>c.id===id);
+const studente = (cid,sid) => (classe(cid)?.studenti||[]).find(s=>s.id===sid);
+
+/* ============================================================
+   3. UTILITÀ
+   ============================================================ */
+
+let U = {vista:"ingresso", classeId:null, studId:null, sbloccato:false, carta:null, quizIdx:null, quizEsito:null, provenienza:null};
+
+const esc = t => String(t==null?"":t).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ora = ts => new Date(ts).toLocaleString("it-IT",{day:"2-digit",month:"2-digit",year:"2-digit",hour:"2-digit",minute:"2-digit"});
+const norm = t => String(t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+
+function mostra(nome){
+  if(!D.privacyLIM) return nome;
+  const p = String(nome).trim().split(/\s+/);
+  if(p.length===1) return p[0];
+  return p[0] + " " + p[1][0].toUpperCase() + ".";
+}
+function avvisa(t){
+  const a = document.getElementById("avviso");
+  a.textContent = t; a.classList.add("vedi");
+  clearTimeout(avvisa._t);
+  avvisa._t = setTimeout(()=>a.classList.remove("vedi"), 2600);
+}
+function aureola(pp, w){
+  pp = pp||0;
+  const R = 46, cx = 60, cy = 58;
+  const a0 = -172*Math.PI/180, a1 = -8*Math.PI/180;
+  const pt = t => { const a = a0 + (a1-a0)*t; return [cx + R*Math.cos(a), cy + R*Math.sin(a)]; };
+  const frac = Math.max(0, Math.min(1, pp/100));
+  const [x0,y0] = pt(0), [x1,y1] = pt(1), [xp,yp] = pt(frac);
+  const f = n => n.toFixed(1);
+  const dots = SOGLIE.map(s=>{
+    const [x,y] = pt(s/100);
+    const tap = TAPPE.includes(s);
+    return `<circle cx="${f(x)}" cy="${f(y)}" r="${tap?6:4}" class="ad${pp>=s?" on":""}${tap?" tap":""}"><title>${s} PP</title></circle>`;
+  }).join("");
+  const grande = w >= 200;
+  return `<svg class="aur" viewBox="0 0 120 62" width="${w}" height="${Math.round(w*62/120)}"
+      role="img" aria-label="Aureola: ${pp} punti su 100">
+    <path class="arco" d="M${f(x0)} ${f(y0)} A${R} ${R} 0 0 1 ${f(x1)} ${f(y1)}"/>
+    ${frac>0.004?`<path class="prog" d="M${f(x0)} ${f(y0)} A${R} ${R} 0 0 1 ${f(xp)} ${f(yp)}"/>`:""}
+    ${dots}
+    <text class="num${pp>=100?" pieno":""}" x="60" y="${grande?48:49}" text-anchor="middle"
+      font-size="${pp>999?24:30}">${pp}</text>
+    ${grande?`<text class="eti" x="60" y="59" text-anchor="middle">PUNTI PARADISO</text>`:""}
+  </svg>`;
+}
+function attesePer(cid){ return D.richieste.filter(r=>r.stato==="attesa" && r.classeId===cid).length; }
+function atteseTotali(){ return D.richieste.filter(r=>r.stato==="attesa").length; }
+
+function assegna(cid, sid, delta, causale){
+  const s = studente(cid,sid); if(!s) return;
+  delta = Math.round(Number(delta)||0);
+  s.pp = Math.max(0, (s.pp||0) + delta);
+  s.storico = s.storico || [];
+  s.storico.unshift({ts:Date.now(), delta, causale:causale||"Movimento"});
+  salva();
+}
+
+/* ============================================================
+   4. ROUTER
+   ============================================================ */
+
+function vai(v, extra){ Object.assign(U, {vista:v}, extra||{}); chiudiModale(); disegna(); window.scrollTo({top:0}); }
+
+function disegna(){
+  const app = document.getElementById("app");
+  const viste = {
+    ingresso:vIngresso, privacy:vPrivacy,
+    docPin:vDocPin, docHome:vDocHome, docClasse:vDocClasse, docMazzo:vDocMazzo,
+    docRichieste:vDocRichieste, docRegistro:vDocRegistro, docImpostazioni:vDocImpostazioni,
+    stuAccesso:vStuAccesso, stuHome:vStuHome, stuRichiesta:vStuRichiesta, stuQuiz:vStuQuiz, stuStorico:vStuStorico
+  };
+  app.innerHTML = intestazione() + (viste[U.vista]||vIngresso)();
+}
+
+function intestazione(){
+  const dentro = U.vista.startsWith("doc") && U.vista!=="docPin";
+  return `<div class="top">
+    <button class="marchio" data-act="casa" style="background:none;border:0;padding:0;text-align:left">
+      <span class="aureola-logo" aria-hidden="true"></span>
+      <span><b>Aureolissima</b><span>Il gioco dei Punti Paradiso</span></span>
+    </button>
+    ${dentro?spiaFile():""}
+    ${dentro?`<button class="btn piccolo ${D.privacyLIM?"oro":""}" data-act="privacyLim">${D.privacyLIM?"Nomi mascherati":"Modalità Privacy LIM"}</button>`:""}
+    ${dentro?`<button class="btn piccolo" data-act="vaiImpostazioni">Impostazioni</button>`:""}
+    ${U.vista!=="ingresso"?`<button class="btn piccolo fantasma" data-act="esci">Esci</button>`:""}
+  </div>`;
+}
+
+/* ============================================================
+   5. VISTE COMUNI
+   ============================================================ */
+
+function vIngresso(){
+  return `<div class="pannello">
+    <h1>Un'aula, cento punti, qualche aureola.</h1>
+    <p style="max-width:62ch;font-size:17px">Si guadagnano Punti Paradiso studiando, partecipando e facendo del bene agli altri.
+    Ogni richiesta passa dalle mani del docente: nessuno si assegna punti da solo.</p>
+    <div class="porte">
+      <button class="porta" data-act="vaiDocente">
+        <b>Sono il docente</b>
+        <span>Classi, slot, approvazioni e Mazzo di San Pietro. Da proiettare alla lavagna.</span>
+      </button>
+      <button class="porta" data-act="vaiStudente">
+        <b>Sono uno studente</b>
+        <span>Entra con il tuo nickname e il tuo PIN, chiedi punti, gioca ai quiz.</span>
+      </button>
+    </div>
+    <hr class="tra">
+    <div class="riga">
+      <small>I dati restano su questo dispositivo, nel browser. Nessun account, nessun server.</small>
+      <button class="btn piccolo fantasma" data-act="vaiPrivacy" style="margin-left:auto">Informativa sulla privacy</button>
+    </div>
+  </div>`;
+}
+
+function vPrivacy(){
+  return `<div class="pannello">
+    <h2>Informativa sulla privacy</h2>
+    <p><b>Dove finiscono i dati.</b> Tutto quello che scrivi in Aureolissima (classi, nickname, punti, richieste, storico)
+    viene salvato nella memoria locale del browser che stai usando, in questo dispositivo. Non esiste alcun server,
+    nessun account, nessun invio verso internet. Chiudere la scheda non cancella nulla; cancellare i dati del browser
+    o usare la navigazione anonima invece sì.</p>
+    <p><b>Salvataggio su file.</b> Puoi collegare un file `.json` sul disco: da quel momento l'app ci scrive dentro
+    a ogni modifica. Se scegli una cartella sincronizzata (Google Drive per desktop, OneDrive), quel file viene
+    copiato anche nello spazio cloud dell'istituto, con le regole e le responsabilità che l'istituto applica a
+    quello spazio. È una scelta consapevole del docente: con nickname e PIN, senza nomi reali, nel file non c'è
+    nulla che identifichi direttamente uno studente. Se preferisci che non esca nulla dal computer, tieni il file
+    in una cartella locale o su una chiavetta.</p>
+    <p><b>Nessun nome reale è necessario.</b> Gli slot si creano con un nickname o un codice scelto dal docente.
+    È la scelta consigliata con studenti minorenni: la classe funziona benissimo con «Pellicano 3B» al posto di cognome e nome.
+    Se il docente decide comunque di inserire nomi reali, se ne assume la responsabilità come titolare del trattamento
+    nel contesto della propria istituzione scolastica.</p>
+    <p><b>Iscrizione libera.</b> Per ogni classe il docente può lasciare che siano gli studenti a creare il proprio slot
+    scegliendo nickname e PIN, oppure chiudere le iscrizioni e crearli lui. Quando è aperta, l'app propone nickname
+    di fantasia proprio per evitare che qualcuno digiti il proprio nome; il docente resta comunque in grado di
+    rinominare o eliminare qualsiasi slot.</p>
+    <p><b>Modalità Privacy LIM.</b> Quando è attiva, sullo schermo proiettato compaiono solo il nome e l'iniziale
+    della seconda parola («Marco R.»). Serve a proteggere la classe da occhi esterni, per esempio durante una lezione
+    con la porta aperta o una videoconferenza.</p>
+    <p><b>Che cosa non sono i PIN.</b> Il PIN del docente e quelli degli studenti servono a evitare scherzi tra compagni,
+    non sono una misura di sicurezza informatica: chiunque abbia accesso fisico al dispositivo e competenze tecniche
+    può leggere i dati salvati nel browser. Non inserire mai in Aureolissima informazioni delicate
+    (salute, situazione familiare, provvedimenti disciplinari, convinzioni religiose personali).</p>
+    <p><b>Conservazione e cancellazione.</b> I dati restano finché non li cancelli. Da Impostazioni puoi esportare un
+    backup, cancellare un singolo slot, una classe intera o azzerare tutta l'app. Su richiesta di uno studente
+    o di chi ne fa le veci, il docente cancella lo slot corrispondente: l'operazione è immediata e definitiva.</p>
+    <p><b>Un consiglio pratico.</b> A fine anno scolastico esporta il backup se ti serve, poi azzera l'app.</p>
+    <div class="barra-azioni" style="margin-top:18px"><button class="btn primario" data-act="indietroPrivacy">Torna indietro</button></div>
+  </div>`;
+}
+
+/* ============================================================
+   6. VISTE DOCENTE
+   ============================================================ */
+
+function vDocPin(){
+  return `<div class="pannello" style="max-width:420px;margin:6vh auto 0">
+    <h2>Accesso docente</h2>
+    <p><small>PIN iniziale: 1234. Cambialo dalle impostazioni.</small></p>
+    <div class="campo"><label for="pinDoc">PIN</label>
+      <input id="pinDoc" type="password" inputmode="numeric" autocomplete="off" maxlength="12" placeholder="••••"></div>
+    <button class="btn primario pieno" data-act="confermaPinDoc">Entra</button>
+  </div>`;
+}
+
+function vDocHome(){
+  const att = atteseTotali();
+  const classi = D.classi.map(c=>{
+    const n = c.studenti.length;
+    const a = attesePer(c.id);
+    const tot = c.studenti.reduce((s,x)=>s+(x.pp||0),0);
+    return `<button class="porta" data-act="apriClasse" data-id="${c.id}">
+      <b>${esc(c.nome)}</b>
+      <span>${n} ${n===1?"slot":"slot"} · ${tot} PP in totale</span>
+      ${a?`<span><span class="pallino">${a}</span> <span style="color:var(--oro)">richieste da valutare</span></span>`:`<span style="color:var(--testo-soft)">Nessuna richiesta in sospeso</span>`}
+    </button>`;
+  }).join("");
+
+  return `<div class="pannello">
+    <div class="testata">
+      <div><h2>Le tue classi</h2><small>Apri una classe per vedere gli slot, approvare le richieste e pescare dal mazzo.</small></div>
+      <button class="btn primario" data-act="nuovaClasse">Aggiungi una classe</button>
+    </div>
+    ${att?`<div class="nota-privacy" style="margin-bottom:14px">Ci sono <b>${att}</b> richieste in attesa di approvazione.</div>`:""}
+    ${D.classi.length? `<div class="griglia g-classi">${classi}</div>` :
+      `<div class="vuoto">Nessuna classe ancora. Inizia creando la prima: «3A», «Quarte scientifico», come preferisci.</div>`}
+  </div>`;
+}
+
+function vDocClasse(){
+  const c = classe(U.classeId);
+  if(!c) return vDocHome();
+  const att = attesePer(c.id);
+  const ordinati = [...c.studenti].sort((a,b)=>(b.pp||0)-(a.pp||0));
+  const slot = ordinati.map(s=>{
+    const san = SANTI.find(x=>x.n===s.santo);
+    return `<div class="slot aureolato">
+      ${aureola(s.pp||0, 150)}
+      <div class="nome">${esc(mostra(s.nick))}</div>
+      <div class="santo">${s.santo?`con <b>${esc(s.santo)}</b>${san?`, patrono ${esc(san.p)}`:""}`:"nessun patrono assegnato"}</div>
+      <div class="barra-azioni" style="margin-top:4px;justify-content:center">
+        <button class="btn piccolo" data-act="movimento" data-id="${s.id}">Punti</button>
+        <button class="btn piccolo fantasma" data-act="slotOpzioni" data-id="${s.id}">Gestisci</button>
+      </div>
+    </div>`;
+  }).join("");
+
+  return `<div class="pannello">
+    <div class="testata">
+      <div><h2>${esc(c.nome)}</h2><small>${c.studenti.length} slot · ${c.studenti.reduce((a,x)=>a+(x.pp||0),0)} PP distribuiti · ${c.aperta!==false?"iscrizione libera attiva":"iscrizioni chiuse"}</small></div>
+      <button class="btn piccolo fantasma" data-act="tornaHome">Tutte le classi</button>
+    </div>
+    <div class="barra-azioni" style="margin-bottom:18px">
+      <button class="btn oro" data-act="apriMazzo">Mazzo di San Pietro</button>
+      <button class="btn ${att?"primario":""}" data-act="apriRichieste">Richieste ${att?`<span class="pallino">${att}</span>`:""}</button>
+      <button class="btn" data-act="apriRegistro">Registro</button>
+      <button class="btn" data-act="nuovoSlot">Aggiungi slot</button>
+      <button class="btn ${c.aperta!==false?"oro":""}" data-act="toggleAperta">${c.aperta!==false?"Iscrizione libera: attiva":"Iscrizione libera: chiusa"}</button>
+      <button class="btn fantasma" data-act="classeOpzioni">Rinomina o elimina la classe</button>
+    </div>
+    ${c.studenti.length? `<div class="griglia g-slot">${slot}</div>` :
+      `<div class="vuoto">Nessuno slot in questa classe. Creane uno con un nickname e un PIN: lo studente entrerà con quelli.</div>`}
+  </div>`;
+}
+
+function vDocMazzo(){
+  const c = classe(U.classeId); if(!c) return vDocHome();
+  const k = U.carta;
+  let carta;
+  if(!k){
+    carta = `<div class="carta retro">
+      <div class="genere">Mazzo di San Pietro</div>
+      <div class="testo">Trenta domande, faccia in giù.</div>
+      <div class="nota">Pesca, leggi ad alta voce, assegna i punti a chi risponde.</div>
+    </div>`;
+  } else {
+    carta = `<div class="carta domanda">
+      <div class="genere">Domanda spot · vale ${k.pp} PP</div>
+      <div class="testo">${esc(k.t)}</div>
+      ${U.svelata
+        ? `<div class="nota" style="border-top:1px solid #9cc0e6;padding-top:12px;margin-top:4px"><b>Risposta:</b> ${esc(k.n)}</div>`
+        : `<div class="nota" style="opacity:.6">La risposta resta coperta finché non la mostri.</div>`}
+    </div>`;
+  }
+  return `<div class="tavolo">
+    <div class="riga">
+      <div><h2>Mazzo di San Pietro</h2><div class="sottotitolo">${esc(c.nome)} · proietta questa schermata e pesca</div></div>
+      <button class="btn piccolo fantasma" style="margin-left:auto;color:#a9bbd8" data-act="tornaClasse">Torna alla classe</button>
+    </div>
+    ${carta}
+    <div class="barra-azioni">
+      <button class="btn oro" data-act="pesca">${k?"Pesca un'altra domanda":"Pesca una domanda"}</button>
+      ${k&&!U.svelata?`<button class="btn cupo" style="border-color:#5b7099" data-act="svela">Mostra la risposta</button>`:""}
+      ${k?`<button class="btn" data-act="applicaCarta">Assegna ${k.pp} PP a…</button>`:""}
+    </div>
+  </div>`;
+}
+
+function vDocRichieste(){
+  const c = classe(U.classeId); if(!c) return vDocHome();
+  const rs = D.richieste.filter(r=>r.classeId===c.id).sort((a,b)=>{
+    if(a.stato!==b.stato) return a.stato==="attesa" ? -1 : 1;
+    return b.ts-a.ts;
+  });
+  const lista = rs.map(r=>{
+    const s = studente(c.id, r.studId);
+    const m = MOTIVI.find(x=>x.id===r.tipo);
+    return `<div class="mov">
+      <div class="delta su">+${r.pp}</div>
+      <div class="causale">
+        <b>${esc(mostra(s?s.nick:"slot rimosso"))}</b> · <span class="tag">${esc(m?m.e.split(" (")[0]:r.tipo)}</span><br>
+        ${esc(r.testo)}<br>
+        <small>${ora(r.ts)}</small>
+        ${r.stato==="attesa"?`<div class="barra-azioni" style="margin-top:8px">
+          <button class="btn piccolo primario" data-act="approva" data-id="${r.id}">Approva</button>
+          <button class="btn piccolo" data-act="modificaApprova" data-id="${r.id}">Approva con altri punti</button>
+          <button class="btn piccolo fantasma" data-act="respingi" data-id="${r.id}">Respingi</button>
+        </div>`:`<div style="margin-top:6px"><span class="tag ${r.stato==="approvata"?"ok":"no"}">${r.stato==="approvata"?"Approvata":"Respinta"}</span></div>`}
+      </div>
+    </div>`;
+  }).join("");
+  return `<div class="pannello">
+    <div class="testata">
+      <div><h2>Richieste · ${esc(c.nome)}</h2><small>Nessun punto viene sommato finché non approvi tu.</small></div>
+      <button class="btn piccolo fantasma" data-act="tornaClasse">Torna alla classe</button>
+    </div>
+    ${rs.length? lista : `<div class="vuoto">Nessuna richiesta ancora. Arriveranno qui quando gli studenti chiederanno punti o supereranno un quiz.</div>`}
+  </div>`;
+}
+
+function vDocRegistro(){
+  const c = classe(U.classeId); if(!c) return vDocHome();
+  const mov = [];
+  c.studenti.forEach(s => (s.storico||[]).forEach(m => mov.push(Object.assign({nick:s.nick}, m))));
+  mov.sort((a,b)=>b.ts-a.ts);
+  const lista = mov.slice(0,300).map(m=>`<div class="mov">
+    <div class="delta ${m.delta>=0?"su":"giu"}">${m.delta>0?"+":""}${m.delta}</div>
+    <div class="causale"><b>${esc(mostra(m.nick))}</b><br>${esc(m.causale)}</div>
+    <div class="ora">${ora(m.ts)}</div>
+  </div>`).join("");
+  return `<div class="pannello">
+    <div class="testata">
+      <div><h2>Registro · ${esc(c.nome)}</h2><small>${mov.length} movimenti, dal più recente.</small></div>
+      <button class="btn piccolo fantasma" data-act="tornaClasse">Torna alla classe</button>
+    </div>
+    ${mov.length? lista : `<div class="vuoto">Il registro è vuoto: qui finiranno tutti i punti dati e tolti, con orario e causale.</div>`}
+  </div>`;
+}
+
+function vDocImpostazioni(){
+  return `<div class="pannello">
+    <div class="testata"><div><h2>Impostazioni</h2><small>PIN, schermo proiettato, backup.</small></div>
+      <button class="btn piccolo fantasma" data-act="tornaHome">Torna alle classi</button></div>
+
+    <h3>Schermo proiettato</h3>
+    <p>Con la modalità Privacy LIM i nickname compaiono accorciati: «Pellicano Blu» diventa «Pellicano B.».</p>
+    <button class="btn ${D.privacyLIM?"oro":""}" data-act="privacyLim">${D.privacyLIM?"Disattiva Privacy LIM":"Attiva Privacy LIM"}</button>
+
+    <hr class="tra">
+    <h3>PIN del docente</h3>
+    <div class="due">
+      <div class="campo"><label for="pinVecchio">PIN attuale</label><input id="pinVecchio" type="password" inputmode="numeric" maxlength="12"></div>
+      <div class="campo"><label for="pinNuovo">Nuovo PIN (almeno 4 cifre)</label><input id="pinNuovo" type="password" inputmode="numeric" maxlength="12"></div>
+    </div>
+    <button class="btn primario" data-act="cambiaPinDoc">Cambia PIN</button>
+
+    <hr class="tra">
+    <h3>Dove vivono i dati</h3>
+    ${!supportaFile()
+      ? `<p>Questo browser non permette di scrivere su un file. I dati restano nella memoria locale del browser:
+         funziona, ma si perde tutto se pulisci la cronologia o se il computer si ripristina all'avvio.
+         Per il salvataggio su file servono Chrome o Edge. Nel frattempo, usa l'esportazione qui sotto.</p>`
+      : statoFile === "attivo"
+      ? `<p>Salvataggio automatico su <b>${esc(nomeFile())}</b>${ultimoSalvataggio?`, ultima scrittura alle ${new Date(ultimoSalvataggio).toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"})}`:""}.
+         Ogni punto assegnato finisce subito lì dentro. Se il file sta in una cartella di Google Drive per desktop
+         o OneDrive, la sincronizzazione nel cloud dell'istituto avviene da sé.</p>
+         <div class="barra-azioni"><button class="btn" data-act="scriviOra">Salva adesso</button>
+         <button class="btn fantasma" data-act="scollegaFile">Scollega il file</button></div>`
+      : statoFile === "dapermettere"
+      ? `<p>C'è un file collegato (<b>${esc(nomeFile())}</b>), ma il browser chiede il tuo permesso a ogni avvio.
+         Un clic e riprendi da lì.</p>
+         <div class="barra-azioni"><button class="btn oro" data-act="riattivaFile">Riattiva il file</button>
+         <button class="btn fantasma" data-act="scollegaFile">Scollega</button></div>`
+      : `<p>Adesso i dati stanno solo nella memoria di questo browser. Collega un file e l'app ci scriverà dentro
+         da sola a ogni modifica: mettilo in una cartella di Google Drive per desktop, di OneDrive o su una chiavetta,
+         e i punti sopravvivono a pulizie della cronologia, cambi di computer e PC che si ripristinano all'avvio.</p>
+         <div class="barra-azioni">
+           <button class="btn primario" data-act="collegaNuovo">Crea un file di dati</button>
+           <button class="btn" data-act="collegaEsistente">Apri un file esistente</button>
+         </div>
+         <p style="margin-top:10px"><small>Un dispositivo alla volta sullo stesso file: aperto su due computer insieme,
+         Drive non unisce le modifiche e crea una copia in conflitto.</small></p>`}
+
+    <hr class="tra">
+    <h3>Copia di sicurezza manuale</h3>
+    <p>Utile a fine quadrimestre, o per spostare le classi su un altro dispositivo.</p>
+    <div class="barra-azioni">
+      <button class="btn" data-act="esporta">Esporta backup</button>
+      <button class="btn" data-act="importa">Importa backup</button>
+      <input type="file" id="fileBackup" accept="application/json,.json" hidden>
+    </div>
+
+    <hr class="tra">
+    <h3>Cancellazione</h3>
+    <p>Azzerare elimina classi, slot, punti e storico da questo browser. Non si torna indietro.</p>
+    <button class="btn" style="border-color:#e0b7b7;color:var(--rosso)" data-act="azzera">Azzera tutta l'app</button>
+
+    <hr class="tra">
+    <button class="btn fantasma" data-act="vaiPrivacy">Leggi l'informativa sulla privacy</button>
+  </div>`;
+}
+
+/* ============================================================
+   7. VISTE STUDENTE
+   ============================================================ */
+
+function vStuAccesso(){
+  if(!classe(U.classeId) && D.classi.length) U.classeId = D.classi[0].id;
+  const opzC = D.classi.map(c=>`<option value="${c.id}"${c.id===U.classeId?" selected":""}>${esc(c.nome)}</option>`).join("");
+  const c = classe(U.classeId) || D.classi[0];
+  const opzS = c ? c.studenti.map(s=>`<option value="${s.id}">${esc(s.nick)}</option>`).join("") : "";
+  if(!D.classi.length) return `<div class="pannello"><h2>Ancora nulla da vedere</h2>
+    <p>Il docente non ha creato classi su questo dispositivo. Chiedi a lui di aprire la vista docente e aggiungere la tua.</p>
+    <button class="btn" data-act="casa">Torna all'inizio</button></div>`;
+  return `<div class="pannello" style="max-width:440px;margin:0 auto">
+    <h2>Entra</h2>
+    <p><small>Scegli la classe, il tuo nickname e digita il PIN che ti ha dato il docente.</small></p>
+    <div class="campo"><label for="selClasse">Classe</label><select id="selClasse">${opzC}</select></div>
+    <div class="campo"><label for="selStud">Nickname</label><select id="selStud">${opzS||`<option value="">— nessuno slot in questa classe —</option>`}</select></div>
+    <div class="campo"><label for="pinStud">PIN</label><input id="pinStud" type="password" inputmode="numeric" maxlength="12" placeholder="••••"></div>
+    <button class="btn primario pieno" data-act="confermaAccessoStud">Entra</button>
+    ${c && c.aperta!==false ? `<hr class="tra">
+      <p style="margin-top:0"><small>Prima volta? Crea il tuo slot in dieci secondi: il nickname te lo puoi far suggerire.</small></p>
+      <button class="btn oro pieno" data-act="autoIscrizione">Iscriviti a ${esc(c.nome)}</button>` :
+      c ? `<p style="margin-top:14px"><small>In questa classe gli slot li crea il docente.</small></p>` : ""}
+  </div>`;
+}
+
+function vStuHome(){
+  const s = studente(U.classeId, U.studId); if(!s) return vStuAccesso();
+  if(U.curioIdx==null) U.curioIdx = Math.floor(Math.random()*CURIOSITA.length);
+  const san = SANTI.find(x=>x.n===s.santo);
+  const pros = TAPPE.find(t=>t>(s.pp||0));
+  const mie = D.richieste.filter(r=>r.studId===s.id).sort((a,b)=>b.ts-a.ts).slice(0,4);
+  return `<div class="pila">
+    <div class="pannello" style="text-align:center">
+      <h2>Ciao ${esc(s.nick)}</h2>
+      <div style="margin:14px 0 6px">${aureola(s.pp||0, 260)}</div>
+      <p style="max-width:46ch;margin-left:auto;margin-right:auto">${pros?`Ti mancano <b>${pros-(s.pp||0)}</b> punti alla prossima aureola (${pros} PP).`:"Hai acceso tutte le aureole. Ora tocca a te aiutare gli altri ad arrivarci."}</p>
+      <div class="barra-azioni" style="margin-top:14px;justify-content:center">
+        <button class="btn primario" data-act="vaiRichiesta">Chiedi dei punti</button>
+        <button class="btn oro" data-act="vaiQuiz">Gioca a un quiz</button>
+        <button class="btn" data-act="vaiStorico">I tuoi movimenti</button>
+      </div>
+    </div>
+    ${san?`<div class="pannello">
+      <h3>${esc(san.n)}</h3>
+      <p style="margin-top:2px"><small>patrono ${esc(san.p)}${san.t?` · ${esc(san.t)}`:""}</small></p>
+      <p style="font-family:var(--serif);font-size:17px;line-height:1.55;max-width:66ch">${esc(san.s)}</p>
+    </div>`:""}
+    <div class="pannello" style="background:linear-gradient(170deg,#fffdf7,#f7f0dd);border-color:#e3d3a6">
+      <h3>Lo sapevi?</h3>
+      <p style="font-family:var(--serif);font-size:18px;line-height:1.55;max-width:64ch">${esc(CURIOSITA[U.curioIdx])}</p>
+      <button class="btn piccolo" data-act="altraCuriosita">Un'altra curiosità</button>
+    </div>
+    ${mie.length?`<div class="pannello">
+      <h3>Le tue ultime richieste</h3>
+      ${mie.map(r=>`<div class="mov"><div class="delta su">+${r.pp}</div>
+        <div class="causale">${esc(r.testo)}<br><small>${ora(r.ts)}</small></div>
+        <div><span class="tag ${r.stato==="approvata"?"ok":r.stato==="respinta"?"no":"attesa"}">${r.stato==="attesa"?"In attesa":r.stato==="approvata"?"Approvata":"Respinta"}</span></div></div>`).join("")}
+    </div>`:""}
+  </div>`;
+}
+
+function vStuRichiesta(){
+  const s = studente(U.classeId, U.studId); if(!s) return vStuAccesso();
+  const opz = MOTIVI.filter(m=>m.id!=="quiz").map(m=>`<option value="${m.id}">${esc(m.e)}</option>`).join("");
+  return `<div class="pannello" style="max-width:560px;margin:0 auto">
+    <div class="testata"><div><h2>Chiedi dei punti</h2><small>Spiega bene che cosa hai fatto: decide il docente.</small></div>
+      <button class="btn piccolo fantasma" data-act="tornaStud">Indietro</button></div>
+    <div class="campo"><label for="tipoRic">Per che cosa</label><select id="tipoRic">${opz}</select></div>
+    <div class="campo"><label for="testoRic">Racconta in poche righe</label>
+      <textarea id="testoRic" maxlength="400" placeholder="Es. Ho spiegato l'esercizio a Giulia che era rimasta indietro dopo l'assenza."></textarea></div>
+    <div class="campo" style="max-width:200px"><label for="ppRic">Punti che chiedi (1-10)</label>
+      <input id="ppRic" type="number" min="1" max="10" value="5"></div>
+    <button class="btn primario pieno" data-act="inviaRichiesta">Invia al docente</button>
+    <p style="margin-top:12px"><small>I punti compaiono solo dopo l'approvazione. Le richieste gonfiate si vedono da lontano.</small></p>
+  </div>`;
+}
+
+function vStuQuiz(){
+  const s = studente(U.classeId, U.studId); if(!s) return vStuAccesso();
+  if(U.quizIdx==null) U.quizIdx = Math.floor(Math.random()*QUIZ.length);
+  const q = QUIZ[U.quizIdx];
+  const e = U.quizEsito;
+
+  if(e){
+    return `<div class="pannello" style="max-width:560px;margin:0 auto">
+      <h2>${e.ok?"Risposta esatta":"Non ci siamo"}</h2>
+      <p style="font-family:var(--serif);font-size:19px;line-height:1.35">${esc(q.d)}</p>
+      <div style="background:${e.ok?"#f2f9f4":"#fdf4f4"};border:1px solid ${e.ok?"#bfe0cc":"#e8c9c9"};border-radius:12px;padding:14px 16px;margin:12px 0">
+        <div style="font-size:13px;color:var(--testo-soft);margin-bottom:4px">Risposta corretta</div>
+        <b style="font-family:var(--serif);font-size:20px">${esc(q.r)}</b>
+        ${e.data && !e.ok ? `<div style="font-size:13.5px;color:var(--testo-soft);margin-top:6px">Tu avevi risposto: ${esc(e.data)}</div>` : ""}
+      </div>
+      <p>${esc(q.sp||"")}</p>
+      <p>${e.ok?`Una richiesta da <b>+${q.pp} PP</b> è partita verso il docente, che la approverà.`
+              :`Nessuna richiesta inviata questa volta: la domanda valeva <b>${q.pp} PP</b>. Prova con un'altra.`}</p>
+      <div class="barra-azioni" style="margin-top:14px">
+        <button class="btn primario" data-act="altroQuiz">Un'altra domanda</button>
+        <button class="btn" data-act="tornaStud">Torna alla home</button>
+      </div>
+    </div>`;
+  }
+
+  const corpo = q.a
+    ? `<div class="campo"><label for="rispQuiz">La tua risposta</label><input id="rispQuiz" type="text" autocomplete="off" placeholder="Scrivi qui"></div>`
+    : `<div class="pila" style="gap:9px;margin-bottom:16px">${q.m.map((o,i)=>
+        `<button class="btn pieno" style="justify-content:flex-start;text-align:left" data-act="rispondiQuiz" data-scelta="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+
+  return `<div class="pannello" style="max-width:560px;margin:0 auto">
+    <div class="testata"><div><h2>Quiz</h2><small>${q.a?"Risposta da scrivere":"Risposta a scelta multipla"} · risposta giusta, richiesta automatica al docente</small></div>
+      <button class="btn piccolo fantasma" data-act="tornaStud">Indietro</button></div>
+    <div style="display:inline-flex;align-items:baseline;gap:7px;background:linear-gradient(170deg,#fbf0d2,#f2dda2);
+      border:1px solid #d9b85c;border-radius:999px;padding:5px 15px;margin-bottom:14px">
+      <b style="font-family:var(--serif);font-size:20px;color:#6b5210">${q.pp}</b>
+      <span style="font-size:13px;color:#6b5210">Punti Paradiso in palio</span></div>
+    <p style="font-family:var(--serif);font-size:clamp(20px,3vw,26px);line-height:1.3">${esc(q.d)}</p>
+    ${corpo}
+    ${q.a?`<button class="btn primario pieno" data-act="rispondiQuiz">Rispondi</button>`:""}
+    <div class="barra-azioni" style="margin-top:12px"><button class="btn fantasma" data-act="altroQuiz">Cambia domanda</button></div>
+  </div>`;
+}
+
+function vStuStorico(){
+  const s = studente(U.classeId, U.studId); if(!s) return vStuAccesso();
+  const mov = (s.storico||[]);
+  return `<div class="pannello" style="max-width:600px;margin:0 auto">
+    <div class="testata"><div><h2>I tuoi movimenti</h2><small>${mov.length} voci</small></div>
+      <button class="btn piccolo fantasma" data-act="tornaStud">Indietro</button></div>
+    ${mov.length? mov.map(m=>`<div class="mov">
+      <div class="delta ${m.delta>=0?"su":"giu"}">${m.delta>0?"+":""}${m.delta}</div>
+      <div class="causale">${esc(m.causale)}</div>
+      <div class="ora">${ora(m.ts)}</div></div>`).join("")
+    : `<div class="vuoto">Ancora nessun punto. Si comincia dalla prossima lezione.</div>`}
+  </div>`;
+}
+
+/* ============================================================
+   8. MODALI
+   ============================================================ */
+
+function apriModale(html){
+  document.getElementById("modale-host").innerHTML =
+    `<div class="velo" data-velo><div class="modale" role="dialog" aria-modal="true">${html}</div></div>`;
+  const f = document.querySelector(".modale input,.modale select,.modale textarea,.modale button");
+  if(f) f.focus();
+}
+function chiudiModale(){ document.getElementById("modale-host").innerHTML = ""; }
+
+function modaleSlot(sid){
+  const c = classe(U.classeId);
+  const s = sid ? studente(c.id, sid) : null;
+  const opz = SANTI.map(x=>`<option value="${esc(x.n)}"${s&&s.santo===x.n?" selected":""}>${esc(x.n)} — ${esc(x.p)}</option>`).join("");
+  apriModale(`
+    <h3>${s?"Modifica slot":"Nuovo slot"}</h3>
+    <p><small>Usa un nickname o un codice, non il nome reale: è la scelta più prudente con studenti minorenni.</small></p>
+    <div class="campo"><label for="mNick">Nickname o codice</label>
+      <div class="riga" style="gap:8px;flex-wrap:nowrap">
+        <input id="mNick" maxlength="30" value="${s?esc(s.nick):""}" placeholder="Es. Pellicano 3B">
+        <button class="btn piccolo" style="white-space:nowrap" data-act="proponiNick" data-id="${c.id}">Proponi</button>
+      </div></div>
+    <div class="campo"><label for="mPin">PIN dello studente (almeno 4 cifre)</label>
+      <input id="mPin" inputmode="numeric" maxlength="12" value="${s?esc(s.pin):""}" placeholder="Es. 4821"></div>
+    <div class="campo"><label for="mSanto">Santo protettore</label>
+      <select id="mSanto"><option value="">— scegline uno a caso —</option>${opz}</select>
+      <div id="mSantoInfo" style="margin-top:10px;background:#f4f8fd;border:1px solid var(--bordo);border-radius:10px;padding:12px 14px">${infoSanto(s?s.santo:"")}</div></div>
+    <div class="barra-azioni">
+      <button class="btn primario" data-act="salvaSlot" data-id="${s?s.id:""}">Salva</button>
+      <button class="btn fantasma" data-act="chiudi">Annulla</button>
+      ${s?`<button class="btn fantasma" style="margin-left:auto;color:var(--rosso)" data-act="eliminaSlot" data-id="${s.id}">Elimina slot</button>`:""}
+    </div>`);
+}
+
+function modaleMovimento(sid){
+  const s = studente(U.classeId, sid);
+  apriModale(`
+    <h3>Punti per ${esc(s.nick)}</h3>
+    <p><small>Ora ha ${s.pp||0} PP.</small></p>
+    <div class="due">
+      <div class="campo"><label for="mDelta">Punti (usa il meno per toglierli)</label>
+        <input id="mDelta" type="number" value="5"></div>
+      <div class="campo"><label for="mCausale">Causale</label>
+        <input id="mCausale" maxlength="80" placeholder="Es. Interrogazione ottima"></div>
+    </div>
+    <div class="barra-azioni">
+      <button class="btn primario" data-act="salvaMovimento" data-id="${s.id}">Registra</button>
+      <button class="btn fantasma" data-act="chiudi">Annulla</button>
+    </div>`);
+}
+
+function modaleCarta(){
+  const c = classe(U.classeId); const k = U.carta; if(!k) return;
+  if(!c.studenti.length){ avvisa("Prima aggiungi almeno uno slot alla classe."); return; }
+  const opz = c.studenti.map(s=>`<option value="${s.id}">${esc(mostra(s.nick))} — ${s.pp||0} PP</option>`).join("");
+  apriModale(`
+    <h3>Chi ha risposto?</h3>
+    <p><small>${esc(k.t)}</small></p>
+    <div class="campo"><label for="mChi">Assegna i punti a</label><select id="mChi">${opz}</select></div>
+    <div class="campo" style="max-width:180px"><label for="mPp">Punti (metti il meno per toglierli)</label>
+      <input id="mPp" type="number" value="${k.pp}"></div>
+    <div class="barra-azioni">
+      <button class="btn oro" data-act="salvaCarta">Conferma</button>
+      <button class="btn fantasma" data-act="chiudi">Annulla</button>
+    </div>`);
+}
+
+function modaleApprovaMod(rid){
+  const r = D.richieste.find(x=>x.id===rid);
+  apriModale(`
+    <h3>Approva con altri punti</h3>
+    <p><small>${esc(r.testo)}</small></p>
+    <div class="campo" style="max-width:180px"><label for="mPpApp">Punti da assegnare</label>
+      <input id="mPpApp" type="number" value="${r.pp}"></div>
+    <div class="barra-azioni">
+      <button class="btn primario" data-act="salvaApprovaMod" data-id="${r.id}">Approva</button>
+      <button class="btn fantasma" data-act="chiudi">Annulla</button>
+    </div>`);
+}
+
+function modaleClasse(id){
+  const c = id ? classe(id) : null;
+  apriModale(`
+    <h3>${c?"Gestisci la classe":"Nuova classe"}</h3>
+    <div class="campo"><label for="mNomeClasse">Nome della classe</label>
+      <input id="mNomeClasse" maxlength="40" value="${c?esc(c.nome):""}" placeholder="Es. 3A, Quarte linguistico"></div>
+    <div class="campo"><label>Iscrizione degli studenti</label>
+      <label style="display:flex;gap:9px;align-items:flex-start;color:var(--inchiostro);font-size:14.5px;line-height:1.45">
+        <input type="checkbox" id="mAperta" style="width:auto;margin-top:3px"${!c || c.aperta!==false?" checked":""}>
+        <span>Gli studenti possono iscriversi da soli scegliendo un nickname e un PIN. Tu continui a vedere e a gestire ogni slot.</span>
+      </label></div>
+    <div class="barra-azioni">
+      <button class="btn primario" data-act="salvaClasse" data-id="${c?c.id:""}">Salva</button>
+      <button class="btn fantasma" data-act="chiudi">Annulla</button>
+      ${c?`<button class="btn fantasma" style="margin-left:auto;color:var(--rosso)" data-act="eliminaClasse" data-id="${c.id}">Elimina classe</button>`:""}
+    </div>`);
+}
+
+function infoSanto(nome){
+  const x = SANTI.find(s=>s.n===nome);
+  if(!x) return `<small>Scegli una figura dall'elenco: qui comparirà la sua storia.</small>`;
+  return `<b style="font-family:var(--serif);font-size:18px">${esc(x.n)}</b>
+    <div style="font-size:13px;color:var(--testo-soft);margin:3px 0 6px">patrono ${esc(x.p)}${x.t?` · ${esc(x.t)}`:" · tradizione cattolica"}</div>
+    <div style="font-size:14.5px;line-height:1.5">${esc(x.s)}</div>`;
+}
+
+function modaleIscrizione(cid){
+  const c = classe(cid); if(!c) return;
+  const primo = SANTI[Math.floor(Math.random()*SANTI.length)].n;
+  const opz = SANTI.map(x=>`<option value="${esc(x.n)}"${x.n===primo?" selected":""}>${esc(x.n)} — ${esc(x.p)}</option>`).join("");
+  apriModale(`
+    <h3>Iscriviti a ${esc(c.nome)}</h3>
+    <p><small>Non usare nome e cognome: scegli un nickname, oppure fattene proporre uno.</small></p>
+    <div class="campo"><label for="mNick">Nickname</label>
+      <div class="riga" style="gap:8px;flex-wrap:nowrap">
+        <input id="mNick" maxlength="30" placeholder="Es. Pellicano Sereno">
+        <button class="btn piccolo" style="white-space:nowrap" data-act="proponiNick" data-id="${c.id}">Proponi</button>
+      </div></div>
+    <div class="campo"><label for="mSanto">Chi ti accompagna</label>
+      <div class="riga" style="gap:8px;flex-wrap:nowrap">
+        <select id="mSanto">${opz}</select>
+        <button class="btn piccolo" style="white-space:nowrap" data-act="santoACaso">A caso</button>
+      </div>
+      <div id="mSantoInfo" style="margin-top:10px;background:#f4f8fd;border:1px solid var(--bordo);border-radius:10px;padding:12px 14px">${infoSanto(primo)}</div>
+    </div>
+    <div class="campo"><label for="mPin">Scegli un PIN di almeno 4 cifre</label>
+      <input id="mPin" type="password" inputmode="numeric" maxlength="12" placeholder="••••"></div>
+    <div class="campo"><label for="mPin2">Ripeti il PIN</label>
+      <input id="mPin2" type="password" inputmode="numeric" maxlength="12" placeholder="••••"></div>
+    <p><small>Se dimentichi il PIN, chiedi al docente.</small></p>
+    <div class="barra-azioni">
+      <button class="btn primario" data-act="salvaIscrizione" data-id="${c.id}">Crea il mio slot</button>
+      <button class="btn fantasma" data-act="chiudi">Annulla</button>
+    </div>`);
+}
+
+let AZIONE = null;
+function conferma(titolo, testo, etichetta, fn){
+  AZIONE = fn;
+  apriModale(`
+    <h3>${esc(titolo)}</h3>
+    <p>${esc(testo)}</p>
+    <div class="barra-azioni" style="margin-top:16px">
+      <button class="btn" style="border-color:#e0b7b7;color:var(--rosso)" data-act="confermaAzione">${esc(etichetta)}</button>
+      <button class="btn fantasma" data-act="chiudi">Annulla</button>
+    </div>`);
+}
+
+/* ============================================================
+   9. EVENTI
+   ============================================================ */
+
+document.addEventListener("click", ev=>{
+  const velo = ev.target.closest("[data-velo]");
+  if(velo && ev.target===velo){ chiudiModale(); return; }
+  const b = ev.target.closest("[data-act]"); if(!b) return;
+  const act = b.dataset.act, id = b.dataset.id;
+  const c = classe(U.classeId);
+
+  switch(act){
+
+  /* --- navigazione --- */
+  case "casa": vai("ingresso"); break;
+  case "esci": U.sbloccato=false; U.studId=null; vai("ingresso"); break;
+  case "vaiPrivacy": U.provenienza = U.vista; vai("privacy"); break;
+  case "indietroPrivacy": vai(U.provenienza && U.provenienza!=="privacy" ? U.provenienza : "ingresso"); break;
+  case "vaiDocente": vai(U.sbloccato ? "docHome" : "docPin"); break;
+  case "vaiStudente": vai("stuAccesso"); break;
+  case "tornaHome": vai("docHome"); break;
+  case "tornaClasse": vai("docClasse"); break;
+  case "vaiImpostazioni": vai("docImpostazioni"); break;
+  case "apriClasse": vai("docClasse", {classeId:id}); break;
+  case "apriMazzo": U.carta=null; vai("docMazzo"); break;
+  case "apriRichieste": vai("docRichieste"); break;
+  case "apriRegistro": vai("docRegistro"); break;
+  case "chiudi": chiudiModale(); break;
+
+  /* --- accesso docente --- */
+  case "confermaPinDoc": {
+    const v = document.getElementById("pinDoc").value.trim();
+    if(v === D.pinDocente){ U.sbloccato = true; vai("docHome"); }
+    else avvisa("PIN non riconosciuto. Quello iniziale è 1234.");
+    break;
+  }
+  case "cambiaPinDoc": {
+    const vecchio = document.getElementById("pinVecchio").value.trim();
+    const nuovo = document.getElementById("pinNuovo").value.trim();
+    if(vecchio !== D.pinDocente){ avvisa("Il PIN attuale non corrisponde."); break; }
+    if(nuovo.length < 4){ avvisa("Il nuovo PIN deve avere almeno 4 caratteri."); break; }
+    D.pinDocente = nuovo; salva(); avvisa("PIN aggiornato."); disegna(); break;
+  }
+  case "privacyLim": D.privacyLIM = !D.privacyLIM; salva();
+    avvisa(D.privacyLIM ? "Privacy LIM attiva: i nomi sono mascherati." : "Privacy LIM disattivata."); disegna(); break;
+
+  /* --- classi --- */
+  case "nuovaClasse": modaleClasse(null); break;
+  case "classeOpzioni": modaleClasse(U.classeId); break;
+  case "salvaClasse": {
+    const n = document.getElementById("mNomeClasse").value.trim();
+    const ap = document.getElementById("mAperta").checked;
+    if(n.length < 1){ avvisa("Dai un nome alla classe."); break; }
+    if(id){ const cl = classe(id); cl.nome = n; cl.aperta = ap; }
+    else { const nc = {id:uid(), nome:n, aperta:ap, studenti:[]}; D.classi.push(nc); U.classeId = nc.id; }
+    salva(); chiudiModale(); disegna(); avvisa(id?"Classe aggiornata.":"Classe creata."); break;
+  }
+  case "toggleAperta": {
+    c.aperta = c.aperta===false; salva(); disegna();
+    avvisa(c.aperta!==false ? "Gli studenti possono iscriversi da soli." : "Iscrizioni chiuse: gli slot li crei tu.");
+    break;
+  }
+  case "eliminaClasse": conferma("Eliminare la classe?",
+    "Spariscono tutti gli slot, i punti e lo storico di questa classe. Non si torna indietro.",
+    "Elimina la classe", ()=>{
+      D.classi = D.classi.filter(x=>x.id!==id);
+      D.richieste = D.richieste.filter(r=>r.classeId!==id);
+      U.classeId = D.classi[0] ? D.classi[0].id : null;
+      salva(); vai("docHome"); avvisa("Classe eliminata.");
+    }); break;
+  case "confermaAzione": { const f = AZIONE; AZIONE = null; chiudiModale(); if(f) f(); break; }
+
+  /* --- slot --- */
+  case "nuovoSlot": modaleSlot(null); break;
+  case "slotOpzioni": modaleSlot(id); break;
+  case "salvaSlot": {
+    const nick = document.getElementById("mNick").value.trim();
+    const pin = document.getElementById("mPin").value.trim();
+    let santo = document.getElementById("mSanto").value;
+    if(nick.length < 2){ avvisa("Serve un nickname di almeno due caratteri."); break; }
+    if(pin.length < 4){ avvisa("Il PIN dello studente deve avere almeno 4 cifre."); break; }
+    if(c.studenti.some(x=>x.id!==id && x.nick.toLowerCase()===nick.toLowerCase())){ avvisa("In questa classe c'è già un nickname uguale."); break; }
+    if(!santo) santo = SANTI[Math.floor(Math.random()*SANTI.length)].n;
+    if(id){ const s = studente(c.id,id); Object.assign(s,{nick,pin,santo}); }
+    else { c.studenti.push({id:uid(), nick, pin, santo, pp:0, storico:[]}); }
+    salva(); chiudiModale(); disegna(); avvisa(id?"Slot aggiornato.":"Slot creato."); break;
+  }
+  case "eliminaSlot": {
+    const s = studente(c.id,id);
+    conferma("Eliminare lo slot?", `«${s.nick}» sparisce con tutti i suoi punti e il suo storico. L'operazione è definitiva.`,
+      "Elimina lo slot", ()=>{
+        c.studenti = c.studenti.filter(x=>x.id!==id);
+        D.richieste = D.richieste.filter(r=>r.studId!==id);
+        salva(); disegna(); avvisa("Slot eliminato.");
+      });
+    break;
+  }
+  case "movimento": modaleMovimento(id); break;
+  case "salvaMovimento": {
+    const d = Number(document.getElementById("mDelta").value);
+    const ca = document.getElementById("mCausale").value.trim() || "Assegnazione del docente";
+    if(!d){ avvisa("Indica quanti punti dare o togliere."); break; }
+    assegna(c.id, id, d, ca); chiudiModale(); disegna(); avvisa("Registrato."); break;
+  }
+
+  /* --- mazzo --- */
+  case "pesca": {
+    let k; do { k = MAZZO[Math.floor(Math.random()*MAZZO.length)]; } while(MAZZO.length>1 && k===U.carta);
+    U.carta = k; U.svelata = false; disegna(); break;
+  }
+  case "svela": U.svelata = true; disegna(); break;
+  case "applicaCarta": modaleCarta(); break;
+  case "salvaCarta": {
+    const sid = document.getElementById("mChi").value;
+    const pp = Number(document.getElementById("mPp").value);
+    assegna(c.id, sid, pp, "Domanda spot: " + U.carta.t);
+    chiudiModale(); disegna(); avvisa("Punti assegnati."); break;
+  }
+
+  /* --- richieste --- */
+  case "approva": {
+    const r = D.richieste.find(x=>x.id===id);
+    const m = MOTIVI.find(x=>x.id===r.tipo);
+    assegna(r.classeId, r.studId, r.pp, (m?m.e.split(" (")[0]:"Richiesta") + ": " + r.testo);
+    r.stato="approvata"; salva(); disegna(); avvisa("Approvata."); break;
+  }
+  case "modificaApprova": modaleApprovaMod(id); break;
+  case "salvaApprovaMod": {
+    const r = D.richieste.find(x=>x.id===id);
+    const pp = Number(document.getElementById("mPpApp").value)||0;
+    const m = MOTIVI.find(x=>x.id===r.tipo);
+    assegna(r.classeId, r.studId, pp, (m?m.e.split(" (")[0]:"Richiesta") + ": " + r.testo);
+    r.pp = pp; r.stato="approvata"; salva(); chiudiModale(); disegna(); avvisa("Approvata."); break;
+  }
+  case "respingi": {
+    const r = D.richieste.find(x=>x.id===id);
+    r.stato="respinta"; salva(); disegna(); avvisa("Richiesta respinta."); break;
+  }
+
+  /* --- studente --- */
+  case "confermaAccessoStud": {
+    const cid = document.getElementById("selClasse").value;
+    const sid = document.getElementById("selStud").value;
+    const pin = document.getElementById("pinStud").value.trim();
+    const s = studente(cid,sid);
+    if(!s){ avvisa("Scegli un nickname dall'elenco."); break; }
+    if(s.pin !== pin){ avvisa("PIN sbagliato. Chiedi al docente se l'hai dimenticato."); break; }
+    vai("stuHome", {classeId:cid, studId:sid}); break;
+  }
+  case "altraCuriosita": {
+    let i; do { i = Math.floor(Math.random()*CURIOSITA.length); } while(CURIOSITA.length>1 && i===U.curioIdx);
+    U.curioIdx = i; disegna(); break;
+  }
+  case "tornaStud": U.quizEsito=null; vai("stuHome"); break;
+  case "vaiRichiesta": vai("stuRichiesta"); break;
+  case "autoIscrizione": {
+    const cid = document.getElementById("selClasse").value;
+    U.classeId = cid; modaleIscrizione(cid); break;
+  }
+  case "proponiNick": {
+    const campo = document.getElementById("mNick");
+    if(campo){ campo.value = generaNick(id || U.classeId); campo.focus(); }
+    break;
+  }
+  case "santoACaso": {
+    const sel = document.getElementById("mSanto");
+    if(sel){
+      sel.value = SANTI[Math.floor(Math.random()*SANTI.length)].n;
+      const d = document.getElementById("mSantoInfo"); if(d) d.innerHTML = infoSanto(sel.value);
+    }
+    break;
+  }
+  case "salvaIscrizione": {
+    const cl = classe(id); if(!cl) break;
+    const nick = document.getElementById("mNick").value.trim();
+    const p1 = document.getElementById("mPin").value.trim();
+    const p2 = document.getElementById("mPin2").value.trim();
+    const santo = document.getElementById("mSanto").value || SANTI[Math.floor(Math.random()*SANTI.length)].n;
+    if(nick.length < 2){ avvisa("Scegli un nickname, o premi Proponi."); break; }
+    if(cl.studenti.some(s=>s.nick.toLowerCase()===nick.toLowerCase())){ avvisa("Questo nickname è già preso in classe. Cambialo."); break; }
+    if(p1.length < 4){ avvisa("Il PIN deve avere almeno 4 cifre."); break; }
+    if(p1 !== p2){ avvisa("I due PIN non coincidono."); break; }
+    const s = {id:uid(), nick, pin:p1, santo, pp:0, storico:[]};
+    cl.studenti.push(s); salva();
+    vai("stuHome", {classeId:cl.id, studId:s.id, curioIdx:null});
+    avvisa("Slot creato. Ti accompagna " + santo + ".");
+    break;
+  }
+  case "vaiStorico": vai("stuStorico"); break;
+  case "vaiQuiz": U.quizIdx=null; U.quizEsito=null; vai("stuQuiz"); break;
+  case "altroQuiz": {
+    let i; do { i = Math.floor(Math.random()*QUIZ.length); } while(QUIZ.length>1 && i===U.quizIdx);
+    U.quizIdx=i; U.quizEsito=null; disegna(); break;
+  }
+  case "inviaRichiesta": {
+    const tipo = document.getElementById("tipoRic").value;
+    const testo = document.getElementById("testoRic").value.trim();
+    let pp = Math.round(Number(document.getElementById("ppRic").value)||0);
+    if(testo.length < 10){ avvisa("Scrivi qualche parola in più: il docente deve capire di che cosa si tratta."); break; }
+    pp = Math.min(10, Math.max(1, pp));
+    D.richieste.push({id:uid(), classeId:U.classeId, studId:U.studId, tipo, testo, pp, stato:"attesa", ts:Date.now()});
+    salva(); vai("stuHome"); avvisa("Richiesta inviata. Ora tocca al docente."); break;
+  }
+  case "rispondiQuiz": {
+    const q = QUIZ[U.quizIdx];
+    const data = b.dataset.scelta != null ? b.dataset.scelta : (document.getElementById("rispQuiz")||{}).value;
+    if(data==null || String(data).trim()===""){ avvisa("Scrivi una risposta."); break; }
+    const ok = norm(data) === norm(q.r);
+    U.quizEsito = {ok, data:String(data).trim()};
+    if(ok){
+      D.richieste.push({id:uid(), classeId:U.classeId, studId:U.studId, tipo:"quiz",
+        testo:"Quiz: " + q.d, pp:q.pp, stato:"attesa", ts:Date.now()});
+      salva();
+    }
+    disegna(); break;
+  }
+
+  /* --- archivio su file --- */
+  case "collegaNuovo": {
+    if(!supportaFile()){ avvisa("Questo browser non lo permette: servono Chrome o Edge."); break; }
+    window.showSaveFilePicker({
+      suggestedName:"aureolissima-dati.json",
+      types:[{description:"Dati Aureolissima", accept:{"application/json":[".json"]}}]
+    }).then(async h=>{
+      FH = h; statoFile = "attivo";
+      await idbPut("file", h);
+      await scriviFile();
+      disegna(); avvisa("File collegato: da ora salvo lì a ogni modifica.");
+    }).catch(()=>{});
+    break;
+  }
+  case "collegaEsistente": {
+    if(!supportaFile()){ avvisa("Questo browser non lo permette: servono Chrome o Edge."); break; }
+    window.showOpenFilePicker({
+      types:[{description:"Dati Aureolissima", accept:{"application/json":[".json"]}}], multiple:false
+    }).then(async ([h])=>{
+      FH = h;
+      try{ await leggiFile(); }
+      catch(e){ statoFile = "errore"; avvisa("Quel file non contiene dati di Aureolissima."); disegna(); return; }
+      await idbPut("file", h);
+      U.classeId = D.classi[0] ? D.classi[0].id : null;
+      disegna(); avvisa("File collegato: dati caricati.");
+    }).catch(()=>{});
+    break;
+  }
+  case "riattivaFile": {
+    if(!FH){ avvisa("Nessun file collegato."); break; }
+    FH.requestPermission({mode:"readwrite"}).then(async p=>{
+      if(p !== "granted"){ avvisa("Permesso negato: i dati restano solo nel browser."); return; }
+      try{ await leggiFile(); avvisa("Ripreso dal file: tutto al suo posto."); }
+      catch(e){ statoFile = "attivo"; await scriviFile(); }
+      disegna();
+    }).catch(()=>{});
+    break;
+  }
+  case "scriviOra": scriviFile().then(()=>{ avvisa("Salvato sul file."); disegna(); }); break;
+  case "scollegaFile": {
+    FH = null; statoFile = "assente"; ultimoSalvataggio = null;
+    idbDel("file").catch(()=>{});
+    disegna(); avvisa("File scollegato. I dati restano nella memoria del browser."); break;
+  }
+  case "esporta": {
+    const blob = new Blob([JSON.stringify(D,null,2)],{type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "aureolissima-backup-" + new Date().toISOString().slice(0,10) + ".json";
+    a.click(); URL.revokeObjectURL(a.href); avvisa("Backup scaricato."); break;
+  }
+  case "importa": document.getElementById("fileBackup").click(); break;
+  case "azzera": conferma("Azzerare tutto?",
+    "Vengono cancellati classi, slot, punti e storico da questo browser. Non si torna indietro.",
+    "Azzera tutta l'app", ()=>{
+      D = vuoto(); salva(); U.sbloccato=false; U.classeId=null; vai("ingresso"); avvisa("Tutto azzerato.");
+    }); break;
+  }
+});
+
+document.addEventListener("change", ev=>{
+  if(ev.target.id === "mSanto"){
+    const d = document.getElementById("mSantoInfo");
+    if(d) d.innerHTML = infoSanto(ev.target.value);
+  }
+  if(ev.target.id === "selClasse"){
+    U.classeId = ev.target.value; disegna();
+    const s = document.getElementById("selClasse"); if(s) s.focus();
+  }
+  if(ev.target.id === "fileBackup"){
+    const f = ev.target.files[0]; if(!f) return;
+    const fr = new FileReader();
+    fr.onload = () => {
+      try{
+        const dati = JSON.parse(fr.result);
+        if(!dati || !Array.isArray(dati.classi)) throw new Error("struttura");
+        conferma("Importare il backup?", "I dati attuali di questo browser vengono sostituiti da quelli del file.",
+          "Sostituisci i dati", ()=>{
+            D = Object.assign(vuoto(), dati); U.classeId = D.classi[0] ? D.classi[0].id : null;
+            salva(); disegna(); avvisa("Backup importato.");
+          });
+      }catch(e){ avvisa("Il file non è un backup valido di Aureolissima."); }
+    };
+    fr.readAsText(f);
+  }
+});
+
+document.addEventListener("keydown", ev=>{
+  if(ev.key === "Escape") chiudiModale();
+  if(ev.key === "Enter"){
+    const t = ev.target;
+    if(t.id === "pinDoc"){ document.querySelector('[data-act="confermaPinDoc"]').click(); }
+    if(t.id === "pinStud"){ document.querySelector('[data-act="confermaAccessoStud"]').click(); }
+    if(t.id === "rispQuiz"){ document.querySelector('[data-act="rispondiQuiz"]').click(); }
+  }
+});
+
+carica();
+if(!U.classeId && D.classi.length) U.classeId = D.classi[0].id;
+disegna();
+ripristinaFile();
+</script>
+</body>
+</html>
