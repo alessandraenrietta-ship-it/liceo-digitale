@@ -149,7 +149,7 @@ window.ChiavePersonale = (function () {
       if (valore.length < 20) {
         aggiornaStato("Questa sembra troppo corta per essere una chiave. "
           + "La chiave di Google e' una sequenza lunga che inizia con AIza, "
-          + "e non e' la parola d'ordine della sezione.");
+          + "e non e' la password della sezione.");
         return;
       }
       if (salva(nome, valore)) {

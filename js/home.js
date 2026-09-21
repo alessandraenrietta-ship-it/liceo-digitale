@@ -495,11 +495,11 @@
          chiave lo diciamo, invece di ripetere "non corretta". */
       if (sembraUnaChiave(scritto)) {
         errore.textContent = "Questa sembra la chiave di Google, non la "
-          + "parola d'ordine. Qui va una sola parola, quella che ti è "
+          + "password. Qui va una sola parola, quella che ti è "
           + "stata comunicata. La chiave si incolla dentro lo strumento, "
           + "dopo essere entrati.";
       } else {
-        errore.textContent = "Parola d'ordine non corretta.";
+        errore.textContent = "Password non corretta.";
       }
       campo.value = "";
       campo.focus();
