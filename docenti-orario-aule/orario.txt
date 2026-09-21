@@ -220,3 +220,42 @@ LEZIONE: 1B | venerdi | 2 | Scienze naturali | Ferrari Luca
 LEZIONE: 1B | venerdi | 3 | Lingua inglese | Verdi Anna
 LEZIONE: 1B | venerdi | 4 | Lingua italiana | Esposito Chiara
 LEZIONE: 1B | venerdi | 5 | Informatica | Greco Davide | L41_INFO | Costa Marco
+
+
+#  -----------------------------------------------------------
+#  5. LA SORVEGLIANZA DEGLI INTERVALLI
+#
+#     Durante l'intervallo l'insegnante dell'ora appena finita
+#     resta a sorvegliare, e in certe aule deve fare cose
+#     precise. Qui si scrive che cosa, aula per aula: chi guarda
+#     il proprio orario se lo trova scritto nella casella
+#     dell'ora giusta, senza doverselo ricordare.
+#
+#     Servono due cose.
+#
+#     SORVEGLIANZA ORE: le ore dopo le quali c'e' l'intervallo,
+#     separate dalla barra. Se la scansione oraria cambia, si
+#     cambia questa riga e basta.
+#
+#     SORVEGLIANZA: aula | che cosa deve fare chi ci ha lezione
+#     Una riga per aula. Il testo si legge cosi' com'e' scritto
+#     qui: si puo' correggere liberamente. Un'aula senza riga,
+#     o con il testo in bianco, non fa comparire niente.
+#
+#     C'e' anche AVVISO ORA: ora | testo , per un avviso che
+#     vale per tutti in una certa ora, qualunque sia l'aula.
+#
+#     ATTENZIONE: le righe qui sotto sono INVENTATE, come tutto
+#     il resto di questo file. Le regole vere della scuola non
+#     stanno nel sito, che e' pubblico: stanno nel file che
+#     ciascun docente carica dal proprio computer.
+#  -----------------------------------------------------------
+
+SORVEGLIANZA ORE: 2 | 4
+
+SORVEGLIANZA: A6 | Fai uscire gli studenti, chiudi l'aula e sorvegli il corridoio davanti alla porta.
+SORVEGLIANZA: A7 | Resti sulla soglia dell'aula e sorvegli l'aula e l'area antistante.
+SORVEGLIANZA: A11 | Resti sulla soglia dell'aula e sorvegli l'aula e l'area antistante.
+SORVEGLIANZA: L41_INFO | Fai uscire gli studenti, chiudi il laboratorio e sorvegli il corridoio davanti al laboratorio.
+SORVEGLIANZA: L51_DISEGNO | Fai uscire gli studenti, chiudi il laboratorio e sorvegli il corridoio davanti al laboratorio.
+SORVEGLIANZA: palestra | Fai uscire gli studenti dalla palestra e dagli spogliatoi, chiudi e sorvegli l'area davanti alle palestre.

@@ -20,3 +20,6 @@ orario_vero*
 # File temporanei di Windows.
 Thumbs.db
 desktop.ini
+
+# La cartella degli strumenti di Claude: non fa parte del sito.
+.claude/

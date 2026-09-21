@@ -176,6 +176,19 @@
       border-radius: var(--raggio);
     }
 
+    /* L'avviso della sorveglianza: giallo, perche' e' una cosa
+       da fare, non un'informazione sulla lezione. */
+    .sorveglianza {
+      display: block;
+      margin-top: 0.35em;
+      padding: 0.4em 0.55em;
+      font-size: 0.82rem;
+      line-height: 1.35;
+      color: var(--testo);
+      background: var(--giallo);
+      border-radius: var(--raggio);
+    }
+
     .aula-mancante {
       display: inline-block;
       margin-top: 0.3em;
@@ -423,6 +436,11 @@
         giorni: [],
         auleClasse: {},
         lezioni: [],
+        /* Le sorveglianze degli intervalli: per ogni aula, che
+           cosa deve fare chi ci ha lezione. */
+        sorveglianze: {},
+        oreSorveglianza: [],
+        avvisiOra: {},
         scartate: []
       };
 
@@ -501,6 +519,29 @@
             aula: campi[5] || "",
             compresenza: campi[6] || ""
           });
+
+        } else if (etichetta === "SORVEGLIANZA ORE") {
+          campi.forEach(function (n) {
+            if (n !== "") { risultato.oreSorveglianza.push(n); }
+          });
+
+        } else if (etichetta === "SORVEGLIANZA") {
+          if (campi[0] === "") {
+            risultato.scartate.push({ n: numeroRiga, testo: riga,
+              motivo: "manca il nome dell'aula" });
+            return;
+          }
+          /* Un testo lasciato in bianco va benissimo: vuol dire
+             che per quell'aula non c'e' niente da dire. */
+          risultato.sorveglianze[campi[0]] = campi[1] || "";
+
+        } else if (etichetta === "AVVISO ORA") {
+          if (campi[0] === "" || !campi[1]) {
+            risultato.scartate.push({ n: numeroRiga, testo: riga,
+              motivo: "servono il numero dell'ora e il testo dell'avviso" });
+            return;
+          }
+          risultato.avvisiOra[campi[0]] = campi[1];
 
         } else {
           risultato.scartate.push({ n: numeroRiga, testo: riga,
@@ -655,6 +696,24 @@
       return base || "";
     }
 
+    /* Che cosa deve sapere l'insegnante di questa lezione oltre
+       alla lezione stessa: la sorveglianza dell'intervallo, se
+       l'ora e' una di quelle indicate nel file e per quell'aula
+       c'e' una regola, e gli avvisi validi per tutti a una certa
+       ora. */
+    function avvisiDi(lezione) {
+      var testi = [];
+
+      if (dati.oreSorveglianza.indexOf(lezione.ora) >= 0) {
+        var regola = dati.sorveglianze[auleDi(lezione)];
+        if (regola) { testi.push(regola); }
+      }
+
+      if (dati.avvisiOra[lezione.ora]) { testi.push(dati.avvisiOra[lezione.ora]); }
+
+      return testi;
+    }
+
     function cella(lezione, vista) {
       var td = document.createElement("td");
 
@@ -701,6 +760,17 @@
         etichetta.textContent = "aula da definire";
       }
       td.appendChild(etichetta);
+
+      /* Le sorveglianze riguardano chi fa lezione, non la classe:
+         compaiono solo nell'orario di un insegnante. */
+      if (vista === "insegnante") {
+        avvisiDi(lezione).forEach(function (testo) {
+          var nota = document.createElement("span");
+          nota.className = "sorveglianza";
+          nota.textContent = testo;
+          td.appendChild(nota);
+        });
+      }
 
       return td;
     }
