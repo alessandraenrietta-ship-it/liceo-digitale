@@ -253,9 +253,9 @@ LEZIONE: 1B | venerdi | 5 | Informatica | Greco Davide | L41_INFO | Costa Marco
 
 SORVEGLIANZA ORE: 2 | 4
 
-SORVEGLIANZA: A6 | Fai uscire gli studenti, chiudi l'aula e sorvegli il corridoio davanti alla porta.
-SORVEGLIANZA: A7 | Resti sulla soglia dell'aula e sorvegli l'aula e l'area antistante.
-SORVEGLIANZA: A11 | Resti sulla soglia dell'aula e sorvegli l'aula e l'area antistante.
-SORVEGLIANZA: L41_INFO | Fai uscire gli studenti, chiudi il laboratorio e sorvegli il corridoio davanti al laboratorio.
-SORVEGLIANZA: L51_DISEGNO | Fai uscire gli studenti, chiudi il laboratorio e sorvegli il corridoio davanti al laboratorio.
-SORVEGLIANZA: palestra | Fai uscire gli studenti dalla palestra e dagli spogliatoi, chiudi e sorvegli l'area davanti alle palestre.
+SORVEGLIANZA: A6 | Far uscire gli studenti, chiudere l'aula e sorvegliare il corridoio davanti.
+SORVEGLIANZA: A7 | Restare sulla soglia e sorvegliare l'aula e il corridoio davanti.
+SORVEGLIANZA: A11 | Restare sulla soglia e sorvegliare l'aula e il corridoio davanti.
+SORVEGLIANZA: L41_INFO | Far uscire gli studenti, chiudere il laboratorio e sorvegliare il corridoio davanti.
+SORVEGLIANZA: L51_DISEGNO | Far uscire gli studenti, chiudere il laboratorio e sorvegliare il corridoio davanti.
+SORVEGLIANZA: palestra | Far uscire gli studenti da palestra e spogliatoi, chiudere e sorvegliare l'area davanti alle palestre.
