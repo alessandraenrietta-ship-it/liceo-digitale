@@ -179,7 +179,7 @@
     });
   }
 
-  function vocePerArtefatto(artefatto) {
+  function vocePerArtefatto(artefatto, inRilievo) {
     var voce = document.createElement("li");
 
     /* Segna le voci pronte da aprire: negli Strumenti generali, dove
@@ -187,6 +187,19 @@
        laterale delle discipline con un artefatto pronto. */
     if (artefatto.pronto) {
       voce.className = "pronto";
+    }
+
+    /* Negli Strumenti generali una riga ancora tutta da compilare, senza
+       nemmeno il titolo, e' un posto riservato per uno strumento che
+       arrivera': si mostra come un riquadro tratteggiato "in
+       costruzione", con lo stesso aspetto delle discipline vuote. */
+    if (inRilievo && !artefatto.pronto && daCompilare(artefatto.titolo)) {
+      voce.className = "in-costruzione";
+      var segnaposto = document.createElement("span");
+      segnaposto.className = "artefatto-titolo";
+      segnaposto.textContent = "in costruzione";
+      voce.appendChild(segnaposto);
+      return voce;
     }
 
     if (artefatto.pronto) {
@@ -293,7 +306,7 @@
     elenco.id = identificativo;
     elenco.hidden = true;
     artefatti.forEach(function (artefatto) {
-      elenco.appendChild(vocePerArtefatto(artefatto));
+      elenco.appendChild(vocePerArtefatto(artefatto, inRilievo));
     });
 
     testata.addEventListener("click", function () {

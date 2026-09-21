@@ -86,6 +86,17 @@
       border-left-width: 10px;
     }
 
+    /* Posto riservato per uno strumento che arrivera': tratteggiato,
+       come le discipline in costruzione. */
+    .disciplina.rilievo .elenco-artefatti li.in-costruzione {
+      border-style: dashed;
+      border-color: var(--teal);
+    }
+
+    .disciplina.rilievo .elenco-artefatti li.in-costruzione .artefatto-titolo {
+      color: var(--teal);
+    }
+
     /* Qui la descrizione non si mostra: serve a tenere i riquadri
        della stessa misura di quelli delle discipline. Per rimetterla,
        si cancellano le tre righe qui sotto. */
@@ -256,7 +267,7 @@
     <ul id="elenco-segnalazioni"></ul>
   </section>
 
-  <script src="js/home.js?v=7"></script>
+  <script src="js/home.js?v=8"></script>
 
 </body>
 </html>
