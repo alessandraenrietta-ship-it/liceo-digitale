@@ -182,6 +182,13 @@
   function vocePerArtefatto(artefatto) {
     var voce = document.createElement("li");
 
+    /* Segna le voci pronte da aprire: negli Strumenti generali, dove
+       ogni strumento ha il suo riquadro, ricevono la stessa striscia
+       laterale delle discipline con un artefatto pronto. */
+    if (artefatto.pronto) {
+      voce.className = "pronto";
+    }
+
     if (artefatto.pronto) {
       var collegamento = document.createElement("a");
       collegamento.className = "artefatto-titolo";
