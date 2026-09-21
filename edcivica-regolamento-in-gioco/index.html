@@ -22,6 +22,10 @@
     --text: var(--testo);
     --muted: var(--teal);
     --radius: var(--raggio);
+    /* Fondo delle caselle di testo e dei blocchi di risposta: prima
+       questi due nomi non erano definiti, e il browser li ignorava. */
+    --bg: var(--fondo-lettura);
+    --bg-grad: var(--fondo-lettura);
   }
   *{box-sizing:border-box;}
 
@@ -81,7 +85,7 @@
   .tab-main.active{ background:var(--verde); color:var(--testo-su-scuro); border-color:var(--accent); }
 
   .card{
-    background:var(--surface); color:var(--text); border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--surface); color:var(--text); border:3px solid var(--bordo); border-radius:var(--radius);
     padding:20px; margin-bottom:16px;
   }
   .card h2{ font-family:var(--carattere); font-weight:400; font-size:22px; margin:0 0 10px; color:var(--accent); letter-spacing:0.01em;}
