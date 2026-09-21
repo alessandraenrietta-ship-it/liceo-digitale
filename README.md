@@ -16,7 +16,6 @@ https://alessandraenrietta-ship-it.github.io/liceo-digitale/
 | `index.html` | La pagina iniziale |
 | `stile.css` | Il foglio di stile comune a tutte le pagine |
 | `js/home.js` | Legge il registro e costruisce la pagina iniziale |
-| `js/artefatto.js` | Fa funzionare le pagine degli artefatti a linea del tempo |
 | `specifica-comune.md` | Le regole da dare ai colleghi che costruiscono un artefatto |
 | `CLAUDE.md` | Le regole del progetto |
 | `anteprima.bat` | Apre il sito sul computer, senza pubblicarlo |

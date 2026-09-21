@@ -51,7 +51,6 @@
 # Chi vede un artefatto sul sito lo decide il TERZO CAMPO della sua
 # riga, non il blocco in cui si trova.
 
-La rivoluzione francese | Storia | entrambi | storia-la-rivoluzione-francese | Una linea del tempo interattiva con gli eventi principali dal 1789 al 1799.
 
 DA COMPILARE | Lingua e cultura straniera - inglese | docenti | inglese-DACOMPILARE | DA COMPILARE
 DA COMPILARE | Scienze naturali | docenti | scienze-DACOMPILARE | DA COMPILARE
