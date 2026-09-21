@@ -92,6 +92,10 @@
 
     table.orario {
       width: 100%;
+      /* I cinque giorni hanno tutti la stessa larghezza. Senza
+         questa riga il giorno con meno scritte si stringe e gli
+         altri si allargano, e la tabella sembra storta. */
+      table-layout: fixed;
       border-collapse: collapse;
       font-size: 0.95rem;
     }
@@ -102,6 +106,9 @@
       padding: 0.45em 0.55em;
       vertical-align: top;
       text-align: left;
+      /* Un nome lungo senza spazi, come L43B_METROLOGIA, va a
+         capo invece di sfondare la colonna. */
+      overflow-wrap: break-word;
     }
 
     table.orario thead th {
@@ -110,6 +117,13 @@
       text-align: center;
       white-space: nowrap;
     }
+
+    /* Con le colonne a larghezza fissa il posto lo decide la
+       prima riga: la casella "Ora" in cima deve dichiarare la
+       sua larghezza, altrimenti si prende un quinto del tavolo
+       come i giorni. Qui si dice solo quanto e' larga: il colore
+       resta quello delle altre caselle dell'intestazione. */
+    table.orario thead th:first-child { width: 6.5rem; }
 
     table.orario th.ora {
       width: 6.5rem;
