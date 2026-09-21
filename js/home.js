@@ -253,6 +253,17 @@
       return artefatto.pronto;
     }).length;
 
+    /* Una disciplina con almeno un artefatto pronto da aprire ha la
+       striscia laterale, cosi' si distingue al volo da quelle dove c'e'
+       solo qualcosa in preparazione. La scritta "disponibile" resta
+       comunque: il colore da solo non basta a chi non lo distingue. */
+    /* Gli Strumenti generali restano esclusi: sono un riquadro largo e
+       col titolo centrato, e la fascia su un lato lo farebbe sembrare
+       storto. Si riconoscono gia' perche' stanno in cima. */
+    if (pronti > 0 && !inRilievo) {
+      scheda.className += " con-artefatto";
+    }
+
     var stato = document.createElement("span");
     stato.className = "disciplina-stato";
     if (pronti === 0) {
