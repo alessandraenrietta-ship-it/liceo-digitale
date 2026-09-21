@@ -880,13 +880,13 @@ function renderGruppi(){
   const avvisoLocale = location.hostname === 'localhost' || location.hostname === '127.0.0.1'
     ? `<div class="hint" style="margin-top:12px"><strong>Stai guardando l'anteprima sul tuo computer.</strong>
          Questo indirizzo vale solo qui: dai telefoni non si apre. Il codice da proiettare in classe
-         e' quello che compare quando la pagina e' aperta dal sito pubblicato.</div>`
+         è quello che compare quando la pagina è aperta dal sito pubblicato.</div>`
     : '';
 
   el.innerHTML = `
     <div class="card">
       <h3>Inquadra per leggere il caso sul tuo dispositivo</h3>
-      <div class="hint">Proietta questo codice a inizio attivita'. Ogni gruppo lo inquadra con la
+      <div class="hint">Proietta questo codice a inizio attività. Ogni gruppo lo inquadra con la
         fotocamera del telefono e si apre il testo dei casi insieme a tutto il regolamento, da cercare
         per conto proprio senza aspettare il turno alla lavagna.</div>
       ${disegno
@@ -894,7 +894,7 @@ function renderGruppi(){
         : `<div class="empty">Indirizzo troppo lungo per un codice QR.</div>`}
       <div class="hint" style="text-align:center;word-break:break-all">${escapeHtml(indirizzo)}</div>
       <div class="hint" style="margin-top:12px"><strong>Dal telefono non si invia niente.</strong>
-        Nella versione dei gruppi il modulo di risposta non c'e': si legge, si cerca, e poi si detta
+        Nella versione dei gruppi il modulo di risposta non c'è: si legge, si cerca, e poi si detta
         la risposta all'insegnante, che la registra qui sullo schermo della classe.</div>
       ${avvisoLocale}
     </div>
@@ -913,9 +913,21 @@ function mostraCasoPerGruppi(caseId){
     </div>
 
     <div class="card">
+      <h3>Che cosa dovete trovare</h3>
+      <div class="hint">Sono i quattro punti che l'insegnante registrerà. Preparateli tutti e
+        quattro prima di dettare: la risposta è completa solo se ci sono tutti.</div>
+      <div class="answer-block">
+        <div class="answer-field"><span class="fl">Sanzione individuata</span>Quale sanzione prevede il regolamento?</div>
+        <div class="answer-field"><span class="fl">Organo competente</span>Chi decide ed eventualmente interviene?</div>
+        <div class="answer-field"><span class="fl">Procedura</span>Quali passaggi prevede il regolamento?</div>
+        <div class="answer-field"><span class="fl">Perché — il principio che la giustifica</span>Collegate la sanzione al principio educativo dello Statuto o del Regolamento: perché è proporzionata, cosa vuole ottenere, che valore protegge?</div>
+      </div>
+    </div>
+
+    <div class="card">
       <h3>Archivio documenti</h3>
       <div class="hint">Statuto e Regolamento di disciplina dell'Istituto. Cerca nelle sezioni
-        pertinenti: non e' detto sia solo una.</div>
+        pertinenti: non è detto sia solo una.</div>
       ${buildArchiveHtml(caseId)}
     </div>
 
