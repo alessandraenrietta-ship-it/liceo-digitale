@@ -1036,8 +1036,7 @@
       elencoRis.textContent = "";
       campoCerca.value = "";
       mostraSegnalazioni();
-      statoFile.textContent = provenienza;
-      statoFile.className = daFile ? "stato-fatto" : "nota-piccola";
+      mostraStato(provenienza, daFile);
 
       /* Una riga sempre visibile che dice quale orario si sta
          guardando: senza, riaprendo la pagina non si capisce se
@@ -1054,6 +1053,15 @@
         erroreGrave("Il file non contiene nessuna lezione.",
           "Controlla che le righe comincino con la parola LEZIONE seguita dai due punti.");
       }
+    }
+
+    /* La riga sotto il riquadro si fa vedere solo quando c'e'
+       davvero qualcosa da dire: se non c'e' niente, sparisce
+       invece di lasciare un riquadro vuoto. */
+    function mostraStato(testo, forte) {
+      statoFile.textContent = testo || "";
+      statoFile.className = forte ? "stato-fatto" : "nota-piccola";
+      statoFile.hidden = !testo;
     }
 
     /* Il riquadro "Carica il tuo orario" cambia a seconda di
@@ -1141,16 +1149,16 @@
       lettore.onload = function () {
         var testo = String(lettore.result);
         usa(testo, "", true);
-        statoFile.textContent = "Fatto: e' caricato il tuo orario (" + file.name
-          + "), con " + dati.classi.length + " classi e "
-          + dati.insegnanti.length + " insegnanti. Resta su questo computer.";
-        if (casellaRic.checked) {
-          statoFile.textContent += salva(testo)
-            ? " E' stato salvato su questo computer."
-            : " Non e' stato possibile salvarlo su questo computer.";
+
+        /* Che sia andata bene lo dicono gia' la riga in cima
+           ("Orario in uso: il tuo...") e il titolo del riquadro:
+           qui si parla solo se qualcosa non ha funzionato. */
+        if (casellaRic.checked && !salva(testo)) {
+          mostraStato("L'orario e' caricato, ma non e' stato possibile "
+            + "salvarlo su questo computer: la prossima volta va ricaricato.", true);
         }
-        /* Il riquadro ha finito il suo lavoro: si richiude, cosi'
-           resta solo la riga che dice com'e' andata. */
+
+        /* Il riquadro ha finito il suo lavoro: si richiude. */
         riquadroFile.open = false;
 
         /* Il campo di ricerca e' in cima e la tabella pure: senza
@@ -1170,14 +1178,12 @@
       if (casellaRic.checked) {
         if (!daFile || !testoAttuale) {
           casellaRic.checked = false;
-          statoFile.className = "nota-piccola";
-          statoFile.textContent = "Prima scegli il file del tuo orario, poi lo si puo' ricordare.";
+          mostraStato("Prima scegli il file del tuo orario, poi lo si puo' ricordare.", false);
           return;
         }
-        statoFile.className = "stato-fatto";
-        statoFile.textContent = salva(testoAttuale)
+        mostraStato(salva(testoAttuale)
           ? "Il tuo orario e' salvato su questo computer: la prossima volta lo ritrovi gia' caricato."
-          : "Non e' stato possibile salvarlo su questo computer.";
+          : "Non e' stato possibile salvarlo su questo computer.", true);
       } else {
         /* Togliendo la spunta l'orario sparisce da questo
            computer e si torna a quello di esempio. */
