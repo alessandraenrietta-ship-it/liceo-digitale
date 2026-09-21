@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Costruisci il tuo tema argomentativo — Liceo Digitale</title>
-<link rel="stylesheet" href="../stile.css?v=2">
+<link rel="stylesheet" href="../stile.css?v=3">
 <style>
   /* I colori arrivano tutti da stile.css, il foglio comune del sito:
      qui si usano i loro nomi, mai i codici scritti a mano.
@@ -94,7 +94,10 @@
     margin-bottom: 26px;
   }
 
+  /* Regola dei titoli del sito: il titolo del riquadro al centro,
+     il testo sotto a sinistra. */
   .box h2 {
+    text-align: center;
     font-family: var(--carattere);
     font-style: italic;
     font-weight: 700;
@@ -154,6 +157,7 @@
   .sezione-schema.tesi { background: var(--fondo-lettura); border-color: var(--verde); }
 
   .sezione-schema h3 {
+    text-align: center;
     font-family: var(--carattere);
     font-style: italic;
     font-weight: 700;
@@ -231,7 +235,7 @@
        tutti gli artefatti che ne chiedono una. -->
   <div class="box" id="chiaveBox"></div>
 
-  <div class="box" style="text-align:center;">
+  <div class="box">
     <p class="titolo-pagina">Costruisci il tuo tema argomentativo</p>
     <h2>La tua tesi</h2>
     <p>Scrivi in una o due frasi la posizione che vuoi sostenere nel tema.</p>
@@ -280,7 +284,7 @@
       <p id="out-conclusione"></p>
     </div>
 
-    <div class="box" style="text-align:center;">
+    <div class="box">
       <button class="secondario" onclick="ricomincia()">Ricomincia con un'altra tesi</button>
     </div>
 
