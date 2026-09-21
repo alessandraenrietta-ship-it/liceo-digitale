@@ -23,3 +23,7 @@ desktop.ini
 
 # La cartella degli strumenti di Claude: non fa parte del sito.
 .claude/
+
+# Qualunque file marcato NON-PUBBLICARE nel nome, ovunque si trovi.
+*NON-PUBBLICARE*
+*non-pubblicare*
