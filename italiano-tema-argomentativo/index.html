@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Costruisci il tuo tema argomentativo — Liceo Digitale</title>
-<link rel="stylesheet" href="../stile.css?v=3">
+<link rel="stylesheet" href="../stile.css?v=4">
 <style>
   /* I colori arrivano tutti da stile.css, il foglio comune del sito:
      qui si usano i loro nomi, mai i codici scritti a mano.
@@ -295,7 +295,7 @@
 
 </div>
 
-<script src="../js/chiave.js?v=3"></script>
+<script src="../js/chiave.js?v=4"></script>
 <script>
 /* ------------------------------------------------------------------
    LA CHIAVE DI ACCESSO PERSONALE
@@ -310,7 +310,14 @@ const CHIAVE_STORAGE = "liceo-digitale-chiave-google";
 ChiavePersonale.prepara({
   dove: "chiaveBox",
   nome: CHIAVE_STORAGE,
-  aCosaServe: "costruisce lo schema"
+  aCosaServe: "costruisce lo schema",
+  /* TESTO MODIFICABILE: puoi cambiare la frase qui sotto. Compare
+     dentro il riquadro della chiave, solo in questa pagina. */
+  inPiu: "Se questa pagina la usa uno studente, la chiave non se la "
+       + "crea da solo: la crea un genitore con il proprio account "
+       + "Google e gliela incolla qui, sul dispositivo che lo studente "
+       + "usa. Non va chiesta all'insegnante: e' personale, e la quota "
+       + "gratuita e' pensata per una persona sola."
 });
 
 

@@ -27,7 +27,8 @@
 
        ChiavePersonale.prepara({
          dove: 'riquadro-chiave',
-         aCosaServe: 'costruisce lo schema'
+         aCosaServe: 'costruisce lo schema',
+         inPiu: 'una frase in piu, solo per questo artefatto'   <- si puo omettere
        });
 
    e al momento di chiamare il servizio:
@@ -96,12 +97,29 @@ window.ChiavePersonale = (function () {
     }
   }
 
+  /* La frase in piu' arriva da un file scritto a mano: se contiene
+     per sbaglio un < o una &, deve comparire come tale e non come
+     codice. */
+  function testoSemplice(testo) {
+    return String(testo)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
   function prepara(opzioni) {
     var contenitore = document.getElementById(opzioni.dove);
     if (!contenitore) { return; }
 
     var nome = opzioni.nome || NOME_CONDIVISO;
     var aCosaServe = opzioni.aCosaServe || "funziona";
+
+    /* Una frase in piu', scritta dall'artefatto che chiama questo
+       riquadro, per dire qualcosa che vale solo per lui. Chi non la
+       passa non la vede: il riquadro resta quello di sempre. */
+    var inPiu = opzioni.inPiu
+      ? '<p class="chiave-in-piu">' + testoSemplice(opzioni.inPiu) + '</p>'
+      : '';
 
     recuperaDaiNomiVecchi(nome);
 
@@ -118,6 +136,7 @@ window.ChiavePersonale = (function () {
       'usare il testo che scrivi per migliorare i suoi servizi. Chi ' +
       'preferisce evitarlo puo\' usare una chiave a pagamento, che non ha ' +
       'questo effetto.</p>' +
+      inPiu +
       '<div class="chiave-riga">' +
       '  <label class="chiave-etichetta" for="chiave-campo">La tua chiave</label>' +
       '  <input type="password" id="chiave-campo" autocomplete="off" ' +
