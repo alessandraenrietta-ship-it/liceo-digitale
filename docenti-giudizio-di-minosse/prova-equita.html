@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prova di equità di Minosse</title>
+<!--
+  PROVA DI EQUITA' DEL GIUDIZIO DI MINOSSE
+  Apre lo strumento in una cornice nascosta e mette alla prova lo stesso
+  motore di estrazione che usa la pagina vera (MinosseMotore), senza
+  animazioni. Non serve a chi usa lo strumento in classe: serve a
+  controllare che l'estrazione sia equa. Si puo' riaprire quando si
+  vuole, e ogni volta i numeri sono un po' diversi, come e' giusto.
+-->
+<style>
+  body { font-family: "Segoe UI", system-ui, sans-serif; background: #fffdf6; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 16px; }
+  h1 { text-align: center; }
+  .esito { font-size: 20px; font-weight: 700; padding: 10px 14px; border-radius: 10px; margin: 10px 0; }
+  .ok { background: #dff3df; border: 2px solid #2e7d32; }
+  .no { background: #fde0dc; border: 2px solid #b71c1c; }
+  table { border-collapse: collapse; margin: 10px 0; }
+  td, th { border: 1px solid #bbb; padding: 3px 10px; text-align: right; }
+  pre { background: #f2efe4; padding: 10px; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<h1>Prova di equità di Minosse</h1>
+<p id="stato">Prova in corso…</p>
+<div id="risultati"></div>
+<iframe id="cornice" src="index.html" hidden title="strumento sotto prova"></iframe>
+
+<script>
+(function () {
+  "use strict";
+
+  var ESTRAZIONI = 100000;
+  var STUDENTI = 25;
+  var GIRI_COMPLETI = 20000;
+  /* Valori critici del chi quadrato con 24 gradi di liberta' */
+  var CRITICO_5 = 36.415;
+  var CRITICO_01 = 51.179;
+
+  var uscita = document.getElementById("risultati");
+  var riepilogo = { tutteOk: true, righe: [] };
+
+  function esito(ok, testo) {
+    if (!ok) { riepilogo.tutteOk = false; }
+    riepilogo.righe.push((ok ? "OK  " : "NO  ") + testo);
+    var p = document.createElement("p");
+    p.className = "esito " + (ok ? "ok" : "no");
+    p.textContent = (ok ? "Superata: " : "NON superata: ") + testo;
+    uscita.appendChild(p);
+  }
+
+  function classe(n) {
+    var a = [];
+    for (var i = 1; i <= n; i += 1) { a.push({ numero: i, nome: "" }); }
+    return a;
+  }
+
+  function chiQuadrato(conteggi, totale) {
+    var atteso = totale / conteggi.length;
+    return conteggi.reduce(function (s, c) { return s + (c - atteso) * (c - atteso) / atteso; }, 0);
+  }
+
+  function prova(M) {
+    var t0 = performance.now();
+
+    /* 1. Prima estrazione, 100.000 volte, con 25 studenti */
+    var conteggi = new Array(STUDENTI).fill(0);
+    var atterraggiSbagliati = 0;
+    var passiSbagliati = 0;
+    for (var e = 0; e < ESTRAZIONI; e += 1) {
+      var stato = M.nuovaClasse(classe(STUDENTI));
+      var s = M.preparaSentenza(stato.attesa);
+      conteggi[s.anima.numero - 1] += 1;
+      /* L'animazione si ferma davvero sul vincitore? */
+      if (M.indiceAlPasso(s.passi, stato.attesa.length) !== s.indice) { atterraggiSbagliati += 1; }
+      /* Passi = rimasti + posizione (almeno un giro completo) */
+      if (s.passi !== STUDENTI + s.indice + 1 || s.passi <= STUDENTI) { passiSbagliati += 1; }
+    }
+    var chi = chiQuadrato(conteggi, ESTRAZIONI);
+    var atteso = ESTRAZIONI / STUDENTI;
+    var min = Math.min.apply(null, conteggi);
+    var max = Math.max.apply(null, conteggi);
+
+    var tabella = "<table><tr><th>Studente</th><th>Uscito per primo</th><th>Frequenza</th><th>Scarto dall'atteso</th></tr>";
+    conteggi.forEach(function (c, i) {
+      tabella += "<tr><td>" + (i + 1) + "</td><td>" + c + "</td><td>" + (100 * c / ESTRAZIONI).toFixed(2) +
+        " %</td><td>" + ((c - atteso) / atteso * 100).toFixed(1) + " %</td></tr>";
+    });
+    tabella += "</table>";
+
+    esito(chi < CRITICO_01,
+      "prima estrazione uniforme su " + ESTRAZIONI.toLocaleString("it") + " prove con " + STUDENTI +
+      " studenti. Atteso per ciascuno: " + atteso + ". Minimo " + min + ", massimo " + max +
+      ". Chi quadrato = " + chi.toFixed(2) + " (24 gradi di libertà; soglia 5% = " + CRITICO_5 +
+      ", soglia 0,1% = " + CRITICO_01 + ")" + (chi < CRITICO_5 ? "." : ": sopra la soglia del 5%, capita per caso una volta su venti; rilanciare la prova."));
+    var div = document.createElement("div");
+    div.innerHTML = tabella;
+    uscita.appendChild(div);
+
+    esito(atterraggiSbagliati === 0, "in tutte le " + ESTRAZIONI.toLocaleString("it") +
+      " prove l'ultimo passo della coda cade proprio sul vincitore scelto prima (errori: " + atterraggiSbagliati + ").");
+    esito(passiSbagliati === 0, "in tutte le prove i passi sono rimasti + posizione del vincitore, cioè sempre almeno un giro completo (errori: " + passiSbagliati + ").");
+
+    /* 2. Giri completi: nessuno estratto due volte, tutti estratti */
+    var doppioni = 0;
+    var mancanti = 0;
+    var perPosto = [];
+    for (var k = 0; k < STUDENTI; k += 1) { perPosto.push(new Array(STUDENTI).fill(0)); }
+    for (var g = 0; g < GIRI_COMPLETI; g += 1) {
+      var st = M.nuovaClasse(classe(STUDENTI));
+      var visti = {};
+      for (var turno = 0; turno < STUDENTI; turno += 1) {
+        var sen = M.preparaSentenza(st.attesa);
+        var anima = M.condanna(st, sen.indice);
+        if (visti[anima.numero]) { doppioni += 1; }
+        visti[anima.numero] = true;
+        perPosto[turno][anima.numero - 1] += 1;
+      }
+      if (Object.keys(visti).length !== STUDENTI || st.attesa.length !== 0) { mancanti += 1; }
+      if (M.preparaSentenza(st.attesa) !== null) { mancanti += 1; }
+    }
+    esito(doppioni === 0 && mancanti === 0, GIRI_COMPLETI.toLocaleString("it") +
+      " giri completi da " + STUDENTI + " estrazioni: nessuno estratto due volte (doppioni: " + doppioni +
+      "), e alla fine del giro sono usciti tutti (giri incompleti: " + mancanti + ").");
+
+    /* Anche all'estrazione n-esima del giro, fra chi resta, nessuno e' favorito */
+    var peggiore = 0;
+    var postoPeggiore = 0;
+    perPosto.forEach(function (riga, turno) {
+      var c = chiQuadrato(riga, GIRI_COMPLETI);
+      if (c > peggiore) { peggiore = c; postoPeggiore = turno + 1; }
+    });
+    /* 25 prove insieme: soglia corretta per il numero di prove (0,1% / 25) */
+    esito(peggiore < 62, "per ogni estrazione del giro (la 1a, la 2a, … la 25a) ciascuno studente esce in quella posizione con la stessa frequenza. " +
+      "Il chi quadrato più alto è " + peggiore.toFixed(2) + ", alla " + postoPeggiore + "a estrazione (soglia 62, cioè 0,1% corretto per 25 confronti).");
+
+    /* 3. Annulla: l'ultimo dannato torna al suo posto e puo' riuscire */
+    var sa = M.nuovaClasse(classe(5));
+    M.condanna(sa, 2);
+    var tornata = M.annulla(sa);
+    var ordineGiusto = sa.attesa.map(function (a) { return a.numero; }).join(",") === "1,2,3,4,5";
+    esito(tornata && tornata.numero === 3 && ordineGiusto && sa.dannati.length === 0,
+      "\"Annulla ultima estrazione\" rimette lo studente fra chi aspetta, al suo posto nel cerchio.");
+
+    /* 4. Numeri piccoli e grandi: nessun errore, sempre nell'intervallo */
+    var fuori = 0;
+    [1, 2, 3, 7, 40, 1000, 2147483649].forEach(function (n) {
+      for (var r = 0; r < 2000; r += 1) {
+        var x = M.numeroCasuale(n);
+        if (x < 0 || x >= n || x !== Math.floor(x)) { fuori += 1; }
+      }
+    });
+    esito(fuori === 0, "il generatore dà sempre un numero intero nell'intervallo giusto, anche per n = 2 o n molto grandi (fuori intervallo: " + fuori + ").");
+
+    /* 5. Le durate: fra 6 e 9 secondi, per ogni classe e ogni vincitore */
+    var durataMin = Infinity, durataMax = 0;
+    for (var R = 1; R <= 40; R += 1) {
+      for (var pos = 0; pos < R; pos += 1) {
+        var tot = M.durate(R + pos + 1, R, false).reduce(function (a, b) { return a + b; }, 0);
+        durataMin = Math.min(durataMin, tot); durataMax = Math.max(durataMax, tot);
+      }
+    }
+    esito(durataMin >= 6000 - 1 && durataMax <= 9000 + 1, "la girata dura sempre fra 6 e 9 secondi, per classi da 1 a 40 (minimo " +
+      (durataMin / 1000).toFixed(2) + " s, massimo " + (durataMax / 1000).toFixed(2) + " s).");
+
+    riepilogo.secondi = ((performance.now() - t0) / 1000).toFixed(1);
+    riepilogo.chi = chi;
+    riepilogo.conteggi = conteggi;
+    document.getElementById("stato").textContent = (riepilogo.tutteOk ? "Tutte le prove superate" : "ATTENZIONE: qualche prova non è superata") +
+      " (tempo: " + riepilogo.secondi + " secondi).";
+    window.esitoProva = riepilogo;
+  }
+
+  document.getElementById("cornice").addEventListener("load", function () {
+    var w = this.contentWindow;
+    /* Se il motore usasse Math.random, qui si fermerebbe con un errore */
+    w.Math.random = function () { throw new Error("Math.random non deve essere usato"); };
+    try {
+      prova(w.MinosseMotore);
+    } catch (err) {
+      esito(false, "errore durante la prova: " + err.message);
+      window.esitoProva = riepilogo;
+    }
+  });
+}());
+</script>
+</body>
+</html>

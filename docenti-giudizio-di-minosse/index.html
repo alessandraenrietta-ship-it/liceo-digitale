@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Il giudizio di Minosse</title>
+<!--
+  IL GIUDIZIO DI MINOSSE
+  Estrattore di studenti da usare in classe sulla LIM.
+
+  Questo strumento e' volutamente un unico file: testo, aspetto e
+  funzionamento stanno tutti qui dentro, e non chiede niente a nessun
+  altro sito. Non salva niente: i nomi restano in memoria solo finche'
+  la pagina e' aperta.
+
+  I testi che si possono cambiare senza toccare il resto sono segnati
+  con il commento  TESTO MODIFICABILE .
+
+  EQUITA': chi viene estratto e' deciso PRIMA dell'animazione, con il
+  generatore casuale crittografico del browser (crypto.getRandomValues)
+  e senza "arrotondamenti" che favoriscano qualcuno. L'animazione mette
+  solo in scena un risultato gia' deciso. La prova che l'estrazione e'
+  equa sta nel file prova-equita.html, in questa stessa cartella.
+-->
+<style>
+  :root {
+    --fondo: #0c0605;
+    --fondo-2: #1b0b08;
+    --brace: #c2361b;
+    --brace-viva: #ff6a3d;
+    --ocra: #e0a943;
+    --ocra-scura: #9a6a1c;
+    --pergamena: #f3e2b8;
+    --pergamena-2: #d8b877;
+    --inchiostro: #2a1206;
+    --testo: #f7ead2;
+    --testo-tenue: #d9c4a0;
+    --serpe: #56702a;
+    --serpe-scura: #243010;
+    --lato: 600px;
+    --fs: 20px;
+    --maxw: 160px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: radial-gradient(ellipse at 50% 110%, #3a0f06 0%, var(--fondo-2) 40%, var(--fondo) 75%);
+    background-color: var(--fondo);
+    color: var(--testo);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.4;
+  }
+  h1, h2, .serif { font-family: Georgia, "Times New Roman", serif; }
+  [hidden] { display: none !important; }
+
+  /* Il fuoco si vede sempre, su ogni comando */
+  a:focus-visible, button:focus-visible, input:focus-visible,
+  textarea:focus-visible, label:focus-within {
+    outline: 4px solid var(--ocra);
+    outline-offset: 3px;
+  }
+  a { color: var(--ocra); }
+
+  /* Aggiunto per il sito Liceo Digitale: collegamento per tornare
+     alla pagina iniziale del sito. */
+  .ritorno { margin: 0; padding: 8px 16px 0; font-size: 16px; }
+
+  button {
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 12px;
+    border: 2px solid var(--ocra);
+    background: #2a120c;
+    color: var(--testo);
+    padding: 10px 18px;
+  }
+  button:hover:not(:disabled) { background: #3d1a10; }
+  button:disabled { opacity: .38; cursor: not-allowed; }
+  .principale {
+    background: linear-gradient(#e0452a, #9e2410);
+    border-color: #ffb08a;
+    color: #fff;
+    font-family: Georgia, serif;
+    font-size: clamp(24px, 3.4vw, 44px);
+    padding: 10px 34px;
+    box-shadow: 0 0 22px rgba(255, 90, 40, .45);
+  }
+  .principale:hover:not(:disabled) { background: linear-gradient(#f0543a, #b02a14); }
+  .discreto {
+    background: transparent;
+    border: 1px solid rgba(224, 169, 67, .5);
+    color: var(--testo-tenue);
+    font-weight: 400;
+    font-size: 15px;
+    padding: 6px 12px;
+  }
+
+  /* ---------- Impostazione della classe ---------- */
+  .impostazione {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 12px 16px 40px;
+  }
+  .impostazione h1 {
+    text-align: center;
+    font-size: clamp(34px, 6vw, 60px);
+    color: var(--ocra);
+    margin: 10px 0 4px;
+    text-shadow: 0 0 18px rgba(255, 90, 40, .5);
+  }
+  .sottotitolo { text-align: center; color: var(--testo-tenue); margin: 0 0 22px; font-style: italic; }
+  .scheda {
+    background: rgba(40, 16, 10, .85);
+    border: 2px solid var(--ocra-scura);
+    border-radius: 16px;
+    padding: 18px 20px;
+  }
+  .scheda h2 { text-align: center; margin: 0 0 14px; color: var(--ocra); }
+  .modi { border: 0; padding: 0; margin: 0 0 16px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .modi label {
+    display: flex; align-items: center; gap: 8px;
+    border: 2px solid var(--ocra-scura); border-radius: 12px;
+    padding: 8px 14px; cursor: pointer; font-weight: 700;
+  }
+  .modi label:has(input:checked) { border-color: var(--ocra); background: #3d1a10; }
+  .modi input { width: 20px; height: 20px; accent-color: var(--brace); }
+  .campo { margin: 10px 0; }
+  .campo label { display: block; font-weight: 700; margin-bottom: 6px; }
+  .campo input[type=number] {
+    font: inherit; font-size: 28px; width: 130px; padding: 6px 10px;
+    border-radius: 10px; border: 2px solid var(--ocra); background: #fff8e8; color: var(--inchiostro);
+  }
+  .campo input[type=file] { font: inherit; color: var(--testo); max-width: 100%; }
+  .campo textarea {
+    font: inherit; width: 100%; min-height: 200px; padding: 10px;
+    border-radius: 10px; border: 2px solid var(--ocra); background: #fff8e8; color: var(--inchiostro);
+  }
+  .aiuto { color: var(--testo-tenue); font-size: 16px; margin: 6px 0 0; }
+  .anteprima {
+    margin: 16px 0; padding: 12px 14px; border-radius: 12px;
+    background: rgba(0, 0, 0, .35); border: 1px dashed var(--ocra-scura);
+  }
+  .anteprima .conteggio { font-size: 22px; font-weight: 700; color: var(--ocra); margin: 0 0 8px; }
+  .anteprima .errore { color: #ffb08a; font-weight: 700; margin: 0; }
+  .elenco-anteprima { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; max-height: 190px; overflow: auto; }
+  .elenco-anteprima li {
+    background: var(--pergamena); color: var(--inchiostro);
+    border-radius: 8px; padding: 2px 8px; font-size: 15px;
+  }
+  .conferma { text-align: center; }
+  .privacy { color: var(--testo-tenue); font-size: 15px; text-align: center; margin-top: 16px; }
+
+  /* ---------- Il giudizio ---------- */
+  .giudizio {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+  .barra {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 8px 14px; padding: 6px 16px;
+  }
+  .barra h1 { margin: 0; font-size: clamp(22px, 3vw, 38px); color: var(--ocra); }
+  .contatore {
+    font-size: clamp(20px, 2.6vw, 34px); font-weight: 700;
+    background: rgba(0, 0, 0, .4); border: 2px solid var(--ocra-scura);
+    border-radius: 12px; padding: 4px 14px;
+  }
+  .contatore strong { color: var(--ocra); }
+  .comandi-alti { display: flex; flex-wrap: wrap; gap: 8px; }
+  .scena {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 16px;
+  }
+  .palco {
+    position: relative;
+    width: min(100%, 58vh);
+    width: min(100%, 58dvh);
+    aspect-ratio: 1 / 1;
+  }
+  .palco svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+  .anima {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    font-size: var(--fs);
+    max-width: var(--maxw);
+    min-width: 1.9em;
+    padding: .18em .45em .22em;
+    text-align: center;
+    line-height: 1.05;
+    color: var(--inchiostro);
+    background: linear-gradient(170deg, var(--pergamena), var(--pergamena-2));
+    border-radius: 48% 48% 34% 34% / 58% 58% 34% 34%;
+    box-shadow: 0 0 .5em rgba(255, 200, 120, .25), inset 0 -.12em 0 rgba(120, 70, 20, .35);
+    transition: transform .18s, box-shadow .18s, background .18s;
+    white-space: nowrap;
+  }
+  .anima .n { display: block; font-weight: 800; font-family: Georgia, serif; }
+  .anima .nome { display: block; font-size: .62em; overflow: hidden; text-overflow: ellipsis; }
+  .anima.accesa {
+    transform: translate(-50%, -50%) scale(1.22);
+    background: linear-gradient(170deg, #fff4d6, #ffb36b);
+    box-shadow: 0 0 .5em .15em var(--brace-viva), 0 0 1.4em .4em rgba(255, 80, 30, .55);
+    z-index: 2;
+  }
+
+  /* La sentenza: il cartellino che cresce al centro */
+  .sentenza {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    max-width: 92vw;
+    padding: .15em .5em .25em;
+    text-align: center;
+    color: var(--inchiostro);
+    background: linear-gradient(170deg, #fff4d6, var(--pergamena-2));
+    border: .06em solid var(--brace);
+    border-radius: 44% 44% 30% 30% / 50% 50% 30% 30%;
+    box-shadow: 0 0 .4em .1em var(--brace-viva), 0 0 1.5em .5em rgba(255, 80, 30, .5);
+    font-family: Georgia, serif;
+    font-size: clamp(56px, 13vmin, 190px);
+    line-height: 1;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .sentenza .n { display: block; font-weight: 800; }
+  .sentenza .nome { display: block; font-size: .5em; overflow: hidden; text-overflow: ellipsis; }
+  .sentenza.cresce { animation: cresce .55s cubic-bezier(.2, 1.4, .4, 1) both; }
+  @keyframes cresce {
+    from { transform: translate(-50%, -50%) scale(.2); opacity: 0; }
+    to   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+
+  /* La fine: l'Inferno e' pieno */
+  .fine {
+    position: absolute; inset: 8% 4%;
+    z-index: 6;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; text-align: center;
+    background: rgba(12, 6, 5, .92);
+    border: 3px solid var(--brace);
+    border-radius: 24px;
+    padding: 16px;
+    box-shadow: 0 0 40px rgba(255, 80, 30, .45);
+  }
+  .fine h2 { margin: 0; font-size: clamp(30px, 6vmin, 70px); color: var(--ocra); }
+  .fine p { margin: 0; font-size: clamp(18px, 2.6vmin, 28px); color: var(--testo-tenue); }
+  .fine .bottoni { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+
+  .comandi {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 10px 14px; padding: 4px 16px 8px;
+  }
+
+  /* Il baratro, dove si accumulano i dannati */
+  .baratro {
+    position: relative;
+    min-height: 16vh;
+    padding: 14px 16px 18px;
+    background:
+      radial-gradient(ellipse at 50% 135%, rgba(255, 110, 40, .75) 0%, rgba(170, 35, 10, .5) 35%, rgba(60, 10, 4, .2) 65%, transparent 80%),
+      #120604;
+    border-top: 4px solid #000;
+    box-shadow: inset 0 14px 18px -8px #000;
+  }
+  .baratro h2 {
+    margin: 0 0 8px; font-size: 16px; font-weight: 400; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--testo-tenue); text-align: center;
+  }
+  .dannati { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; list-style: none; margin: 0; padding: 0; }
+  .dannati li {
+    font-size: clamp(16px, 2vw, 26px);
+    color: var(--inchiostro);
+    background: linear-gradient(170deg, #e9cf98, #b88b45);
+    border-radius: 44% 44% 30% 30% / 55% 55% 30% 30%;
+    padding: .1em .55em .15em;
+    font-family: Georgia, serif;
+    font-weight: 700;
+    box-shadow: 0 0 .5em rgba(255, 90, 30, .6);
+    filter: saturate(.8);
+  }
+  .dannati li.atterra { animation: atterra .5s ease-out; }
+  @keyframes atterra {
+    0% { transform: translateY(-30px) scale(1.3); }
+    60% { transform: translateY(4px) scale(.95); }
+    100% { transform: none; }
+  }
+  .vuoto { text-align: center; color: var(--testo-tenue); font-style: italic; margin: 0; }
+
+  /* Le spire della coda */
+  .spira-anim { stroke-dasharray: 100; stroke-dashoffset: 0; }
+  .spira-anim.stringe { animation: stringe linear both; }
+  @keyframes stringe {
+    0%   { stroke-dashoffset: 100; stroke: #b9dc6a; }
+    100% { stroke-dashoffset: 0; }
+  }
+  #braccio-coda {
+    transform-box: view-box;
+    transform-origin: 200px 200px;
+  }
+
+  .solo-lettori {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    body { font-size: 16px; }
+    .barra { justify-content: center; }
+    .palco { width: min(100%, 50vh); }
+  }
+
+  /* Chi ha chiesto meno movimento: niente rotazioni ne' cadute */
+  @media (prefers-reduced-motion: reduce) {
+    .anima, .anima.accesa { transition: none; }
+    .anima.accesa { transform: translate(-50%, -50%); }
+    .sentenza.cresce { animation: appare .2s both; }
+    @keyframes appare { from { opacity: 0; } to { opacity: 1; } }
+    .dannati li.atterra { animation: none; }
+    .spira-anim.stringe { animation: none; }
+    #braccio-coda { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Aggiunto per il sito Liceo Digitale: collegamento per tornare
+     alla pagina iniziale del sito. -->
+<p class="ritorno"><a href="../index.html">&larr; Torna alla pagina iniziale</a></p>
+
+<!-- ============ IMPOSTAZIONE DELLA CLASSE ============ -->
+<main id="impostazione" class="impostazione">
+  <!-- TESTO MODIFICABILE: titolo e sottotitolo del pannello iniziale -->
+  <h1>Il giudizio di Minosse</h1>
+  <p class="sottotitolo">Estrattore di interrogati. Imparziale per costituzione, inflessibile per vocazione.</p>
+
+  <section class="scheda" aria-labelledby="titolo-classe">
+    <h2 id="titolo-classe">Chi si presenta al giudizio?</h2>
+
+    <fieldset class="modi">
+      <legend class="solo-lettori">Come preparare la classe</legend>
+      <label><input type="radio" name="modo" value="numero" checked> Solo numeri</label>
+      <label><input type="radio" name="modo" value="file"> Carica un file</label>
+      <label><input type="radio" name="modo" value="incolla"> Incolla l'elenco</label>
+    </fieldset>
+
+    <div id="modo-numero" class="campo">
+      <label for="quanti">Quanti studenti? (da 2 a 40)</label>
+      <input type="number" id="quanti" min="2" max="40" value="25" inputmode="numeric">
+      <p class="aiuto">Le anime saranno riconosciute solo dal numero, come sul registro.</p>
+    </div>
+
+    <div id="modo-file" class="campo" hidden>
+      <label for="file-classe">File .txt o .csv, un cognome (o cognome e nome) per riga</label>
+      <input type="file" id="file-classe" accept=".txt,.csv,text/plain,text/csv">
+      <p class="aiuto">Nel file .csv si usa solo la prima colonna. Le righe vuote e gli spazi in più non contano. Il numero di ciascuno è la sua posizione nell'elenco.</p>
+    </div>
+
+    <div id="modo-incolla" class="campo" hidden>
+      <label for="testo-classe">Un nome per riga, nell'ordine del registro</label>
+      <textarea id="testo-classe" spellcheck="false" placeholder="Rossi&#10;Bianchi&#10;Verdi"></textarea>
+      <p class="aiuto">Il numero di ciascuno è la sua posizione nell'elenco.</p>
+    </div>
+
+    <div class="anteprima" aria-live="polite">
+      <p class="conteggio" id="anteprima-conteggio"></p>
+      <p class="errore" id="anteprima-errore" hidden></p>
+      <ul class="elenco-anteprima" id="anteprima-elenco"></ul>
+    </div>
+
+    <p class="conferma">
+      <button type="button" class="principale" id="conferma">Conferma la classe</button>
+    </p>
+  </section>
+
+  <!-- TESTO MODIFICABILE: la nota sulla riservatezza -->
+  <p class="privacy">I nomi restano solo in questa pagina finché è aperta: non vengono salvati né inviati da nessuna parte. Chiusa la pagina, Minosse dimentica tutti.</p>
+</main>
+
+<!-- ============ IL GIUDIZIO ============ -->
+<div id="giudizio" class="giudizio" hidden>
+  <header class="barra">
+    <h1>Il giudizio di Minosse</h1>
+    <div class="contatore" id="contatore" aria-live="polite">Anime in attesa: <strong id="n-attesa">0</strong> · Dannati: <strong id="n-dannati">0</strong></div>
+    <div class="comandi-alti">
+      <button type="button" class="discreto" id="schermo-intero">Schermo intero</button>
+      <button type="button" class="discreto" id="cambia-classe">Carica un'altra classe</button>
+    </div>
+  </header>
+
+  <div class="scena">
+    <div class="palco" id="palco">
+      <svg viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+        <defs>
+          <radialGradient id="alone" cx="50%" cy="55%" r="50%">
+            <stop offset="0%" stop-color="#ff6a3d" stop-opacity=".28"/>
+            <stop offset="60%" stop-color="#8a1c08" stop-opacity=".12"/>
+            <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="veste" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#7a1a10"/>
+            <stop offset="100%" stop-color="#3a0906"/>
+          </linearGradient>
+          <linearGradient id="oro" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ffe08a"/>
+            <stop offset="100%" stop-color="#b9831f"/>
+          </linearGradient>
+        </defs>
+
+        <circle cx="200" cy="200" r="190" fill="url(#alone)"/>
+        <circle cx="200" cy="200" r="168" fill="none" stroke="#5a1a0c" stroke-width="1.5" stroke-dasharray="3 7"/>
+
+        <!-- Il braccio della coda: ruota verso l'anima che si illumina.
+             Parte dal centro, e la sua radice resta nascosta dietro Minosse. -->
+        <g id="braccio-coda">
+          <path d="M200 205 C 238 175, 162 150, 200 118 S 236 78, 200 58" fill="none" stroke="var(--serpe-scura)" stroke-width="19" stroke-linecap="round"/>
+          <path d="M200 205 C 238 175, 162 150, 200 118 S 236 78, 200 58" fill="none" stroke="var(--serpe)" stroke-width="12" stroke-linecap="round"/>
+          <path d="M200 205 C 238 175, 162 150, 200 118 S 236 78, 200 58" fill="none" stroke="#9cbf4e" stroke-width="3" stroke-dasharray="4 8" stroke-linecap="round"/>
+          <path d="M200 30 L 214 60 Q 200 54 186 60 Z" fill="#8a1c08" stroke="var(--serpe-scura)" stroke-width="3" stroke-linejoin="round"/>
+        </g>
+
+        <!-- Le spire dietro al corpo (meta' superiore) -->
+        <g fill="none" stroke="var(--serpe-scura)" stroke-width="12">
+          <path d="M136 236 A 64 15 0 0 1 264 236"/>
+          <path d="M132 256 A 68 15 0 0 1 268 256"/>
+          <path d="M128 276 A 72 15 0 0 1 272 276"/>
+          <path d="M124 296 A 76 15 0 0 1 276 296"/>
+        </g>
+
+        <!-- Il corpo: una veste da giudice -->
+        <path d="M168 188 Q 150 250 128 318 Q 200 334 272 318 Q 250 250 232 188 Z" fill="url(#veste)" stroke="#220503" stroke-width="3"/>
+        <path d="M200 196 L 200 318" stroke="#220503" stroke-width="2" opacity=".6"/>
+        <!-- le mani intrecciate, in attesa -->
+        <ellipse cx="200" cy="222" rx="20" ry="11" fill="#b8784a" stroke="#4a2410" stroke-width="2"/>
+
+        <!-- La testa -->
+        <path d="M160 150 L 150 132 L 166 144 Z" fill="#b8784a" stroke="#4a2410" stroke-width="2"/>
+        <path d="M240 150 L 250 132 L 234 144 Z" fill="#b8784a" stroke="#4a2410" stroke-width="2"/>
+        <ellipse cx="200" cy="158" rx="38" ry="42" fill="#c48656" stroke="#4a2410" stroke-width="3"/>
+        <!-- la barba a punta -->
+        <path d="M168 170 Q 176 214 200 236 Q 224 214 232 170 Q 216 186 200 184 Q 184 186 168 170 Z" fill="#2a1a12" stroke="#120a06" stroke-width="2"/>
+        <!-- le sopracciglia, aggrottate -->
+        <path d="M172 140 L 196 150" stroke="#1a0e08" stroke-width="7" stroke-linecap="round"/>
+        <path d="M228 140 L 204 150" stroke="#1a0e08" stroke-width="7" stroke-linecap="round"/>
+        <!-- gli occhi, che guardano di sbieco -->
+        <ellipse cx="185" cy="156" rx="9" ry="6" fill="#fff4d6"/>
+        <ellipse cx="215" cy="156" rx="9" ry="6" fill="#fff4d6"/>
+        <circle cx="189" cy="157" r="3.6" fill="#8a1c08"/>
+        <circle cx="219" cy="157" r="3.6" fill="#8a1c08"/>
+        <!-- il nasone -->
+        <path d="M200 152 Q 192 172 196 178 Q 200 182 206 178 Q 210 172 200 152 Z" fill="#b06e40" stroke="#4a2410" stroke-width="2"/>
+        <!-- la bocca, imbronciata -->
+        <path d="M187 192 Q 200 184 213 192" fill="none" stroke="#120a06" stroke-width="4" stroke-linecap="round"/>
+
+        <!-- La corona -->
+        <path d="M164 126 L 160 94 L 176 110 L 188 86 L 200 106 L 212 86 L 224 110 L 240 94 L 236 126 Z" fill="url(#oro)" stroke="#6b4a0c" stroke-width="3" stroke-linejoin="round"/>
+        <circle cx="200" cy="116" r="5" fill="#c2361b" stroke="#6b4a0c" stroke-width="1.5"/>
+        <circle cx="178" cy="119" r="3.5" fill="#c2361b"/>
+        <circle cx="222" cy="119" r="3.5" fill="#c2361b"/>
+
+        <!-- Le spire davanti al corpo (meta' inferiore): a ogni giro se ne
+             stringe una, e la coda si avvolge -->
+        <g fill="none" stroke-linecap="round">
+          <g stroke="var(--serpe-scura)" stroke-width="15">
+            <path d="M136 236 A 64 15 0 0 0 264 236"/>
+            <path d="M132 256 A 68 15 0 0 0 268 256"/>
+            <path d="M128 276 A 72 15 0 0 0 272 276"/>
+            <path d="M124 296 A 76 15 0 0 0 276 296"/>
+          </g>
+          <g stroke="var(--serpe)" stroke-width="9">
+            <path class="spira-anim" pathLength="100" d="M136 236 A 64 15 0 0 0 264 236"/>
+            <path class="spira-anim" pathLength="100" d="M132 256 A 68 15 0 0 0 268 256"/>
+            <path class="spira-anim" pathLength="100" d="M128 276 A 72 15 0 0 0 272 276"/>
+            <path class="spira-anim" pathLength="100" d="M124 296 A 76 15 0 0 0 276 296"/>
+          </g>
+        </g>
+      </svg>
+
+      <div id="anime"></div>
+      <div id="sentenza" class="sentenza" hidden></div>
+
+      <div id="fine" class="fine" hidden>
+        <!-- TESTO MODIFICABILE: il messaggio finale -->
+        <h2>L'Inferno è al completo.</h2>
+        <p>Minosse ha giudicato tutti. Per oggi non si salva nessuno.</p>
+        <div class="bottoni">
+          <button type="button" class="principale" id="ricomincia">Ricomincia con la stessa classe</button>
+          <button type="button" id="altra-classe">Carica un'altra classe</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="comandi">
+    <button type="button" class="principale" id="giudica" aria-keyshortcuts="Space">Giudica!</button>
+    <button type="button" id="salta" disabled>Salta</button>
+    <button type="button" class="discreto" id="annulla" disabled>Annulla ultima estrazione</button>
+  </div>
+
+  <section class="baratro" id="baratro" aria-labelledby="titolo-baratro">
+    <h2 id="titolo-baratro">Il baratro</h2>
+    <p class="vuoto" id="baratro-vuoto">Per ora è vuoto. Ancora per poco.</p>
+    <ol class="dannati" id="dannati"></ol>
+  </section>
+
+  <p class="solo-lettori" id="annuncio" aria-live="assertive"></p>
+</div>
+
+<noscript><p style="padding:16px">Per funzionare, questa pagina ha bisogno di JavaScript.</p></noscript>
+
+<script>
+/* ==================================================================
+   IL MOTORE DELL'ESTRAZIONE
+   Qui si decide chi viene estratto. Non c'e' niente di grafico: e'
+   separato apposta, cosi' il file prova-equita.html puo' metterlo alla
+   prova da solo, senza animazioni.
+   ================================================================== */
+(function () {
+  "use strict";
+
+  var DUE_ALLA_32 = 4294967296;
+
+  /* Un numero intero da 0 a n-1, tutti con la stessa probabilita'.
+     Si usa il generatore crittografico del browser. Il "rigetto" serve
+     a evitare un difetto sottile: 4.294.967.296 valori possibili non si
+     dividono quasi mai in parti uguali fra n studenti, e i primi
+     sarebbero favoriti di pochissimo. Si scartano i valori dell'ultimo
+     pezzo incompleto e si ritira. */
+  function numeroCasuale(n) {
+    if (!(n >= 1) || n !== Math.floor(n) || n > DUE_ALLA_32) {
+      throw new Error("numeroCasuale: n non valido");
+    }
+    if (n === 1) { return 0; }
+    var limite = Math.floor(DUE_ALLA_32 / n) * n;
+    var cella = new Uint32Array(1);
+    do {
+      crypto.getRandomValues(cella);
+    } while (cella[0] >= limite);
+    return cella[0] % n;
+  }
+
+  /* Il cerchio contiene solo chi e' ancora in attesa, in ordine di
+     numero. Il vincitore si sceglie qui, prima di qualsiasi animazione.
+     Passi = quanti sono in attesa + posizione del vincitore: un giro
+     completo e poi i passi fino a lui. */
+  function preparaSentenza(attesa) {
+    var rimasti = attesa.length;
+    if (rimasti < 1) { return null; }
+    var indice = numeroCasuale(rimasti);
+    return { indice: indice, anima: attesa[indice], passi: rimasti + indice + 1 };
+  }
+
+  /* Al passo p (da 1 in poi) si illumina questa anima del cerchio.
+     Il conteggio parte dalla prima anima rimasta. */
+  function indiceAlPasso(p, rimasti) {
+    return (p - 1) % rimasti;
+  }
+
+  function nuovaClasse(anime) {
+    return { anime: anime.slice(), attesa: anime.slice(), dannati: [] };
+  }
+
+  function condanna(stato, indice) {
+    var anima = stato.attesa.splice(indice, 1)[0];
+    stato.dannati.push(anima);
+    return anima;
+  }
+
+  /* L'ultimo dannato torna fra chi aspetta, al suo posto nel cerchio. */
+  function annulla(stato) {
+    var anima = stato.dannati.pop();
+    if (!anima) { return null; }
+    var i = 0;
+    while (i < stato.attesa.length && stato.attesa[i].numero < anima.numero) { i += 1; }
+    stato.attesa.splice(i, 0, anima);
+    return anima;
+  }
+
+  function ricomincia(stato) {
+    stato.attesa = stato.anime.slice();
+    stato.dannati = [];
+  }
+
+  /* La durata di ogni passo. Il totale sta fra 6 e 9 secondi qualunque
+     sia il numero di studenti. Il ritmo: lento e solenne all'inizio,
+     poi la coda accelera, e alla fine frena fino a fermarsi, come una
+     ruota della fortuna. Dipende solo da quanti passi sono: non tocca
+     in nessun modo il risultato. */
+  function durate(passi, rimasti, pocoMovimento) {
+    var totale = pocoMovimento ? 1600 : 6000 + 3000 * (passi - rimasti) / rimasti;
+    var pesi = [];
+    var somma = 0;
+    for (var i = 0; i < passi; i += 1) {
+      var u = (i + 0.5) / passi;
+      var peso = pocoMovimento
+        ? 1 + 2 * u * u * u
+        : 0.3 + 1.3 * Math.exp(-(u / 0.2) * (u / 0.2)) + 2.4 * Math.pow(u, 5);
+      pesi.push(peso);
+      somma += peso;
+    }
+    return pesi.map(function (p) { return totale * p / somma; });
+  }
+
+  window.MinosseMotore = {
+    numeroCasuale: numeroCasuale,
+    preparaSentenza: preparaSentenza,
+    indiceAlPasso: indiceAlPasso,
+    nuovaClasse: nuovaClasse,
+    condanna: condanna,
+    annulla: annulla,
+    ricomincia: ricomincia,
+    durate: durate
+  };
+}());
+
+/* ==================================================================
+   LA PAGINA: pannello della classe, scena, comandi
+   ================================================================== */
+(function () {
+  "use strict";
+
+  var M = window.MinosseMotore;
+  var $ = function (id) { return document.getElementById(id); };
+
+  var stato = null;          /* la classe caricata */
+  var inCorso = false;       /* true mentre Minosse giudica */
+  var saltaFase = false;     /* premuto "Salta" nella fase attuale */
+  var svegliaAttesa = null;  /* per interrompere un'attesa con "Salta" */
+  var caduta = null;         /* l'animazione della caduta in corso */
+  var rotazione = 0;         /* gradi del braccio della coda */
+  var giroSpira = 0;
+  var anteprimaAnime = [];
+
+  var pocoMovimento = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", function (e) {
+      pocoMovimento = e.matches;
+    });
+  }
+
+  function etichetta(anima) {
+    return anima.nome ? anima.numero + " · " + anima.nome : String(anima.numero);
+  }
+
+  /* ---------- Leggere l'elenco ---------- */
+
+  function pulisci(riga) {
+    return riga.normalize("NFC").replace(/[\s ]+/g, " ").trim();
+  }
+
+  /* Prima colonna di una riga CSV: separatori , ; o tabulazione, con
+     eventuali virgolette attorno. */
+  function primaColonna(riga) {
+    var r = riga.replace(/^\s+/, "");
+    if (r.charAt(0) === '"') {
+      var fuori = "";
+      for (var i = 1; i < r.length; i += 1) {
+        if (r.charAt(i) === '"') {
+          if (r.charAt(i + 1) === '"') { fuori += '"'; i += 1; } else { break; }
+        } else {
+          fuori += r.charAt(i);
+        }
+      }
+      return fuori;
+    }
+    return r.split(/[;,\t]/)[0];
+  }
+
+  function daTesto(testo, csv) {
+    return testo.replace(/^﻿/, "").split(/\r\n|\r|\n/)
+      .map(function (riga) { return pulisci(csv ? primaColonna(riga) : riga); })
+      .filter(function (riga) { return riga !== ""; })
+      .map(function (nome, i) { return { numero: i + 1, nome: nome }; });
+  }
+
+  function soloNumeri(quanti) {
+    var anime = [];
+    for (var i = 1; i <= quanti; i += 1) { anime.push({ numero: i, nome: "" }); }
+    return anime;
+  }
+
+  /* Il file si legge come UTF-8. Se non lo e' (capita con i file salvati
+     da Excel su Windows), si rilegge nella codifica di Windows, cosi' le
+     lettere accentate restano giuste. */
+  function leggiFile(file) {
+    return file.arrayBuffer().then(function (dati) {
+      try {
+        return new TextDecoder("utf-8", { fatal: true }).decode(dati);
+      } catch (e) {
+        return new TextDecoder("windows-1252").decode(dati);
+      }
+    });
+  }
+
+  var testoDelFile = "";
+  var fileCsv = false;
+
+  function modoScelto() {
+    return document.querySelector('input[name="modo"]:checked').value;
+  }
+
+  function aggiornaAnteprima() {
+    var modo = modoScelto();
+    $("modo-numero").hidden = modo !== "numero";
+    $("modo-file").hidden = modo !== "file";
+    $("modo-incolla").hidden = modo !== "incolla";
+
+    var errore = "";
+    var anime = [];
+    if (modo === "numero") {
+      var quanti = Number($("quanti").value);
+      if (!(quanti >= 2 && quanti <= 40 && quanti === Math.floor(quanti))) {
+        errore = "Scrivi un numero intero da 2 a 40.";
+      } else {
+        anime = soloNumeri(quanti);
+      }
+    } else if (modo === "file") {
+      if (!testoDelFile) { errore = "Scegli un file .txt o .csv."; }
+      else { anime = daTesto(testoDelFile, fileCsv); }
+    } else {
+      anime = daTesto($("testo-classe").value, false);
+    }
+    if (!errore && anime.length < 2) {
+      errore = "Servono almeno due anime: Minosse non giudica chi è solo.";
+    } else if (!errore && anime.length > 40) {
+      errore = "Sono " + anime.length + " righe: il massimo è 40. Controlla che l'elenco sia quello giusto.";
+    }
+
+    anteprimaAnime = errore ? [] : anime;
+    $("anteprima-conteggio").textContent = errore ? "" :
+      "Anteprima: " + anime.length + " anime in attesa di giudizio";
+    $("anteprima-errore").textContent = errore;
+    $("anteprima-errore").hidden = !errore;
+    var elenco = $("anteprima-elenco");
+    elenco.textContent = "";
+    anteprimaAnime.forEach(function (a) {
+      var li = document.createElement("li");
+      li.textContent = etichetta(a);
+      elenco.appendChild(li);
+    });
+    $("conferma").disabled = !!errore;
+  }
+
+  document.querySelectorAll('input[name="modo"]').forEach(function (r) {
+    r.addEventListener("change", aggiornaAnteprima);
+  });
+  $("quanti").addEventListener("input", aggiornaAnteprima);
+  $("testo-classe").addEventListener("input", aggiornaAnteprima);
+  $("file-classe").addEventListener("change", function () {
+    var file = this.files && this.files[0];
+    testoDelFile = "";
+    if (!file) { aggiornaAnteprima(); return; }
+    fileCsv = /\.csv$/i.test(file.name) || file.type === "text/csv";
+    leggiFile(file).then(function (testo) {
+      testoDelFile = testo;
+      aggiornaAnteprima();
+    }, function () {
+      testoDelFile = "";
+      aggiornaAnteprima();
+      $("anteprima-errore").textContent = "Non riesco a leggere questo file.";
+      $("anteprima-errore").hidden = false;
+    });
+  });
+
+  $("conferma").addEventListener("click", function () {
+    if (!anteprimaAnime.length) { return; }
+    stato = M.nuovaClasse(anteprimaAnime);
+    $("impostazione").hidden = true;
+    $("giudizio").hidden = false;
+    $("dannati").textContent = "";
+    $("fine").hidden = true;
+    disegnaCerchio();
+    aggiornaComandi();
+    $("giudica").focus();
+  });
+
+  function tornaAllaClasse() {
+    if (inCorso) { return; }
+    stato = null;
+    $("giudizio").hidden = true;
+    $("impostazione").hidden = false;
+    aggiornaAnteprima();
+    $("conferma").focus();
+  }
+  $("cambia-classe").addEventListener("click", tornaAllaClasse);
+  $("altra-classe").addEventListener("click", tornaAllaClasse);
+
+  $("ricomincia").addEventListener("click", function () {
+    M.ricomincia(stato);
+    $("dannati").textContent = "";
+    $("fine").hidden = true;
+    disegnaCerchio();
+    aggiornaComandi();
+    $("giudica").focus();
+  });
+
+  /* ---------- La scena ---------- */
+
+  function misure() {
+    var lato = $("palco").clientWidth || 600;
+    var rimasti = stato ? Math.max(stato.attesa.length, 1) : 25;
+    var fs = lato * Math.min(0.05, 1.1 / (rimasti + 6));
+    var arco = 2 * Math.PI * 0.42 * lato / rimasti;
+    $("palco").style.setProperty("--fs", fs.toFixed(1) + "px");
+    $("palco").style.setProperty("--maxw", Math.min(arco * 0.94, lato * 0.24).toFixed(1) + "px");
+  }
+
+  function disegnaCerchio() {
+    var contenitore = $("anime");
+    contenitore.textContent = "";
+    var rimasti = stato.attesa.length;
+    stato.attesa.forEach(function (anima, i) {
+      var angolo = -Math.PI / 2 + 2 * Math.PI * i / rimasti;
+      var div = document.createElement("div");
+      div.className = "anima";
+      div.style.left = (50 + 42 * Math.cos(angolo)).toFixed(3) + "%";
+      div.style.top = (50 + 42 * Math.sin(angolo)).toFixed(3) + "%";
+      var n = document.createElement("span");
+      n.className = "n";
+      n.textContent = anima.numero;
+      div.appendChild(n);
+      if (anima.nome) {
+        var nome = document.createElement("span");
+        nome.className = "nome";
+        nome.textContent = anima.nome;
+        div.appendChild(nome);
+        div.title = etichetta(anima);
+      }
+      contenitore.appendChild(div);
+    });
+    misure();
+  }
+
+  if (window.ResizeObserver) {
+    new ResizeObserver(function () { if (stato) { misure(); } }).observe($("palco"));
+  }
+
+  function aggiornaComandi() {
+    var rimasti = stato ? stato.attesa.length : 0;
+    var dannati = stato ? stato.dannati.length : 0;
+    $("n-attesa").textContent = rimasti;
+    $("n-dannati").textContent = dannati;
+    $("giudica").disabled = inCorso || rimasti === 0;
+    $("salta").disabled = !inCorso;
+    $("annulla").disabled = inCorso || dannati === 0;
+    $("cambia-classe").disabled = inCorso;
+    $("baratro-vuoto").hidden = dannati > 0;
+  }
+
+  /* Un'attesa che il pulsante "Salta" puo' accorciare */
+  function aspetta(ms) {
+    if (saltaFase) { return Promise.resolve(); }
+    return new Promise(function (fatto) {
+      var t = setTimeout(function () { svegliaAttesa = null; fatto(); }, ms);
+      svegliaAttesa = function () { clearTimeout(t); svegliaAttesa = null; fatto(); };
+    });
+  }
+
+  function giraCoda(indice, rimasti, durata) {
+    var braccio = $("braccio-coda");
+    var bersaglio = 360 * indice / rimasti;
+    var attuale = ((rotazione % 360) + 360) % 360;
+    rotazione += ((bersaglio - attuale) % 360 + 360) % 360;
+    braccio.style.transition = (pocoMovimento || durata <= 0) ? "none" :
+      "transform " + Math.round(durata * 0.85) + "ms cubic-bezier(.45,0,.3,1)";
+    braccio.style.transform = "rotate(" + rotazione.toFixed(2) + "deg)";
+  }
+
+  function stringiSpira(durata) {
+    if (pocoMovimento) { return; }
+    var spire = document.querySelectorAll(".spira-anim");
+    var spira = spire[giroSpira % spire.length];
+    giroSpira += 1;
+    spira.classList.remove("stringe");
+    void spira.getBoundingClientRect();
+    spira.style.animationDuration = Math.max(60, Math.round(durata * 0.9)) + "ms";
+    spira.classList.add("stringe");
+  }
+
+  function accendi(indice) {
+    var anime = $("anime").children;
+    for (var i = 0; i < anime.length; i += 1) {
+      anime[i].classList.toggle("accesa", i === indice);
+    }
+  }
+
+  function giudica() {
+    if (inCorso || !stato || stato.attesa.length === 0) { return; }
+
+    /* IL RISULTATO SI DECIDE QUI, prima dell'animazione. */
+    var sentenza = M.preparaSentenza(stato.attesa);
+
+    inCorso = true;
+    saltaFase = false;
+    $("fine").hidden = true;
+    aggiornaComandi();
+    $("salta").focus();
+
+    var rimasti = stato.attesa.length;
+    var tempi = M.durate(sentenza.passi, rimasti, pocoMovimento);
+    var p = 0;
+
+    function prossimoPasso() {
+      if (saltaFase || p >= sentenza.passi) { return Promise.resolve(); }
+      p += 1;
+      var i = M.indiceAlPasso(p, rimasti);
+      var d = tempi[p - 1];
+      accendi(i);
+      giraCoda(i, rimasti, d);
+      stringiSpira(d);
+      return aspetta(d).then(prossimoPasso);
+    }
+
+    prossimoPasso()
+      .then(function () {
+        /* Se si e' saltato, si va dritti al vincitore */
+        accendi(sentenza.indice);
+        giraCoda(sentenza.indice, rimasti, 0);
+        saltaFase = false;
+        return mostraSentenza(sentenza.anima);
+      })
+      .then(function () {
+        saltaFase = false;
+        return cadeNelBaratro(sentenza);
+      })
+      .then(function () {
+        inCorso = false;
+        disegnaCerchio();
+        aggiornaComandi();
+        if (stato.attesa.length === 0) {
+          $("fine").hidden = false;
+          $("ricomincia").focus();
+        } else {
+          $("giudica").focus();
+        }
+      });
+  }
+
+  function riempiCartellino(el, anima) {
+    el.textContent = "";
+    var n = document.createElement("span");
+    n.className = "n";
+    n.textContent = anima.numero;
+    el.appendChild(n);
+    if (anima.nome) {
+      var nome = document.createElement("span");
+      nome.className = "nome";
+      nome.textContent = anima.nome;
+      el.appendChild(nome);
+    }
+  }
+
+  function mostraSentenza(anima) {
+    var el = $("sentenza");
+    riempiCartellino(el, anima);
+    el.hidden = false;
+    el.classList.remove("cresce");
+    void el.offsetWidth;
+    el.classList.add("cresce");
+    $("annuncio").textContent = "Estratto: " + etichetta(anima);
+    return aspetta(2000);
+  }
+
+  function cadeNelBaratro(sentenza) {
+    var el = $("sentenza");
+    var elenco = $("dannati");
+
+    function atterra() {
+      caduta = null;
+      el.hidden = true;
+      el.classList.remove("cresce");
+      M.condanna(stato, sentenza.indice);
+      var li = document.createElement("li");
+      li.textContent = etichetta(sentenza.anima);
+      li.className = "atterra";
+      elenco.appendChild(li);
+    }
+
+    if (pocoMovimento || !el.animate) {
+      atterra();
+      return Promise.resolve();
+    }
+
+    var da = el.getBoundingClientRect();
+    var baratro = $("baratro").getBoundingClientRect();
+    var giu = (baratro.top + 30) - (da.top + da.height / 2);
+    caduta = el.animate([
+      { transform: "translate(-50%, -50%) scale(1) rotate(0deg)", opacity: 1 },
+      { transform: "translate(-50%, calc(-50% + " + (giu * 0.35).toFixed(0) + "px)) scale(.7) rotate(-8deg)", opacity: 1, offset: 0.45 },
+      { transform: "translate(-50%, calc(-50% + " + giu.toFixed(0) + "px)) scale(.18) rotate(28deg)", opacity: 0.15 }
+    ], { duration: 1150, easing: "cubic-bezier(.55,0,.9,.5)", fill: "forwards" });
+
+    return new Promise(function (fatto) {
+      caduta.onfinish = function () {
+        caduta.cancel();
+        atterra();
+        fatto();
+      };
+    });
+  }
+
+  $("giudica").addEventListener("click", giudica);
+
+  $("salta").addEventListener("click", function () {
+    if (!inCorso) { return; }
+    saltaFase = true;
+    if (svegliaAttesa) { svegliaAttesa(); }
+    if (caduta) { caduta.finish(); }
+  });
+
+  $("annulla").addEventListener("click", function () {
+    if (inCorso || !stato) { return; }
+    var anima = M.annulla(stato);
+    if (!anima) { return; }
+    var elenco = $("dannati");
+    if (elenco.lastElementChild) { elenco.removeChild(elenco.lastElementChild); }
+    $("fine").hidden = true;
+    $("annuncio").textContent = "Torna in attesa: " + etichetta(anima);
+    disegnaCerchio();
+    aggiornaComandi();
+  });
+
+  /* La barra spaziatrice fa "Giudica!", tranne quando si sta scrivendo
+     o quando il fuoco e' su un altro pulsante (che si preme da se'). */
+  document.addEventListener("keydown", function (e) {
+    if (e.code !== "Space" && e.key !== " ") { return; }
+    if ($("giudizio").hidden) { return; }
+    var t = e.target;
+    if (t && /^(BUTTON|INPUT|TEXTAREA|SELECT|A)$/.test(t.tagName)) { return; }
+    e.preventDefault();
+    giudica();
+  });
+
+  /* Schermo intero */
+  var bottoneSchermo = $("schermo-intero");
+  if (!document.fullscreenEnabled) {
+    bottoneSchermo.hidden = true;
+  }
+  bottoneSchermo.addEventListener("click", function () {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      document.documentElement.requestFullscreen().catch(function () {});
+    }
+  });
+  document.addEventListener("fullscreenchange", function () {
+    bottoneSchermo.textContent = document.fullscreenElement ? "Esci dallo schermo intero" : "Schermo intero";
+  });
+
+  aggiornaAnteprima();
+}());
+</script>
+</body>
+</html>

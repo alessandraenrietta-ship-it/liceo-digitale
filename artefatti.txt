@@ -72,11 +72,7 @@ Costruisci il tuo tema argomentativo | Lingua e letteratura italiana | docenti |
 Annotazioni sul registro | | docenti | docenti-annotazioni | Compone annotazioni disciplinari e di merito nel rispetto del regolamento d'istituto. Il nome dello studente resta sul computer di chi la usa. Richiede una chiave personale di accesso al servizio.
 Orario e aule | | docenti | docenti-orario-aule | Cerca una classe o un insegnante e mostra l'orario della settimana con l'aula di ogni ora. L'orario pubblicato e' di esempio: chi usa la pagina puo' caricare il proprio, che resta sul suo computer.
 
-# Terzo strumento generale: previsto ma non ancora deciso. Finche' il
-# titolo resta DA COMPILARE, sul sito compare come riquadro
-# tratteggiato "in costruzione". Quando si sa cos'e', si scrivono al
-# posto dei DA COMPILARE il titolo, la cartella e la descrizione.
-DA COMPILARE | | docenti | DA COMPILARE | DA COMPILARE
+Il giudizio di Minosse | | docenti | docenti-giudizio-di-minosse | Estrae chi viene interrogato, da proiettare sulla LIM: Minosse avvolge la coda e manda un'anima nel baratro. Estrazione equa, senza ripetizioni fino a fine giro. I nomi non vengono salvati.
 
 # Il campo disciplina resta vuoto per gli strumenti che non
 # appartengono a una disciplina.
