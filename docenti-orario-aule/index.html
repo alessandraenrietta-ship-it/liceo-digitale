@@ -8,7 +8,7 @@
 
   <style>
     /* -------------------------------------------------------------
-       Qui c'e' solo la DISPOSIZIONE delle cose sulla pagina.
+       Qui c'è solo la DISPOSIZIONE delle cose sulla pagina.
        I colori arrivano tutti da stile.css: si usano i loro nomi
        (var(--verde) e simili), mai i codici scritti a mano.
        ------------------------------------------------------------- */
@@ -18,7 +18,7 @@
       margin: 0 auto 0.6rem;
     }
 
-    /* Il riquadro dell'orario e' piu' largo degli altri:
+    /* Il riquadro dell'orario è più largo degli altri:
        cinque giorni per otto ore non stanno in 60rem. */
     .riquadro-largo { max-width: 78rem; }
 
@@ -121,7 +121,7 @@
     /* Con le colonne a larghezza fissa il posto lo decide la
        prima riga: la casella "Ora" in cima deve dichiarare la
        sua larghezza, altrimenti si prende un quinto del tavolo
-       come i giorni. Qui si dice solo quanto e' larga: il colore
+       come i giorni. Qui si dice solo quanto è larga: il colore
        resta quello delle altre caselle dell'intestazione. */
     table.orario thead th:first-child { width: 6.5rem; }
 
@@ -192,7 +192,7 @@
 
     /* Il riquadro dentro ogni casella della tabella. Serve a due
        cose: dare a tutte le caselle la stessa altezza minima,
-       cosi' un'ora buca non si schiaccia, e tenere l'avviso
+       così un'ora buca non si schiaccia, e tenere l'avviso
        giallo appoggiato in fondo invece che subito sotto la
        lezione. */
     table.orario tbody td { height: 1px; }
@@ -201,23 +201,23 @@
       display: flex;
       flex-direction: column;
       height: 100%;
-      /* Quanto e' alta una casella con dentro una lezione
+      /* Quanto è alta una casella con dentro una lezione
          normale: materia, classe e aula su tre righe. Le caselle
-         vuote e le ore buche si tengono almeno cosi', per non
+         vuote e le ore buche si tengono almeno così, per non
          schiacciare la riga. */
       min-height: 4.9rem;
     }
 
     /* Gli avvisi stanno in fondo alla casella: il margine
        automatico in cima si mangia tutto lo spazio che avanza e
-       li spinge giu'. Il padding garantisce un filo di stacco
+       li spinge giù. Il padding garantisce un filo di stacco
        anche quando spazio non ne avanza. */
     .avvisi {
       margin-top: auto;
       padding-top: 0.4em;
     }
 
-    /* L'avviso della sorveglianza: giallo, perche' e' una cosa
+    /* L'avviso della sorveglianza: giallo, perché è una cosa
        da fare, non un'informazione sulla lezione. */
     .sorveglianza {
       display: block;
@@ -360,15 +360,15 @@
 
     <!-- TESTO MODIFICABILE: puoi cambiare le frasi qui sotto.
          Le parti che hanno un id vengono nascoste dalla pagina
-         quando l'orario proprio e' gia' caricato: a quel punto
-         le spiegazioni su come caricarlo non servono piu'. -->
+         quando l'orario proprio è già caricato: a quel punto
+         le spiegazioni su come caricarlo non servono più. -->
     <details class="mio-file" id="riquadro-file">
       <summary id="riassunto-file">Carica il tuo orario</summary>
 
       <div id="spiega-file">
         <p>
           L'orario pubblicato nel sito e' un <strong>esempio inventato</strong>:
-          questo sito e' pubblico, e i nomi veri degli insegnanti non possono
+          questo sito è pubblico, e i nomi veri degli insegnanti non possono
           starci dentro.
         </p>
         <p>
@@ -401,8 +401,8 @@
       </p>
     </details>
 
-    <!-- La riga che dice com'e' andata. Sta fuori dal riquadro
-         qui sopra, cosi' si legge anche quando il riquadro e'
+    <!-- La riga che dice com'è andata. Sta fuori dal riquadro
+         qui sopra, così si legge anche quando il riquadro è
          chiuso. -->
     <p class="nota-piccola" id="stato-file"></p>
 
@@ -572,7 +572,7 @@
             return;
           }
           /* Un testo lasciato in bianco va benissimo: vuol dire
-             che per quell'aula non c'e' niente da dire. */
+             che per quell'aula non c'è niente da dire. */
           risultato.sorveglianze[campi[0]] = campi[1] || "";
 
         } else if (etichetta === "AVVISO ORA") {
@@ -614,12 +614,12 @@
       letto.lezioni = letto.lezioni.filter(function (l) {
         if (letto.giorniChiave.indexOf(senzaAccenti(l.giorno)) < 0) {
           letto.scartate.push({ n: l.riga,
-            motivo: "il giorno \"" + l.giorno + "\" non e' fra i giorni indicati in cima al file" });
+            motivo: "il giorno \"" + l.giorno + "\" non è fra i giorni indicati in cima al file" });
           return false;
         }
         if (numeriOra.length > 0 && numeriOra.indexOf(l.ora) < 0) {
           letto.scartate.push({ n: l.riga,
-            motivo: "l'ora \"" + l.ora + "\" non e' fra le ore indicate in cima al file" });
+            motivo: "l'ora \"" + l.ora + "\" non è fra le ore indicate in cima al file" });
           return false;
         }
         return true;
@@ -738,8 +738,8 @@
 
     /* Che cosa deve sapere l'insegnante di questa lezione oltre
        alla lezione stessa: la sorveglianza dell'intervallo, se
-       l'ora e' una di quelle indicate nel file e per quell'aula
-       c'e' una regola, e gli avvisi validi per tutti a una certa
+       l'ora è una di quelle indicate nel file e per quell'aula
+       c'è una regola, e gli avvisi validi per tutti a una certa
        ora. */
     function avvisiDi(lezione) {
       var testi = [];
@@ -966,7 +966,7 @@
         var vuoto = document.createElement("div");
         vuoto.className = "avviso";
         var pv = document.createElement("p");
-        pv.textContent = "Non c'e' nessuna lezione per " + seleziona.nome + ".";
+        pv.textContent = "Non c'è nessuna lezione per " + seleziona.nome + ".";
         vuoto.appendChild(pv);
         zonaOrario.appendChild(vuoto);
         return;
@@ -1017,8 +1017,8 @@
         var tr = document.createElement("tr");
 
         if (riga.tipo === "pausa") {
-          /* Un intervallo si mostra solo se c'e' lezione sia
-             prima sia dopo: altrimenti e' un intervallo fra il
+          /* Un intervallo si mostra solo se c'è lezione sia
+             prima sia dopo: altrimenti è un intervallo fra il
              nulla e il nulla. */
           var prima = dati.righe.slice(0, posizione).some(function (r) {
             return r.tipo === "ora" && oraPiena(r.dato);
@@ -1065,7 +1065,7 @@
             var vuota = document.createElement("td");
             vuota.setAttribute("data-giorno", giorno);
             /* Anche le caselle senza lezione hanno il riquadro
-               interno: cosi' sono alte come le altre e la riga
+               interno: così sono alte come le altre e la riga
                dell'ora buca non si schiaccia. */
             var dentroVuota = document.createElement("div");
             dentroVuota.className = "dentro";
@@ -1083,7 +1083,7 @@
             return;
           }
 
-          /* Normalmente ce n'e' una sola. Se il file ne contiene
+          /* Normalmente ce n'è una sola. Se il file ne contiene
              due nella stessa ora, si mostrano tutte e due invece
              di nasconderne una. */
           var td = cella(trovate[0], seleziona.tipo);
@@ -1118,7 +1118,7 @@
 
       var p = document.createElement("p");
       p.textContent = dati.scartate.length === 1
-        ? "Una riga del file dell'orario non e' stata capita ed e' stata saltata:"
+        ? "Una riga del file dell'orario non è stata capita ed è stata saltata:"
         : dati.scartate.length + " righe del file dell'orario non sono state capite e sono state saltate:";
       box.appendChild(p);
 
@@ -1169,7 +1169,7 @@
 
       /* Una riga sempre visibile che dice quale orario si sta
          guardando: senza, riaprendo la pagina non si capisce se
-         e' quello di esempio o il proprio. */
+         è quello di esempio o il proprio. */
       quale.textContent = daFile
         ? "Orario in uso: il tuo, " + dati.classi.length + " classi e "
           + dati.insegnanti.length + " insegnanti."
@@ -1184,8 +1184,8 @@
       }
     }
 
-    /* La riga sotto il riquadro si fa vedere solo quando c'e'
-       davvero qualcosa da dire: se non c'e' niente, sparisce
+    /* La riga sotto il riquadro si fa vedere solo quando c'è
+       davvero qualcosa da dire: se non c'è niente, sparisce
        invece di lasciare un riquadro vuoto. */
     function mostraStato(testo, forte) {
       statoFile.textContent = testo || "";
@@ -1194,9 +1194,9 @@
     }
 
     /* Il riquadro "Carica il tuo orario" cambia a seconda di
-       cosa si sta guardando. Finche' c'e' l'esempio del sito
-       spiega tutto; quando l'orario proprio e' gia' caricato
-       quelle spiegazioni non servono piu' e restano soltanto il
+       cosa si sta guardando. Finché c'è l'esempio del sito
+       spiega tutto; quando l'orario proprio è già caricato
+       quelle spiegazioni non servono più e restano soltanto il
        modo per cambiare file e la spunta per ricordarlo. */
     function aggiornaRiquadroFile() {
       spiegaFile.hidden = daFile;
@@ -1205,7 +1205,7 @@
         ? "Orario caricato: premi qui se devi cambiare file"
         : "Carica il tuo orario";
       etichettaF.textContent = daFile
-        ? "Se l'orario e' cambiato, scegli qui il file nuovo"
+        ? "Se l'orario è cambiato, scegli qui il file nuovo"
         : "Scegli il file dell'orario (un file di testo .txt)";
     }
 
@@ -1233,7 +1233,7 @@
     }
 
     function caricaEsempio() {
-      /* L'orario si aggiunge in fondo all'indirizzo cosi' il
+      /* L'orario si aggiunge in fondo all'indirizzo così il
          browser rilegge davvero il file invece di mostrare
          quello vecchio tenuto in memoria. */
       return fetch("orario.txt?aggiornato=" + Date.now(), { cache: "no-store" })
@@ -1246,8 +1246,8 @@
         })
         .catch(function (errore) {
           erroreGrave(
-            "L'orario di esempio non e' stato caricato.",
-            "Se hai aperto la pagina con un doppio clic e' normale: il browser non lascia leggere i file della cartella. Usa l'anteprima locale oppure la pagina pubblicata. Dettaglio tecnico: " + errore.message
+            "L'orario di esempio non è stato caricato.",
+            "Se hai aperto la pagina con un doppio clic è normale: il browser non lascia leggere i file della cartella. Usa l'anteprima locale oppure la pagina pubblicata. Dettaglio tecnico: " + errore.message
           );
         });
     }
@@ -1279,30 +1279,30 @@
         var testo = String(lettore.result);
         usa(testo, "", true);
 
-        /* Che sia andata bene lo dicono gia' la riga in cima
+        /* Che sia andata bene lo dicono già la riga in cima
            ("Orario in uso: il tuo...") e il titolo del riquadro:
            qui si parla solo se qualcosa non ha funzionato. */
         if (casellaRic.checked && !salva(testo)) {
-          mostraStato("L'orario e' caricato, ma non e' stato possibile "
+          mostraStato("L'orario è caricato, ma non è stato possibile "
             + "salvarlo su questo computer: la prossima volta va ricaricato.", true);
         }
 
         /* Il riquadro ha finito il suo lavoro: si richiude. */
         riquadroFile.open = false;
 
-        /* Il campo di ricerca e' in cima e la tabella pure: senza
+        /* Il campo di ricerca è in cima e la tabella pure: senza
            questo salto sembra che non sia successo niente. */
         campoCerca.scrollIntoView({ block: "center" });
         campoCerca.focus();
       };
       lettore.onerror = function () {
-        erroreGrave("Il file non e' stato letto.", "Controlla che sia un file di testo.");
+        erroreGrave("Il file non è stato letto.", "Controlla che sia un file di testo.");
       };
       lettore.readAsText(file, "utf-8");
     });
 
-    /* La spunta si puo' mettere anche dopo aver scelto il file:
-       in quel caso si salva quello che si sta gia' guardando. */
+    /* La spunta si può mettere anche dopo aver scelto il file:
+       in quel caso si salva quello che si sta già guardando. */
     casellaRic.addEventListener("change", function () {
       if (casellaRic.checked) {
         if (!daFile || !testoAttuale) {
@@ -1311,8 +1311,8 @@
           return;
         }
         mostraStato(salva(testoAttuale)
-          ? "Il tuo orario e' salvato su questo computer: la prossima volta lo ritrovi gia' caricato."
-          : "Non e' stato possibile salvarlo su questo computer.", true);
+          ? "Il tuo orario è salvato su questo computer: la prossima volta lo ritrovi già caricato."
+          : "Non è stato possibile salvarlo su questo computer.", true);
       } else {
         /* Togliendo la spunta l'orario sparisce da questo
            computer e si torna a quello di esempio. */
@@ -1322,7 +1322,7 @@
       }
     });
 
-    /* All'apertura: se c'e' un orario salvato su questo computer
+    /* All'apertura: se c'è un orario salvato su questo computer
        si usa quello, altrimenti quello di esempio del sito. */
     var salvato = leggiSalvato();
     if (salvato) {

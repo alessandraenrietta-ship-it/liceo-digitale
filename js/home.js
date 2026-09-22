@@ -14,10 +14,10 @@
 
      Cambiale scrivendo quello che vuoi fra le virgolette, qui sotto.
 
-     ATTENZIONE, e' importante che sia chiaro: queste parole NON
-     proteggono niente. Il sito e' pubblico e questo file e' leggibile
-     da chiunque, quindi chiunque puo' trovarle in pochi secondi.
-     Servono soltanto a tenere separati i due pubblici, perche' uno
+     ATTENZIONE, è importante che sia chiaro: queste parole NON
+     proteggono niente. Il sito è pubblico e questo file è leggibile
+     da chiunque, quindi chiunque può trovarle in pochi secondi.
+     Servono soltanto a tenere separati i due pubblici, perché uno
      studente non finisca per sbaglio fra gli strumenti dei docenti.
 
      Non mettere mai dietro queste parole qualcosa di riservato.
@@ -32,7 +32,7 @@
      ------------------------------------------------------------------ */
 
   /* Un campo vale "DA COMPILARE" quando chi costruisce l'artefatto non
-     lo ha ancora riempito. Confrontiamo senza spazi ne' trattini, cosi'
+     lo ha ancora riempito. Confrontiamo senza spazi né trattini, così
      valgono sia "DA COMPILARE" sia "italiano-DACOMPILARE". */
   function daCompilare(valore) {
     var pulito = (valore || "").toUpperCase().replace(/[^A-Z]/g, "");
@@ -43,7 +43,7 @@
     return riga.charAt(0) === "#" ? riga.slice(1).trim() : null;
   }
 
-  /* Un nome di disciplina e' una riga breve, con delle lettere e senza
+  /* Un nome di disciplina è una riga breve, con delle lettere e senza
      punteggiatura da frase: serve a distinguerlo dalle spiegazioni,
      che nel registro sono scritte anche loro come commenti. */
   function sembraNomeDisciplina(testo) {
@@ -61,7 +61,7 @@
 
   /* L'elenco delle discipline sta dentro i commenti in fondo al
      registro. Se ci sono le righe di marcatura usiamo quelle, che sono
-     esatte; altrimenti cerchiamo la sequenza di nomi piu' lunga dopo il
+     esatte; altrimenti cerchiamo la sequenza di nomi più lunga dopo il
      titolo "ELENCO DELLE DISCIPLINE". */
   function leggiDiscipline(testo) {
     var righe = testo.split(/\r?\n/).map(function (riga) {
@@ -190,8 +190,8 @@
     }
 
     /* Negli Strumenti generali una riga ancora tutta da compilare, senza
-       nemmeno il titolo, e' un posto riservato per uno strumento che
-       arrivera': si mostra come un riquadro tratteggiato "in
+       nemmeno il titolo, è un posto riservato per uno strumento che
+       arriverà: si mostra come un riquadro tratteggiato "in
        costruzione", con lo stesso aspetto delle discipline vuote. */
     if (inRilievo && !artefatto.pronto && daCompilare(artefatto.titolo)) {
       voce.className = "in-costruzione";
@@ -274,12 +274,12 @@
     }).length;
 
     /* Una disciplina con almeno un artefatto pronto da aprire ha la
-       striscia laterale, cosi' si distingue al volo da quelle dove c'e'
+       striscia laterale, così si distingue al volo da quelle dove c'è
        solo qualcosa in preparazione. La scritta "disponibile" resta
        comunque: il colore da solo non basta a chi non lo distingue. */
     /* Gli Strumenti generali restano esclusi: sono un riquadro largo e
        col titolo centrato, e la fascia su un lato lo farebbe sembrare
-       storto. Si riconoscono gia' perche' stanno in cima. */
+       storto. Si riconoscono già perché stanno in cima. */
     if (pronti > 0 && !inRilievo) {
       scheda.className += " con-artefatto";
     }
@@ -287,13 +287,13 @@
     var stato = document.createElement("span");
     stato.className = "disciplina-stato";
     if (pronti === 0) {
-      /* Niente di pronto: basta dire che c'e' qualcosa in arrivo, senza
+      /* Niente di pronto: basta dire che c'è qualcosa in arrivo, senza
          contare quanti. */
       stato.textContent = "in preparazione";
     } else {
-      /* Quando c'e' qualcosa di pronto si scrive il suo nome, non
-         "1 artefatto disponibile": si capisce subito che cosa c'e'
-         dentro senza dover aprire. Se sono piu' d'uno, compaiono tutti. */
+      /* Quando c'è qualcosa di pronto si scrive il suo nome, non
+         "1 artefatto disponibile": si capisce subito che cosa c'è
+         dentro senza dover aprire. Se sono più d'uno, compaiono tutti. */
       stato.textContent = artefatti
         .filter(function (artefatto) { return artefatto.pronto; })
         .map(function (artefatto) { return artefatto.titolo; })
@@ -401,10 +401,10 @@
      ------------------------------------------------------------------ */
 
   /* Una sezione aperta resta aperta su questo computer: la parola
-     d'ordine si scrive una volta sola e non la si richiede piu', nemmeno
+     d'ordine si scrive una volta sola e non la si richiede più, nemmeno
      dopo aver chiuso il browser.
 
-     Si puo' fare perche' queste parole non proteggono niente: sono
+     Si può fare perché queste parole non proteggono niente: sono
      scritte in chiaro nel codice del sito, servono solo a tenere
      separate le due sezioni. Chi vuole richiuderle usa il collegamento
      "esci" in fondo alla pagina. */
@@ -430,7 +430,7 @@
       if (window.localStorage.getItem(prefisso + "-aperta") === "si") {
         return true;
       }
-      /* Chi aveva gia' aperto la sezione prima di questa modifica non
+      /* Chi aveva già aperto la sezione prima di questa modifica non
          deve riscrivere la parola: si sposta il ricordo. */
       if (window.sessionStorage.getItem(prefisso + "-aperta") === "si") {
         ricorda(prefisso);

@@ -42,9 +42,9 @@
   --massimo: 60rem;   /* larghezza massima del testo */
 }
 
-/* ATTENZIONE alla leggibilita'.
+/* ATTENZIONE alla leggibilità.
    Il verde chiaro e il giallo NON vanno mai usati per il testo su
-   fondo crema o bianco: il contrasto e' troppo basso e il testo
+   fondo crema o bianco: il contrasto è troppo basso e il testo
    diventa illeggibile. Su fondo blu notte invece funzionano bene. */
 
 
@@ -109,7 +109,7 @@ h3 { font-size: 1.2rem; }
 /* Regola dei titoli, uguale in tutto il sito:
    il titolo della pagina e il titolo di ogni riquadro stanno al
    CENTRO; il testo, le caselle e i pulsanti restano a SINISTRA,
-   perche' si leggono meglio. */
+   perché si leggono meglio. */
 .riquadro > h2,
 .riquadro > h3 {
   text-align: center;
@@ -178,7 +178,7 @@ label {
 
 
 /* -----------------------------------------------------------------
-   ACCESSIBILITA'
+   ACCESSIBILITÀ
    Il contorno di messa a fuoco serve a chi naviga con la tastiera:
    non va tolto.
    ----------------------------------------------------------------- */
@@ -210,8 +210,8 @@ label {
    chiedono una chiave. Va dentro un .riquadro.
    ----------------------------------------------------------------- */
 
-/* La frase in piu' che un singolo artefatto puo' aggiungere al
-   riquadro: si stacca dal resto perche' riguarda solo lui. */
+/* La frase in più che un singolo artefatto può aggiungere al
+   riquadro: si stacca dal resto perché riguarda solo lui. */
 .chiave-in-piu {
   padding: 0.7em 0.9em;
   background: #FFFFFF;

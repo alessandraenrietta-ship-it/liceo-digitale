@@ -4,14 +4,14 @@
    Serve agli artefatti che chiedono aiuto a un servizio esterno, come
    Gemini di Google, e che per farlo hanno bisogno di una chiave.
 
-   PERCHE' ESISTE QUESTO FILE
-   Il sito e' pubblico: una chiave scritta dentro una pagina sarebbe
+   PERCHÉ ESISTE QUESTO FILE
+   Il sito è pubblico: una chiave scritta dentro una pagina sarebbe
    leggibile da chiunque in pochi secondi. Quindi nessuna chiave sta
    nel codice. Ognuno incolla la propria, che resta soltanto nel suo
    browser e non passa da nessun'altra parte.
 
    Prima ogni artefatto si costruiva il suo riquadro per conto proprio.
-   Ora ce n'e' uno solo: se un giorno cambia il testo o il modo di
+   Ora ce n'è uno solo: se un giorno cambia il testo o il modo di
    salvare, si corregge qui e cambia dappertutto.
 
    COME SI USA IN UNA PAGINA NUOVA
@@ -28,7 +28,7 @@
        ChiavePersonale.prepara({
          dove: 'riquadro-chiave',
          aCosaServe: 'costruisce lo schema',
-         inPiu: 'una frase in piu, solo per questo artefatto'   <- si puo omettere
+         inPiu: 'una frase in più, solo per questo artefatto'   <- si può omettere
        });
 
    e al momento di chiamare il servizio:
@@ -37,10 +37,10 @@
        if (!chiave) { ...avvisa e fermati... }
 
    ATTENZIONE: tutti gli strumenti che usano Gemini devono usare lo
-   STESSO nome, 'liceo-digitale-chiave-google'. E' quello che permette di
+   STESSO nome, 'liceo-digitale-chiave-google'. È quello che permette di
    incollare la chiave una volta sola e ritrovarla in ogni strumento. Se
    un artefatto nuovo ne usasse uno suo, chi lo apre dovrebbe incollarla
-   di nuovo. Il campo "nome" in prepara() si puo' omettere: vale gia'
+   di nuovo. Il campo "nome" in prepara() si può omettere: vale già
    quello condiviso.
    ================================================================== */
 
@@ -52,8 +52,8 @@ window.ChiavePersonale = (function () {
      con un nome suo, e bisognava reinserirla in ogni strumento. */
   var NOME_CONDIVISO = "liceo-digitale-chiave-google";
 
-  /* I nomi usati prima. Se qualcuno ha gia' la chiave salvata sotto uno
-     di questi, la si sposta sul nome nuovo: cosi' non deve reinserirla. */
+  /* I nomi usati prima. Se qualcuno ha già la chiave salvata sotto uno
+     di questi, la si sposta sul nome nuovo: così non deve reinserirla. */
   var NOMI_VECCHI = [
     "liceo-digitale-chiave-annotazioni",
     "liceo-digitale-chiave-tema-argomentativo"
@@ -64,7 +64,7 @@ window.ChiavePersonale = (function () {
       return localStorage.getItem(nome) || "";
     } catch (e) {
       /* Alcuni browser, in navigazione anonima, non lasciano salvare
-         niente. In quel caso la chiave semplicemente non c'e'. */
+         niente. In quel caso la chiave semplicemente non c'è. */
       return "";
     }
   }
@@ -97,7 +97,7 @@ window.ChiavePersonale = (function () {
     }
   }
 
-  /* La frase in piu' arriva da un file scritto a mano: se contiene
+  /* La frase in più arriva da un file scritto a mano: se contiene
      per sbaglio un < o una &, deve comparire come tale e non come
      codice. */
   function testoSemplice(testo) {
@@ -114,7 +114,7 @@ window.ChiavePersonale = (function () {
     var nome = opzioni.nome || NOME_CONDIVISO;
     var aCosaServe = opzioni.aCosaServe || "funziona";
 
-    /* Una frase in piu', scritta dall'artefatto che chiama questo
+    /* Una frase in più, scritta dall'artefatto che chiama questo
        riquadro, per dire qualcosa che vale solo per lui. Chi non la
        passa non la vede: il riquadro resta quello di sempre. */
     var inPiu = opzioni.inPiu
@@ -132,9 +132,9 @@ window.ChiavePersonale = (function () {
       'parte. Si ottiene gratuitamente su ' +
       '<a href="https://aistudio.google.com/apikey" target="_blank" ' +
       'rel="noopener">Google AI Studio</a>, con un account Google.</p>' +
-      '<p><strong>Da sapere:</strong> con la chiave gratuita, Google puo\' ' +
+      '<p><strong>Da sapere:</strong> con la chiave gratuita, Google può ' +
       'usare il testo che scrivi per migliorare i suoi servizi. Chi ' +
-      'preferisce evitarlo puo\' usare una chiave a pagamento, che non ha ' +
+      'preferisce evitarlo può usare una chiave a pagamento, che non ha ' +
       'questo effetto.</p>' +
       inPiu +
       '<div class="chiave-riga">' +
@@ -170,8 +170,8 @@ window.ChiavePersonale = (function () {
          sezione invece della chiave: sono due cose diverse. */
       if (valore.length < 20) {
         aggiornaStato("Questa sembra troppo corta per essere una chiave. "
-          + "La chiave di Google e' una sequenza lunga che inizia con AIza, "
-          + "e non e' la password della sezione.");
+          + "La chiave di Google è una sequenza lunga che inizia con AIza, "
+          + "e non è la password della sezione.");
         return;
       }
       if (salva(nome, valore)) {

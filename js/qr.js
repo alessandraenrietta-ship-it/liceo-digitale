@@ -9,7 +9,7 @@
        QR.svg("https://esempio.it/pagina");
 
    QR.svg(testo) restituisce un disegno pronto da mettere dentro la
-   pagina. Il disegno e' vettoriale: ingrandito sulla LIM resta
+   pagina. Il disegno è vettoriale: ingrandito sulla LIM resta
    nitido, non sgrana.
 
    Si possono passare delle opzioni:
@@ -30,11 +30,11 @@
    abbondanti. Oltre quella misura QR.svg restituisce una stringa
    vuota, invece di disegnare un codice sbagliato.
 
-   PERCHE' E' SCRITTO A MANO
+   PERCHÉ È SCRITTO A MANO
    Le regole del progetto non ammettono librerie prese da altri siti.
-   Qui dentro c'e' quindi tutto quello che serve a costruire un codice
-   QR: la correzione d'errore, la griglia e le sue maschere. Non e'
-   codice da leggere per capire il sito: e' un pezzo di meccanica.
+   Qui dentro c'è quindi tutto quello che serve a costruire un codice
+   QR: la correzione d'errore, la griglia e le sue maschere. Non è
+   codice da leggere per capire il sito: è un pezzo di meccanica.
    ------------------------------------------------------------------ */
 
 var QR = (function () {
@@ -103,11 +103,11 @@ var QR = (function () {
 
      Un codice QR esiste in quaranta misure, chiamate versioni. Qui ne
      usiamo le prime dieci: bastano e avanzano per un indirizzo
-     internet, e restano codici con pochi quadretti, quindi piu'
+     internet, e restano codici con pochi quadretti, quindi più
      facili da inquadrare da lontano.
 
-     Il livello di correzione d'errore e' sempre M: circa il quindici
-     per cento del codice puo' essere rovinato o coperto e il telefono
+     Il livello di correzione d'errore è sempre M: circa il quindici
+     per cento del codice può essere rovinato o coperto e il telefono
      lo legge lo stesso.
 
      Per ogni versione: quanti byte di correzione per blocco, e come i
@@ -218,7 +218,7 @@ var QR = (function () {
   }
 
   /* I dati si spezzano in blocchi, ogni blocco ha la sua correzione, e
-     poi il tutto si mescola: cosi' una macchia sul foglio rovina un
+     poi il tutto si mescola: così una macchia sul foglio rovina un
      pezzetto di ogni blocco, invece di distruggerne uno intero. */
   function mescola(byteDati, versione) {
     var info = VERSIONI[versione];
@@ -371,7 +371,7 @@ var QR = (function () {
 
     /* Si scrive un formato provvisorio solo per marcare come occupati
        i quadretti che gli spettano. Quello vero arriva dopo, quando la
-       maschera e' stata scelta. */
+       maschera è stata scelta. */
     scriviFormato(m, fissa, 0);
 
     if (versione >= 7) {
@@ -394,7 +394,7 @@ var QR = (function () {
     var misura = m.length;
     var i = 0;
     for (var destra = misura - 1; destra >= 1; destra -= 2) {
-      if (destra === 6) destra = 5;          /* la colonna 6 e' riservata */
+      if (destra === 6) destra = 5;          /* la colonna 6 è riservata */
       for (var passo = 0; passo < misura; passo++) {
         for (var j = 0; j < 2; j++) {
           var c = destra - j;
@@ -430,7 +430,7 @@ var QR = (function () {
   }
 
   /* Lo standard prevede otto maschere e un modo per dare un voto a
-     ciascuna: vince quella che rende il disegno piu' facile da
+     ciascuna: vince quella che rende il disegno più facile da
      leggere. */
   var SEQUENZA_A = [true, false, true, true, true, false, true, false, false, false, false];
   var SEQUENZA_B = [false, false, false, false, true, false, true, true, true, false, true];
@@ -517,7 +517,7 @@ var QR = (function () {
      ================================================================ */
 
   /* Restituisce la griglia di quadretti: un elenco di righe, dove
-     "vero" vuol dire scuro. Restituisce null se il testo e' troppo
+     "vero" vuol dire scuro. Restituisce null se il testo è troppo
      lungo. */
   function matrice(testo) {
     var byteTesto = inUtf8(String(testo));

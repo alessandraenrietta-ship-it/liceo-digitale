@@ -14,23 +14,23 @@
 #   titolo        come lo strumento si chiama sul sito
 #   disciplina    va scritta esattamente come compare nell'elenco in fondo
 #   destinatario  studenti, docenti oppure entrambi.
-#                 La regola del progetto e' questa:
+#                 La regola del progetto è questa:
 #                 - se l'artefatto usa l'intelligenza artificiale, e
 #                   quindi chiede una chiave di accesso personale,
 #                   si scrive  docenti
-#                 - se non la usa, si scrive  entrambi , cosi' compare
+#                 - se non la usa, si scrive  entrambi , così compare
 #                   in tutte e due le sezioni e possono usarlo anche
 #                   gli studenti
-#                 Il motivo: la chiave e' personale e a pagamento
-#                 oltre la quota gratuita. Non si puo' dare a una
+#                 Il motivo: la chiave è personale e a pagamento
+#                 oltre la quota gratuita. Non si può dare a una
 #                 classe intera, e un codice scritto nella pagina non
-#                 la proteggerebbe, perche' il sito e' pubblico e il
-#                 suo codice e' leggibile da chiunque.
+#                 la proteggerebbe, perché il sito è pubblico e il
+#                 suo codice è leggibile da chiunque.
 #                 Un artefatto nuovo si carica come  docenti , e
-#                 diventa  entrambi  quando si e' visto che funziona
+#                 diventa  entrambi  quando si è visto che funziona
 #                 senza chiave.
 #
-#                 UN'ECCEZIONE: gli strumenti generali, cioe' quelli
+#                 UN'ECCEZIONE: gli strumenti generali, cioè quelli
 #                 con il campo disciplina vuoto, restano sempre
 #                 docenti , anche quando non usano l'intelligenza
 #                 artificiale. Sono strumenti di lavoro nostri e non
@@ -53,7 +53,7 @@
 
 
 DA COMPILARE | Lingua e cultura straniera - inglese | docenti | inglese-DACOMPILARE | DA COMPILARE
-Il detective degli esperimenti | Scienze naturali | docenti | scienze-detective-degli-esperimenti | Quattordici casi in cui progettare passo per passo l'esperimento che scopre chi ha ragione, con il Sistema Internazionale e un allenamento a convertire le unita' di misura.
+Il detective degli esperimenti | Scienze naturali | docenti | scienze-detective-degli-esperimenti | Quattordici casi in cui progettare passo per passo l'esperimento che scopre chi ha ragione, con il Sistema Internazionale e un allenamento a convertire le unità di misura.
 Triedro - metodi di rappresentazione | Disegno e storia dell'arte | docenti | arte-triedro | Un solido rappresentato con i diversi metodi: proiezioni ortogonali, assonometria, prospettiva e sezioni. Con l'Esploratore si osserva e si modifica, con la Palestra ci si esercita.
 DA COMPILARE | Informatica | docenti | informatica-DACOMPILARE | DA COMPILARE
 Aureolissima - Punti Paradiso | Religione cattolica | docenti | religione-aureolissima | Gioco a punti per la classe: il docente assegna i Punti Paradiso, gli studenti li chiedono e li guadagnano con quiz e domande a sorpresa. Nomi veri non servono: si usano nickname. Tutto resta sul computer di chi la usa.
@@ -70,7 +70,7 @@ Costruisci il tuo tema argomentativo | Lingua e letteratura italiana | docenti |
 # Cartella prevista: docenti-annotazioni
 # Da riscrivere al posto di DA COMPILARE quando l'artefatto viene consegnato.
 Annotazioni sul registro | | docenti | docenti-annotazioni | Compone annotazioni disciplinari e di merito nel rispetto del regolamento d'istituto. Il nome dello studente resta sul computer di chi la usa. Richiede una chiave personale di accesso al servizio.
-Orario e aule | | docenti | docenti-orario-aule | Cerca una classe o un insegnante e mostra l'orario della settimana con l'aula di ogni ora. L'orario pubblicato e' di esempio: chi usa la pagina puo' caricare il proprio, che resta sul suo computer.
+Orario e aule | | docenti | docenti-orario-aule | Cerca una classe o un insegnante e mostra l'orario della settimana con l'aula di ogni ora. L'orario pubblicato è di esempio: chi usa la pagina può caricare il proprio, che resta sul suo computer.
 
 Il giudizio di Minosse | | docenti | docenti-giudizio-di-minosse | Estrae chi viene interrogato, da proiettare sulla LIM: Minosse avvolge la coda e manda un'anima nel baratro. Estrazione equa, senza ripetizioni fino a fine giro. I nomi non vengono salvati.
 
@@ -81,8 +81,8 @@ Il giudizio di Minosse | | docenti | docenti-giudizio-di-minosse | Estrae chi vi
 # aule dipende dall'orario, e separarli vorrebbe dire scrivere due
 # volte le stesse informazioni.
 #
-# L'orario vero non sta dentro al sito, perche' il repository e'
-# pubblico. Nella cartella c'e' un orario inventato, e la pagina ha
+# L'orario vero non sta dentro al sito, perché il repository è
+# pubblico. Nella cartella c'è un orario inventato, e la pagina ha
 # un pulsante per caricare il proprio file dal proprio computer.
 
 
@@ -113,10 +113,10 @@ Il giudizio di Minosse | | docenti | docenti-giudizio-di-minosse | Estrae chi vi
 # Laboratorio del pensiero critico
 # Scienze motorie e sportive
 # Religione cattolica
-# Attivita' alternative
+# Attività alternative
 # Educazione civica
 # FINE ELENCO DISCIPLINE
 #
-# Educazione civica e' un insegnamento trasversale: compare
+# Educazione civica è un insegnamento trasversale: compare
 # nell'elenco insieme alle altre, e la sua pagina lo specifica.
 # ------------------------------------------------------------------

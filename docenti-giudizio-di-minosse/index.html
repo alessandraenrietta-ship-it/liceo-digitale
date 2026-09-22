@@ -8,18 +8,18 @@
   IL GIUDIZIO DI MINOSSE
   Estrattore di studenti da usare in classe sulla LIM.
 
-  Questo strumento e' volutamente un unico file: testo, aspetto e
+  Questo strumento è volutamente un unico file: testo, aspetto e
   funzionamento stanno tutti qui dentro, e non chiede niente a nessun
-  altro sito. Non salva niente: i nomi restano in memoria solo finche'
-  la pagina e' aperta.
+  altro sito. Non salva niente: i nomi restano in memoria solo finché
+  la pagina è aperta.
 
   I testi che si possono cambiare senza toccare il resto sono segnati
   con il commento  TESTO MODIFICABILE .
 
-  EQUITA': chi viene estratto e' deciso PRIMA dell'animazione, con il
+  EQUITÀ: chi viene estratto è deciso PRIMA dell'animazione, con il
   generatore casuale crittografico del browser (crypto.getRandomValues)
   e senza "arrotondamenti" che favoriscano qualcuno. L'animazione mette
-  solo in scena un risultato gia' deciso. La prova che l'estrazione e'
+  solo in scena un risultato già deciso. La prova che l'estrazione è
   equa sta nel file prova-equita.html, in questa stessa cartella.
 -->
 <style>
@@ -239,7 +239,7 @@
     to   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
   }
 
-  /* La fine: l'Inferno e' pieno */
+  /* La fine: l'Inferno è pieno */
   .fine {
     position: absolute; inset: 8% 4%;
     z-index: 6;
@@ -318,7 +318,7 @@
     .palco { width: min(100%, 50vh); }
   }
 
-  /* Chi ha chiesto meno movimento: niente rotazioni ne' cadute */
+  /* Chi ha chiesto meno movimento: niente rotazioni né cadute */
   @media (prefers-reduced-motion: reduce) {
     .anima, .anima.accesa { transition: none; }
     .anima.accesa { transform: translate(-50%, -50%); }
@@ -427,7 +427,7 @@
           <path d="M200 30 L 214 60 Q 200 54 186 60 Z" fill="#8a1c08" stroke="var(--serpe-scura)" stroke-width="3" stroke-linejoin="round"/>
         </g>
 
-        <!-- Le spire dietro al corpo (meta' superiore) -->
+        <!-- Le spire dietro al corpo (metà superiore) -->
         <g fill="none" stroke="var(--serpe-scura)" stroke-width="12">
           <path d="M136 236 A 64 15 0 0 1 264 236"/>
           <path d="M132 256 A 68 15 0 0 1 268 256"/>
@@ -466,7 +466,7 @@
         <circle cx="178" cy="119" r="3.5" fill="#c2361b"/>
         <circle cx="222" cy="119" r="3.5" fill="#c2361b"/>
 
-        <!-- Le spire davanti al corpo (meta' inferiore): a ogni giro se ne
+        <!-- Le spire davanti al corpo (metà inferiore): a ogni giro se ne
              stringe una, e la coda si avvolge -->
         <g fill="none" stroke-linecap="round">
           <g stroke="var(--serpe-scura)" stroke-width="15">
@@ -519,8 +519,8 @@
 <script>
 /* ==================================================================
    IL MOTORE DELL'ESTRAZIONE
-   Qui si decide chi viene estratto. Non c'e' niente di grafico: e'
-   separato apposta, cosi' il file prova-equita.html puo' metterlo alla
+   Qui si decide chi viene estratto. Non c'è niente di grafico: è
+   separato apposta, così il file prova-equita.html può metterlo alla
    prova da solo, senza animazioni.
    ================================================================== */
 (function () {
@@ -528,7 +528,7 @@
 
   var DUE_ALLA_32 = 4294967296;
 
-  /* Un numero intero da 0 a n-1, tutti con la stessa probabilita'.
+  /* Un numero intero da 0 a n-1, tutti con la stessa probabilità.
      Si usa il generatore crittografico del browser. Il "rigetto" serve
      a evitare un difetto sottile: 4.294.967.296 valori possibili non si
      dividono quasi mai in parti uguali fra n studenti, e i primi
@@ -547,7 +547,7 @@
     return cella[0] % n;
   }
 
-  /* Il cerchio contiene solo chi e' ancora in attesa, in ordine di
+  /* Il cerchio contiene solo chi è ancora in attesa, in ordine di
      numero. Il vincitore si sceglie qui, prima di qualsiasi animazione.
      Passi = quanti sono in attesa + posizione del vincitore: un giro
      completo e poi i passi fino a lui. */
@@ -688,8 +688,8 @@
     return anime;
   }
 
-  /* Il file si legge come UTF-8. Se non lo e' (capita con i file salvati
-     da Excel su Windows), si rilegge nella codifica di Windows, cosi' le
+  /* Il file si legge come UTF-8. Se non lo è (capita con i file salvati
+     da Excel su Windows), si rilegge nella codifica di Windows, così le
      lettere accentate restano giuste. */
   function leggiFile(file) {
     return file.arrayBuffer().then(function (dati) {
@@ -856,7 +856,7 @@
     $("baratro-vuoto").hidden = dannati > 0;
   }
 
-  /* Un'attesa che il pulsante "Salta" puo' accorciare */
+  /* Un'attesa che il pulsante "Salta" può accorciare */
   function aspetta(ms) {
     if (saltaFase) { return Promise.resolve(); }
     return new Promise(function (fatto) {
@@ -922,7 +922,7 @@
 
     prossimoPasso()
       .then(function () {
-        /* Se si e' saltato, si va dritti al vincitore */
+        /* Se si è saltato, si va dritti al vincitore */
         accendi(sentenza.indice);
         giraCoda(sentenza.indice, rimasti, 0);
         saltaFase = false;
@@ -1030,7 +1030,7 @@
   });
 
   /* La barra spaziatrice fa "Giudica!", tranne quando si sta scrivendo
-     o quando il fuoco e' su un altro pulsante (che si preme da se'). */
+     o quando il fuoco è su un altro pulsante (che si preme da sé). */
   document.addEventListener("keydown", function (e) {
     if (e.code !== "Space" && e.key !== " ") { return; }
     if ($("giudizio").hidden) { return; }

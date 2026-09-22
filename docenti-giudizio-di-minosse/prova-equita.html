@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Prova di equità di Minosse</title>
 <!--
-  PROVA DI EQUITA' DEL GIUDIZIO DI MINOSSE
+  PROVA DI EQUITÀ DEL GIUDIZIO DI MINOSSE
   Apre lo strumento in una cornice nascosta e mette alla prova lo stesso
   motore di estrazione che usa la pagina vera (MinosseMotore), senza
   animazioni. Non serve a chi usa lo strumento in classe: serve a
-  controllare che l'estrazione sia equa. Si puo' riaprire quando si
-  vuole, e ogni volta i numeri sono un po' diversi, come e' giusto.
+  controllare che l'estrazione sia equa. Si può riaprire quando si
+  vuole, e ogni volta i numeri sono un po' diversi, come è giusto.
 -->
 <style>
   body { font-family: "Segoe UI", system-ui, sans-serif; background: #fffdf6; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 16px; }
@@ -36,7 +36,7 @@
   var ESTRAZIONI = 100000;
   var STUDENTI = 25;
   var GIRI_COMPLETI = 20000;
-  /* Valori critici del chi quadrato con 24 gradi di liberta' */
+  /* Valori critici del chi quadrato con 24 gradi di libertà */
   var CRITICO_5 = 36.415;
   var CRITICO_01 = 51.179;
 
@@ -126,7 +126,7 @@
       " giri completi da " + STUDENTI + " estrazioni: nessuno estratto due volte (doppioni: " + doppioni +
       "), e alla fine del giro sono usciti tutti (giri incompleti: " + mancanti + ").");
 
-    /* Anche all'estrazione n-esima del giro, fra chi resta, nessuno e' favorito */
+    /* Anche all'estrazione n-esima del giro, fra chi resta, nessuno è favorito */
     var peggiore = 0;
     var postoPeggiore = 0;
     perPosto.forEach(function (riga, turno) {
@@ -137,7 +137,7 @@
     esito(peggiore < 62, "per ogni estrazione del giro (la 1a, la 2a, … la 25a) ciascuno studente esce in quella posizione con la stessa frequenza. " +
       "Il chi quadrato più alto è " + peggiore.toFixed(2) + ", alla " + postoPeggiore + "a estrazione (soglia 62, cioè 0,1% corretto per 25 confronti).");
 
-    /* 3. Annulla: l'ultimo dannato torna al suo posto e puo' riuscire */
+    /* 3. Annulla: l'ultimo dannato torna al suo posto e può riuscire */
     var sa = M.nuovaClasse(classe(5));
     M.condanna(sa, 2);
     var tornata = M.annulla(sa);

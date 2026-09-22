@@ -17,8 +17,8 @@
 #    (sulla tastiera italiana: AltGr e il tasto del backslash)
 #  - le righe vuote non danno fastidio
 #
-#  SE UNA RIGA E' SCRITTA MALE non si blocca niente: la pagina
-#  la salta e scrive in fondo quale riga ha saltato, cosi' si
+#  SE UNA RIGA È SCRITTA MALE non si blocca niente: la pagina
+#  la salta e scrive in fondo quale riga ha saltato, così si
 #  trova subito.
 #
 #  ATTENZIONE: questo file finisce su internet insieme al sito.
@@ -72,7 +72,7 @@ GIORNI: Lunedì | Martedì | Mercoledì | Giovedì | Venerdì
 #
 #     AULA: classe | aula
 #
-#     E' l'aula dove la classe sta normalmente. Serve perche'
+#     È l'aula dove la classe sta normalmente. Serve perché
 #     nell'orario l'aula si scrive solo quando la lezione si
 #     sposta altrove (laboratorio, palestra): per tutte le
 #     altre ore la pagina usa l'aula scritta qui.
@@ -99,7 +99,7 @@ AULA: 1B | A11
 #     aula         SI LASCIA VUOTO se la lezione si fa nell'aula
 #                  della classe; si scrive solo quando si va da
 #                  un'altra parte (palestra, L41_INFO...)
-#     compresenza  il secondo insegnante, se c'e'; altrimenti
+#     compresenza  il secondo insegnante, se c'è; altrimenti
 #                  si lascia vuoto
 #
 #     Gli ultimi campi vuoti si possono anche non scrivere: una
@@ -114,112 +114,112 @@ AULA: 1B | A11
 
 #  ----- CLASSE 1A -----
 
-LEZIONE: 1A | lunedi | 1 | Lingua italiana | Rossi Maria
-LEZIONE: 1A | lunedi | 2 | Lingua italiana | Rossi Maria
-LEZIONE: 1A | lunedi | 3 | Matematica | Bianchi Paolo
-LEZIONE: 1A | lunedi | 4 | Scienze naturali | Ferrari Luca
-LEZIONE: 1A | lunedi | 5 | Lingua inglese | Verdi Anna
-LEZIONE: 1A | lunedi | 6 | Storia e geografia | Rossi Maria
+LEZIONE: 1A | lunedì | 1 | Lingua italiana | Rossi Maria
+LEZIONE: 1A | lunedì | 2 | Lingua italiana | Rossi Maria
+LEZIONE: 1A | lunedì | 3 | Matematica | Bianchi Paolo
+LEZIONE: 1A | lunedì | 4 | Scienze naturali | Ferrari Luca
+LEZIONE: 1A | lunedì | 5 | Lingua inglese | Verdi Anna
+LEZIONE: 1A | lunedì | 6 | Storia e geografia | Rossi Maria
 
-LEZIONE: 1A | martedi | 1 | Matematica | Bianchi Paolo
-LEZIONE: 1A | martedi | 2 | Informatica | Greco Davide | L41_INFO
-LEZIONE: 1A | martedi | 3 | Lingua italiana | Rossi Maria
-LEZIONE: 1A | martedi | 4 | Lingua inglese | Verdi Anna
-LEZIONE: 1A | martedi | 5 | Scienze motorie | Marino Sara | palestra
-LEZIONE: 1A | martedi | 6 | Scienze motorie | Marino Sara | palestra
+LEZIONE: 1A | martedì | 1 | Matematica | Bianchi Paolo
+LEZIONE: 1A | martedì | 2 | Informatica | Greco Davide | L41_INFO
+LEZIONE: 1A | martedì | 3 | Lingua italiana | Rossi Maria
+LEZIONE: 1A | martedì | 4 | Lingua inglese | Verdi Anna
+LEZIONE: 1A | martedì | 5 | Scienze motorie | Marino Sara | palestra
+LEZIONE: 1A | martedì | 6 | Scienze motorie | Marino Sara | palestra
 
-LEZIONE: 1A | mercoledi | 1 | Storia e geografia | Rossi Maria
-LEZIONE: 1A | mercoledi | 2 | Matematica | Bianchi Paolo
-LEZIONE: 1A | mercoledi | 3 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
-LEZIONE: 1A | mercoledi | 4 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
-LEZIONE: 1A | mercoledi | 5 | Lingua italiana | Rossi Maria
-LEZIONE: 1A | mercoledi | 6 | Lingua italiana | Rossi Maria
+LEZIONE: 1A | mercoledì | 1 | Storia e geografia | Rossi Maria
+LEZIONE: 1A | mercoledì | 2 | Matematica | Bianchi Paolo
+LEZIONE: 1A | mercoledì | 3 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
+LEZIONE: 1A | mercoledì | 4 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
+LEZIONE: 1A | mercoledì | 5 | Lingua italiana | Rossi Maria
+LEZIONE: 1A | mercoledì | 6 | Lingua italiana | Rossi Maria
 
-LEZIONE: 1A | giovedi | 1 | Lingua inglese | Verdi Anna
-LEZIONE: 1A | giovedi | 2 | Scienze naturali | Ferrari Luca
-LEZIONE: 1A | giovedi | 3 | Lingua italiana | Rossi Maria
-LEZIONE: 1A | giovedi | 4 | Matematica | Bianchi Paolo
-LEZIONE: 1A | giovedi | 5 | Informatica | Greco Davide | L41_INFO | Costa Marco
+LEZIONE: 1A | giovedì | 1 | Lingua inglese | Verdi Anna
+LEZIONE: 1A | giovedì | 2 | Scienze naturali | Ferrari Luca
+LEZIONE: 1A | giovedì | 3 | Lingua italiana | Rossi Maria
+LEZIONE: 1A | giovedì | 4 | Matematica | Bianchi Paolo
+LEZIONE: 1A | giovedì | 5 | Informatica | Greco Davide | L41_INFO | Costa Marco
 
-LEZIONE: 1A | venerdi | 1 | Scienze naturali | Ferrari Luca
-LEZIONE: 1A | venerdi | 2 | Lingua italiana | Rossi Maria
-LEZIONE: 1A | venerdi | 3 | Storia e geografia | Rossi Maria
-LEZIONE: 1A | venerdi | 4 | Matematica | Bianchi Paolo
-LEZIONE: 1A | venerdi | 5 | Lingua inglese | Verdi Anna
+LEZIONE: 1A | venerdì | 1 | Scienze naturali | Ferrari Luca
+LEZIONE: 1A | venerdì | 2 | Lingua italiana | Rossi Maria
+LEZIONE: 1A | venerdì | 3 | Storia e geografia | Rossi Maria
+LEZIONE: 1A | venerdì | 4 | Matematica | Bianchi Paolo
+LEZIONE: 1A | venerdì | 5 | Lingua inglese | Verdi Anna
 
 
 #  ----- CLASSE 2A -----
 
-LEZIONE: 2A | lunedi | 1 | Matematica | Bianchi Paolo
-LEZIONE: 2A | lunedi | 2 | Fisica | Rizzo Franco | L59_FISICA
-LEZIONE: 2A | lunedi | 3 | Lingua inglese | Verdi Anna
-LEZIONE: 2A | lunedi | 4 | Lingua italiana | Rossi Maria
-LEZIONE: 2A | lunedi | 5 | Storia e geografia | Esposito Chiara
-LEZIONE: 2A | lunedi | 6 | Fisica | Rizzo Franco
+LEZIONE: 2A | lunedì | 1 | Matematica | Bianchi Paolo
+LEZIONE: 2A | lunedì | 2 | Fisica | Rizzo Franco | L59_FISICA
+LEZIONE: 2A | lunedì | 3 | Lingua inglese | Verdi Anna
+LEZIONE: 2A | lunedì | 4 | Lingua italiana | Rossi Maria
+LEZIONE: 2A | lunedì | 5 | Storia e geografia | Esposito Chiara
+LEZIONE: 2A | lunedì | 6 | Fisica | Rizzo Franco
 
-LEZIONE: 2A | martedi | 1 | Lingua italiana | Rossi Maria
-LEZIONE: 2A | martedi | 2 | Storia e geografia | Esposito Chiara
-LEZIONE: 2A | martedi | 3 | Fisica | Rizzo Franco
-LEZIONE: 2A | martedi | 4 | Matematica | Bianchi Paolo
-LEZIONE: 2A | martedi | 5 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
-LEZIONE: 2A | martedi | 6 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
+LEZIONE: 2A | martedì | 1 | Lingua italiana | Rossi Maria
+LEZIONE: 2A | martedì | 2 | Storia e geografia | Esposito Chiara
+LEZIONE: 2A | martedì | 3 | Fisica | Rizzo Franco
+LEZIONE: 2A | martedì | 4 | Matematica | Bianchi Paolo
+LEZIONE: 2A | martedì | 5 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
+LEZIONE: 2A | martedì | 6 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
 
-LEZIONE: 2A | mercoledi | 1 | Lingua inglese | Verdi Anna
-LEZIONE: 2A | mercoledi | 2 | Lingua italiana | Rossi Maria
-LEZIONE: 2A | mercoledi | 3 | Matematica | Bianchi Paolo
-LEZIONE: 2A | mercoledi | 4 | Storia e geografia | Esposito Chiara
-LEZIONE: 2A | mercoledi | 5 | Fisica | Rizzo Franco | L59_FISICA
-LEZIONE: 2A | mercoledi | 6 | Religione cattolica | Moretti Elena
+LEZIONE: 2A | mercoledì | 1 | Lingua inglese | Verdi Anna
+LEZIONE: 2A | mercoledì | 2 | Lingua italiana | Rossi Maria
+LEZIONE: 2A | mercoledì | 3 | Matematica | Bianchi Paolo
+LEZIONE: 2A | mercoledì | 4 | Storia e geografia | Esposito Chiara
+LEZIONE: 2A | mercoledì | 5 | Fisica | Rizzo Franco | L59_FISICA
+LEZIONE: 2A | mercoledì | 6 | Religione cattolica | Moretti Elena
 
-LEZIONE: 2A | giovedi | 1 | Storia e geografia | Esposito Chiara
-LEZIONE: 2A | giovedi | 2 | Matematica | Bianchi Paolo
-LEZIONE: 2A | giovedi | 3 | Fisica | Rizzo Franco
-LEZIONE: 2A | giovedi | 4 | Lingua inglese | Verdi Anna
-LEZIONE: 2A | giovedi | 5 | Lingua italiana | Rossi Maria
-LEZIONE: 2A | giovedi | 7 | Educazione civica | Esposito Chiara
+LEZIONE: 2A | giovedì | 1 | Storia e geografia | Esposito Chiara
+LEZIONE: 2A | giovedì | 2 | Matematica | Bianchi Paolo
+LEZIONE: 2A | giovedì | 3 | Fisica | Rizzo Franco
+LEZIONE: 2A | giovedì | 4 | Lingua inglese | Verdi Anna
+LEZIONE: 2A | giovedì | 5 | Lingua italiana | Rossi Maria
+LEZIONE: 2A | giovedì | 7 | Educazione civica | Esposito Chiara
 
-LEZIONE: 2A | venerdi | 1 | Lingua italiana | Rossi Maria
-LEZIONE: 2A | venerdi | 2 | Matematica | Bianchi Paolo
-LEZIONE: 2A | venerdi | 3 | Scienze motorie | Marino Sara | palestra
-LEZIONE: 2A | venerdi | 4 | Scienze motorie | Marino Sara | palestra
-LEZIONE: 2A | venerdi | 5 | Storia e geografia | Esposito Chiara
+LEZIONE: 2A | venerdì | 1 | Lingua italiana | Rossi Maria
+LEZIONE: 2A | venerdì | 2 | Matematica | Bianchi Paolo
+LEZIONE: 2A | venerdì | 3 | Scienze motorie | Marino Sara | palestra
+LEZIONE: 2A | venerdì | 4 | Scienze motorie | Marino Sara | palestra
+LEZIONE: 2A | venerdì | 5 | Storia e geografia | Esposito Chiara
 
 
 #  ----- CLASSE 1B -----
 
-LEZIONE: 1B | lunedi | 1 | Lingua inglese | Verdi Anna
-LEZIONE: 1B | lunedi | 2 | Matematica | Bianchi Paolo
-LEZIONE: 1B | lunedi | 3 | Lingua italiana | Esposito Chiara
-LEZIONE: 1B | lunedi | 4 | Lingua italiana | Esposito Chiara
-LEZIONE: 1B | lunedi | 5 | Scienze naturali | Ferrari Luca
-LEZIONE: 1B | lunedi | 6 | Informatica | Greco Davide | L41_INFO
+LEZIONE: 1B | lunedì | 1 | Lingua inglese | Verdi Anna
+LEZIONE: 1B | lunedì | 2 | Matematica | Bianchi Paolo
+LEZIONE: 1B | lunedì | 3 | Lingua italiana | Esposito Chiara
+LEZIONE: 1B | lunedì | 4 | Lingua italiana | Esposito Chiara
+LEZIONE: 1B | lunedì | 5 | Scienze naturali | Ferrari Luca
+LEZIONE: 1B | lunedì | 6 | Informatica | Greco Davide | L41_INFO
 
-LEZIONE: 1B | martedi | 1 | Lingua italiana | Esposito Chiara
-LEZIONE: 1B | martedi | 2 | Storia e geografia | Esposito Chiara
-LEZIONE: 1B | martedi | 3 | Matematica | Bianchi Paolo
-LEZIONE: 1B | martedi | 4 | Scienze naturali | Ferrari Luca
-LEZIONE: 1B | martedi | 5 | Lingua inglese | Verdi Anna
-LEZIONE: 1B | martedi | 6 | Religione cattolica | Moretti Elena
+LEZIONE: 1B | martedì | 1 | Lingua italiana | Esposito Chiara
+LEZIONE: 1B | martedì | 2 | Storia e geografia | Esposito Chiara
+LEZIONE: 1B | martedì | 3 | Matematica | Bianchi Paolo
+LEZIONE: 1B | martedì | 4 | Scienze naturali | Ferrari Luca
+LEZIONE: 1B | martedì | 5 | Lingua inglese | Verdi Anna
+LEZIONE: 1B | martedì | 6 | Religione cattolica | Moretti Elena
 
-LEZIONE: 1B | mercoledi | 1 | Matematica | Bianchi Paolo
-LEZIONE: 1B | mercoledi | 2 | Lingua inglese | Verdi Anna
-LEZIONE: 1B | mercoledi | 3 | Lingua italiana | Esposito Chiara
-LEZIONE: 1B | mercoledi | 4 | Scienze naturali | Ferrari Luca
-LEZIONE: 1B | mercoledi | 5 | Scienze motorie | Marino Sara | palestra
-LEZIONE: 1B | mercoledi | 6 | Scienze motorie | Marino Sara | palestra
+LEZIONE: 1B | mercoledì | 1 | Matematica | Bianchi Paolo
+LEZIONE: 1B | mercoledì | 2 | Lingua inglese | Verdi Anna
+LEZIONE: 1B | mercoledì | 3 | Lingua italiana | Esposito Chiara
+LEZIONE: 1B | mercoledì | 4 | Scienze naturali | Ferrari Luca
+LEZIONE: 1B | mercoledì | 5 | Scienze motorie | Marino Sara | palestra
+LEZIONE: 1B | mercoledì | 6 | Scienze motorie | Marino Sara | palestra
 
-LEZIONE: 1B | giovedi | 1 | Informatica | Greco Davide | L41_INFO
-LEZIONE: 1B | giovedi | 2 | Lingua italiana | Esposito Chiara
-LEZIONE: 1B | giovedi | 3 | Matematica | Bianchi Paolo
-LEZIONE: 1B | giovedi | 4 | Storia e geografia | Esposito Chiara
-LEZIONE: 1B | giovedi | 5 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
-LEZIONE: 1B | giovedi | 6 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
+LEZIONE: 1B | giovedì | 1 | Informatica | Greco Davide | L41_INFO
+LEZIONE: 1B | giovedì | 2 | Lingua italiana | Esposito Chiara
+LEZIONE: 1B | giovedì | 3 | Matematica | Bianchi Paolo
+LEZIONE: 1B | giovedì | 4 | Storia e geografia | Esposito Chiara
+LEZIONE: 1B | giovedì | 5 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
+LEZIONE: 1B | giovedì | 6 | Disegno e storia dell'arte | Conti Giulia | L51_DISEGNO
 
-LEZIONE: 1B | venerdi | 1 | Matematica | Bianchi Paolo
-LEZIONE: 1B | venerdi | 2 | Scienze naturali | Ferrari Luca
-LEZIONE: 1B | venerdi | 3 | Lingua inglese | Verdi Anna
-LEZIONE: 1B | venerdi | 4 | Lingua italiana | Esposito Chiara
-LEZIONE: 1B | venerdi | 5 | Informatica | Greco Davide | L41_INFO | Costa Marco
+LEZIONE: 1B | venerdì | 1 | Matematica | Bianchi Paolo
+LEZIONE: 1B | venerdì | 2 | Scienze naturali | Ferrari Luca
+LEZIONE: 1B | venerdì | 3 | Lingua inglese | Verdi Anna
+LEZIONE: 1B | venerdì | 4 | Lingua italiana | Esposito Chiara
+LEZIONE: 1B | venerdì | 5 | Informatica | Greco Davide | L41_INFO | Costa Marco
 
 
 #  -----------------------------------------------------------
@@ -233,21 +233,21 @@ LEZIONE: 1B | venerdi | 5 | Informatica | Greco Davide | L41_INFO | Costa Marco
 #
 #     Servono due cose.
 #
-#     SORVEGLIANZA ORE: le ore dopo le quali c'e' l'intervallo,
+#     SORVEGLIANZA ORE: le ore dopo le quali c'è l'intervallo,
 #     separate dalla barra. Se la scansione oraria cambia, si
 #     cambia questa riga e basta.
 #
 #     SORVEGLIANZA: aula | che cosa deve fare chi ci ha lezione
-#     Una riga per aula. Il testo si legge cosi' com'e' scritto
-#     qui: si puo' correggere liberamente. Un'aula senza riga,
+#     Una riga per aula. Il testo si legge così com'è scritto
+#     qui: si può correggere liberamente. Un'aula senza riga,
 #     o con il testo in bianco, non fa comparire niente.
 #
-#     C'e' anche AVVISO ORA: ora | testo , per un avviso che
+#     C'è anche AVVISO ORA: ora | testo , per un avviso che
 #     vale per tutti in una certa ora, qualunque sia l'aula.
 #
 #     ATTENZIONE: le righe qui sotto sono INVENTATE, come tutto
 #     il resto di questo file. Le regole vere della scuola non
-#     stanno nel sito, che e' pubblico: stanno nel file che
+#     stanno nel sito, che è pubblico: stanno nel file che
 #     ciascun docente carica dal proprio computer.
 #  -----------------------------------------------------------
 
