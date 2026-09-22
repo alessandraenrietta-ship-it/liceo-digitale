@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- chiede ai motori di ricerca di non indicizzare la pagina: chi ha il link
+     entra, ma il sito non compare nelle ricerche -->
+<meta name="robots" content="noindex, nofollow">
+<title>Triedro — metodi di rappresentazione</title>
+<link rel="stylesheet" href="css/stile.css">
+</head>
+<body>
+
+<!-- Aggiunto per il sito Liceo Digitale: collegamento per tornare
+     alla pagina iniziale del sito. -->
+<p class="ritorno"><a href="../index.html">&larr; Torna alla pagina iniziale</a></p>
+
+<header class="barra">
+  <div class="marchio">
+    <span class="logo" aria-hidden="true">
+      <svg viewBox="0 0 32 32"><path d="M4 26 L16 6 L28 26 Z"/><path d="M16 6 L16 26"/><path d="M4 26 L28 26"/></svg>
+    </span>
+    <div>
+      <h1>Triedro</h1>
+      <p class="sottotitolo">Un solido, più modi di rappresentarlo</p>
+    </div>
+  </div>
+  <nav class="menu-principale">
+    <button type="button" class="attivo" data-sezione="esploratore">Esploratore</button>
+    <button type="button" data-sezione="palestra">Palestra</button>
+  </nav>
+</header>
+
+<main>
+  <section id="sezione-esploratore">
+
+    <div class="riga-comandi">
+      <label class="campo">
+        <span>Solido</span>
+        <select id="scelta-solido"></select>
+      </label>
+      <label class="interruttore">
+        <input type="checkbox" id="solido-inclinato">
+        <span>Base inclinata</span>
+      </label>
+      <button type="button" id="apri-pannello" class="solo-stretto">Comandi</button>
+    </div>
+
+    <div class="schede" role="tablist">
+      <button type="button" role="tab" class="attivo" data-scheda="ortogonali">Proiezioni ortogonali</button>
+      <button type="button" role="tab" data-scheda="assonometria">Assonometria</button>
+      <button type="button" role="tab" data-scheda="prospettiva">Prospettiva</button>
+      <button type="button" role="tab" data-scheda="sezioni">Sezioni</button>
+    </div>
+
+    <div class="selettore-vista" id="selettore-vista" hidden>
+      <div class="scelta-viste">
+        <button type="button" class="attivo" data-vista="prospetto">Prospetto</button>
+        <button type="button" data-vista="pianta">Pianta</button>
+        <button type="button" data-vista="laterale">Vista laterale</button>
+      </div>
+      <svg class="schema-disposizione" id="schema-disposizione" viewBox="0 0 132 96" aria-label="Disposizione delle viste">
+        <line x1="10" y1="42" x2="10" y2="56" class="schema-richiamo"/>
+        <line x1="52" y1="42" x2="52" y2="56" class="schema-richiamo"/>
+        <line x1="60" y1="10" x2="74" y2="10" class="schema-richiamo"/>
+        <line x1="60" y1="40" x2="74" y2="40" class="schema-richiamo"/>
+        <rect x="10" y="8" width="42" height="34" data-riquadro="prospetto"/>
+        <rect x="74" y="8" width="42" height="34" data-riquadro="laterale"/>
+        <rect x="10" y="56" width="42" height="32" data-riquadro="pianta"/>
+        <text x="31" y="28" text-anchor="middle">P</text>
+        <text x="95" y="28" text-anchor="middle">L</text>
+        <text x="31" y="76" text-anchor="middle">Pi</text>
+      </svg>
+    </div>
+
+    <div class="area-lavoro">
+      <div class="tele" id="tele">
+        <figure class="tela" id="tela-a">
+          <figcaption id="didascalia-a">Proiezioni ortogonali — metodo europeo (primo diedro)</figcaption>
+          <svg id="svg-a" xmlns="http://www.w3.org/2000/svg"></svg>
+        </figure>
+        <figure class="tela nascosta" id="tela-b">
+          <figcaption id="didascalia-b">Assonometria</figcaption>
+          <svg id="svg-b" xmlns="http://www.w3.org/2000/svg"></svg>
+        </figure>
+      </div>
+
+      <aside class="pannello" id="pannello">
+        <div class="pannello-testata">
+          <h2>Comandi</h2>
+          <button type="button" id="chiudi-pannello" class="solo-stretto" aria-label="Chiudi">×</button>
+        </div>
+
+        <fieldset>
+          <legend>Visualizzazione</legend>
+          <label class="interruttore"><input type="checkbox" id="opz-nascosti" checked><span>Spigoli nascosti</span></label>
+          <label class="interruttore"><input type="checkbox" id="opz-etichette"><span>Etichette dei vertici</span></label>
+          <label class="interruttore"><input type="checkbox" id="opz-assi"><span>Assi di riferimento</span></label>
+          <label class="interruttore"><input type="checkbox" id="opz-griglia"><span>Griglia</span></label>
+        </fieldset>
+
+        <fieldset data-scheda="ortogonali">
+          <legend>Proiezioni ortogonali</legend>
+          <label class="interruttore"><input type="checkbox" id="opz-richiami" checked><span>Linee di richiamo e ribaltamento</span></label>
+          <label class="interruttore"><input type="checkbox" id="opz-piani"><span>Piani di proiezione</span></label>
+
+          <div class="cursore">
+            <label for="pos-allontanamento">Allontanamento dal P.V. <output id="val-allontanamento">30</output></label>
+            <input type="range" id="pos-allontanamento" min="0" max="100" step="1" value="30">
+          </div>
+          <div class="cursore">
+            <label for="pos-quota">Quota sul P.O. <output id="val-quota">0</output></label>
+            <input type="range" id="pos-quota" min="0" max="80" step="1" value="0">
+          </div>
+          <div class="cursore">
+            <label for="pos-distanzaPL">Distanza dal P.L. <output id="val-distanzaPL">30</output></label>
+            <input type="range" id="pos-distanzaPL" min="0" max="100" step="1" value="30">
+          </div>
+        </fieldset>
+
+        <fieldset data-scheda="sezioni">
+          <legend>Piano di sezione</legend>
+          <label class="interruttore"><input type="checkbox" id="sez-attiva"><span>Inserisci il piano di sezione</span></label>
+          <div class="pulsanti-tipo">
+            <button type="button" data-sez="orizzontale" class="attivo">Orizzontale</button>
+            <button type="button" data-sez="verticale">Verticale</button>
+            <button type="button" data-sez="profilo">Di profilo</button>
+            <button type="button" data-sez="inclinato">Inclinato</button>
+          </div>
+          <div class="cursore">
+            <label for="sez-posizione">Posizione del piano <output id="val-sez-posizione">50</output></label>
+            <input type="range" id="sez-posizione" min="0" max="100" step="1" value="50">
+          </div>
+          <div class="cursore" id="cursore-inclinazione" hidden>
+            <label for="sez-inclinazione">Inclinazione <output id="val-sez-inclinazione">30</output>°</label>
+            <input type="range" id="sez-inclinazione" min="-75" max="75" step="1" value="30">
+          </div>
+          <label class="interruttore"><input type="checkbox" id="sez-effettuata"><span>Sezione effettuata (rimuovi la parte davanti)</span></label>
+          <label class="interruttore"><input type="checkbox" id="sez-invertito"><span>Inverti la parte rimossa</span></label>
+          <label class="interruttore"><input type="checkbox" id="sez-vera-forma"><span>Mostra la vera forma ribaltata</span></label>
+          <p class="nota">La sezione compare anche nelle proiezioni ortogonali, nell'assonometria e in prospettiva.</p>
+        </fieldset>
+
+        <fieldset data-scheda="prospettiva">
+          <legend>Tipo di prospettiva</legend>
+          <div class="pulsanti-tipo">
+            <button type="button" data-prosp="centrale" class="attivo">Centrale</button>
+            <button type="button" data-prosp="accidentale">Accidentale</button>
+          </div>
+          <div class="cursore">
+            <label for="pv-distanza">Distanza dell'osservatore <output id="val-pv-distanza">140</output></label>
+            <input type="range" id="pv-distanza" min="60" max="400" step="5" value="140">
+          </div>
+          <div class="cursore">
+            <label for="pv-altezza">Altezza dell'occhio <output id="val-pv-altezza">45</output></label>
+            <input type="range" id="pv-altezza" min="0" max="160" step="1" value="45">
+          </div>
+          <div class="cursore" id="cursore-alfa">
+            <label for="pv-alfa">Rotazione del solido <output id="val-pv-alfa">45</output>°</label>
+            <input type="range" id="pv-alfa" min="5" max="85" step="1" value="45">
+          </div>
+          <label class="interruttore"><input type="checkbox" id="opz-fughe" checked><span>Linee di fuga</span></label>
+          <label class="interruttore"><input type="checkbox" id="opz-inquadra-fughe" checked><span>Inquadra i punti di fuga</span></label>
+          <p class="nota">Trascina nel disegno la linea d'orizzonte, il punto principale (P.P.) e i punti di fuga.</p>
+        </fieldset>
+
+        <fieldset data-scheda="assonometria">
+          <legend>Tipo di assonometria</legend>
+          <div class="pulsanti-tipo">
+            <button type="button" data-asso="isometrica">Isometrica</button>
+            <button type="button" data-asso="cavaliera">Cavaliera</button>
+            <button type="button" data-asso="monometrica">Monometrica</button>
+            <button type="button" data-asso="libera" class="attivo">Rotazione libera</button>
+          </div>
+          <div class="lettura" id="lettura-assi"></div>
+          <p class="nota" id="nota-assonometria"></p>
+          <label class="interruttore"><input type="checkbox" id="opz-ombreggiato"><span>Resa ombreggiata</span></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Confronto</legend>
+          <label class="interruttore"><input type="checkbox" id="opz-confronto"><span>Mostra due metodi affiancati</span></label>
+          <div class="alternanza" id="alternanza" hidden>
+            <button type="button" class="attivo" data-mostra="a">Proiezioni</button>
+            <button type="button" data-mostra="b">Assonometria</button>
+          </div>
+        </fieldset>
+      </aside>
+    </div>
+  </section>
+
+  <section id="sezione-palestra" hidden>
+    <div class="riga-comandi">
+      <div class="gruppo-scelte">
+        <span class="etichetta-gruppo">Argomento</span>
+        <button type="button" class="attivo" data-argomento="ortogonali">Proiezioni ortogonali</button>
+        <button type="button" data-argomento="assonometria">Assonometria</button>
+        <button type="button" data-argomento="sezioni">Sezioni</button>
+        <button type="button" data-argomento="prospettiva">Prospettiva</button>
+        <button type="button" data-argomento="misto">Misto</button>
+      </div>
+      <div class="gruppo-scelte">
+        <span class="etichetta-gruppo">Livello</span>
+        <button type="button" class="attivo" data-livello="facile">Facile</button>
+        <button type="button" data-livello="difficile">Difficile</button>
+      </div>
+    </div>
+
+    <div class="tabellone">
+      <span>Punteggio <b id="punteggio">0</b></span>
+      <span>Serie <b id="serie">0</b></span>
+      <span>Serie migliore <b id="migliore">0</b></span>
+      <span>Risposte <b id="risposte">0</b></span>
+    </div>
+
+    <div class="esercizio">
+      <p class="domanda" id="domanda"></p>
+      <div class="riquadro-domanda" id="riquadro-domanda"></div>
+      <div class="opzioni" id="opzioni"></div>
+      <button type="button" id="verifica" class="pulsante-principale" hidden>Verifica gli abbinamenti</button>
+      <div class="riscontro" id="riscontro"></div>
+      <button type="button" id="prossimo" class="pulsante-principale" hidden>Prossimo esercizio</button>
+      <div class="statistiche" id="statistiche"></div>
+    </div>
+  </section>
+</main>
+
+<script src="js/geometria.js"></script>
+<script src="js/solidi.js"></script>
+<script src="js/sezione.js"></script>
+<script src="js/disegno.js"></script>
+<script src="js/esploratore.js"></script>
+<script src="js/palestra.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
