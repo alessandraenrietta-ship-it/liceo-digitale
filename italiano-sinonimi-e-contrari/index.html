@@ -201,9 +201,12 @@
       aCosaServe: 'cerca i sinonimi e i contrari'
     });
 
-    var MODELLO = "gemini-3.6-flash";
-    var INDIRIZZO = "https://generativelanguage.googleapis.com/v1beta/models/"
-                  + MODELLO + ":generateContent";
+    /* I modelli si provano in quest'ordine: se il primo è occupato
+       perché in quel momento lo stanno usando in troppi, la pagina
+       passa al secondo. Per cambiarli basta riscrivere i nomi qui. */
+    var MODELLI = ["gemini-3.6-flash", "gemini-3.5-flash-lite"];
+    var INDIRIZZO_PRIMA = "https://generativelanguage.googleapis.com/v1beta/models/";
+    var INDIRIZZO_DOPO = ":generateContent";
 
     /* Le istruzioni per il servizio. Si possono cambiare, ma la parte
        sul formato JSON va lasciata com'è: senza quella la pagina non
@@ -268,7 +271,20 @@
       var domanda = "Parola: " + parola;
       if (frase) { domanda += "\nFrase in cui è usata: " + frase; }
 
-      fetch(INDIRIZZO, {
+      chiediAiuto(domanda, chiave, 0, false).then(function (dati) {
+        mostra(leggiRisposta(dati), parola);
+      }).catch(function (errore) {
+        risultato.textContent = "";
+        avviso.textContent = spiegaErrore(errore);
+      }).then(function () {
+        bottone.disabled = false;
+        bottone.textContent = "Cerca i sinonimi";
+      });
+    }
+
+    /* Una chiamata sola al servizio, con il modello scelto. */
+    function chiamata(modello, domanda, chiave) {
+      return fetch(INDIRIZZO_PRIMA + modello + INDIRIZZO_DOPO, {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -283,23 +299,67 @@
           }
         })
       }).then(function (risposta) {
-        return risposta.json().then(function (dati) {
+        return risposta.json().catch(function () { return {}; }).then(function (dati) {
           if (!risposta.ok) {
             var motivo = (dati && dati.error && dati.error.message) || ("errore " + risposta.status);
-            throw new Error(motivo);
+            var errore = new Error(motivo);
+            /* "Occupato" vuol dire che il servizio in questo momento ha
+               troppe richieste: non e' colpa della chiave e passa da
+               solo, quindi conviene solo riprovare. */
+            errore.occupato = risposta.status === 429 || risposta.status === 503
+              || /high demand|overload|unavailable|try again later/i.test(motivo);
+            throw errore;
           }
           return dati;
         });
-      }).then(function (dati) {
-        mostra(leggiRisposta(dati), parola);
-      }).catch(function (errore) {
-        risultato.textContent = "";
-        avviso.textContent = "Non è stato possibile cercare la parola ("
-          + errore.message + "). Riprova, oppure controlla la chiave nel riquadro qui sopra.";
-      }).then(function () {
-        bottone.disabled = false;
-        bottone.textContent = "Cerca i sinonimi";
       });
+    }
+
+    /* Se il servizio e' occupato, la pagina non si arrende: aspetta un
+       paio di secondi e riprova, e se serve passa al modello successivo
+       dell'elenco MODELLI. */
+    function chiediAiuto(domanda, chiave, quale, giaRiprovato) {
+      return chiamata(MODELLI[quale], domanda, chiave).catch(function (errore) {
+        if (!errore.occupato) { throw errore; }
+
+        if (!giaRiprovato) {
+          bottone.textContent = "Il servizio è occupato, riprovo...";
+          return attendi(2000).then(function () {
+            return chiediAiuto(domanda, chiave, quale, true);
+          });
+        }
+        if (quale + 1 < MODELLI.length) {
+          return chiediAiuto(domanda, chiave, quale + 1, false);
+        }
+        throw errore;
+      });
+    }
+
+    function attendi(millesimi) {
+      return new Promise(function (avanti) { setTimeout(avanti, millesimi); });
+    }
+
+    /* Gli avvisi di Google arrivano in inglese: qui si traducono nei
+       pochi casi che capitano davvero. */
+    function spiegaErrore(errore) {
+      var testo = errore.message || "";
+      if (errore.occupato) {
+        return "Il servizio di Google in questo momento ha troppe richieste. "
+          + "Riprova fra qualche secondo: di solito dura poco.";
+      }
+      if (/API key not valid|API_KEY_INVALID|PERMISSION_DENIED/i.test(testo)) {
+        return "La chiave non è stata accettata. Controllala nel riquadro qui sopra: "
+          + "si rimuove e si incolla di nuovo.";
+      }
+      if (/quota|RESOURCE_EXHAUSTED/i.test(testo)) {
+        return "La quota gratuita della chiave è esaurita per oggi. "
+          + "Riprova domani, oppure usa il rimando al dizionario Treccani.";
+      }
+      if (/Failed to fetch|NetworkError/i.test(testo)) {
+        return "Non c'è collegamento a internet, oppure la rete della scuola "
+          + "blocca il servizio.";
+      }
+      return "Non è stato possibile cercare la parola (" + testo + "). Riprova.";
     }
 
     /* La risposta arriva dentro una scatola di scatole: qui si prende
