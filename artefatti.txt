@@ -52,6 +52,7 @@
 # riga, non il blocco in cui si trova.
 
 
+Sinonimi e contrari | Lingua e letteratura italiana | docenti | italiano-sinonimi-e-contrari | Cerca sinonimi e contrari di una parola, divisi per significato, e indica quale gruppo si adatta alla frase in cui la parola è usata. Richiede una chiave personale di accesso al servizio.
 DA COMPILARE | Lingua e cultura straniera - inglese | docenti | inglese-DACOMPILARE | DA COMPILARE
 Il detective degli esperimenti | Scienze naturali | docenti | scienze-detective-degli-esperimenti | Quattordici casi in cui progettare passo per passo l'esperimento che scopre chi ha ragione, con il Sistema Internazionale e un allenamento a convertire le unità di misura.
 Triedro - metodi di rappresentazione | Disegno e storia dell'arte | docenti | arte-triedro | Un solido rappresentato con i diversi metodi: proiezioni ortogonali, assonometria, prospettiva e sezioni. Con l'Esploratore si osserva e si modifica, con la Palestra ci si esercita.

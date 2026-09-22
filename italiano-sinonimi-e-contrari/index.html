@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sinonimi e contrari</title>
+  <link rel="stylesheet" href="../stile.css?v=5">
+
+  <style>
+    /* -------------------------------------------------------------
+       Qui c'è solo la DISPOSIZIONE delle cose sulla pagina.
+       I colori arrivano tutti da stile.css: si usano i loro nomi
+       (var(--verde) e simili), mai i codici scritti a mano.
+       ------------------------------------------------------------- */
+
+    .ritorno {
+      max-width: var(--massimo);
+      margin: 0 auto 0.6rem;
+    }
+
+    /* Casella e pulsante sulla stessa riga; sul telefono il
+       pulsante va a capo e prende tutta la larghezza. */
+    .cerca-riga {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .cerca-riga input {
+      flex: 1 1 14rem;
+      min-width: 0;
+      font-size: 1.15rem;
+    }
+
+    .cerca-riga button { flex: 0 0 auto; }
+
+    .nota-piccola {
+      margin: 0.7rem 0 0;
+      font-size: 0.9rem;
+      color: var(--teal);
+    }
+
+    .avviso {
+      margin: 0.8rem 0 0;
+      font-weight: bold;
+      color: var(--verde);
+    }
+
+    .avviso:empty { display: none; }
+
+    /* Un significato per riquadro: sono le "accezioni" della parola. */
+    .significato {
+      border-left: 6px solid var(--verde-chiaro);
+      padding: 0.2rem 0 0.2rem 0.9rem;
+      margin: 1.2rem 0;
+    }
+
+    .significato.adatto { border-left-color: var(--giallo); }
+
+    .significato h3 { margin: 0 0 0.3rem; }
+
+    .esempio {
+      font-style: italic;
+      margin: 0 0 0.6rem;
+    }
+
+    .fila { margin: 0.4rem 0; }
+
+    .fila .titolo {
+      display: inline-block;
+      min-width: 9.5rem;
+      font-weight: bold;
+    }
+
+    .parola {
+      display: inline-block;
+      background: var(--crema);
+      border: 1px solid var(--verde-chiaro);
+      border-radius: 0.4rem;
+      padding: 0.05rem 0.45rem;
+      margin: 0.15rem 0.3rem 0.15rem 0;
+    }
+
+    .parola .nota {
+      font-size: 0.8rem;
+      color: var(--teal);
+    }
+
+    .segnalibro {
+      display: inline-block;
+      background: var(--giallo);
+      color: var(--blu-notte);
+      border-radius: 0.4rem;
+      padding: 0.05rem 0.45rem;
+      font-size: 0.85rem;
+      font-weight: bold;
+      margin-bottom: 0.4rem;
+    }
+
+    @media (max-width: 40rem) {
+      .cerca-riga button { flex: 1 1 100%; }
+      .fila .titolo { min-width: 0; display: block; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <p class="ritorno su-scuro"><a href="../index.html">&larr; Torna alla pagina iniziale</a></p>
+
+  <h1 class="titolo-pagina">Sinonimi e contrari</h1>
+  <p class="titolo-pagina">Per trovare la parola giusta mentre si scrive un tema.</p>
+
+  <div class="riquadro" id="riquadro-chiave"></div>
+
+  <main class="riquadro">
+
+    <form id="modulo" novalidate>
+      <label for="parola">Parola da cercare</label>
+      <div class="cerca-riga">
+        <input type="text" id="parola" autocomplete="off" spellcheck="true"
+               placeholder="per esempio importante">
+        <button type="submit" id="cerca">Cerca i sinonimi</button>
+      </div>
+
+      <label for="frase">La frase in cui la usi (se vuoi)</label>
+      <input type="text" id="frase" autocomplete="off"
+             placeholder="per esempio: è importante ricordare che..."
+             aria-describedby="spiega-frase">
+      <!-- TESTO MODIFICABILE: puoi cambiare le due frasi qui sotto -->
+      <p class="nota-piccola" id="spiega-frase">
+        La frase non è obbligatoria, ma aiuta: una parola ha più
+        significati, e così viene indicato quale gruppo di sinonimi
+        è adatto al senso che ti serve.
+      </p>
+
+      <p class="avviso" id="avviso" aria-live="polite"></p>
+    </form>
+
+    <div id="risultato" aria-live="polite"></div>
+
+    <p class="nota-piccola" id="verifica" hidden>
+      Le proposte sono generate da un programma e possono sbagliare.
+      Prima di usare una parola che non conosci, controllala sul
+      <a id="link-treccani" href="https://www.treccani.it/sinonimi/" target="_blank" rel="noopener">dizionario Treccani</a>.
+    </p>
+
+    <noscript>
+      <p>
+        Senza JavaScript la ricerca non funziona. Puoi cercare la parola
+        direttamente sul
+        <a href="https://www.treccani.it/sinonimi/" target="_blank" rel="noopener">dizionario dei sinonimi e contrari Treccani</a>.
+      </p>
+    </noscript>
+
+  </main>
+
+  <!-- TESTO MODIFICABILE: puoi cambiare le frasi di questo riquadro.
+       Attenzione solo a non cancellare i segni fra < e >. -->
+  <section class="riquadro">
+    <h2>Come scegliere il sinonimo giusto</h2>
+
+    <p>
+      Due parole diverse non hanno quasi mai lo stesso identico
+      significato. I sinonimi sono divisi per significato: scegli il
+      gruppo che corrisponde al senso della tua frase, non il primo che
+      trovi.
+    </p>
+
+    <p>
+      Guarda anche le indicazioni fra parentesi, che dicono in quale
+      contesto si usa una parola: letterario, antico, regionale,
+      familiare, non comune. In un tema evita le parole antiche,
+      regionali e familiari; quelle letterarie funzionano solo se tutto
+      il testo ha un tono adatto a sostenerle.
+    </p>
+
+    <p>
+      Quando hai scelto, rileggi l'intera frase con la parola nuova. Se
+      suona forzata o dice qualcosa di diverso da quello che intendevi,
+      torna indietro: a volte, per evitare una ripetizione, conviene
+      riformulare la frase invece di cambiare una parola sola.
+    </p>
+  </section>
+
+  <script src="../js/chiave.js?v=5"></script>
+  <script>
+    /* -------------------------------------------------------------
+       La pagina non contiene un dizionario: chiede i sinonimi al
+       servizio Gemini di Google, che risponde con un elenco diviso per
+       significato. La chiave di accesso resta soltanto nel browser di
+       chi usa la pagina: il riquadro qui sopra la gestisce da solo
+       (vedi js/chiave.js).
+
+       Niente viene salvato: la parola cercata e la frase restano nella
+       pagina finché è aperta.
+       ------------------------------------------------------------- */
+
+    ChiavePersonale.prepara({
+      dove: 'riquadro-chiave',
+      aCosaServe: 'cerca i sinonimi e i contrari',
+      inPiu: 'La parola cercata e la frase di esempio vengono inviate a Google: '
+           + 'non scrivere nella frase nomi di persone o altri dati riservati.'
+    });
+
+    var MODELLO = "gemini-3.6-flash";
+    var INDIRIZZO = "https://generativelanguage.googleapis.com/v1beta/models/"
+                  + MODELLO + ":generateContent";
+
+    /* Le istruzioni per il servizio. Si possono cambiare, ma la parte
+       sul formato JSON va lasciata com'è: senza quella la pagina non
+       riesce più a leggere la risposta. */
+    var ISTRUZIONI =
+      "Sei un dizionario italiano dei sinonimi e dei contrari, usato da studenti "
+      + "di scuola superiore che stanno scrivendo un tema.\n"
+      + "Per la parola richiesta elenca i significati principali (al massimo quattro), "
+      + "e per ciascuno i sinonimi, le parole di significato vicino ma non equivalente, "
+      + "e i contrari.\n"
+      + "Segnala fra parentesi nel campo nota se una parola è letteraria, antica, "
+      + "regionale, familiare, non comune, più forte o più debole; se è una parola "
+      + "normale lascia la nota vuota.\n"
+      + "Se viene indicata una frase, segna con adatto uguale a vero il significato "
+      + "che corrisponde a come la parola è usata in quella frase.\n"
+      + "Se la parola non esiste in italiano o è scritta male, lascia significati "
+      + "vuoto e scrivi il motivo in avvertenza, proponendo la grafia corretta.\n"
+      + "Rispondi SOLO con un oggetto JSON, senza testo prima o dopo, senza "
+      + "spiegazioni e senza virgolette a tripla apice, in questa forma:\n"
+      + '{"parola":"","significati":[{"senso":"","esempio":"","adatto":false,'
+      + '"sinonimi":[{"parola":"","nota":""}],"vicini":[{"parola":"","nota":""}],'
+      + '"contrari":[{"parola":"","nota":""}]}],"avvertenza":""}';
+
+    var modulo = document.getElementById("modulo");
+    var campoParola = document.getElementById("parola");
+    var campoFrase = document.getElementById("frase");
+    var avviso = document.getElementById("avviso");
+    var risultato = document.getElementById("risultato");
+    var verifica = document.getElementById("verifica");
+    var bottone = document.getElementById("cerca");
+
+    modulo.addEventListener("submit", function (evento) {
+      evento.preventDefault();
+      cerca();
+    });
+
+    campoParola.addEventListener("input", function () { avviso.textContent = ""; });
+
+    function cerca() {
+      var parola = campoParola.value.trim();
+      var frase = campoFrase.value.trim();
+
+      if (parola === "") {
+        avviso.textContent = "Scrivi prima la parola da cercare.";
+        campoParola.focus();
+        return;
+      }
+
+      var chiave = ChiavePersonale.leggi('liceo-digitale-chiave-google');
+      if (!chiave) {
+        avviso.textContent = "Serve la chiave di accesso personale: incollala nel "
+          + "riquadro qui sopra e salvala.";
+        return;
+      }
+
+      avviso.textContent = "";
+      risultato.textContent = "";
+      verifica.hidden = true;
+      bottone.disabled = true;
+      bottone.textContent = "Sto cercando...";
+
+      var domanda = "Parola: " + parola;
+      if (frase) { domanda += "\nFrase in cui è usata: " + frase; }
+
+      fetch(INDIRIZZO, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-goog-api-key": chiave
+        },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: domanda }] }],
+          systemInstruction: { parts: [{ text: ISTRUZIONI }] },
+          generationConfig: {
+            maxOutputTokens: 2000,
+            responseMimeType: "application/json"
+          }
+        })
+      }).then(function (risposta) {
+        return risposta.json().then(function (dati) {
+          if (!risposta.ok) {
+            var motivo = (dati && dati.error && dati.error.message) || ("errore " + risposta.status);
+            throw new Error(motivo);
+          }
+          return dati;
+        });
+      }).then(function (dati) {
+        mostra(leggiRisposta(dati), parola);
+      }).catch(function (errore) {
+        risultato.textContent = "";
+        avviso.textContent = "Non è stato possibile cercare la parola ("
+          + errore.message + "). Riprova, oppure controlla la chiave nel riquadro qui sopra.";
+      }).then(function () {
+        bottone.disabled = false;
+        bottone.textContent = "Cerca i sinonimi";
+      });
+    }
+
+    /* La risposta arriva dentro una scatola di scatole: qui si prende
+       il testo e lo si trasforma nell'elenco dei significati. */
+    function leggiRisposta(dati) {
+      var candidata = (dati.candidates || [])[0];
+      var parti = (candidata && candidata.content && candidata.content.parts) || [];
+      var testo = parti.map(function (p) { return p.text || ""; }).join("");
+      testo = testo.replace(/^[^{]*/, "").replace(/[^}]*$/, "");
+      if (!testo) { throw new Error("la risposta è arrivata vuota"); }
+      return JSON.parse(testo);
+    }
+
+    function elencoParole(voci) {
+      var contenitore = document.createElement("span");
+      (voci || []).forEach(function (voce) {
+        var testo = typeof voce === "string" ? voce : (voce.parola || "");
+        var nota = typeof voce === "string" ? "" : (voce.nota || "");
+        if (!testo) { return; }
+        var span = document.createElement("span");
+        span.className = "parola";
+        span.appendChild(document.createTextNode(testo));
+        if (nota) {
+          var piccolo = document.createElement("span");
+          piccolo.className = "nota";
+          piccolo.textContent = " (" + nota + ")";
+          span.appendChild(piccolo);
+        }
+        contenitore.appendChild(span);
+      });
+      return contenitore;
+    }
+
+    function fila(titolo, voci) {
+      if (!voci || !voci.length) { return null; }
+      var p = document.createElement("p");
+      p.className = "fila";
+      var t = document.createElement("span");
+      t.className = "titolo";
+      t.textContent = titolo;
+      p.appendChild(t);
+      p.appendChild(elencoParole(voci));
+      return p;
+    }
+
+    function mostra(dati, parolaCercata) {
+      risultato.textContent = "";
+      var significati = dati.significati || [];
+
+      if (dati.avvertenza) {
+        var nota = document.createElement("p");
+        nota.className = "avviso";
+        nota.textContent = dati.avvertenza;
+        risultato.appendChild(nota);
+      }
+
+      if (!significati.length) {
+        if (!dati.avvertenza) {
+          avviso.textContent = "Per questa parola non è arrivato nessun sinonimo.";
+        }
+        return;
+      }
+
+      var titolo = document.createElement("h2");
+      titolo.textContent = dati.parola || parolaCercata;
+      risultato.appendChild(titolo);
+
+      significati.forEach(function (s) {
+        var blocco = document.createElement("div");
+        blocco.className = "significato" + (s.adatto ? " adatto" : "");
+
+        if (s.adatto) {
+          var segno = document.createElement("span");
+          segno.className = "segnalibro";
+          segno.textContent = "il significato che corrisponde alla tua frase";
+          blocco.appendChild(segno);
+        }
+
+        var senso = document.createElement("h3");
+        senso.textContent = s.senso || "";
+        blocco.appendChild(senso);
+
+        if (s.esempio) {
+          var esempio = document.createElement("p");
+          esempio.className = "esempio";
+          esempio.textContent = s.esempio;
+          blocco.appendChild(esempio);
+        }
+
+        [["Sinonimi", s.sinonimi],
+         ["Significato vicino", s.vicini],
+         ["Contrari", s.contrari]].forEach(function (coppia) {
+          var riga = fila(coppia[0], coppia[1]);
+          if (riga) { blocco.appendChild(riga); }
+        });
+
+        risultato.appendChild(blocco);
+      });
+
+      document.getElementById("link-treccani").href =
+        "https://www.treccani.it/vocabolario/ricerca/"
+        + encodeURIComponent(parolaCercata) + "/Sinonimi_e_Contrari/";
+      verifica.hidden = false;
+    }
+  </script>
+
+</body>
+</html>
