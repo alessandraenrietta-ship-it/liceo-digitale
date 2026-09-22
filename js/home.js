@@ -220,7 +220,7 @@
 
       var stato = document.createElement("span");
       stato.className = "artefatto-stato";
-      stato.textContent = "— non ancora consegnato";
+      stato.textContent = "(non ancora consegnato)";
       voce.appendChild(stato);
     }
 
@@ -516,7 +516,7 @@
       lettura.problemi.unshift({
         numero: 0,
         testo: "(elenco delle discipline)",
-        motivo: "non sono riuscito a trovare l'elenco delle discipline in "
+        motivo: "non è stato possibile trovare l'elenco delle discipline in "
           + "fondo al registro"
       });
     }

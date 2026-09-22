@@ -392,7 +392,7 @@ const Esploratore = (function () {
 
     if (scheda === 'ortogonali') {
       if (vistaSingolaAttiva) opzioni.vistaSingola = stato.vistaSingola;
-      didascalia.textContent = 'Proiezioni ortogonali — metodo europeo (primo diedro) · ' + solido.nome + conSezione;
+      didascalia.textContent = 'Proiezioni ortogonali, metodo europeo (primo diedro) · ' + solido.nome + conSezione;
       Disegno.disegnaProiezioniOrtogonali(svg, solido, opzioni);
     } else if (scheda === 'assonometria' || scheda === 'sezioni') {
       const vista = vistaAssonometrica();

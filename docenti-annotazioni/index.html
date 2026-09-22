@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Annotazioni sul registro</title>
-<link rel="stylesheet" href="../stile.css?v=4">
+<link rel="stylesheet" href="../stile.css?v=5">
 
 <style>
   /* -------------------------------------------------------------
@@ -289,7 +289,7 @@
   Il testo è generato al momento da un modello linguistico e non viene salvato: chiudendo o ricaricando la pagina, tutto viene perso.
 </p>
 
-<script src="../js/chiave.js?v=4"></script>
+<script src="../js/chiave.js?v=5"></script>
 <script>
 /* ------------------------------------------------------------------
    LA CHIAVE DI ACCESSO PERSONALE
@@ -526,7 +526,7 @@ Descrizione dell'episodio fornita dal docente: ${fatto}`;
     document.getElementById("output").scrollIntoView({behavior:"smooth", block:"start"});
 
   } catch(err){
-    errorBox.textContent = "Non sono riuscita a generare la nota (" + err.message + "). Riprova.";
+    errorBox.textContent = "Non è stato possibile generare la nota (" + err.message + "). Riprova.";
     errorBox.style.display = "block";
   } finally {
     generaBtn.disabled = false;

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Costruisci il tuo tema argomentativo — Liceo Digitale</title>
-<link rel="stylesheet" href="../stile.css?v=4">
+<link rel="stylesheet" href="../stile.css?v=5">
 <style>
   /* I colori arrivano tutti da stile.css, il foglio comune del sito:
      qui si usano i loro nomi, mai i codici scritti a mano.
@@ -260,7 +260,7 @@
     </div>
 
     <div class="sezione-schema">
-      <h3>Argomentazione/i a favore della tesi</h3>
+      <h3>Argomenti a favore della tesi</h3>
       <div id="out-argomentazioni"></div>
     </div>
 
@@ -270,7 +270,7 @@
     </div>
 
     <div class="sezione-schema antitesi">
-      <h3>Argomentazione/i a favore dell'antitesi</h3>
+      <h3>Argomenti a favore dell'antitesi</h3>
       <div id="out-argomentazioni-antitesi"></div>
     </div>
 
@@ -295,7 +295,7 @@
 
 </div>
 
-<script src="../js/chiave.js?v=4"></script>
+<script src="../js/chiave.js?v=5"></script>
 <script>
 /* ------------------------------------------------------------------
    LA CHIAVE DI ACCESSO PERSONALE
@@ -353,7 +353,7 @@ Il tuo compito è restituire ESCLUSIVAMENTE una struttura guida in formato JSON.
 
 Rispondi SOLO con il JSON, senza testo introduttivo, senza markdown, senza backtick.
 
-La struttura da seguire, in ordine, è: introduzione, tesi, argomentazione/i a favore della tesi, antitesi, argomentazione/i a favore dell'antitesi, confutazione, sintesi e conclusione finale.
+La struttura da seguire, in ordine, è: introduzione, tesi, argomenti a favore della tesi, antitesi, argomenti a favore dell'antitesi, confutazione, sintesi e conclusione finale.
 
 Formato richiesto:
 {
@@ -421,7 +421,7 @@ Formato richiesto:
     const isRateLimit = msg.includes("quota") || msg.includes("rate") || msg.includes("429");
     document.getElementById('caricamento').innerText = isRateLimit
       ? "In questo momento il programma è molto richiesto: aspetta un minuto e premi di nuovo \"Genera struttura\"."
-      : "Qualcosa non ha funzionato. Riprova, o chiedi alla prof.";
+      : "Qualcosa non ha funzionato: riprova o chiedi all'insegnante.";
     console.error(err);
     btn.disabled = false;
     return;

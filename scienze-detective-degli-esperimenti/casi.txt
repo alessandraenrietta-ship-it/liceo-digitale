@@ -387,7 +387,7 @@ domanda: Come verifichi l'altra parte, cioè che il peso non conta?
 
 [PASSO]
 titolo: La conclusione
-premessa: Ecco le vostre misure. Altalena corta, circa 1,5 m: 2,46 s — 2,44 s — 2,47 s. Altalena lunga, circa 2,5 m: 3,18 s — 3,16 s — 3,17 s. Sulla stessa altalena, con persone da 35 a 70 kg: 2,45 s — 2,46 s — 2,44 s.
+premessa: Ecco le vostre misure. Altalena corta, circa 1,5 m: 2,46 s; 2,44 s; 2,47 s. Altalena lunga, circa 2,5 m: 3,18 s; 3,16 s; 3,17 s. Sulla stessa altalena, con persone da 35 a 70 kg: 2,45 s; 2,46 s; 2,44 s.
 domanda: Che cosa dicono questi numeri?
 + La lunghezza cambia la durata in modo netto; il peso no, perché le differenze restano dentro l'incertezza delle vostre misure | Fra le due altalene ci sono sette decimi di differenza, trenta volte più grandi del vostro errore. Fra i pesi ci sono due centesimi, cioè niente. Confrontare la differenza con l'incertezza è il modo giusto di leggere dei dati.
 - Anche il peso conta un pochino, perché i numeri non vengono identici | Differenze di uno o due centesimi sono più piccole dell'errore dello strumento: è rumore, non segnale.

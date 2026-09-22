@@ -232,7 +232,7 @@
       var fatto = risultati[caso.titolo];
       if (fatto) {
         carta.appendChild(elemento("div", "carta-stato",
-          "✓ già affrontato — miglior risultato " + fatto.giuste + " su " + fatto.totale));
+          "✓ già affrontato (miglior risultato: " + fatto.giuste + " su " + fatto.totale + ")"));
       } else {
         carta.appendChild(elemento("div", "carta-passi",
           caso.passi.length + (caso.passi.length === 1 ? " passo" : " passi")));
