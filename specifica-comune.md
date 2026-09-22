@@ -1,4 +1,4 @@
-# Specifica comune - artefatti del sito Liceo Digitale
+# Specifica comune - artefatti del sito Liceo digitale
 
 Incolla questo testo all'inizio della tua sessione, prima di chiedere
 qualsiasi cosa. Serve a far sì che i dieci artefatti stiano insieme in
