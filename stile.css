@@ -210,9 +210,18 @@ label {
    chiedono una chiave. Va dentro un .riquadro.
    ----------------------------------------------------------------- */
 
+/* Le spiegazioni del riquadro si leggono una volta sola, quando si
+   incolla la chiave: stanno scritte in piccolo, così il riquadro non
+   pesa più dello strumento che sta sotto. */
+.chiave-spiegazione {
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
 /* La frase in più che un singolo artefatto può aggiungere al
    riquadro: si stacca dal resto perché riguarda solo lui. */
 .chiave-in-piu {
+  font-size: 0.85rem;
   padding: 0.7em 0.9em;
   background: #FFFFFF;
   border-left: 6px solid var(--bordo);

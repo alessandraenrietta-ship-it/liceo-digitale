@@ -125,14 +125,17 @@ window.ChiavePersonale = (function () {
 
     contenitore.innerHTML =
       '<h2>Chiave di accesso personale</h2>' +
-      '<p>Questa pagina ' + aCosaServe + ' chiedendo aiuto al servizio ' +
+      /* Le spiegazioni si leggono una volta sola: stanno scritte in
+         piccolo, per non rubare spazio allo strumento vero e proprio.
+         La misura si decide in stile.css, con .chiave-spiegazione. */
+      '<p class="chiave-spiegazione">Questa pagina ' + aCosaServe + ' chiedendo aiuto al servizio ' +
       'Gemini di Google, che richiede una chiave personale gratuita per ' +
       'funzionare. La chiave resta soltanto in questo browser: non viene ' +
       'mai scritta nel codice del sito e non passa da nessun\'altra ' +
       'parte. Si ottiene gratuitamente su ' +
       '<a href="https://aistudio.google.com/apikey" target="_blank" ' +
       'rel="noopener">Google AI Studio</a>, con un account Google.</p>' +
-      '<p><strong>Da sapere:</strong> con la chiave gratuita, Google può ' +
+      '<p class="chiave-spiegazione"><strong>Da sapere:</strong> con la chiave gratuita, Google può ' +
       'usare il testo che scrivi per migliorare i suoi servizi. Chi ' +
       'preferisce evitarlo può usare una chiave a pagamento, che non ha ' +
       'questo effetto.</p>' +
