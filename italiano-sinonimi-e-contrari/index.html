@@ -203,8 +203,10 @@
 
     /* I modelli si provano in quest'ordine: se il primo è occupato
        perché in quel momento lo stanno usando in troppi, la pagina
-       passa al secondo. Per cambiarli basta riscrivere i nomi qui. */
-    var MODELLI = ["gemini-3.6-flash", "gemini-3.5-flash-lite"];
+       passa al secondo. Per cambiarli basta riscrivere i nomi qui.
+       Il "lite" sta per primo perché è quello meno affollato: è lo
+       stesso che usa il Tema argomentativo. */
+    var MODELLI = ["gemini-3.5-flash-lite", "gemini-3.6-flash"];
     var INDIRIZZO_PRIMA = "https://generativelanguage.googleapis.com/v1beta/models/";
     var INDIRIZZO_DOPO = ":generateContent";
 
@@ -271,11 +273,15 @@
       var domanda = "Parola: " + parola;
       if (frase) { domanda += "\nFrase in cui è usata: " + frase; }
 
-      chiediAiuto(domanda, chiave, 0, false).then(function (dati) {
+      chiediAiuto(domanda, chiave, 0, 0).then(function (dati) {
         mostra(leggiRisposta(dati), parola);
       }).catch(function (errore) {
         risultato.textContent = "";
         avviso.textContent = spiegaErrore(errore);
+        /* Anche quando il servizio non risponde, la parola si può
+           sempre cercare sul dizionario: il rimando compare qui sotto,
+           già pronto sulla parola scritta. */
+        mostraRimandoTreccani(parola);
       }).then(function () {
         bottone.disabled = false;
         bottone.textContent = "Cerca i sinonimi";
@@ -318,18 +324,21 @@
     /* Se il servizio e' occupato, la pagina non si arrende: aspetta un
        paio di secondi e riprova, e se serve passa al modello successivo
        dell'elenco MODELLI. */
-    function chiediAiuto(domanda, chiave, quale, giaRiprovato) {
+    function chiediAiuto(domanda, chiave, quale, tentativo) {
       return chiamata(MODELLI[quale], domanda, chiave).catch(function (errore) {
         if (!errore.occupato) { throw errore; }
 
-        if (!giaRiprovato) {
-          bottone.textContent = "Il servizio è occupato, riprovo...";
-          return attendi(2000).then(function () {
-            return chiediAiuto(domanda, chiave, quale, true);
+        /* Due tentativi per modello, aspettando ogni volta un po' di
+           più; poi si passa al modello successivo. */
+        if (tentativo < 2) {
+          bottone.textContent = "Il servizio è occupato, riprovo... ("
+            + (quale * 2 + tentativo + 1) + " di " + (MODELLI.length * 2) + ")";
+          return attendi(2000 * (tentativo + 1)).then(function () {
+            return chiediAiuto(domanda, chiave, quale, tentativo + 1);
           });
         }
         if (quale + 1 < MODELLI.length) {
-          return chiediAiuto(domanda, chiave, quale + 1, false);
+          return chiediAiuto(domanda, chiave, quale + 1, 0);
         }
         throw errore;
       });
@@ -459,9 +468,13 @@
         risultato.appendChild(blocco);
       });
 
+      mostraRimandoTreccani(parolaCercata);
+    }
+
+    function mostraRimandoTreccani(parola) {
       document.getElementById("link-treccani").href =
         "https://www.treccani.it/vocabolario/ricerca/"
-        + encodeURIComponent(parolaCercata) + "/Sinonimi_e_Contrari/";
+        + encodeURIComponent(parola) + "/Sinonimi_e_Contrari/";
       verifica.hidden = false;
     }
   </script>
