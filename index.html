@@ -139,6 +139,17 @@
       color: var(--teal);
     }
 
+    /* I titoli degli strumenti pronti: uno per riga, con il pallino,
+       come un elenco. Non è un vero elenco <ul> perché stanno dentro
+       un pulsante, che non lo può contenere. */
+    .disciplina-stato .artefatto-pronto {
+      display: block;
+      padding-left: 0.9em;
+      text-indent: -0.9em;
+    }
+
+    .disciplina-stato .artefatto-pronto::before { content: "\2022  "; }
+
     .disciplina-testata .disciplina-nome { text-decoration: underline; }
     .disciplina-testata[aria-expanded="true"] .disciplina-nome { text-decoration: none; }
 
@@ -257,7 +268,7 @@
     <ul id="elenco-segnalazioni"></ul>
   </section>
 
-  <script src="js/home.js?v=11"></script>
+  <script src="js/home.js?v=12"></script>
 
 </body>
 </html>

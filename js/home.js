@@ -293,11 +293,17 @@
     } else {
       /* Quando c'è qualcosa di pronto si scrive il suo nome, non
          "1 artefatto disponibile": si capisce subito che cosa c'è
-         dentro senza dover aprire. Se sono più d'uno, compaiono tutti. */
-      stato.textContent = artefatti
+         dentro senza dover aprire. Se sono più d'uno, compaiono tutti,
+         uno sotto l'altro: di seguito sulla stessa riga i titoli si
+         confondevano fra loro. */
+      artefatti
         .filter(function (artefatto) { return artefatto.pronto; })
-        .map(function (artefatto) { return artefatto.titolo; })
-        .join(" · ");
+        .forEach(function (artefatto) {
+          var titolo = document.createElement("span");
+          titolo.className = "artefatto-pronto";
+          titolo.textContent = artefatto.titolo;
+          stato.appendChild(titolo);
+        });
     }
     testata.appendChild(stato);
 
