@@ -54,8 +54,8 @@
 
 Sinonimi e contrari | Lingua e letteratura italiana | docenti | italiano-sinonimi-e-contrari | Cerca sinonimi e contrari di una parola, divisi per significato, e indica quale gruppo si adatta alla frase in cui la parola è usata. Richiede una chiave personale di accesso al servizio.
 DA COMPILARE | Lingua e cultura straniera - inglese | docenti | inglese-DACOMPILARE | DA COMPILARE
-Il detective degli esperimenti | Scienze naturali | docenti | scienze-detective-degli-esperimenti | Quattordici casi in cui progettare passo per passo l'esperimento che scopre chi ha ragione, con il Sistema Internazionale e un allenamento a convertire le unità di misura.
-Triedro - metodi di rappresentazione | Disegno e storia dell'arte | docenti | arte-triedro | Un solido rappresentato con i diversi metodi: proiezioni ortogonali, assonometria, prospettiva e sezioni. Con l'Esploratore si osserva e si modifica, con la Palestra ci si esercita.
+Il detective degli esperimenti | Scienze naturali | entrambi | scienze-detective-degli-esperimenti | Quattordici casi in cui progettare passo per passo l'esperimento che scopre chi ha ragione, con il Sistema Internazionale e un allenamento a convertire le unità di misura.
+Triedro - metodi di rappresentazione | Disegno e storia dell'arte | entrambi | arte-triedro | Un solido rappresentato con i diversi metodi: proiezioni ortogonali, assonometria, prospettiva e sezioni. Con l'Esploratore si osserva e si modifica, con la Palestra ci si esercita.
 DA COMPILARE | Informatica | docenti | informatica-DACOMPILARE | DA COMPILARE
 Aureolissima - Punti Paradiso | Religione cattolica | docenti | religione-aureolissima | Gioco a punti per la classe: il docente assegna i Punti Paradiso, gli studenti li chiedono e li guadagnano con quiz e domande a sorpresa. Nomi veri non servono: si usano nickname. Tutto resta sul computer di chi la usa.
 Il Regolamento in Gioco | Educazione civica | entrambi | edcivica-regolamento-in-gioco | Gioco a squadre sul regolamento d'istituto: cinque casi da risolvere cercando sanzione, organo competente e procedura, con cronometro e bacheca delle risposte. Si conduce dallo schermo proiettato.
