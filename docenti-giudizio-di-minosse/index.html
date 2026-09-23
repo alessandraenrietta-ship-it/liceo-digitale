@@ -10,8 +10,9 @@
 
   Questo strumento è volutamente un unico file: testo, aspetto e
   funzionamento stanno tutti qui dentro, e non chiede niente a nessun
-  altro sito. Non salva niente: i nomi restano in memoria solo finché
-  la pagina è aperta.
+  altro sito. Gli elenchi non escono da questo computer: restano nella
+  pagina finché è aperta, e soltanto le classi salvate apposta restano
+  nel browser di chi le salva.
 
   I testi che si possono cambiare senza toccare il resto sono segnati
   con il commento  TESTO MODIFICABILE .
@@ -162,6 +163,35 @@
   }
   .conferma { text-align: center; }
   .privacy { color: var(--testo-tenue); font-size: 15px; text-align: center; margin-top: 16px; }
+
+  /* ---------- Le classi salvate ---------- */
+  .salvataggio {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--ocra-scura);
+  }
+  .riga-salva { display: flex; flex-wrap: wrap; gap: 8px; }
+  .riga-salva input {
+    font: inherit; flex: 1 1 12em; min-width: 0; padding: 8px 10px;
+    border-radius: 10px; border: 2px solid var(--ocra);
+    background: #fff8e8; color: var(--inchiostro);
+  }
+  .titolo-classi { font-weight: 700; color: var(--ocra); margin: 16px 0 8px; }
+  .elenco-classi { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .elenco-classi li { display: flex; align-items: stretch; }
+  .classe-apri {
+    border-radius: 12px 0 0 12px;
+    border-right-width: 1px;
+    font-size: 16px;
+  }
+  .classe-togli {
+    border-radius: 0 12px 12px 0;
+    border-left-width: 1px;
+    padding: 10px 12px;
+    font-size: 15px;
+    color: var(--testo-tenue);
+  }
+  .classe-togli:hover:not(:disabled) { background: #5a1a10; color: #ffd9c4; }
 
   /* ---------- Il giudizio ---------- */
   .giudizio {
@@ -359,7 +389,6 @@
     <fieldset class="modi">
       <legend class="solo-lettori">Come preparare la classe</legend>
       <label><input type="radio" name="modo" value="numero" checked> Solo numeri</label>
-      <label><input type="radio" name="modo" value="file"> Carica un file</label>
       <label><input type="radio" name="modo" value="incolla"> Incolla l'elenco</label>
     </fieldset>
 
@@ -369,16 +398,10 @@
       <p class="aiuto">Le anime saranno riconosciute solo dal numero, come sul registro.</p>
     </div>
 
-    <div id="modo-file" class="campo" hidden>
-      <label for="file-classe">File .txt o .csv, un cognome (o cognome e nome) per riga</label>
-      <input type="file" id="file-classe" accept=".txt,.csv,text/plain,text/csv">
-      <p class="aiuto">Nel file .csv si usa solo la prima colonna. Le righe vuote e gli spazi in più non contano. Il numero di ciascuno è la sua posizione nell'elenco.</p>
-    </div>
-
     <div id="modo-incolla" class="campo" hidden>
       <label for="testo-classe">Un nome per riga, nell'ordine del registro</label>
       <textarea id="testo-classe" spellcheck="false" placeholder="Rossi&#10;Bianchi&#10;Verdi"></textarea>
-      <p class="aiuto">Il numero di ciascuno è la sua posizione nell'elenco.</p>
+      <p class="aiuto">Il numero di ciascuno è la sua posizione nell'elenco. Si può incollare direttamente dal registro elettronico.</p>
     </div>
 
     <div class="anteprima" aria-live="polite">
@@ -390,10 +413,32 @@
     <p class="conferma">
       <button type="button" class="principale" id="conferma">Conferma la classe</button>
     </p>
+
+    <!-- Le classi salvate su questo computer -->
+    <div class="salvataggio">
+      <div class="campo">
+        <label for="nome-classe">Salva questa classe con un nome (per esempio 3A)</label>
+        <div class="riga-salva">
+          <input type="text" id="nome-classe" maxlength="20" placeholder="3A" autocomplete="off">
+          <button type="button" id="salva-classe">Salva</button>
+        </div>
+        <p class="aiuto" id="esito-salvataggio" role="status"></p>
+      </div>
+
+      <div id="classi-salvate" hidden>
+        <p class="titolo-classi">Le tue classi, su questo computer</p>
+        <ul class="elenco-classi" id="elenco-classi"></ul>
+      </div>
+    </div>
   </section>
 
   <!-- TESTO MODIFICABILE: la nota sulla riservatezza -->
-  <p class="privacy">I nomi restano solo in questa pagina finché è aperta: non vengono salvati né inviati da nessuna parte. Chiusa la pagina, Minosse dimentica tutti.</p>
+  <p class="privacy">
+    Gli elenchi non escono da questo computer: non vengono inviati da
+    nessuna parte. Se salvi una classe resta nel browser di questo
+    computer finché non la cancelli, quindi su un computer condiviso
+    salva solo quello che altri possono vedere.
+  </p>
 </main>
 
 <!-- ============ IL GIUDIZIO ============ -->
@@ -668,27 +713,9 @@
     return riga.normalize("NFC").replace(/[\s ]+/g, " ").trim();
   }
 
-  /* Prima colonna di una riga CSV: separatori , ; o tabulazione, con
-     eventuali virgolette attorno. */
-  function primaColonna(riga) {
-    var r = riga.replace(/^\s+/, "");
-    if (r.charAt(0) === '"') {
-      var fuori = "";
-      for (var i = 1; i < r.length; i += 1) {
-        if (r.charAt(i) === '"') {
-          if (r.charAt(i + 1) === '"') { fuori += '"'; i += 1; } else { break; }
-        } else {
-          fuori += r.charAt(i);
-        }
-      }
-      return fuori;
-    }
-    return r.split(/[;,\t]/)[0];
-  }
-
-  function daTesto(testo, csv) {
+  function daTesto(testo) {
     return testo.replace(/^﻿/, "").split(/\r\n|\r|\n/)
-      .map(function (riga) { return pulisci(csv ? primaColonna(riga) : riga); })
+      .map(function (riga) { return pulisci(riga); })
       .filter(function (riga) { return riga !== ""; })
       .map(function (nome, i) { return { numero: i + 1, nome: nome }; });
   }
@@ -699,22 +726,6 @@
     return anime;
   }
 
-  /* Il file si legge come UTF-8. Se non lo è (capita con i file salvati
-     da Excel su Windows), si rilegge nella codifica di Windows, così le
-     lettere accentate restano giuste. */
-  function leggiFile(file) {
-    return file.arrayBuffer().then(function (dati) {
-      try {
-        return new TextDecoder("utf-8", { fatal: true }).decode(dati);
-      } catch (e) {
-        return new TextDecoder("windows-1252").decode(dati);
-      }
-    });
-  }
-
-  var testoDelFile = "";
-  var fileCsv = false;
-
   function modoScelto() {
     return document.querySelector('input[name="modo"]:checked').value;
   }
@@ -722,7 +733,6 @@
   function aggiornaAnteprima() {
     var modo = modoScelto();
     $("modo-numero").hidden = modo !== "numero";
-    $("modo-file").hidden = modo !== "file";
     $("modo-incolla").hidden = modo !== "incolla";
 
     var errore = "";
@@ -734,11 +744,8 @@
       } else {
         anime = soloNumeri(quanti);
       }
-    } else if (modo === "file") {
-      if (!testoDelFile) { errore = "Scegli un file .txt o .csv."; }
-      else { anime = daTesto(testoDelFile, fileCsv); }
     } else {
-      anime = daTesto($("testo-classe").value, false);
+      anime = daTesto($("testo-classe").value);
     }
     if (!errore && anime.length < 2) {
       errore = "Servono almeno due anime: Minosse non giudica chi è solo.";
@@ -766,20 +773,116 @@
   });
   $("quanti").addEventListener("input", aggiornaAnteprima);
   $("testo-classe").addEventListener("input", aggiornaAnteprima);
-  $("file-classe").addEventListener("change", function () {
-    var file = this.files && this.files[0];
-    testoDelFile = "";
-    if (!file) { aggiornaAnteprima(); return; }
-    fileCsv = /\.csv$/i.test(file.name) || file.type === "text/csv";
-    leggiFile(file).then(function (testo) {
-      testoDelFile = testo;
-      aggiornaAnteprima();
-    }, function () {
-      testoDelFile = "";
-      aggiornaAnteprima();
-      $("anteprima-errore").textContent = "Non riesco a leggere questo file.";
-      $("anteprima-errore").hidden = false;
+  /* ---------- Le classi salvate su questo computer ----------
+     Un docente usa sempre le stesse classi: riscrivere l'elenco ogni
+     volta è una perdita di tempo. Gli elenchi salvati restano nel
+     browser di questo computer, non vengono inviati da nessuna parte,
+     e si cancellano con il pulsante accanto al nome. */
+
+  var NOME_ARCHIVIO = "liceo-digitale-minosse-classi";
+
+  function classiSalvate() {
+    try {
+      var grezzo = localStorage.getItem(NOME_ARCHIVIO);
+      var elenco = grezzo ? JSON.parse(grezzo) : [];
+      return Array.isArray(elenco) ? elenco : [];
+    } catch (e) {
+      /* Se il salvataggio è rovinato o il browser non lo permette,
+         si riparte da zero invece di bloccare tutto. */
+      return [];
+    }
+  }
+
+  function scriviClassi(elenco) {
+    try {
+      localStorage.setItem(NOME_ARCHIVIO, JSON.stringify(elenco));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function mostraClassi() {
+    var elenco = classiSalvate();
+    var contenitore = $("elenco-classi");
+    contenitore.textContent = "";
+    $("classi-salvate").hidden = elenco.length === 0;
+
+    elenco.forEach(function (classe, posizione) {
+      var li = document.createElement("li");
+
+      var apri = document.createElement("button");
+      apri.type = "button";
+      apri.className = "classe-apri";
+      apri.textContent = classe.nome + " (" + classe.nomi.length + ")";
+      apri.title = "Apri la classe " + classe.nome;
+      apri.addEventListener("click", function () {
+        document.querySelector('input[name="modo"][value="incolla"]').checked = true;
+        $("testo-classe").value = classe.nomi.join("\n");
+        $("nome-classe").value = classe.nome;
+        $("esito-salvataggio").textContent = "";
+        aggiornaAnteprima();
+        $("conferma").focus();
+      });
+
+      var togli = document.createElement("button");
+      togli.type = "button";
+      togli.className = "classe-togli";
+      togli.textContent = "✕";
+      togli.title = "Cancella la classe " + classe.nome + " da questo computer";
+      togli.setAttribute("aria-label", "Cancella la classe " + classe.nome);
+      togli.addEventListener("click", function () {
+        var rimanenti = classiSalvate();
+        rimanenti.splice(posizione, 1);
+        scriviClassi(rimanenti);
+        mostraClassi();
+        $("esito-salvataggio").textContent = "Classe " + classe.nome + " cancellata da questo computer.";
+      });
+
+      li.appendChild(apri);
+      li.appendChild(togli);
+      contenitore.appendChild(li);
     });
+  }
+
+  $("salva-classe").addEventListener("click", function () {
+    var nome = $("nome-classe").value.replace(/\s+/g, " ").trim();
+    var esito = $("esito-salvataggio");
+
+    if (!nome) {
+      esito.textContent = "Scrivi prima un nome per la classe, per esempio 3A.";
+      $("nome-classe").focus();
+      return;
+    }
+    if (!anteprimaAnime.length) {
+      esito.textContent = "Prima prepara l'elenco qui sopra, poi salvalo.";
+      return;
+    }
+    if (!anteprimaAnime[0].nome) {
+      esito.textContent = "Una classe di soli numeri non vale la pena di salvarla: "
+        + "basta scrivere quanti sono.";
+      return;
+    }
+
+    var elenco = classiSalvate();
+    var nomi = anteprimaAnime.map(function (a) { return a.nome; });
+    var giaC = -1;
+    elenco.forEach(function (c, i) {
+      if (c.nome.toLowerCase() === nome.toLowerCase()) { giaC = i; }
+    });
+
+    if (giaC >= 0) { elenco[giaC] = { nome: nome, nomi: nomi }; }
+    else { elenco.push({ nome: nome, nomi: nomi }); }
+
+    if (scriviClassi(elenco)) {
+      esito.textContent = giaC >= 0
+        ? "Classe " + nome + " aggiornata su questo computer."
+        : "Classe " + nome + " salvata su questo computer.";
+      mostraClassi();
+    } else {
+      esito.textContent = "Questo browser non mi lascia salvare. "
+        + "Di solito succede in navigazione anonima.";
+    }
   });
 
   $("conferma").addEventListener("click", function () {
@@ -1067,6 +1170,7 @@
     bottoneSchermo.textContent = document.fullscreenElement ? "Esci dallo schermo intero" : "Schermo intero";
   });
 
+  mostraClassi();
   aggiornaAnteprima();
 }());
 </script>
