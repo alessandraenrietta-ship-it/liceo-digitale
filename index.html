@@ -177,6 +177,11 @@
       color: var(--teal);
     }
 
+    /* Il riquadro della presentazione: testo e pulsante al centro,
+       come il titolo. */
+    .presentazione-testo { text-align: center; }
+    .presentazione-testo:last-child { margin-bottom: 0; }
+
     .gruppo-docenti { margin-top: var(--spazio); }
 
     .accesso { max-width: 22rem; }
@@ -221,6 +226,20 @@
   -->
 
   <h1 class="titolo-pagina">Liceo digitale</h1>
+
+  <!-- TESTO MODIFICABILE: puoi cambiare le due righe qui sotto.
+       Questo riquadro sta fuori dalle sezioni con la password: la
+       presentazione la vede chiunque apra il sito, anche le famiglie. -->
+  <section class="riquadro" aria-labelledby="titolo-presentazione">
+    <h2 id="titolo-presentazione">Che cos'è il Liceo digitale</h2>
+    <p class="presentazione-testo">
+      Due minuti per vedere che cosa si studia, come si lavora e che cosa
+      cambia rispetto al liceo scientifico.
+    </p>
+    <p class="presentazione-testo">
+      <a class="pulsante" href="presentazione-liceo-digitale/">Guarda la presentazione</a>
+    </p>
+  </section>
 
   <section class="riquadro" aria-labelledby="titolo-studenti">
     <h2 id="titolo-studenti">Per gli studenti</h2>
