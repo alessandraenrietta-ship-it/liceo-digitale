@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Orario e aule</title>
-  <link rel="stylesheet" href="../stile.css?v=6">
+  <script src="../js/tema.js?v=1"></script>
+<link rel="stylesheet" href="../stile.css?v=7">
 
   <style>
     /* -------------------------------------------------------------
@@ -12,11 +13,6 @@
        I colori arrivano tutti da stile.css: si usano i loro nomi
        (var(--verde) e simili), mai i codici scritti a mano.
        ------------------------------------------------------------- */
-
-    .ritorno {
-      max-width: var(--massimo);
-      margin: 0 auto 0.6rem;
-    }
 
     /* Il riquadro dell'orario è più largo degli altri:
        cinque giorni per otto ore non stanno in 60rem. */
@@ -34,7 +30,7 @@
       overflow-y: auto;
       border: 2px solid var(--verde);
       border-radius: var(--raggio);
-      background: #FFFFFF;
+      background: var(--campo);
     }
 
     .risultati:empty { display: none; }
@@ -56,7 +52,7 @@
 
     .risultati button:hover,
     .risultati button:focus-visible {
-      background: var(--crema);
+      background: var(--fondo-lettura);
     }
 
     .risultati .tipo {
@@ -127,7 +123,7 @@
 
     table.orario th.ora {
       width: 6.5rem;
-      background: var(--crema);
+      background: var(--fondo-lettura);
       color: var(--verde);
       white-space: nowrap;
     }
@@ -159,7 +155,7 @@
       padding: 0.1em 0.5em;
       font-size: 0.88rem;
       color: var(--testo);
-      background: #FFFFFF;
+      background: var(--campo);
       border: 1px dashed var(--teal);
       border-radius: var(--raggio);
     }
@@ -235,7 +231,7 @@
       padding: 0.1em 0.5em;
       font-size: 0.88rem;
       color: var(--testo);
-      background: #FFFFFF;
+      background: var(--campo);
       border: 1px dashed #7A7A7A;
       border-radius: var(--raggio);
     }
@@ -245,7 +241,7 @@
     .avviso {
       margin-top: var(--spazio);
       padding: 0.8rem 1rem;
-      background: #FFFFFF;
+      background: var(--campo);
       border-left: 6px solid var(--verde);
       border-radius: var(--raggio);
       color: var(--testo);
@@ -279,7 +275,7 @@
       padding: 0.6em 0.8em;
       font-size: 1rem;
       color: var(--testo);
-      background: #FFFFFF;
+      background: var(--campo);
       border-left: 6px solid var(--verde);
       border-radius: var(--raggio);
     }
@@ -332,7 +328,7 @@
 
 <body>
 
-  <p class="ritorno su-scuro"><a href="../index.html">&larr; Torna alla pagina iniziale</a></p>
+  <p class="ritorno su-scuro"><a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a></p>
 
   <h1 class="titolo-pagina">Orario e aule</h1>
   <p class="titolo-pagina">Cerca una classe o un insegnante e vedi la settimana, con l'aula di ogni ora.</p>

@@ -29,9 +29,15 @@
   --testo-su-scuro:   #FFFFFF;
   --fondo-lettura:    var(--crema);
   --bordo:            var(--giallo);
+  --campo:            #FFFFFF;   /* fondo delle caselle da compilare */
+  --pulsante-fondo:   var(--verde);
+  --pulsante-testo:   var(--testo-su-scuro);
+  --pulsante-sopra:   var(--teal);   /* quando ci passi sopra il mouse */
 
   /* Sfondo generale: gradiente verde-blu, sostituisce l'immagine */
-  --sfondo: linear-gradient(135deg, #4E9A5A 0%, var(--teal) 45%, var(--blu-notte) 100%);
+  /* Il verde di partenza è scuro apposta: sopra ci scriviamo in bianco
+     e in giallo, e su un verde più chiaro quei testi si leggevano male. */
+  --sfondo: linear-gradient(135deg, #357042 0%, var(--teal) 45%, var(--blu-notte) 100%);
 
   /* Caratteri */
   --carattere: Arial, Helvetica, sans-serif;
@@ -46,6 +52,33 @@
    Il verde chiaro e il giallo NON vanno mai usati per il testo su
    fondo crema o bianco: il contrasto è troppo basso e il testo
    diventa illeggibile. Su fondo blu notte invece funzionano bene. */
+
+
+/* -----------------------------------------------------------------
+   MODALITÀ SCURA
+   Si accende con l'interruttore che sta sulla pagina iniziale. La
+   scelta resta ricordata nel browser di chi la fa (vedi js/tema.js).
+   Chi non la chiede vede il sito chiaro, come sempre.
+
+   Qui NON si ridisegna niente: si cambiano soltanto i colori dei
+   ruoli scritti qui sopra, e tutto il sito li segue. Se aggiungi un
+   colore nuovo, mettilo anche qui, altrimenti in modalità scura
+   resterà com'era e rischia di non leggersi.
+   ----------------------------------------------------------------- */
+
+html[data-tema="scuro"] {
+  /* Sul fondo scuro il verde del logo diventa illeggibile: al suo
+     posto, per titoli e collegamenti, si usa il verde chiaro. */
+  --verde:          #9BD246;
+  --teal:           #7FC8DA;
+  --testo:          #F1F7F3;
+  --fondo-lettura:  #10222C;
+  --campo:          #0B1A22;
+  --pulsante-fondo: #9BD246;
+  --pulsante-testo: #06231A;
+  --pulsante-sopra: #B7E065;
+  --sfondo: linear-gradient(135deg, #0A2B1D 0%, #072A33 45%, #01060F 100%);
+}
 
 
 /* -----------------------------------------------------------------
@@ -137,8 +170,8 @@ button,
   font-family: inherit;
   font-size: 1rem;
   font-weight: bold;
-  color: var(--testo-su-scuro);
-  background: var(--verde);
+  color: var(--pulsante-testo);
+  background: var(--pulsante-fondo);
   border: none;
   border-radius: var(--raggio);
   cursor: pointer;
@@ -146,7 +179,7 @@ button,
 }
 
 button:hover,
-.pulsante:hover { background: var(--teal); }
+.pulsante:hover { background: var(--pulsante-sopra); }
 
 button:disabled {
   background: #9A9A9A;
@@ -164,7 +197,7 @@ input, textarea, select {
   font-family: inherit;
   font-size: 1rem;
   color: var(--testo);
-  background: #FFFFFF;
+  background: var(--campo);
   border: 2px solid var(--verde);
   border-radius: var(--raggio);
 }
@@ -176,6 +209,53 @@ label {
   color: var(--verde);
 }
 
+
+/* -----------------------------------------------------------------
+   IL RITORNO ALLA PAGINA INIZIALE
+   Sta in cima a ogni artefatto. È una freccia tonda con accanto il
+   nome del sito: la freccia è alta 44 pixel, la misura minima perché
+   un dito la centri senza sbagliare sul telefono.
+
+   È scritto qui una volta sola: cambiando queste righe cambia in tutte
+   le pagine del sito. Gli artefatti dei colleghi, che tengono i loro
+   colori, ripetono la stessa forma nel proprio foglio di stile.
+
+   Nelle pagine scritte su fondo scuro si aggiunge la parola su-scuro:
+   <p class="ritorno su-scuro">
+   ----------------------------------------------------------------- */
+
+.ritorno {
+  max-width: var(--massimo);
+  margin: 0 auto 0.6rem;
+}
+
+.ritorno a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  min-height: 44px;
+  color: var(--verde);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.ritorno .freccia {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.ritorno a:hover { text-decoration: underline; }
+.ritorno a:hover .freccia { background: var(--verde); color: var(--pulsante-testo); }
+
+.ritorno.su-scuro a { color: var(--giallo); }
+.ritorno.su-scuro a:hover .freccia { background: var(--giallo); color: var(--blu-notte); }
 
 /* -----------------------------------------------------------------
    ACCESSIBILITÀ
@@ -223,7 +303,7 @@ label {
 .chiave-in-piu {
   font-size: 0.85rem;
   padding: 0.7em 0.9em;
-  background: #FFFFFF;
+  background: var(--campo);
   border-left: 6px solid var(--bordo);
   border-radius: var(--raggio);
 }

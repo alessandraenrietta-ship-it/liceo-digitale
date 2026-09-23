@@ -12,7 +12,10 @@
     QUANDO SI MODIFICA stile.css O js/home.js, SI AUMENTA IL NUMERO
     DI UNO anche qui sotto.
   -->
-  <link rel="stylesheet" href="stile.css?v=6">
+  <!-- La modalità chiara o scura, scelta dall'interruttore sulla pagina
+       iniziale. Va letto prima del foglio di stile. -->
+  <script src="js/tema.js?v=1"></script>
+  <link rel="stylesheet" href="stile.css?v=7">
 
   <style>
     /* -------------------------------------------------------------
@@ -213,6 +216,30 @@
       color: var(--verde);
     }
 
+    /* L'interruttore dei colori: piccolo e discreto, in alto a destra. */
+    .riga-tema {
+      max-width: var(--massimo);
+      margin: 0 auto 0.4rem;
+      text-align: right;
+    }
+
+    .interruttore-tema {
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      font-size: 1.3rem;
+      line-height: 1;
+      background: transparent;
+      color: var(--testo-su-scuro);
+      border: 2px solid var(--bordo);
+      border-radius: 50%;
+    }
+
+    .interruttore-tema:hover {
+      background: var(--bordo);
+      color: var(--blu-notte);
+    }
+
     .segnalazioni li { margin-bottom: 0.5em; }
   </style>
 </head>
@@ -224,6 +251,10 @@
     file artefatti.txt, che sta in questa stessa cartella. Per
     aggiungere o togliere qualcosa dal sito si modifica quel file.
   -->
+
+  <!-- L'interruttore fra colori chiari e scuri. La scelta vale per
+       tutte le pagine del sito e resta ricordata su questo computer. -->
+  <div id="interruttore-tema" class="riga-tema"></div>
 
   <h1 class="titolo-pagina">Liceo digitale</h1>
 
@@ -288,6 +319,7 @@
   </section>
 
   <script src="js/home.js?v=12"></script>
+  <script>Tema.interruttore("interruttore-tema");</script>
 
 </body>
 </html>

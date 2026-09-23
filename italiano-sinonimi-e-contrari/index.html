@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sinonimi e contrari</title>
-  <link rel="stylesheet" href="../stile.css?v=6">
+  <script src="../js/tema.js?v=1"></script>
+<link rel="stylesheet" href="../stile.css?v=7">
 
   <style>
     /* -------------------------------------------------------------
@@ -12,11 +13,6 @@
        I colori arrivano tutti da stile.css: si usano i loro nomi
        (var(--verde) e simili), mai i codici scritti a mano.
        ------------------------------------------------------------- */
-
-    .ritorno {
-      max-width: var(--massimo);
-      margin: 0 auto 0.6rem;
-    }
 
     /* Casella e pulsante sulla stessa riga; sul telefono il
        pulsante va a capo e prende tutta la larghezza. */
@@ -74,7 +70,7 @@
 
     .parola {
       display: inline-block;
-      background: var(--crema);
+      background: var(--campo);
       border: 1px solid var(--verde-chiaro);
       border-radius: 0.4rem;
       padding: 0.05rem 0.45rem;
@@ -106,7 +102,7 @@
 
 <body>
 
-  <p class="ritorno su-scuro"><a href="../index.html">&larr; Torna alla pagina iniziale</a></p>
+  <p class="ritorno su-scuro"><a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a></p>
 
   <h1 class="titolo-pagina">Sinonimi e contrari</h1>
   <p class="titolo-pagina">Per trovare la parola giusta mentre si scrive un tema.</p>

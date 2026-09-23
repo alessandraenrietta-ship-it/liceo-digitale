@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Annotazioni sul registro</title>
-<link rel="stylesheet" href="../stile.css?v=6">
+<script src="../js/tema.js?v=1"></script>
+<link rel="stylesheet" href="../stile.css?v=7">
 
 <style>
   /* -------------------------------------------------------------
@@ -12,11 +13,6 @@
      I colori arrivano tutti da stile.css: qui si usano i loro nomi
      (var(--verde) e simili), mai i codici scritti a mano.
      ------------------------------------------------------------- */
-
-  .ritorno {
-    max-width: var(--massimo);
-    margin: 0 auto 0.6rem;
-  }
 
   fieldset {
     border: 0;
@@ -50,11 +46,11 @@
     border-radius: 999px;
     padding: 0.4rem 1rem;
     cursor: pointer;
-    background: #FFFFFF;
+    background: var(--campo);
   }
   .opts input[type="radio"]:checked + label {
-    background: var(--verde);
-    color: var(--testo-su-scuro);
+    background: var(--pulsante-fondo);
+    color: var(--pulsante-testo);
   }
   .opts input[type="radio"]:focus-visible + label {
     outline: 3px solid var(--giallo);
@@ -105,7 +101,7 @@
   details.guida {
     border: 2px solid var(--verde);
     border-radius: var(--raggio);
-    background: #FFFFFF;
+    background: var(--campo);
     padding: 0.2rem 1rem;
     margin-bottom: 1.3rem;
   }
@@ -149,7 +145,7 @@
   }
 
   .messaggio-errore {
-    background: #FFFFFF;
+    background: var(--campo);
     border: 3px solid var(--giallo);
     border-radius: var(--raggio);
     padding: 0.9rem 1.1rem;
@@ -164,7 +160,7 @@
     display: block;
   }
   .testo-generato {
-    background: #FFFFFF;
+    background: var(--campo);
     border: 2px solid var(--verde);
     border-radius: var(--raggio);
     padding: 1.1rem 1.2rem;
@@ -186,7 +182,7 @@
 </head>
 <body>
 
-<p class="ritorno su-scuro"><a href="../index.html">&larr; Torna alla pagina iniziale</a></p>
+<p class="ritorno su-scuro"><a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a></p>
 
 <h1 class="titolo-pagina">Annotazioni sul registro</h1>
 <p class="titolo-pagina">Compila i campi e genera il testo da incollare sul registro elettronico.</p>
