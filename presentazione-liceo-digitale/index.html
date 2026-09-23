@@ -620,6 +620,14 @@ body.recording, body.recording > * { overflow: hidden; }
 
     aggiornaAltoparlante();
     play();
+
+    /* La pagina iniziale chiama questa quando toglie il disegno di
+       copertina: la presentazione riparte da capo, così chi guarda non
+       si perde i primi secondi passati dietro alla copertina. */
+    window.riavviaAnteprima = function () {
+      seek(0);
+      play();
+    };
   }
 })();
 </script>
