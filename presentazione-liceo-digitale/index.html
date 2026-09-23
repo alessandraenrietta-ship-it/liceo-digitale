@@ -4,6 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Liceo Digitale · IIS Giulio Natta</title>
+<script>
+  /* Aggiunto per il sito Liceo digitale.
+     Qui si decide SUBITO, prima che la pagina disegni qualsiasi cosa,
+     se la presentazione sta dentro al riquadro della pagina iniziale.
+     Se lo si decidesse più avanti, come prima, per un istante si
+     vedrebbe il fondo scuro della pagina intera: era la barra nera che
+     compariva all'inizio. */
+  if (window.self !== window.top) {
+    document.documentElement.className += " incorporata";
+  }
+</script>
 <!--
   I CARATTERI STANNO DENTRO A QUESTO FILE
   La presentazione usa i caratteri Anton e Barlow. Prima venivano
