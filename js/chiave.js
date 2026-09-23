@@ -126,13 +126,15 @@ window.ChiavePersonale = (function () {
       : '';
 
     recuperaDaiNomiVecchi(nome);
+    /* Una scatola leggera, non un riquadro come gli altri. */
+    contenitore.classList.add("chiave-minima");
 
     function disegnaChiusa() {
       contenitore.classList.add('chiave-chiusa');
       contenitore.innerHTML =
         '<p class="chiave-riga-breve">' +
         '  <span class="chiave-segno" aria-hidden="true">&#128273;</span>' +
-        '  <span class="chiave-detto">Chiave salvata su questo computer</span>' +
+        '  <span class="chiave-detto">Chiave salvata</span>' +
         '  <button type="button" id="chiave-cambia">Cambia</button>' +
         '</p>';
       document.getElementById('chiave-cambia')
@@ -142,20 +144,23 @@ window.ChiavePersonale = (function () {
     function disegnaAperta(mettiAFuoco) {
       contenitore.classList.remove('chiave-chiusa');
       contenitore.innerHTML =
-        '<h2>Chiave di accesso personale</h2>' +
-        /* Una riga sola: dove si prende e dove resta. Il resto lo dice
-           Google AI Studio, a chi vuole leggerlo. */
-        '<p class="chiave-spiegazione">Serve una chiave personale gratuita di ' +
+        /* Il minimo indispensabile: una riga che dice dove si prende la
+           chiave e dove resta, la casella e il pulsante. Niente titolo
+           grande, niente riga di stato fissa: gli avvisi compaiono solo
+           quando c'è davvero qualcosa da dire. */
+        '<p class="chiave-spiegazione">Serve una chiave gratuita di ' +
         '<a href="https://aistudio.google.com/apikey" target="_blank" ' +
-        'rel="noopener">Google AI Studio</a>: resta solo in questo browser, e ' +
-        'Google può usare i testi inviati per migliorare i suoi servizi.</p>' +
+        'rel="noopener">Google AI Studio</a>: resta in questo browser. ' +
+        'Google può usare i testi inviati.</p>' +
         inPiu +
         '<div class="chiave-riga">' +
-        '  <label class="chiave-etichetta" for="chiave-campo">La tua chiave</label>' +
+        '  <label class="chiave-etichetta solo-lettori" for="chiave-campo">La tua chiave di accesso</label>' +
         '  <input type="password" id="chiave-campo" autocomplete="off" ' +
-        '         placeholder="Incolla qui la chiave (inizia con AIza...)">' +
+        '         placeholder="Incolla qui la chiave (AIza...)">' +
         '  <button type="button" id="chiave-salva">Salva</button>' +
-        '  <button type="button" id="chiave-rimuovi">Rimuovi</button>' +
+        (leggi(nome)
+          ? '  <button type="button" id="chiave-rimuovi" class="chiave-secondario">Rimuovi</button>'
+          : '') +
         '</div>' +
         '<p class="chiave-stato" id="chiave-stato" role="status"></p>';
 
@@ -163,9 +168,7 @@ window.ChiavePersonale = (function () {
       var stato = document.getElementById('chiave-stato');
 
       function aggiornaStato(messaggio) {
-        stato.textContent = messaggio || (leggi(nome)
-          ? "Chiave salvata su questo computer."
-          : "Senza chiave la pagina non può funzionare.");
+        stato.textContent = messaggio ? messaggio : "";
       }
 
       document.getElementById('chiave-salva').addEventListener('click', function () {
@@ -191,13 +194,14 @@ window.ChiavePersonale = (function () {
         }
       });
 
-      document.getElementById('chiave-rimuovi').addEventListener('click', function () {
+      /* Il pulsante "Rimuovi" c'è solo se una chiave c'è davvero. */
+      var bottoneRimuovi = document.getElementById('chiave-rimuovi');
+      if (bottoneRimuovi) { bottoneRimuovi.addEventListener('click', function () {
         dimentica(nome);
         campo.value = "";
-        aggiornaStato("Chiave rimossa da questo computer.");
-      });
+        aggiornaStato("Chiave rimossa.");
+      }); }
 
-      aggiornaStato();
       if (mettiAFuoco) { campo.focus(); }
     }
 

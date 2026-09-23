@@ -298,7 +298,19 @@ label {
   line-height: 1.45;
 }
 
-/* Il riquadro della chiave quando la chiave c'è già: una riga sola,
+/* Il riquadro della chiave: leggero, senza la cornice pesante degli
+   altri riquadri. */
+.chiave-minima {
+  border-width: 1px;
+  border-style: solid;
+  padding: 0.8em 1em;
+}
+
+.chiave-minima .chiave-spiegazione { margin-bottom: 0.6em; }
+.chiave-secondario { background: transparent; color: var(--teal); border: 2px solid var(--teal); }
+.chiave-secondario:hover { background: var(--teal); color: var(--testo-su-scuro); }
+
+/* Quando la chiave c'è già: una riga sola,
    con il disegno della chiave e il pulsantino per cambiarla. */
 .chiave-chiusa {
   padding: 0.6em 0.9em;
