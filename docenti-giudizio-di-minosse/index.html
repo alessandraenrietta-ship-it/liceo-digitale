@@ -336,6 +336,55 @@
   }
   .vuoto { text-align: center; color: var(--testo-tenue); font-style: italic; margin: 0; }
 
+  /* ---------- Le fiamme della caduta ----------
+     Ogni fiamma è una goccia rovesciata che sale, si allarga e
+     svanisce. Le crea il codice mentre il cartellino precipita, e si
+     cancellano da sole quando l'animazione finisce. */
+  .fiamma {
+    position: fixed;
+    width: 30px;
+    height: 44px;
+    margin: -38px 0 0 -15px;   /* la punta sta sopra al punto indicato */
+    pointer-events: none;
+    z-index: 4;
+    filter: drop-shadow(0 0 10px rgba(255, 110, 30, .75));
+    animation: sale .85s ease-out forwards;
+    transform-origin: 50% 100%;
+  }
+
+  /* Il corpo della fiamma ondeggia mentre sale: si stringe e si allarga,
+     come fa una fiamma vera. */
+  .fiamma svg { width: 100%; height: 100%; animation: ondeggia .28s ease-in-out infinite alternate; }
+
+  @keyframes sale {
+    0%   { transform: scale(.5) translateY(8px); opacity: .5; }
+    20%  { transform: scale(1) translateY(-4px); opacity: 1; }
+    65%  { transform: scale(.95) translateY(-30px); opacity: .85; }
+    100% { transform: scale(.4) translateY(-60px); opacity: 0; }
+  }
+
+  @keyframes ondeggia {
+    from { transform: scaleX(.82) skewX(-4deg); }
+    to   { transform: scaleX(1.12) skewX(5deg); }
+  }
+
+  /* La vampata del baratro quando il cartellino tocca il fondo */
+  .baratro.vampata::after {
+    content: "";
+    position: absolute;
+    inset: -10% -5% 0;
+    background: radial-gradient(ellipse at 50% 110%,
+      rgba(255, 190, 90, .95) 0%, rgba(255, 90, 20, .6) 35%, transparent 70%);
+    animation: vampata .9s ease-out forwards;
+    pointer-events: none;
+  }
+
+  @keyframes vampata {
+    0%   { opacity: 0; transform: scaleY(.5); }
+    25%  { opacity: 1; transform: scaleY(1); }
+    100% { opacity: 0; transform: scaleY(1.1); }
+  }
+
   /* Le spire della coda */
   .spira-anim { stroke-dasharray: 100; stroke-dashoffset: 0; }
   .spira-anim.stringe { animation: stringe linear both; }
@@ -1103,6 +1152,22 @@
     var da = el.getBoundingClientRect();
     var baratro = $("baratro").getBoundingClientRect();
     var giu = (baratro.top + 30) - (da.top + da.height / 2);
+
+    /* La scia di fiamme: mentre il cartellino precipita se ne lascia
+       dietro una ogni tanto, dove si trova in quel momento. Lo
+       spostamento a destra e a sinistra è calcolato con un seno, non a
+       caso: in questa pagina il caso serve solo per l'estrazione, e
+       deve restare l'unico posto in cui si usa. */
+    var scintilla = 0;
+    var scia = setInterval(function () {
+      var ora = el.getBoundingClientRect();
+      scintilla += 1;
+      accendiFiamma(
+        ora.left + ora.width / 2 + Math.sin(scintilla * 1.7) * 26,
+        ora.top + ora.height * 0.72,
+        1
+      );
+    }, 70);
     caduta = el.animate([
       { transform: "translate(-50%, -50%) scale(1) rotate(0deg)", opacity: 1 },
       { transform: "translate(-50%, calc(-50% + " + (giu * 0.35).toFixed(0) + "px)) scale(.7) rotate(-8deg)", opacity: 1, offset: 0.45 },
@@ -1111,11 +1176,70 @@
 
     return new Promise(function (fatto) {
       caduta.onfinish = function () {
+        clearInterval(scia);
+        vampataDelBaratro();
         caduta.cancel();
         atterra();
         fatto();
       };
     });
+  }
+
+  /* Una fiamma sola, disegnata: una goccia rovesciata con la punta in
+     alto (il corpo, arancione) e dentro un cuore più chiaro, come le
+     fiamme delle candele. Si cancella da sola quando ha finito. */
+  var DISEGNO_FIAMMA =
+    '<svg viewBox="0 0 32 48" aria-hidden="true">'
+    + '<path d="M16 1 C 17 10, 27 17, 27 29 C 27 39, 22 47, 16 47'
+    + ' C 10 47, 5 39, 5 29 C 5 17, 15 10, 16 1 Z" fill="#ff5a1f"/>'
+    + '<path d="M16 14 C 17 20, 22 24, 22 31 C 22 38, 19 43, 16 43'
+    + ' C 13 43, 10 38, 10 31 C 10 24, 15 20, 16 14 Z" fill="#ffc542"/>'
+    + '<path d="M16 26 C 17 30, 19 32, 19 35 C 19 39, 17 41, 16 41'
+    + ' C 15 41, 13 39, 13 35 C 13 32, 15 30, 16 26 Z" fill="#fff6c8"/>'
+    + '</svg>';
+
+  function accendiFiamma(x, y, grandezza) {
+    var fiamma = document.createElement("div");
+    fiamma.className = "fiamma";
+    fiamma.innerHTML = DISEGNO_FIAMMA;
+    fiamma.style.left = x + "px";
+    fiamma.style.top = y + "px";
+    if (grandezza !== 1) {
+      fiamma.style.width = 30 * grandezza + "px";
+      fiamma.style.height = 44 * grandezza + "px";
+      fiamma.style.marginLeft = -15 * grandezza + "px";
+      fiamma.style.marginTop = -38 * grandezza + "px";
+    }
+    document.body.appendChild(fiamma);
+    fiamma.addEventListener("animationend", function (evento) {
+      /* Solo l'animazione della salita finisce: l'ondeggio non finisce
+         mai, e senza questo controllo la fiamma non sparirebbe. */
+      if (evento.animationName === "sale") { fiamma.remove(); }
+    });
+  }
+
+  /* L'arrivo nel baratro: una vampata di fondo e una fila di fiamme che
+     salgono dal bordo, come se il fuoco lo avesse inghiottito. */
+  function vampataDelBaratro() {
+    var baratro = $("baratro");
+    var bordo = baratro.getBoundingClientRect();
+
+    baratro.classList.remove("vampata");
+    void baratro.offsetWidth;
+    baratro.classList.add("vampata");
+    setTimeout(function () { baratro.classList.remove("vampata"); }, 950);
+
+    for (var i = 0; i < 9; i += 1) {
+      (function (indice) {
+        setTimeout(function () {
+          accendiFiamma(
+            bordo.left + bordo.width * (0.2 + 0.075 * indice),
+            bordo.top + 18,
+            1.1 + Math.abs(Math.sin(indice)) * 0.6
+          );
+        }, indice * 45);
+      }(i));
+    }
   }
 
   $("giudica").addEventListener("click", giudica);
