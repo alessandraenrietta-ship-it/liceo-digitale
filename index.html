@@ -15,7 +15,7 @@
   <!-- La modalità chiara o scura, scelta dall'interruttore sulla pagina
        iniziale. Va letto prima del foglio di stile. -->
   <script src="js/tema.js?v=1"></script>
-  <link rel="stylesheet" href="stile.css?v=7">
+  <link rel="stylesheet" href="stile.css?v=9">
 
   <style>
     /* -------------------------------------------------------------
@@ -24,15 +24,33 @@
        (var(--verde) e simili), mai i codici scritti a mano.
        ------------------------------------------------------------- */
 
-    /* auto-fit invece di auto-fill: quando i riquadri sono pochi o lo
-       schermo è stretto, le colonne vuote spariscono invece di
-       lasciare spazio bianco. L'ultima riga la riempie home.js
-       allargando l'ultimo riquadro. */
+    /* Tutti i riquadri della stessa misura, sempre: le colonne hanno
+       una larghezza fissa e la griglia sta al centro. Se l'ultima riga
+       è incompleta, lo spazio che avanza si divide fra i due lati
+       invece di allargare un riquadro solo, che faceva disordine. */
     .griglia {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-      gap: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.7rem;
       margin-top: var(--spazio);
+    }
+
+    /* La fascia degli strumenti generali, sopra alle discipline. */
+    .fascia-generali { margin-top: var(--spazio); }
+    .fascia-generali .disciplina { margin: 0; }
+
+    /* Ogni riquadro parte da una misura piccola e cresce fino a
+       riempire la riga: cosi' non restano spazi vuoti, e se l'ultima
+       riga ne ha meno si allargano tutti insieme invece di lasciarne
+       uno lungo e gli altri corti. I nomi lunghi vanno a capo. */
+    .griglia > .disciplina { flex: 1 1 11rem; max-width: 18rem; }
+    .griglia > .disciplina.rilievo { flex: 1 1 100%; max-width: none; }
+
+    /* Sul telefono: una colonna sola per i riquadri, due piastrelle per
+       riga per le discipline in costruzione. */
+    @media (max-width: 34rem) {
+      .griglia > .disciplina { flex: 1 1 100%; }
     }
 
     .disciplina {
@@ -98,11 +116,14 @@
        di quelli delle discipline. Su schermo stretto si incolonnano
        da soli. */
     .disciplina.rilievo .elenco-artefatti {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-      gap: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.7rem;
       padding: 0.8em 1em 1em;
     }
+
+    .disciplina.rilievo .elenco-artefatti li { flex: 1 1 11rem; max-width: 18rem; }
 
     .disciplina.rilievo .elenco-artefatti li {
       padding: 0.8em 1em;
@@ -344,9 +365,11 @@
     }
 
     .in-costruzione-fascia .disciplina.spenta {
-      flex: 0 0 auto;
-      width: 10.5rem;      /* tutte uguali: nessuna piu' lunga delle altre */
-      max-width: 100%;
+      /* Crescono insieme fino a riempire la riga, ma non oltre una certa
+         misura: due piastrelle larghe il doppio delle altre facevano
+         disordine. Quello che avanza si divide fra i due lati. */
+      flex: 1 1 8rem;
+      max-width: 12rem;
     }
 
     .in-costruzione-fascia .disciplina-spenta-testo {
@@ -393,6 +416,13 @@
     .interruttore-tema:hover {
       background: var(--bordo);
       color: var(--blu-notte);
+    }
+
+    /* Sul telefono le piastrelle stanno due per riga: una sola per riga
+       lascerebbe mezza pagina vuota. Sta qui in fondo perché deve venire
+       dopo la misura fissa scritta più sopra. */
+    @media (max-width: 34rem) {
+      .in-costruzione-fascia .disciplina.spenta { width: calc(50% - 0.2rem); }
     }
 
     .segnalazioni li { margin-bottom: 0.5em; }
@@ -477,7 +507,7 @@
     <ul id="elenco-segnalazioni"></ul>
   </section>
 
-  <script src="js/home.js?v=15"></script>
+  <script src="js/home.js?v=17"></script>
   <script>Tema.interruttore("interruttore-tema");</script>
 
   <script>

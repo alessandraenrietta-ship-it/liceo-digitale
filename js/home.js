@@ -363,32 +363,6 @@
     });
   }
 
-  /* Niente buchi nella griglia: se l'ultima riga è incompleta, l'ultimo
-     riquadro si allarga fino a riempirla. Il numero di colonne lo
-     decide il browser in base alla larghezza, quindi si guarda dove i
-     riquadri sono finiti davvero. */
-  function riempiUltimaRiga(griglia) {
-    var figli = Array.prototype.slice.call(griglia.children);
-    figli.forEach(function (f) { f.style.gridColumn = ""; });
-    if (figli.length === 0) { return; }
-
-    var colonne = getComputedStyle(griglia).gridTemplateColumns.split(" ").length;
-    if (!(colonne > 1)) { return; }
-
-    var righe = {};
-    figli.forEach(function (f) {
-      var y = f.offsetTop;
-      if (!righe[y]) { righe[y] = []; }
-      righe[y].push(f);
-    });
-    var quote = Object.keys(righe).map(Number).sort(function (a, b) { return a - b; });
-    var ultima = righe[quote[quote.length - 1]];
-    var mancanti = colonne - ultima.length;
-    if (mancanti > 0 && ultima.length > 0) {
-      ultima[ultima.length - 1].style.gridColumn = "span " + (mancanti + 1);
-    }
-  }
-
   function costruisciSezione(prefisso, discipline, artefatti) {
     var contenitore = document.getElementById("discipline-" + prefisso);
     var suoi = per(prefisso, artefatti);
@@ -400,20 +374,40 @@
     var senzaDisciplina = suoi.filter(function (artefatto) {
       return artefatto.disciplina === "";
     });
+    /* Gli strumenti generali stanno in una fascia loro, sopra alle
+       discipline, e sono gia' aperti: si usano tutti i giorni, non
+       devono farsi cercare. Non entrano nella griglia delle discipline
+       perche' li' sarebbero un riquadro come gli altri. */
     if (senzaDisciplina.length > 0) {
-      contenitore.appendChild(
-        schedaDisciplina(
-          "Strumenti generali",
-          senzaDisciplina,
-          prefisso + "-strumenti-generali",
-          true
-        )
+      var postoGenerali = document.getElementById("generali-" + prefisso);
+      if (!postoGenerali) {
+        postoGenerali = document.createElement("div");
+        postoGenerali.id = "generali-" + prefisso;
+        postoGenerali.className = "fascia-generali";
+        contenitore.parentNode.insertBefore(postoGenerali, contenitore);
+      }
+      postoGenerali.textContent = "";
+
+      var schedaGenerali = schedaDisciplina(
+        "Strumenti generali",
+        senzaDisciplina,
+        prefisso + "-strumenti-generali",
+        true
       );
+      postoGenerali.appendChild(schedaGenerali);
+
+      /* Aperta da subito. */
+      var testataGenerali = schedaGenerali.querySelector(".disciplina-testata");
+      var elencoGenerali = schedaGenerali.querySelector(".elenco-artefatti");
+      if (testataGenerali && elencoGenerali) {
+        elencoGenerali.hidden = false;
+        testataGenerali.setAttribute("aria-expanded", "true");
+      }
     }
 
     /* Le discipline, nell'ordine scelto. Cambiando ordine si rifanno
        solo queste: il riquadro degli strumenti generali resta in cima. */
-    var primeSchede = contenitore.children.length;
+    var primeSchede = contenitore.children.length;   /* di norma zero */
 
     var fascia = document.getElementById("costruzione-" + prefisso);
     if (!fascia) {
@@ -442,22 +436,11 @@
         if (della.length === 0) { fascia.appendChild(scheda); }
         else { contenitore.appendChild(scheda); }
       });
-      /* Si misura al giro dopo: appena disegnati, i riquadri non hanno
-         ancora una posizione, e con la sezione chiusa sono tutti a
-         zero. */
-      requestAnimationFrame(function () { riempiUltimaRiga(contenitore); });
     }
 
     disegnaDiscipline(ORDINE);
     contenitore.setAttribute("data-ridisegna", "1");
     contenitore.ridisegna = disegnaDiscipline;
-
-    /* La griglia si rimisura quando la finestra cambia larghezza, così
-       non restano buchi nemmeno girando il telefono. */
-    if (window.ResizeObserver) {
-      new ResizeObserver(function () { riempiUltimaRiga(contenitore); })
-        .observe(contenitore);
-    }
 
 
     /* Il conteggio "16 discipline, 3 artefatti" non si scrive più:
@@ -543,13 +526,6 @@
     document.getElementById("accesso-" + prefisso).hidden = true;
     var area = document.getElementById("area-" + prefisso);
     area.hidden = false;
-
-    /* Adesso che la sezione si vede, i riquadri hanno una posizione:
-       si può sistemare l'ultima riga. */
-    var griglia = document.getElementById("discipline-" + prefisso);
-    if (griglia) {
-      requestAnimationFrame(function () { riempiUltimaRiga(griglia); });
-    }
 
     /* Un modo per richiudere la sezione, utile su un computer usato da
        altri. È un pulsantino in cima, accanto al menù dell'ordine: la
