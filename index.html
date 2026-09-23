@@ -185,6 +185,77 @@
     .presentazione-testo { text-align: center; }
     .presentazione-testo:last-child { margin-bottom: 0; }
 
+    /* L'anteprima della presentazione: un rettangolo 16:9, come lo
+       schermo di un video. Finché non si clicca non è la
+       presentazione vera, ma un disegno fatto con i colori del sito:
+       così la pagina iniziale non deve scaricare niente. */
+    .anteprima-presentazione {
+      position: relative;
+      max-width: 44rem;
+      margin: 0 auto var(--spazio);
+      aspect-ratio: 16 / 9;
+      border: 2px solid var(--verde);
+      border-radius: var(--raggio);
+      overflow: hidden;
+      background: linear-gradient(118deg, #9ACB4B 0%, #2FA96B 22%, #1B8C86 48%, #12507A 74%, #08203F 100%);
+    }
+
+    .anteprima-avvio {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem;
+      background: none;
+      border: 0;
+      border-radius: 0;
+      color: #FFFFFF;
+      cursor: pointer;
+    }
+
+    .anteprima-avvio:hover { background: rgba(0, 0, 0, 0.18); }
+
+    .anteprima-titolo {
+      font-size: clamp(1.4rem, 4.5vw, 2.6rem);
+      font-weight: bold;
+      letter-spacing: 0.02em;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Il triangolo del "riproduci", dentro un tondo chiaro */
+    .anteprima-freccia {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--blu-notte);
+      font-size: 1.6rem;
+      padding-left: 0.18em;   /* il triangolo sembra storto se centrato */
+    }
+
+    .anteprima-avvio:hover .anteprima-freccia { background: #FFFFFF; }
+
+    .anteprima-durata {
+      font-size: 0.95rem;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Quando si avvia, la presentazione prende tutto il rettangolo */
+    .anteprima-presentazione iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
     .gruppo-docenti { margin-top: var(--spazio); }
 
     .accesso { max-width: 22rem; }
@@ -267,8 +338,20 @@
       Due minuti per vedere che cosa si studia, come si lavora e che cosa
       cambia rispetto al liceo scientifico.
     </p>
+
+    <!-- L'anteprima: finché non si clicca è solo un disegno leggero.
+         La presentazione vera (che pesa) si carica soltanto quando
+         qualcuno la avvia, così la pagina iniziale resta veloce. -->
+    <div class="anteprima-presentazione" id="anteprima-presentazione">
+      <button type="button" class="anteprima-avvio" id="avvia-presentazione">
+        <span class="anteprima-titolo">Liceo Digitale</span>
+        <span class="anteprima-freccia" aria-hidden="true">&#9654;</span>
+        <span class="anteprima-durata">Guarda la presentazione &middot; 1:53</span>
+      </button>
+    </div>
+
     <p class="presentazione-testo">
-      <a class="pulsante" href="presentazione-liceo-digitale/">Guarda la presentazione</a>
+      <a href="presentazione-liceo-digitale/">Aprila in una pagina sua, a tutto schermo</a>
     </p>
   </section>
 
@@ -320,6 +403,29 @@
 
   <script src="js/home.js?v=12"></script>
   <script>Tema.interruttore("interruttore-tema");</script>
+
+  <script>
+    /* L'anteprima della presentazione: al clic, al posto del disegno
+       compare la presentazione vera, dentro allo stesso rettangolo.
+       Si carica solo adesso: prima la pagina iniziale non scarica
+       niente di pesante. */
+    (function () {
+      "use strict";
+      var riquadro = document.getElementById("anteprima-presentazione");
+      var avvio = document.getElementById("avvia-presentazione");
+      if (!riquadro || !avvio) { return; }
+
+      avvio.addEventListener("click", function () {
+        var cornice = document.createElement("iframe");
+        cornice.src = "presentazione-liceo-digitale/";
+        cornice.title = "Presentazione del Liceo digitale";
+        cornice.allow = "autoplay; fullscreen";
+        riquadro.textContent = "";
+        riquadro.appendChild(cornice);
+        cornice.focus();
+      });
+    }());
+  </script>
 
 </body>
 </html>

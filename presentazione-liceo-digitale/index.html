@@ -192,6 +192,17 @@ button:focus-visible,#scrub:focus-visible{outline:3px solid var(--wire);outline-
 }
 html:fullscreen #viewport, html:-webkit-full-screen #viewport,
 body.recording #viewport { height: 100vh; height: 100dvh; }
+
+/* ---------- Aggiunto per il sito Liceo digitale: anteprima ----------
+   Quando la presentazione sta dentro al riquadro della pagina
+   iniziale si vede soltanto il video: niente comandi, che in un
+   rettangolo piccolo coprirebbero tutto. Parte da sola, e con un clic
+   si mette in pausa. I comandi veri restano nella pagina intera. */
+html.incorporata #viewport { height: 100vh; height: 100dvh; }
+html.incorporata #hud { display: none; }
+html.incorporata, html.incorporata body { overflow: hidden; }
+html.incorporata #stage { cursor: pointer; }
+html.incorporata { padding: 0; }
 html:fullscreen, html:fullscreen body,
 body.recording, body.recording > * { overflow: hidden; }
 </style>
@@ -403,6 +414,14 @@ body.recording, body.recording > * { overflow: hidden; }
   }
   window.addEventListener("resize", fit); fit();
 
+  /* Aggiunto per il sito Liceo digitale: dentro al riquadro della
+     pagina iniziale la misura arriva un attimo dopo, e la finestra non
+     cambia mai; così la presentazione si rimisura da sola ogni volta
+     che il suo spazio cambia. */
+  if (window.ResizeObserver) {
+    new ResizeObserver(fit).observe(document.getElementById("viewport"));
+  }
+
   var t = 0, playing = false, last = 0;
 
   function fmt(ms){
@@ -472,6 +491,18 @@ body.recording, body.recording > * { overflow: hidden; }
   function pause(){
     playing = false; playBtn.textContent = "Riproduci";
     track.pause();
+  }
+
+  /* Aggiunto per il sito Liceo digitale.
+     Se la presentazione è dentro al riquadro della pagina iniziale
+     (cioè dentro una cornice), si mostra solo il video: parte da sola
+     e si ferma con un clic. Fuori dalla cornice non cambia niente. */
+  if (window.self !== window.top) {
+    document.documentElement.classList.add("incorporata");
+    document.getElementById("stage").addEventListener("click", function () {
+      if (playing) { pause(); } else { play(); }
+    });
+    play();
   }
   function seek(ms){
     t = Math.max(0, Math.min(DUR, ms));
