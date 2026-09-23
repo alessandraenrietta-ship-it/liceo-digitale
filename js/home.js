@@ -415,18 +415,32 @@
        solo queste: il riquadro degli strumenti generali resta in cima. */
     var primeSchede = contenitore.children.length;
 
+    var fascia = document.getElementById("costruzione-" + prefisso);
+    if (!fascia) {
+      fascia = document.createElement("div");
+      fascia.id = "costruzione-" + prefisso;
+      fascia.className = "in-costruzione-fascia";
+      contenitore.parentNode.insertBefore(fascia, contenitore.nextSibling);
+    }
+
     function disegnaDiscipline(criterio) {
       while (contenitore.children.length > primeSchede) {
         contenitore.removeChild(contenitore.lastChild);
       }
+      fascia.textContent = "";
+      /* Le discipline con qualcosa dentro stanno nella griglia grande.
+         Quelle ancora in costruzione vanno in una fascia a parte, sotto:
+         sono tante, e in mezzo alle altre facevano massa. Li' diventano
+         piastrelle piccole, tutte della stessa misura, messe in fila e
+         centrate: nessuna si allunga piu' delle altre. */
       ordinaDiscipline(discipline, suoi, criterio).forEach(function (nome) {
         var della = suoi.filter(function (artefatto) {
           return artefatto.disciplina === nome;
         });
         var numero = discipline.indexOf(nome);
-        contenitore.appendChild(
-          schedaDisciplina(nome, della, prefisso + "-disciplina-" + numero)
-        );
+        var scheda = schedaDisciplina(nome, della, prefisso + "-disciplina-" + numero);
+        if (della.length === 0) { fascia.appendChild(scheda); }
+        else { contenitore.appendChild(scheda); }
       });
       /* Si misura al giro dopo: appena disegnati, i riquadri non hanno
          ancora una posizione, e con la sezione chiusa sono tutti a

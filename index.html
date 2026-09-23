@@ -332,6 +332,34 @@
       color: var(--verde);
     }
 
+    /* La fascia delle discipline ancora in costruzione: piastrelle
+       piccole, tutte uguali, centrate. Non stanno nella griglia grande
+       perché lì sarebbero larghe come i riquadri veri. */
+    .in-costruzione-fascia {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-top: 0.8rem;
+    }
+
+    .in-costruzione-fascia .disciplina.spenta {
+      flex: 0 0 auto;
+      width: 10.5rem;      /* tutte uguali: nessuna piu' lunga delle altre */
+      max-width: 100%;
+    }
+
+    .in-costruzione-fascia .disciplina-spenta-testo {
+      justify-content: center;
+      text-align: center;
+      min-height: 2.4em;
+      align-items: center;
+    }
+
+    .in-costruzione-fascia .disciplina-nome {
+      line-height: 1.15;
+    }
+
     /* Le scritte che servono solo a chi si fa leggere la pagina: non
        si vedono, ma i lettori di schermo le leggono. */
     .solo-lettori {
@@ -449,7 +477,7 @@
     <ul id="elenco-segnalazioni"></ul>
   </section>
 
-  <script src="js/home.js?v=14"></script>
+  <script src="js/home.js?v=15"></script>
   <script>Tema.interruttore("interruttore-tema");</script>
 
   <script>
