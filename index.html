@@ -190,6 +190,16 @@
     .presentazione-testo { text-align: center; }
     .presentazione-testo:last-child { margin-bottom: 0; }
 
+    /* Il titolo del sito e, sotto, il nome della scuola: piu' piccolo
+       e staccato di poco, come una firma. */
+    .titolo-sito { margin-bottom: 0.15rem; }
+
+    .scuola {
+      margin-bottom: var(--spazio);
+      font-size: 1.05rem;
+      letter-spacing: 0.04em;
+    }
+
     /* Il video non sta dentro a un riquadro: niente cornice gialla,
        niente fondo crema, niente scritte. Solo il video. */
     .riquadro-video {
@@ -343,7 +353,9 @@
        tutte le pagine del sito e resta ricordata su questo computer. -->
   <div id="interruttore-tema" class="riga-tema"></div>
 
-  <h1 class="titolo-pagina">Liceo digitale</h1>
+  <!-- TESTO MODIFICABILE: il titolo e la riga della scuola -->
+  <h1 class="titolo-pagina titolo-sito">Liceo digitale</h1>
+  <p class="titolo-pagina scuola">I.I.S. Giulio Natta</p>
 
   <!-- TESTO MODIFICABILE: puoi cambiare le due righe qui sotto.
        Questo riquadro sta fuori dalle sezioni con la password: la
