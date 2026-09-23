@@ -107,6 +107,11 @@ window.ChiavePersonale = (function () {
       .replace(/>/g, "&gt;");
   }
 
+  /* Il riquadro ha due facce.
+     Senza chiave: la spiegazione corta e la casella per incollarla.
+     Con la chiave salvata: una riga sola con la chiave disegnata e un
+     pulsantino per cambiarla. Chi ha gia' fatto la sua parte non deve
+     rileggere le istruzioni ogni volta che apre la pagina. */
   function prepara(opzioni) {
     var contenitore = document.getElementById(opzioni.dove);
     if (!contenitore) { return; }
@@ -114,82 +119,89 @@ window.ChiavePersonale = (function () {
     var nome = opzioni.nome || NOME_CONDIVISO;
     var aCosaServe = opzioni.aCosaServe || "funziona";
 
-    /* Una frase in più, scritta dall'artefatto che chiama questo
-       riquadro, per dire qualcosa che vale solo per lui. Chi non la
-       passa non la vede: il riquadro resta quello di sempre. */
+    /* Una frase in piu', scritta dall'artefatto che chiama questo
+       riquadro, per dire qualcosa che vale solo per lui. */
     var inPiu = opzioni.inPiu
       ? '<p class="chiave-in-piu">' + testoSemplice(opzioni.inPiu) + '</p>'
       : '';
 
     recuperaDaiNomiVecchi(nome);
 
-    contenitore.innerHTML =
-      '<h2>Chiave di accesso personale</h2>' +
-      /* Due righe in tutto, scritte in piccolo: quello che serve
-         davvero sapere e niente di piu'. Chi vuole il dettaglio lo
-         trova su Google AI Studio.
-         La misura si decide in stile.css, con .chiave-spiegazione. */
-      '<p class="chiave-spiegazione">Questa pagina ' + aCosaServe + ' con Gemini di Google, ' +
-      'che chiede una chiave personale gratuita: si ottiene su ' +
-      '<a href="https://aistudio.google.com/apikey" target="_blank" ' +
-      'rel="noopener">Google AI Studio</a> e resta soltanto in questo browser. ' +
-      'Con la chiave gratuita Google può usare i testi inviati per migliorare ' +
-      'i suoi servizi.</p>' +
-      inPiu +
-      '<div class="chiave-riga">' +
-      '  <label class="chiave-etichetta" for="chiave-campo">La tua chiave</label>' +
-      '  <input type="password" id="chiave-campo" autocomplete="off" ' +
-      '         placeholder="Incolla qui la tua chiave (inizia con AIza...)">' +
-      '  <button type="button" id="chiave-salva">Salva chiave</button>' +
-      '  <button type="button" id="chiave-rimuovi">Rimuovi chiave salvata</button>' +
-      '</div>' +
-      '<p class="chiave-stato" id="chiave-stato" role="status"></p>';
-
-    var campo = document.getElementById('chiave-campo');
-    var stato = document.getElementById('chiave-stato');
-
-    function aggiornaStato(messaggio) {
-      if (messaggio) {
-        stato.textContent = messaggio;
-      } else if (leggi(nome)) {
-        stato.textContent = "Chiave salvata in questo browser: puoi usare la pagina.";
-      } else {
-        stato.textContent = "Nessuna chiave salvata: serve per usare la pagina.";
-      }
+    function disegnaChiusa() {
+      contenitore.classList.add('chiave-chiusa');
+      contenitore.innerHTML =
+        '<p class="chiave-riga-breve">' +
+        '  <span class="chiave-segno" aria-hidden="true">&#128273;</span>' +
+        '  <span class="chiave-detto">Chiave salvata su questo computer</span>' +
+        '  <button type="button" id="chiave-cambia">Cambia</button>' +
+        '</p>';
+      document.getElementById('chiave-cambia')
+        .addEventListener('click', function () { disegnaAperta(true); });
     }
 
-    document.getElementById('chiave-salva').addEventListener('click', function () {
-      var valore = campo.value.trim();
-      if (!valore) {
-        aggiornaStato("Incolla prima la chiave nella casella.");
-        campo.focus();
-        return;
+    function disegnaAperta(mettiAFuoco) {
+      contenitore.classList.remove('chiave-chiusa');
+      contenitore.innerHTML =
+        '<h2>Chiave di accesso personale</h2>' +
+        /* Una riga sola: dove si prende e dove resta. Il resto lo dice
+           Google AI Studio, a chi vuole leggerlo. */
+        '<p class="chiave-spiegazione">Serve una chiave personale gratuita di ' +
+        '<a href="https://aistudio.google.com/apikey" target="_blank" ' +
+        'rel="noopener">Google AI Studio</a>: resta solo in questo browser, e ' +
+        'Google può usare i testi inviati per migliorare i suoi servizi.</p>' +
+        inPiu +
+        '<div class="chiave-riga">' +
+        '  <label class="chiave-etichetta" for="chiave-campo">La tua chiave</label>' +
+        '  <input type="password" id="chiave-campo" autocomplete="off" ' +
+        '         placeholder="Incolla qui la chiave (inizia con AIza...)">' +
+        '  <button type="button" id="chiave-salva">Salva</button>' +
+        '  <button type="button" id="chiave-rimuovi">Rimuovi</button>' +
+        '</div>' +
+        '<p class="chiave-stato" id="chiave-stato" role="status"></p>';
+
+      var campo = document.getElementById('chiave-campo');
+      var stato = document.getElementById('chiave-stato');
+
+      function aggiornaStato(messaggio) {
+        stato.textContent = messaggio || (leggi(nome)
+          ? "Chiave salvata su questo computer."
+          : "Senza chiave la pagina non può funzionare.");
       }
-      /* Capita di incollare per sbaglio la parola d'ordine della
-         sezione invece della chiave: sono due cose diverse. */
-      if (valore.length < 20) {
-        aggiornaStato("Questa sembra troppo corta per essere una chiave. "
-          + "La chiave di Google è una sequenza lunga che inizia con AIza, "
-          + "e non è la password della sezione.");
-        return;
-      }
-      if (salva(nome, valore)) {
+
+      document.getElementById('chiave-salva').addEventListener('click', function () {
+        var valore = campo.value.trim();
+        if (!valore) {
+          aggiornaStato("Incolla prima la chiave nella casella.");
+          campo.focus();
+          return;
+        }
+        /* Capita di incollare la password della sezione invece della
+           chiave: sono due cose diverse. */
+        if (valore.length < 20) {
+          aggiornaStato("Troppo corta per essere una chiave: quella di Google "
+            + "è lunga e inizia con AIza. Non è la password della sezione.");
+          return;
+        }
+        if (salva(nome, valore)) {
+          campo.value = "";
+          disegnaChiusa();
+        } else {
+          aggiornaStato("Questo browser non mi lascia salvare la chiave. "
+            + "Di solito succede in navigazione anonima.");
+        }
+      });
+
+      document.getElementById('chiave-rimuovi').addEventListener('click', function () {
+        dimentica(nome);
         campo.value = "";
-        aggiornaStato();
-      } else {
-        aggiornaStato("Questo browser non mi lascia salvare la chiave. "
-          + "Di solito succede in navigazione anonima: prova in una "
-          + "finestra normale.");
-      }
-    });
+        aggiornaStato("Chiave rimossa da questo computer.");
+      });
 
-    document.getElementById('chiave-rimuovi').addEventListener('click', function () {
-      dimentica(nome);
-      campo.value = "";
-      aggiornaStato("Chiave rimossa da questo browser.");
-    });
+      aggiornaStato();
+      if (mettiAFuoco) { campo.focus(); }
+    }
 
-    aggiornaStato();
+    if (leggi(nome)) { disegnaChiusa(); } else { disegnaAperta(false); }
   }
 
   return { prepara: prepara, leggi: leggi };

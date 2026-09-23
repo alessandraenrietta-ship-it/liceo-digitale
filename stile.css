@@ -298,6 +298,30 @@ label {
   line-height: 1.45;
 }
 
+/* Il riquadro della chiave quando la chiave c'è già: una riga sola,
+   con il disegno della chiave e il pulsantino per cambiarla. */
+.chiave-chiusa {
+  padding: 0.6em 0.9em;
+}
+
+.chiave-riga-breve {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6em;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.chiave-segno { font-size: 1.2rem; }
+.chiave-detto { color: var(--verde); font-weight: bold; }
+
+.chiave-riga-breve button {
+  padding: 0.3em 0.8em;
+  font-size: 0.85rem;
+  margin-left: auto;
+}
+
 /* La frase in più che un singolo artefatto può aggiungere al
    riquadro: si stacca dal resto perché riguarda solo lui. */
 .chiave-in-piu {
