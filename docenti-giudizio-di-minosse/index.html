@@ -341,31 +341,73 @@
      svanisce. Le crea il codice mentre il cartellino precipita, e si
      cancellano da sole quando l'animazione finisce. */
   .fiamma {
+    --inclina: 0deg;
+    --grandezza: 1;
     position: fixed;
-    width: 30px;
-    height: 44px;
-    margin: -38px 0 0 -15px;   /* la punta sta sopra al punto indicato */
+    width: 46px;
+    height: 68px;
+    margin: -60px 0 0 -23px;   /* la punta sta sopra al punto indicato */
     pointer-events: none;
     z-index: 4;
-    filter: drop-shadow(0 0 10px rgba(255, 110, 30, .75));
-    animation: sale .85s ease-out forwards;
+    mix-blend-mode: screen;    /* le fiamme vicine si sommano: fa massa */
+    filter: drop-shadow(0 0 14px rgba(255, 90, 20, .85));
+    animation: sale .9s ease-out forwards;
     transform-origin: 50% 100%;
   }
 
-  /* Il corpo della fiamma ondeggia mentre sale: si stringe e si allarga,
-     come fa una fiamma vera. */
-  .fiamma svg { width: 100%; height: 100%; animation: ondeggia .28s ease-in-out infinite alternate; }
+  /* Il corpo ondeggia mentre sale: si stringe, si allarga e si piega. */
+  .fiamma svg { width: 100%; height: 100%; animation: ondeggia .16s ease-in-out infinite alternate; }
 
   @keyframes sale {
-    0%   { transform: scale(.5) translateY(8px); opacity: .5; }
-    20%  { transform: scale(1) translateY(-4px); opacity: 1; }
-    65%  { transform: scale(.95) translateY(-30px); opacity: .85; }
-    100% { transform: scale(.4) translateY(-60px); opacity: 0; }
+    0%   { transform: rotate(var(--inclina)) scale(calc(var(--grandezza) * .45)) translateY(14px); opacity: .55; }
+    22%  { transform: rotate(var(--inclina)) scale(var(--grandezza)) translateY(-6px); opacity: 1; }
+    70%  { transform: rotate(var(--inclina)) scale(calc(var(--grandezza) * .85)) translateY(-44px); opacity: .8; }
+    100% { transform: rotate(var(--inclina)) scale(calc(var(--grandezza) * .3)) translateY(-86px); opacity: 0; }
   }
 
   @keyframes ondeggia {
-    from { transform: scaleX(.82) skewX(-4deg); }
-    to   { transform: scaleX(1.12) skewX(5deg); }
+    from { transform: scaleX(.78) skewX(-7deg); }
+    to   { transform: scaleX(1.18) skewX(8deg); }
+  }
+
+  /* L'alone di calore: il rogo non è fatto solo di lingue, è anche la
+     luce che buttano intorno. */
+  .alone-rogo {
+    position: fixed;
+    width: 260px;
+    height: 260px;
+    margin: -130px 0 0 -130px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 3;
+    background: radial-gradient(circle,
+      rgba(255, 150, 40, .55) 0%, rgba(226, 70, 20, .3) 35%, rgba(120, 20, 5, 0) 70%);
+    animation: alone .7s ease-out forwards;
+  }
+
+  @keyframes alone {
+    0%   { transform: scale(.4); opacity: .9; }
+    100% { transform: scale(1.25); opacity: 0; }
+  }
+
+  /* Le scintille che schizzano via dal rogo */
+  .scintilla {
+    --lato: 0px;
+    position: fixed;
+    width: 5px;
+    height: 5px;
+    margin: -2px 0 0 -2px;
+    border-radius: 50%;
+    background: #ffd66b;
+    box-shadow: 0 0 8px 2px rgba(255, 140, 40, .9);
+    pointer-events: none;
+    z-index: 5;
+    animation: scintilla 1s ease-out forwards;
+  }
+
+  @keyframes scintilla {
+    0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--lato), -110px) scale(.2); opacity: 0; }
   }
 
   /* La vampata del baratro quando il cartellino tocca il fondo */
@@ -558,8 +600,8 @@
         <circle cx="219" cy="157" r="3.6" fill="#8a1c08"/>
         <!-- il nasone -->
         <path d="M200 152 Q 192 172 196 178 Q 200 182 206 178 Q 210 172 200 152 Z" fill="#b06e40" stroke="#4a2410" stroke-width="2"/>
-        <!-- la bocca, imbronciata -->
-        <path d="M187 192 Q 200 184 213 192" fill="none" stroke="#120a06" stroke-width="4" stroke-linecap="round"/>
+        <!-- La bocca non si disegna: sta dietro alla barba, e prima si
+             intravedeva attraverso. Il cipiglio lo fanno le sopracciglia. -->
 
         <!-- La corona -->
         <path d="M164 126 L 160 94 L 176 110 L 188 86 L 200 106 L 212 86 L 224 110 L 240 94 L 236 126 Z" fill="url(#oro)" stroke="#6b4a0c" stroke-width="3" stroke-linejoin="round"/>
@@ -1158,16 +1200,10 @@
        spostamento a destra e a sinistra è calcolato con un seno, non a
        caso: in questa pagina il caso serve solo per l'estrazione, e
        deve restare l'unico posto in cui si usa. */
-    var scintilla = 0;
     var scia = setInterval(function () {
       var ora = el.getBoundingClientRect();
-      scintilla += 1;
-      accendiFiamma(
-        ora.left + ora.width / 2 + Math.sin(scintilla * 1.7) * 26,
-        ora.top + ora.height * 0.72,
-        1
-      );
-    }, 70);
+      rogo(ora.left + ora.width / 2, ora.top + ora.height * 0.78, 0.85);
+    }, 90);
     caduta = el.animate([
       { transform: "translate(-50%, -50%) scale(1) rotate(0deg)", opacity: 1 },
       { transform: "translate(-50%, calc(-50% + " + (giu * 0.35).toFixed(0) + "px)) scale(.7) rotate(-8deg)", opacity: 1, offset: 0.45 },
@@ -1188,34 +1224,90 @@
   /* Una fiamma sola, disegnata: una goccia rovesciata con la punta in
      alto (il corpo, arancione) e dentro un cuore più chiaro, come le
      fiamme delle candele. Si cancella da sola quando ha finito. */
-  var DISEGNO_FIAMMA =
-    '<svg viewBox="0 0 32 48" aria-hidden="true">'
-    + '<path d="M16 1 C 17 10, 27 17, 27 29 C 27 39, 22 47, 16 47'
-    + ' C 10 47, 5 39, 5 29 C 5 17, 15 10, 16 1 Z" fill="#ff5a1f"/>'
-    + '<path d="M16 14 C 17 20, 22 24, 22 31 C 22 38, 19 43, 16 43'
-    + ' C 13 43, 10 38, 10 31 C 10 24, 15 20, 16 14 Z" fill="#ffc542"/>'
-    + '<path d="M16 26 C 17 30, 19 32, 19 35 C 19 39, 17 41, 16 41'
-    + ' C 15 41, 13 39, 13 35 C 13 32, 15 30, 16 26 Z" fill="#fff6c8"/>'
-    + '</svg>';
+  /* Tre fiamme diverse, storte e con le lingue: una fiamma regolare
+     sembra una candelina, e qui siamo all'Inferno. Si alternano, così
+     la scia non sembra fatta con lo stampino. Il rosso scuro sta fuori
+     e il giallo dentro, come nel fuoco vero. */
+  var DISEGNI_FIAMMA = [
+    'M20 1 C 23 15, 33 21, 31 35 C 29 49, 22 59, 18 59 C 8 59, 3 48, 5 37'
+      + ' C 7 29, 14 25, 12 16 C 16 21, 18 11, 20 1 Z'
+      + '|M20 22 C 22 30, 27 33, 25 41 C 23 49, 20 53, 18 53'
+      + ' C 13 53, 10 47, 11 41 C 12 34, 18 31, 17 24 C 18 27, 19 25, 20 22 Z',
+    'M18 2 C 15 15, 7 21, 9 34 C 11 47, 17 59, 23 59 C 33 59, 37 46, 33 35'
+      + ' C 30 26, 23 23, 26 13 C 22 19, 20 11, 18 2 Z'
+      + '|M20 24 C 18 32, 13 36, 15 43 C 17 50, 20 54, 22 54'
+      + ' C 27 54, 29 47, 27 41 C 25 35, 20 32, 22 26 C 21 28, 20 27, 20 24 Z',
+    'M20 1 C 21 13, 28 17, 27 27 C 33 25, 37 31, 35 40 C 33 51, 27 59, 20 59'
+      + ' C 11 59, 5 50, 5 40 C 5 29, 14 24, 14 13 C 17 18, 19 10, 20 1 Z'
+      + '|M20 23 C 21 31, 26 35, 24 42 C 22 50, 20 54, 19 54'
+      + ' C 14 54, 11 47, 13 41 C 15 34, 20 31, 19 25 C 19 27, 20 26, 20 23 Z'
+  ];
+
+  function disegnoFiamma(quale) {
+    var parti = DISEGNI_FIAMMA[quale % DISEGNI_FIAMMA.length].split("|");
+    return '<svg viewBox="0 0 40 60" aria-hidden="true">'
+      + '<path d="' + parti[0] + '" fill="#8e1c08"/>'
+      + '<path d="' + parti[0] + '" fill="#e0452a" transform="translate(2 6) scale(.9)"/>'
+      + '<path d="' + parti[1] + '" fill="#ff8a2a"/>'
+      + '<path d="' + parti[1] + '" fill="#ffd66b" transform="translate(1 6) scale(.72)"/>'
+      + '</svg>';
+  }
+
+  var contaFiamme = 0;
 
   function accendiFiamma(x, y, grandezza) {
     var fiamma = document.createElement("div");
     fiamma.className = "fiamma";
-    fiamma.innerHTML = DISEGNO_FIAMMA;
+    contaFiamme += 1;
+    fiamma.innerHTML = disegnoFiamma(contaFiamme);
     fiamma.style.left = x + "px";
     fiamma.style.top = y + "px";
-    if (grandezza !== 1) {
-      fiamma.style.width = 30 * grandezza + "px";
-      fiamma.style.height = 44 * grandezza + "px";
-      fiamma.style.marginLeft = -15 * grandezza + "px";
-      fiamma.style.marginTop = -38 * grandezza + "px";
-    }
+    /* Ogni fiamma è un po' diversa dalle altre: più grande o più
+       piccola, piegata a destra o a sinistra. I numeri vengono da un
+       seno, non dal caso: il caso in questa pagina serve solo a
+       estrarre, e resta l'unico posto in cui si usa. */
+    fiamma.style.setProperty("--grandezza", (grandezza * (0.8 + Math.abs(Math.sin(contaFiamme * 2.3)) * 0.7)).toFixed(2));
+    fiamma.style.setProperty("--inclina", (Math.sin(contaFiamme * 1.1) * 16).toFixed(1) + "deg");
     document.body.appendChild(fiamma);
     fiamma.addEventListener("animationend", function (evento) {
       /* Solo l'animazione della salita finisce: l'ondeggio non finisce
          mai, e senza questo controllo la fiamma non sparirebbe. */
       if (evento.animationName === "sale") { fiamma.remove(); }
     });
+  }
+
+  /* L'alone caldo intorno al fuoco. */
+  function accendiAlone(x, y) {
+    var alone = document.createElement("div");
+    alone.className = "alone-rogo";
+    alone.style.left = x + "px";
+    alone.style.top = y + "px";
+    document.body.appendChild(alone);
+    alone.addEventListener("animationend", function () { alone.remove(); });
+  }
+
+  /* Le scintille: schizzano in alto, di lato, e si spengono. */
+  function accendiScintilla(x, y, quale) {
+    var scintilla = document.createElement("div");
+    scintilla.className = "scintilla";
+    scintilla.style.left = x + "px";
+    scintilla.style.top = y + "px";
+    scintilla.style.setProperty("--lato", (Math.sin(quale * 2.9) * 70).toFixed(0) + "px");
+    document.body.appendChild(scintilla);
+    scintilla.addEventListener("animationend", function () { scintilla.remove(); });
+  }
+
+  /* Il rogo completo in un punto: più lingue di fuoco una sull'altra,
+     l'alone e qualche scintilla. */
+  function rogo(x, y, grandezza) {
+    accendiAlone(x, y - 20 * grandezza);
+    for (var i = 0; i < 2; i += 1) {
+      accendiFiamma(x + Math.sin(contaFiamme + i * 2) * 20 * grandezza, y, grandezza);
+    }
+    /* Una scintilla ogni tanto, non a ogni fiamma: sennò è un incendio. */
+    if (contaFiamme % 3 === 0) {
+      accendiScintilla(x + Math.sin(contaFiamme) * 12, y - 30 * grandezza, contaFiamme);
+    }
   }
 
   /* L'arrivo nel baratro: una vampata di fondo e una fila di fiamme che
@@ -1229,15 +1321,17 @@
     baratro.classList.add("vampata");
     setTimeout(function () { baratro.classList.remove("vampata"); }, 950);
 
-    for (var i = 0; i < 9; i += 1) {
+    /* Il fondo del baratro prende fuoco: una fila di roghi lungo tutto
+       il bordo, a ondate, per un paio di secondi. */
+    for (var i = 0; i < 10; i += 1) {
       (function (indice) {
         setTimeout(function () {
-          accendiFiamma(
-            bordo.left + bordo.width * (0.2 + 0.075 * indice),
-            bordo.top + 18,
-            1.1 + Math.abs(Math.sin(indice)) * 0.6
+          rogo(
+            bordo.left + bordo.width * (0.08 + 0.84 * ((indice * 0.37) % 1)),
+            bordo.top + 26,
+            0.95 + Math.abs(Math.sin(indice)) * 0.4
           );
-        }, indice * 45);
+        }, indice * 80);
       }(i));
     }
   }
