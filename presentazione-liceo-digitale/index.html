@@ -165,7 +165,14 @@ button:focus-visible,#scrub:focus-visible{outline:3px solid var(--wire);outline-
   border:1px solid rgba(255,255,255,.18);cursor:pointer;color:#dce9f5}
 .chip.active{background:var(--wire);color:#101418;border-color:var(--wire);font-weight:700}
 .hint{opacity:.6;font-size:13px}
-.ritorno-sito{color:var(--cream);font-weight:600;text-decoration:underline}
+/* Il ritorno alla pagina iniziale: stessa forma di tutto il sito,
+   la freccia tonda alta 44 pixel, con i colori della presentazione. */
+.ritorno-sito{display:inline-flex;align-items:center;gap:.6em;min-height:44px;
+  color:var(--cream);font-weight:600;text-decoration:none}
+.ritorno-sito .freccia{display:inline-flex;align-items:center;justify-content:center;
+  width:44px;height:44px;border:2px solid currentColor;border-radius:50%;font-size:1.2rem;line-height:1}
+.ritorno-sito:hover{text-decoration:underline}
+.ritorno-sito:hover .freccia{background:var(--cream);color:var(--navy)}
 .ritorno-sito:focus-visible{outline:3px solid var(--wire);outline-offset:3px}
 
 /* ---------- Aggiunto per il sito Liceo digitale: schermi piccoli ----------
@@ -336,7 +343,7 @@ body.recording, body.recording > * { overflow: hidden; }
   </div>
   <!-- Aggiunto per il sito Liceo digitale: collegamento per tornare
        alla pagina iniziale del sito. -->
-  <div class="row"><a class="ritorno-sito" href="../index.html">&larr; Torna alla pagina iniziale</a></div>
+  <div class="row"><a class="ritorno-sito" href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a></div>
   <div class="row"><span class="hint">Musica: “No Copyright Music” di nastelbom, licenza Pixabay. Barra spaziatrice play/pausa · frecce ±2 s · Esc esce dalla registrazione.</span></div>
 </div>
 

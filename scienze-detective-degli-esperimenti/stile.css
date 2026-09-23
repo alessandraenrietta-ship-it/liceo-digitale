@@ -1414,4 +1414,29 @@ h2 { font-size: 1.3rem; margin: 0 0 10px; letter-spacing: -.01em; }
   background: var(--sfondo-trama);
 }
 
-.ritorno a { color: var(--accento); }
+.ritorno a {
+  display: inline-flex;
+  align-items: center;
+  gap: .6em;
+  min-height: 44px;
+  color: var(--accento);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* La freccia tonda e' alta 44 pixel: la misura minima perche' un
+   dito la centri sul telefono. Stessa forma in tutto il sito. */
+.ritorno .freccia {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.ritorno a:hover { text-decoration: underline; }
+.ritorno a:hover .freccia { background: var(--accento); color: #fff; }

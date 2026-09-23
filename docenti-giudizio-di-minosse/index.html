@@ -65,6 +65,17 @@
   /* Aggiunto per il sito Liceo digitale: collegamento per tornare
      alla pagina iniziale del sito. */
   .ritorno { margin: 0; padding: 8px 16px 0; font-size: 16px; }
+  .ritorno a {
+    display: inline-flex; align-items: center; gap: .6em;
+    min-height: 44px; font-weight: 700; text-decoration: none;
+  }
+  .ritorno .freccia {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; border: 2px solid currentColor;
+    border-radius: 50%; font-size: 1.2rem; line-height: 1;
+  }
+  .ritorno a:hover { text-decoration: underline; }
+  .ritorno a:hover .freccia { background: var(--ocra); color: var(--fondo); }
 
   button {
     font: inherit;
@@ -334,7 +345,7 @@
 
 <!-- Aggiunto per il sito Liceo digitale: collegamento per tornare
      alla pagina iniziale del sito. -->
-<p class="ritorno"><a href="../index.html">&larr; Torna alla pagina iniziale</a></p>
+<p class="ritorno"><a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a></p>
 
 <!-- ============ IMPOSTAZIONE DELLA CLASSE ============ -->
 <main id="impostazione" class="impostazione">

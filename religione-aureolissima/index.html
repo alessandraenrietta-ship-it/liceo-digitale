@@ -191,6 +191,19 @@ textarea{min-height:92px;resize:vertical;line-height:1.5}
 .nota-privacy{font-size:13px;color:var(--testo-soft);background:#f4f8fd;border:1px solid var(--bordo);
   border-radius:10px;padding:10px 13px}
 @media print{.barra-azioni,.btn{display:none}}
+/* --- Aggiunto per il sito Liceo digitale ---
+   Il ritorno alla pagina iniziale: stessa forma di tutto il sito,
+   con i colori di questa pagina. La freccia e' alta 44 pixel, la
+   misura minima per toccarla col dito. */
+.ritorno { max-width: 1120px; margin: 0 auto; padding: 0 18px 28px; }
+.ritorno a { display: inline-flex; align-items: center; gap: .6em;
+  min-height: 44px; color: #2c6bad; font-weight: 700; text-decoration: none; }
+.ritorno .freccia { display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border: 2px solid currentColor; border-radius: 50%;
+  font-size: 1.2rem; line-height: 1; }
+.ritorno a:hover { text-decoration: underline; }
+.ritorno a:hover .freccia { background: #2c6bad; color: #fff; }
+
 </style>
 </head>
 <body>
@@ -199,8 +212,8 @@ textarea{min-height:92px;resize:vertical;line-height:1.5}
 <div id="avviso" role="status" aria-live="polite"></div>
 
 <!-- Collegamento per tornare alla pagina iniziale del sito. -->
-<p style="max-width:1120px;margin:0 auto;padding:0 18px 28px;font-size:15px">
-  <a href="../index.html" style="color:#2c6bad">&larr; Torna alla pagina iniziale</a>
+<p class="ritorno">
+  <a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a>
 </p>
 
 <script>
