@@ -190,6 +190,16 @@
     .presentazione-testo { text-align: center; }
     .presentazione-testo:last-child { margin-bottom: 0; }
 
+    /* Il video non sta dentro a un riquadro: niente cornice gialla,
+       niente fondo crema, niente scritte. Solo il video. */
+    .riquadro-video {
+      max-width: 44rem;
+      margin: 0 auto var(--spazio);
+      padding: 0;
+      background: none;
+      border: 0;
+    }
+
     /* L'anteprima della presentazione: un rettangolo 16:9, come lo
        schermo di un video. Finché non si clicca non è la
        presentazione vera, ma un disegno fatto con i colori del sito:
@@ -199,9 +209,10 @@
       max-width: 44rem;
       margin: 0 auto var(--spazio);
       aspect-ratio: 16 / 9;
-      border: 2px solid var(--verde);
+      border: 0;
       border-radius: var(--raggio);
       overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
       background: linear-gradient(118deg, #9ACB4B 0%, #2FA96B 22%, #1B8C86 48%, #12507A 74%, #08203F 100%);
     }
 
@@ -337,13 +348,7 @@
   <!-- TESTO MODIFICABILE: puoi cambiare le due righe qui sotto.
        Questo riquadro sta fuori dalle sezioni con la password: la
        presentazione la vede chiunque apra il sito, anche le famiglie. -->
-  <section class="riquadro" aria-labelledby="titolo-presentazione">
-    <h2 id="titolo-presentazione">Che cos'è il Liceo digitale</h2>
-    <p class="presentazione-testo">
-      Due minuti per vedere che cosa si studia, come si lavora e che cosa
-      cambia rispetto al liceo scientifico.
-    </p>
-
+  <section class="riquadro riquadro-video" aria-label="Presentazione del Liceo digitale">
     <!-- L'anteprima: finché non si clicca è solo un disegno leggero.
          La presentazione vera (che pesa) si carica soltanto quando
          qualcuno la avvia, così la pagina iniziale resta veloce. -->
@@ -416,8 +421,10 @@
       var avvio = document.getElementById("avvia-presentazione");
       if (!riquadro || !avvio) { return; }
 
+      var cornice = null;
+
       avvio.addEventListener("click", function () {
-        var cornice = document.createElement("iframe");
+        cornice = document.createElement("iframe");
         cornice.src = "presentazione-liceo-digitale/";
         cornice.title = "Presentazione del Liceo digitale";
         cornice.allow = "autoplay; fullscreen";
@@ -425,6 +432,7 @@
         riquadro.appendChild(cornice);
         cornice.focus();
       });
+
     }());
   </script>
 

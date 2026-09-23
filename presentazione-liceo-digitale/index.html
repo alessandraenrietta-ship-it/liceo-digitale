@@ -204,25 +204,27 @@ html.incorporata, html.incorporata body { overflow: hidden; }
 html.incorporata #stage { cursor: pointer; }
 html.incorporata { padding: 0; }
 
-/* L'unico comando dell'anteprima: l'altoparlante, in basso a destra.
-   Tondo e alto 44 pixel, come gli altri comandi del sito. */
+/* L'unico comando dell'anteprima: il suono, in alto a destra, dove
+   nessuna scena mette scritte o disegni. Piccolo e semitrasparente,
+   perché non rubi la scena al video. */
 .audio-incorporata {
   position: absolute;
+  top: 10px;
   right: 10px;
-  bottom: 10px;
   z-index: 6;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   padding: 0;
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, .55);
-  background: rgba(4, 12, 20, .62);
+  border: 2px solid rgba(255, 255, 255, .5);
+  background: rgba(4, 12, 20, .5);
   color: #fff;
   cursor: pointer;
 }
-.audio-incorporata:hover { background: rgba(4, 12, 20, .85); }
+.audio-incorporata:hover { background: rgba(4, 12, 20, .8); }
+.audio-incorporata:focus-visible { outline: 3px solid var(--wire); outline-offset: 2px; }
 html:fullscreen, html:fullscreen body,
 body.recording, body.recording > * { overflow: hidden; }
 </style>
@@ -566,13 +568,16 @@ body.recording, body.recording > * { overflow: hidden; }
       if (playing) { pause(); } else { play(); }
     });
 
+    /* Il tasto del suono sta in alto a destra: misurando tutte e otto
+       le scene, le scritte non salgono mai sopra un terzo dell'altezza
+       e la mascotte sta sempre in basso, quindi lì non copre niente. */
     var altoparlante = document.createElement("button");
     altoparlante.type = "button";
     altoparlante.className = "audio-incorporata";
     document.getElementById("viewport").appendChild(altoparlante);
 
     function aggiornaAltoparlante() {
-      /* TESTO MODIFICABILE: i due segni dell'altoparlante */
+      /* TESTO MODIFICABILE: i due segni del tasto del suono */
       altoparlante.textContent = muted ? "🔇" : "🔊";
       var frase = muted ? "Attiva l'audio" : "Togli l'audio";
       altoparlante.title = frase;
