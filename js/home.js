@@ -224,11 +224,16 @@
       voce.appendChild(stato);
     }
 
+    /* La descrizione non si stampa più sotto al titolo: riempiva la
+       pagina di righe che nessuno legge due volte. Resta nel registro e
+       compare come suggerimento, passandoci sopra col mouse, e per chi
+       si fa leggere la pagina. */
     if (artefatto.descrizione && !daCompilare(artefatto.descrizione)) {
-      var descrizione = document.createElement("p");
-      descrizione.className = "artefatto-descrizione";
-      descrizione.textContent = artefatto.descrizione;
-      voce.appendChild(descrizione);
+      var primo = voce.firstChild;
+      if (primo) {
+        primo.title = artefatto.descrizione;
+        primo.setAttribute("aria-label", artefatto.titolo + ". " + artefatto.descrizione);
+      }
     }
 
     return voce;
@@ -284,28 +289,15 @@
       scheda.className += " con-artefatto";
     }
 
-    var stato = document.createElement("span");
-    stato.className = "disciplina-stato";
-    if (pronti === 0) {
-      /* Niente di pronto: basta dire che c'è qualcosa in arrivo, senza
-         contare quanti. */
-      stato.textContent = "in preparazione";
-    } else {
-      /* Quando c'è qualcosa di pronto si scrive il suo nome, non
-         "1 artefatto disponibile": si capisce subito che cosa c'è
-         dentro senza dover aprire. Se sono più d'uno, compaiono tutti,
-         uno sotto l'altro: di seguito sulla stessa riga i titoli si
-         confondevano fra loro. */
-      artefatti
-        .filter(function (artefatto) { return artefatto.pronto; })
-        .forEach(function (artefatto) {
-          var titolo = document.createElement("span");
-          titolo.className = "artefatto-pronto";
-          titolo.textContent = artefatto.titolo;
-          stato.appendChild(titolo);
-        });
-    }
-    testata.appendChild(stato);
+    /* Sotto al nome non si scrive più niente: i titoli comparivano due
+       volte, qui e dentro la scheda aperta, e la pagina risultava
+       affollata. Bastano i riquadri che si aprono.
+       La stessa informazione resta però scritta per chi non vede lo
+       schermo e si fa leggere la pagina: sta nell'etichetta del
+       pulsante, che non si vede ma si sente. */
+    testata.setAttribute("aria-label", nome + ": " + (pronti === 0
+      ? "in preparazione"
+      : (pronti === 1 ? "1 strumento pronto" : pronti + " strumenti pronti")));
 
     var elenco = document.createElement("ul");
     elenco.className = "elenco-artefatti";
@@ -331,9 +323,71 @@
      artefatto si aprono, le altre restano spente.
      Il prefisso serve a non dare lo stesso nome a due riquadri
      diversi, uno per sezione. */
+  /* L'ordine delle discipline.
+     Di suo il sito mette per prime quelle che hanno più strumenti
+     pronti e per ultime quelle ancora in costruzione: così quello che
+     si può usare subito sta in alto. Chi preferisce l'ordine
+     alfabetico lo sceglie dal menù, e la scelta resta su questo
+     computer. */
+  function contaPronti(nome, suoi) {
+    return suoi.filter(function (a) {
+      return a.disciplina === nome && a.pronto;
+    }).length;
+  }
+
+  function contaTutti(nome, suoi) {
+    return suoi.filter(function (a) { return a.disciplina === nome; }).length;
+  }
+
+  /* L'ordine con cui compaiono le discipline. Per cambiarlo si scrive
+     "alfabetico" al posto di "strumenti" qui sotto: non serve altro.
+       strumenti  = prima quelle con piu' strumenti pronti, in fondo
+                    quelle ancora in costruzione
+       alfabetico = dalla A alla Z */
+  var ORDINE = "strumenti";
+
+  function ordinaDiscipline(discipline, suoi, criterio) {
+    var copia = discipline.slice();
+    if (criterio === "alfabetico") {
+      return copia.sort(function (a, b) { return a.localeCompare(b, "it"); });
+    }
+    return copia.sort(function (a, b) {
+      var prontiA = contaPronti(a, suoi), prontiB = contaPronti(b, suoi);
+      if (prontiA !== prontiB) { return prontiB - prontiA; }
+      var tuttiA = contaTutti(a, suoi), tuttiB = contaTutti(b, suoi);
+      if (tuttiA !== tuttiB) { return tuttiB - tuttiA; }
+      return a.localeCompare(b, "it");
+    });
+  }
+
+  /* Niente buchi nella griglia: se l'ultima riga è incompleta, l'ultimo
+     riquadro si allarga fino a riempirla. Il numero di colonne lo
+     decide il browser in base alla larghezza, quindi si guarda dove i
+     riquadri sono finiti davvero. */
+  function riempiUltimaRiga(griglia) {
+    var figli = Array.prototype.slice.call(griglia.children);
+    figli.forEach(function (f) { f.style.gridColumn = ""; });
+    if (figli.length === 0) { return; }
+
+    var colonne = getComputedStyle(griglia).gridTemplateColumns.split(" ").length;
+    if (!(colonne > 1)) { return; }
+
+    var righe = {};
+    figli.forEach(function (f) {
+      var y = f.offsetTop;
+      if (!righe[y]) { righe[y] = []; }
+      righe[y].push(f);
+    });
+    var quote = Object.keys(righe).map(Number).sort(function (a, b) { return a - b; });
+    var ultima = righe[quote[quote.length - 1]];
+    var mancanti = colonne - ultima.length;
+    if (mancanti > 0 && ultima.length > 0) {
+      ultima[ultima.length - 1].style.gridColumn = "span " + (mancanti + 1);
+    }
+  }
+
   function costruisciSezione(prefisso, discipline, artefatti) {
     var contenitore = document.getElementById("discipline-" + prefisso);
-    var riassunto = document.getElementById("riassunto-" + prefisso);
     var suoi = per(prefisso, artefatti);
 
     /* Gli strumenti che non appartengono a nessuna disciplina hanno il
@@ -354,23 +408,43 @@
       );
     }
 
-    discipline.forEach(function (nome, indice) {
-      var della = suoi.filter(function (artefatto) {
-        return artefatto.disciplina === nome;
+    /* Le discipline, nell'ordine scelto. Cambiando ordine si rifanno
+       solo queste: il riquadro degli strumenti generali resta in cima. */
+    var primeSchede = contenitore.children.length;
+
+    function disegnaDiscipline(criterio) {
+      while (contenitore.children.length > primeSchede) {
+        contenitore.removeChild(contenitore.lastChild);
+      }
+      ordinaDiscipline(discipline, suoi, criterio).forEach(function (nome) {
+        var della = suoi.filter(function (artefatto) {
+          return artefatto.disciplina === nome;
+        });
+        var numero = discipline.indexOf(nome);
+        contenitore.appendChild(
+          schedaDisciplina(nome, della, prefisso + "-disciplina-" + numero)
+        );
       });
-      contenitore.appendChild(
-        schedaDisciplina(nome, della, prefisso + "-disciplina-" + indice)
-      );
-    });
+      /* Si misura al giro dopo: appena disegnati, i riquadri non hanno
+         ancora una posizione, e con la sezione chiusa sono tutti a
+         zero. */
+      requestAnimationFrame(function () { riempiUltimaRiga(contenitore); });
+    }
 
-    var disponibili = suoi.filter(function (artefatto) {
-      return artefatto.pronto;
-    }).length;
+    disegnaDiscipline(ORDINE);
+    contenitore.setAttribute("data-ridisegna", "1");
+    contenitore.ridisegna = disegnaDiscipline;
 
-    riassunto.textContent = discipline.length + " discipline, "
-      + (disponibili === 1
-        ? "1 artefatto già disponibile."
-        : disponibili + " artefatti già disponibili.");
+    /* La griglia si rimisura quando la finestra cambia larghezza, così
+       non restano buchi nemmeno girando il telefono. */
+    if (window.ResizeObserver) {
+      new ResizeObserver(function () { riempiUltimaRiga(contenitore); })
+        .observe(contenitore);
+    }
+
+
+    /* Il conteggio "16 discipline, 3 artefatti" non si scrive più:
+       chi apre il sito vuole aprire uno strumento, non contare. */
   }
 
   function mostraSegnalazioni(problemi) {
@@ -453,23 +527,33 @@
     var area = document.getElementById("area-" + prefisso);
     area.hidden = false;
 
+    /* Adesso che la sezione si vede, i riquadri hanno una posizione:
+       si può sistemare l'ultima riga. */
+    var griglia = document.getElementById("discipline-" + prefisso);
+    if (griglia) {
+      requestAnimationFrame(function () { riempiUltimaRiga(griglia); });
+    }
+
     /* Un modo per richiudere la sezione, utile su un computer usato da
-       altri. Si aggiunge una volta sola. */
+       altri. È un pulsantino in cima, accanto al menù dell'ordine: la
+       frase lunga in fondo alla pagina occupava una riga intera per una
+       cosa che si usa di rado. La frase per esteso resta nel
+       suggerimento e per chi si fa leggere la pagina. */
     if (!document.getElementById("esci-" + prefisso)) {
-      var riga = document.createElement("p");
-      riga.className = "riga-esci";
       var esci = document.createElement("button");
       esci.type = "button";
       esci.id = "esci-" + prefisso;
-      esci.className = "collegamento-esci";
-      esci.textContent = "Chiudi questa sezione su questo computer";
+      esci.className = "pulsante-esci";
+      esci.textContent = "Esci";
+      esci.title = "Chiudi questa sezione su questo computer";
+      esci.setAttribute("aria-label", "Chiudi questa sezione su questo computer");
       esci.addEventListener("click", function () {
         dimentica(prefisso);
         document.getElementById("accesso-" + prefisso).hidden = false;
         area.hidden = true;
       });
-      riga.appendChild(esci);
-      area.appendChild(riga);
+      var barra = document.getElementById("barra-" + prefisso);
+      if (barra) { barra.appendChild(esci); } else { area.appendChild(esci); }
     }
   }
 

@@ -24,9 +24,13 @@
        (var(--verde) e simili), mai i codici scritti a mano.
        ------------------------------------------------------------- */
 
+    /* auto-fit invece di auto-fill: quando i riquadri sono pochi o lo
+       schermo è stretto, le colonne vuote spariscono invece di
+       lasciare spazio bianco. L'ultima riga la riempie home.js
+       allargando l'ultimo riquadro. */
     .griglia {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
       gap: 0.8rem;
       margin-top: var(--spazio);
     }
@@ -38,9 +42,32 @@
       overflow: hidden;
     }
 
+    /* Le discipline ancora in costruzione: righe basse, su una riga
+       sola, con il nome in tono minore. Sono tante, e da piene
+       occupavano piu' spazio di quelle che si possono davvero usare. */
     .disciplina.spenta {
       border-style: dashed;
       border-color: var(--teal);
+      border-width: 1px;
+      align-self: start;
+    }
+
+    .disciplina.spenta .disciplina-spenta-testo {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.1em 0.5em;
+      padding: 0.35em 0.7em;
+    }
+
+    .disciplina.spenta .disciplina-nome {
+      font-size: 0.92rem;
+      font-weight: normal;
+    }
+
+    .disciplina.spenta .disciplina-stato {
+      margin: 0;
+      font-size: 0.78rem;
     }
 
     /* Disciplina con almeno un artefatto pronto da aprire: una fascia
@@ -72,7 +99,7 @@
        da soli. */
     .disciplina.rilievo .elenco-artefatti {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
       gap: 0.8rem;
       padding: 0.8em 1em 1em;
     }
@@ -257,24 +284,46 @@
     .accesso { max-width: 22rem; }
     .accesso button { margin-top: 0.6em; }
 
-    /* Collegamento per richiudere una sezione rimasta aperta */
-    .riga-esci {
-      margin: var(--spazio) 0 0;
-      text-align: right;
+    /* La barra sopra le discipline: il menù dell'ordine a sinistra,
+       il pulsantino per richiudere la sezione a destra. */
+    .barra-sezione {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.6rem;
+      margin-top: 0.4rem;
     }
 
-    .collegamento-esci {
-      padding: 0;
-      background: none;
+    .gruppo-ordine {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .etichetta-ordine {
+      margin: 0;
+      font-size: 0.9rem;
       color: var(--teal);
-      font-size: 0.85rem;
-      font-weight: normal;
-      text-decoration: underline;
     }
 
-    .collegamento-esci:hover {
-      background: none;
-      color: var(--verde);
+    .menu-ordine {
+      width: auto;
+      padding: 0.35em 0.6em;
+      font-size: 0.9rem;
+    }
+
+    .pulsante-esci {
+      padding: 0.35em 0.9em;
+      font-size: 0.85rem;
+      background: transparent;
+      color: var(--teal);
+      border: 2px solid var(--teal);
+    }
+
+    .pulsante-esci:hover {
+      background: var(--teal);
+      color: var(--testo-su-scuro);
     }
 
     .messaggio-errore {
@@ -357,7 +406,7 @@
     </div>
 
     <div id="area-studenti" hidden>
-      <p id="riassunto-studenti"></p>
+      <div class="barra-sezione" id="barra-studenti"></div>
       <div id="discipline-studenti" class="griglia"></div>
     </div>
   </section>
@@ -376,7 +425,7 @@
     </div>
 
     <div id="area-docenti" hidden>
-      <p id="riassunto-docenti"></p>
+      <div class="barra-sezione" id="barra-docenti"></div>
       <div id="discipline-docenti" class="griglia"></div>
     </div>
   </section>
@@ -389,7 +438,7 @@
     <ul id="elenco-segnalazioni"></ul>
   </section>
 
-  <script src="js/home.js?v=12"></script>
+  <script src="js/home.js?v=13"></script>
   <script>Tema.interruttore("interruttore-tema");</script>
 
   <script>
