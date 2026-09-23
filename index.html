@@ -226,55 +226,18 @@
       background: linear-gradient(118deg, #9ACB4B 0%, #2FA96B 22%, #1B8C86 48%, #12507A 74%, #08203F 100%);
     }
 
-    .anteprima-avvio {
+    /* Se qualcuno ha spento JavaScript, al posto del video resta un
+       collegamento alla presentazione. */
+    .senza-javascript {
       position: absolute;
       inset: 0;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 1rem;
-      /* Il fondo è pieno, uguale a quello del riquadro: la
-         presentazione parte subito dietro, e senza questo fondo le due
-         scritte si vedrebbero una sopra l'altra. */
-      background: linear-gradient(118deg, #9ACB4B 0%, #2FA96B 22%, #1B8C86 48%, #12507A 74%, #08203F 100%);
-      border: 0;
-      border-radius: 0;
-      color: #FFFFFF;
-      cursor: pointer;
-    }
-
-    .anteprima-avvio:hover { box-shadow: inset 0 0 0 999px rgba(0, 0, 0, 0.18); }
-
-    .anteprima-titolo {
-      font-size: clamp(1.4rem, 4.5vw, 2.6rem);
-      font-weight: bold;
-      letter-spacing: 0.02em;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
-    }
-
-    /* Il triangolo del "riproduci", dentro un tondo chiaro */
-    .anteprima-freccia {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.92);
-      color: var(--blu-notte);
-      font-size: 1.6rem;
-      padding-left: 0.18em;   /* il triangolo sembra storto se centrato */
+      margin: 0;
     }
 
-    .anteprima-avvio:hover .anteprima-freccia { background: #FFFFFF; }
-
-    .anteprima-durata {
-      font-size: 0.95rem;
-      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
-    }
+    .senza-javascript a { color: #FFFFFF; font-weight: bold; }
 
     /* Quando si avvia, la presentazione prende tutto il rettangolo */
     .anteprima-presentazione iframe {
@@ -368,11 +331,11 @@
          La presentazione vera (che pesa) si carica soltanto quando
          qualcuno la avvia, così la pagina iniziale resta veloce. -->
     <div class="anteprima-presentazione" id="anteprima-presentazione">
-      <button type="button" class="anteprima-avvio" id="avvia-presentazione">
-        <span class="anteprima-titolo">Liceo Digitale</span>
-        <span class="anteprima-freccia" aria-hidden="true">&#9654;</span>
-        <span class="anteprima-durata">Guarda la presentazione &middot; 1:53</span>
-      </button>
+      <noscript>
+        <p class="senza-javascript">
+          <a href="presentazione-liceo-digitale/">Guarda la presentazione</a>
+        </p>
+      </noscript>
     </div>
   </section>
 
@@ -426,42 +389,29 @@
   <script>Tema.interruttore("interruttore-tema");</script>
 
   <script>
-    /* L'anteprima della presentazione: al clic, al posto del disegno
-       compare la presentazione vera, dentro allo stesso rettangolo.
-       Si carica solo adesso: prima la pagina iniziale non scarica
-       niente di pesante. */
+    /* La presentazione nel riquadro della pagina iniziale.
+       Parte da sola e muta, e non ha nessuna scritta sopra: prima
+       c'era un disegno di copertina, ma con la presentazione che parte
+       da sola finiva per sovrapporsi alle scene. Mentre carica si vede
+       il fondo colorato del riquadro, e basta. */
     (function () {
       "use strict";
       var riquadro = document.getElementById("anteprima-presentazione");
-      var avvio = document.getElementById("avvia-presentazione");
-      if (!riquadro || !avvio) { return; }
+      if (!riquadro) { return; }
 
-      var cornice = null;
-
-      /* La presentazione parte da sola, muta. Il disegno di copertina
-         resta sopra finché la presentazione non è pronta: così non si
-         vede un rettangolo vuoto mentre carica. Chi arriva prima con
-         un clic la fa partire subito lo stesso. */
-      function avvia() {
-        if (cornice) { return; }
-        cornice = document.createElement("iframe");
-        cornice.src = "presentazione-liceo-digitale/";
-        cornice.title = "Presentazione del Liceo digitale";
-        cornice.allow = "autoplay; fullscreen";
-        cornice.addEventListener("load", function () {
-          avvio.hidden = true;
-          /* Riparte da capo: mentre la copertina copriva, la
-             presentazione stava già andando avanti. */
-          var dentro = cornice.contentWindow;
-          if (dentro && typeof dentro.riavviaAnteprima === "function") {
-            dentro.riavviaAnteprima();
-          }
-        });
-        riquadro.insertBefore(cornice, avvio);
-      }
-
-      avvio.addEventListener("click", avvia);
-      avvia();
+      var cornice = document.createElement("iframe");
+      cornice.src = "presentazione-liceo-digitale/";
+      cornice.title = "Presentazione del Liceo digitale";
+      cornice.allow = "autoplay; fullscreen";
+      cornice.addEventListener("load", function () {
+        /* Riparte da capo: mentre il file finiva di caricarsi, la
+           presentazione era già andata avanti di qualche secondo. */
+        var dentro = cornice.contentWindow;
+        if (dentro && typeof dentro.riavviaAnteprima === "function") {
+          dentro.riavviaAnteprima();
+        }
+      });
+      riquadro.appendChild(cornice);
 
     }());
   </script>
