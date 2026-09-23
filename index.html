@@ -156,6 +156,11 @@
     .disciplina-testata .disciplina-nome { text-decoration: underline; }
     .disciplina-testata[aria-expanded="true"] .disciplina-nome { text-decoration: none; }
 
+    /* Quando la scheda è aperta, l'elenco dei titoli qui in cima
+       sparisce: subito sotto ci sono gli stessi titoli, quelli veri su
+       cui si clicca, e vedendoli due volte si sbaglia bersaglio. */
+    .disciplina-testata[aria-expanded="true"] .disciplina-stato { display: none; }
+
     .elenco-artefatti {
       margin: 0;
       padding: 0 1em 0.9em;
