@@ -332,6 +332,17 @@
       color: var(--verde);
     }
 
+    /* Le scritte che servono solo a chi si fa leggere la pagina: non
+       si vedono, ma i lettori di schermo le leggono. */
+    .solo-lettori {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
     /* L'interruttore dei colori: piccolo e discreto, in alto a destra. */
     .riga-tema {
       max-width: var(--massimo);
@@ -438,7 +449,7 @@
     <ul id="elenco-segnalazioni"></ul>
   </section>
 
-  <script src="js/home.js?v=13"></script>
+  <script src="js/home.js?v=14"></script>
   <script>Tema.interruttore("interruttore-tema");</script>
 
   <script>

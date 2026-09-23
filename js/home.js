@@ -196,8 +196,8 @@
     if (inRilievo && !artefatto.pronto && daCompilare(artefatto.titolo)) {
       voce.className = "in-costruzione";
       var segnaposto = document.createElement("span");
-      segnaposto.className = "artefatto-titolo";
-      segnaposto.textContent = "in costruzione";
+      segnaposto.className = "solo-lettori";
+      segnaposto.textContent = "Posto per uno strumento in costruzione";
       voce.appendChild(segnaposto);
       return voce;
     }
@@ -219,8 +219,8 @@
       voce.appendChild(titolo);
 
       var stato = document.createElement("span");
-      stato.className = "artefatto-stato";
-      stato.textContent = "(non ancora consegnato)";
+      stato.className = "solo-lettori";
+      stato.textContent = ": non ancora consegnato";
       voce.appendChild(stato);
     }
 
@@ -254,9 +254,12 @@
       nomeSpento.textContent = nome;
       spento.appendChild(nomeSpento);
 
+      /* La scritta "in costruzione" non si stampa: il riquadro
+         tratteggiato e piu' piccolo lo dice gia'. Resta per chi si fa
+         leggere la pagina, in una scritta che non si vede. */
       var statoSpento = document.createElement("span");
-      statoSpento.className = "disciplina-stato";
-      statoSpento.textContent = "in costruzione";
+      statoSpento.className = "solo-lettori";
+      statoSpento.textContent = ": in costruzione";
       spento.appendChild(statoSpento);
 
       scheda.appendChild(spento);
