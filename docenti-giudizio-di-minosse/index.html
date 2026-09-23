@@ -732,13 +732,13 @@
     stato.dannati = [];
   }
 
-  /* La durata di ogni passo. Il totale sta fra 6 e 9 secondi qualunque
+  /* La durata di ogni passo. Il totale sta fra 3 e 4,5 secondi qualunque
      sia il numero di studenti. Il ritmo: lento e solenne all'inizio,
      poi la coda accelera, e alla fine frena fino a fermarsi, come una
      ruota della fortuna. Dipende solo da quanti passi sono: non tocca
      in nessun modo il risultato. */
   function durate(passi, rimasti, pocoMovimento) {
-    var totale = pocoMovimento ? 1600 : 6000 + 3000 * (passi - rimasti) / rimasti;
+    var totale = pocoMovimento ? 1200 : 3000 + 1500 * (passi - rimasti) / rimasti;
     var pesi = [];
     var somma = 0;
     for (var i = 0; i < passi; i += 1) {
