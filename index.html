@@ -435,15 +435,24 @@
 
       var cornice = null;
 
-      avvio.addEventListener("click", function () {
+      /* La presentazione parte da sola, muta. Il disegno di copertina
+         resta sopra finché la presentazione non è pronta: così non si
+         vede un rettangolo vuoto mentre carica. Chi arriva prima con
+         un clic la fa partire subito lo stesso. */
+      function avvia() {
+        if (cornice) { return; }
         cornice = document.createElement("iframe");
         cornice.src = "presentazione-liceo-digitale/";
         cornice.title = "Presentazione del Liceo digitale";
         cornice.allow = "autoplay; fullscreen";
-        riquadro.textContent = "";
-        riquadro.appendChild(cornice);
-        cornice.focus();
-      });
+        cornice.addEventListener("load", function () {
+          avvio.hidden = true;
+        });
+        riquadro.insertBefore(cornice, avvio);
+      }
+
+      avvio.addEventListener("click", avvia);
+      avvia();
 
     }());
   </script>

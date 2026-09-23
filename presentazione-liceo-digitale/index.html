@@ -203,6 +203,9 @@ html.incorporata #hud { display: none; }
 html.incorporata, html.incorporata body { overflow: hidden; }
 html.incorporata #stage { cursor: pointer; }
 html.incorporata { padding: 0; }
+/* Il fondo uguale a quello delle scene: se per un istante, mentre
+   carica, resta un filo scoperto, non si vede una riga nera. */
+html.incorporata, html.incorporata body { background: var(--navy); }
 
 /* L'unico comando dell'anteprima: il suono, in alto a destra, dove
    nessuna scena mette scritte o disegni. Piccolo e semitrasparente,
@@ -439,7 +442,17 @@ body.recording, body.recording > * { overflow: hidden; }
 
   function fit(){
     var vp = document.getElementById("viewport");
-    stage.style.transform = "scale(" + Math.min(vp.clientWidth/1920, vp.clientHeight/1080) + ")";
+    var perLarghezza = vp.clientWidth/1920, perAltezza = vp.clientHeight/1080;
+    /* Aggiunto per il sito Liceo digitale: dentro al riquadro della
+       pagina iniziale si prende la misura PIU' GRANDE, così il video
+       riempie tutto il rettangolo e non restano bande nere sopra o
+       sotto. Si perde qualche pixel ai lati, ed è meglio così.
+       Nella pagina intera resta la misura più piccola, che fa vedere
+       la presentazione tutta quanta. */
+    var quanto = document.documentElement.classList.contains("incorporata")
+      ? Math.max(perLarghezza, perAltezza)
+      : Math.min(perLarghezza, perAltezza);
+    stage.style.transform = "scale(" + quanto + ")";
   }
   window.addEventListener("resize", fit); fit();
 
@@ -571,8 +584,14 @@ body.recording, body.recording > * { overflow: hidden; }
     muted = true;
     track.muted = true;
 
-    document.getElementById("stage").addEventListener("click", function () {
-      if (playing) { pause(); } else { play(); }
+    /* Un clic sul video apre la presentazione nella sua pagina, a
+       tutto schermo e con i comandi: nell'anteprima si guarda, qui si
+       usa davvero. Il tasto del suono qui sotto ferma il clic e non
+       fa cambiare pagina. */
+    var palco = document.getElementById("stage");
+    palco.title = "Apri la presentazione";
+    palco.addEventListener("click", function () {
+      window.top.location.href = location.href;
     });
 
     /* Il tasto del suono sta in alto a destra: misurando tutte e otto
