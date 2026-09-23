@@ -203,6 +203,26 @@ html.incorporata #hud { display: none; }
 html.incorporata, html.incorporata body { overflow: hidden; }
 html.incorporata #stage { cursor: pointer; }
 html.incorporata { padding: 0; }
+
+/* L'unico comando dell'anteprima: l'altoparlante, in basso a destra.
+   Tondo e alto 44 pixel, come gli altri comandi del sito. */
+.audio-incorporata {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 6;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-size: 18px;
+  line-height: 1;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .55);
+  background: rgba(4, 12, 20, .62);
+  color: #fff;
+  cursor: pointer;
+}
+.audio-incorporata:hover { background: rgba(4, 12, 20, .85); }
 html:fullscreen, html:fullscreen body,
 body.recording, body.recording > * { overflow: hidden; }
 </style>
@@ -492,18 +512,6 @@ body.recording, body.recording > * { overflow: hidden; }
     playing = false; playBtn.textContent = "Riproduci";
     track.pause();
   }
-
-  /* Aggiunto per il sito Liceo digitale.
-     Se la presentazione è dentro al riquadro della pagina iniziale
-     (cioè dentro una cornice), si mostra solo il video: parte da sola
-     e si ferma con un clic. Fuori dalla cornice non cambia niente. */
-  if (window.self !== window.top) {
-    document.documentElement.classList.add("incorporata");
-    document.getElementById("stage").addEventListener("click", function () {
-      if (playing) { pause(); } else { play(); }
-    });
-    play();
-  }
   function seek(ms){
     t = Math.max(0, Math.min(DUR, ms));
     try{ track.currentTime = t/1000; }catch(e){}
@@ -539,6 +547,49 @@ body.recording, body.recording > * { overflow: hidden; }
   });
 
   render();
+
+  /* ---------- Aggiunto per il sito Liceo digitale ----------
+     Se la presentazione sta dentro al riquadro della pagina iniziale
+     (cioè dentro una cornice), si vede solo il video: parte da sola,
+     si ferma con un clic, e parte SEMPRE MUTA. Il suono si accende
+     con l'altoparlante in basso a destra: un video che parte da solo
+     con la musica a palla, mentre qualcuno sta leggendo, è una cosa
+     che fa chiudere la pagina.
+     Fuori dalla cornice non cambia niente. */
+  if (window.self !== window.top) {
+    document.documentElement.classList.add("incorporata");
+
+    muted = true;
+    track.muted = true;
+
+    document.getElementById("stage").addEventListener("click", function () {
+      if (playing) { pause(); } else { play(); }
+    });
+
+    var altoparlante = document.createElement("button");
+    altoparlante.type = "button";
+    altoparlante.className = "audio-incorporata";
+    document.getElementById("viewport").appendChild(altoparlante);
+
+    function aggiornaAltoparlante() {
+      /* TESTO MODIFICABILE: i due segni dell'altoparlante */
+      altoparlante.textContent = muted ? "🔇" : "🔊";
+      var frase = muted ? "Attiva l'audio" : "Togli l'audio";
+      altoparlante.title = frase;
+      altoparlante.setAttribute("aria-label", frase);
+      altoparlante.setAttribute("aria-pressed", muted ? "false" : "true");
+    }
+
+    altoparlante.addEventListener("click", function (e) {
+      e.stopPropagation();
+      muted = !muted;
+      track.muted = muted;
+      aggiornaAltoparlante();
+    });
+
+    aggiornaAltoparlante();
+    play();
+  }
 })();
 </script>
 </body>
