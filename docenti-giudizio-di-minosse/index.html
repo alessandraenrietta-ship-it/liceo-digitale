@@ -140,6 +140,13 @@
   .modi input { width: 20px; height: 20px; accent-color: var(--brace); }
   .campo { margin: 10px 0; }
   .campo label { display: block; font-weight: 700; margin-bottom: 6px; }
+
+  /* La domanda sul numero, e la casella, stanno in mezzo alla pagina. */
+  #modo-numero { text-align: center; }
+
+  /* I nomi sono corti: una colonna stretta, in mezzo, si legge
+     meglio di una riga lunga quanto tutto il riquadro. */
+  #modo-incolla { max-width: 320px; margin-left: auto; margin-right: auto; }
   .campo input[type=number] {
     font: inherit; font-size: 28px; width: 130px; padding: 6px 10px;
     border-radius: 10px; border: 2px solid var(--ocra); background: #fff8e8; color: var(--inchiostro);
@@ -500,7 +507,7 @@
     </div>
 
     <p class="conferma">
-      <button type="button" class="principale" id="conferma">Conferma la classe</button>
+      <button type="button" class="principale" id="conferma">Conferma le anime in attesa di giudizio</button>
     </p>
 
     <!-- Le classi salvate su questo computer -->
