@@ -349,8 +349,55 @@
        alfabetico = dalla A alla Z */
   var ORDINE = "strumenti";
 
-  function ordinaDiscipline(discipline, suoi, criterio) {
+  /* L'ordine deciso a mano, trascinando le caselle. Vale solo sul
+     computer di chi lo fa: è una comodità personale, non una modifica
+     al sito. Si salva l'elenco dei nomi, non i numeri: così aggiungere
+     o togliere una disciplina dal registro non scombina niente. */
+  function ordinePersonale(prefisso) {
+    try {
+      var salvato = JSON.parse(localStorage.getItem(prefisso + "-mie-discipline"));
+      return Array.isArray(salvato) ? salvato : null;
+    } catch (errore) {
+      return null;
+    }
+  }
+
+  function salvaOrdinePersonale(prefisso, nomi) {
+    try {
+      localStorage.setItem(prefisso + "-mie-discipline", JSON.stringify(nomi));
+    } catch (errore) {
+      /* pazienza: vale solo per questa visita */
+    }
+  }
+
+  function dimenticaOrdinePersonale(prefisso) {
+    try {
+      localStorage.removeItem(prefisso + "-mie-discipline");
+    } catch (errore) {
+      /* niente da fare */
+    }
+  }
+
+  function ordinaDiscipline(discipline, suoi, criterio, prefisso) {
     var copia = discipline.slice();
+
+    /* Se c'è un ordine deciso a mano, comanda quello. Le discipline che
+       non erano ancora nell'elenco (aggiunte dopo) finiscono in coda,
+       nell'ordine automatico. */
+    var mio = prefisso ? ordinePersonale(prefisso) : null;
+    if (mio) {
+      var automatico = ordinaDiscipline(discipline, suoi, criterio);
+      return copia.sort(function (a, b) {
+        var posA = mio.indexOf(a), posB = mio.indexOf(b);
+        if (posA === -1 && posB === -1) {
+          return automatico.indexOf(a) - automatico.indexOf(b);
+        }
+        if (posA === -1) { return 1; }
+        if (posB === -1) { return -1; }
+        return posA - posB;
+      });
+    }
+
     if (criterio === "alfabetico") {
       return copia.sort(function (a, b) { return a.localeCompare(b, "it"); });
     }
@@ -360,6 +407,145 @@
       var tuttiA = contaTutti(a, suoi), tuttiB = contaTutti(b, suoi);
       if (tuttiA !== tuttiB) { return tuttiB - tuttiA; }
       return a.localeCompare(b, "it");
+    });
+  }
+
+  /* ------------------------------------------------------------------
+     METTERE LE DISCIPLINE NELL'ORDINE CHE SI VUOLE
+
+     Si preme "Sposta le caselle": da quel momento ogni casella si può
+     trascinare col mouse, e accanto al nome compaiono due frecce per
+     chi usa il telefono o la tastiera. L'ordine si salva da solo su
+     quel computer, e con "Ordine automatico" si torna com'era.
+     ------------------------------------------------------------------ */
+
+  function nomiNellOrdineMostrato(contenitore) {
+    return Array.prototype.slice.call(contenitore.children).map(function (scheda) {
+      var nome = scheda.querySelector(".disciplina-nome");
+      return nome ? nome.textContent : "";
+    });
+  }
+
+  function preparaSpostamento(prefisso, contenitore, ridisegna) {
+    var barra = document.getElementById("barra-" + prefisso);
+    if (!barra || document.getElementById("sposta-" + prefisso)) { return; }
+
+    var sposta = document.createElement("button");
+    sposta.type = "button";
+    sposta.id = "sposta-" + prefisso;
+    sposta.className = "pulsante-sposta";
+    sposta.textContent = "Sposta le caselle";
+    sposta.title = "Metti le discipline nell'ordine che preferisci";
+
+    var azzera = document.createElement("button");
+    azzera.type = "button";
+    azzera.className = "pulsante-sposta chiave-secondario";
+    azzera.textContent = "Ordine automatico";
+    azzera.hidden = true;
+    azzera.title = "Rimetti l'ordine deciso dal sito";
+
+    barra.insertBefore(azzera, barra.firstChild);
+    barra.insertBefore(sposta, barra.firstChild);
+
+    var attivo = false;
+
+    function salva() {
+      salvaOrdinePersonale(prefisso, nomiNellOrdineMostrato(contenitore));
+    }
+
+    /* Sposta una casella di un posto, a sinistra o a destra. Serve al
+       telefono e alla tastiera, dove trascinare non si può. */
+    function spostaDi(scheda, passo) {
+      var vicina = passo < 0 ? scheda.previousElementSibling : scheda.nextElementSibling;
+      if (!vicina) { return; }
+      if (passo < 0) { contenitore.insertBefore(scheda, vicina); }
+      else { contenitore.insertBefore(vicina, scheda); }
+      salva();
+      var frecce = scheda.querySelector(".freccia-" + (passo < 0 ? "sinistra" : "destra"));
+      if (frecce) { frecce.focus(); }
+    }
+
+    function aggiungiFrecce(scheda) {
+      if (scheda.querySelector(".frecce-sposta")) { return; }
+      var nome = scheda.querySelector(".disciplina-nome");
+      var comandi = document.createElement("span");
+      comandi.className = "frecce-sposta";
+
+      [["sinistra", "←", "Sposta indietro"],
+       ["destra", "→", "Sposta avanti"]].forEach(function (dati) {
+        var freccia = document.createElement("button");
+        freccia.type = "button";
+        freccia.className = "freccia-" + dati[0];
+        freccia.textContent = dati[1];
+        freccia.title = dati[2] + (nome ? " " + nome.textContent : "");
+        freccia.setAttribute("aria-label", freccia.title);
+        freccia.addEventListener("click", function (evento) {
+          evento.stopPropagation();
+          spostaDi(scheda, dati[0] === "sinistra" ? -1 : 1);
+        });
+        comandi.appendChild(freccia);
+      });
+
+      scheda.appendChild(comandi);
+    }
+
+    var inMano = null;
+
+    function preparaScheda(scheda) {
+      scheda.draggable = true;
+      aggiungiFrecce(scheda);
+
+      scheda.addEventListener("dragstart", function (evento) {
+        inMano = scheda;
+        scheda.classList.add("in-mano");
+        if (evento.dataTransfer) { evento.dataTransfer.effectAllowed = "move"; }
+      });
+
+      scheda.addEventListener("dragend", function () {
+        scheda.classList.remove("in-mano");
+        inMano = null;
+        salva();
+      });
+
+      scheda.addEventListener("dragover", function (evento) {
+        evento.preventDefault();
+        if (!inMano || inMano === scheda) { return; }
+        /* Si decide se mettere la casella prima o dopo guardando da che
+           parte del centro si trova il dito o il mouse. */
+        var dimensioni = scheda.getBoundingClientRect();
+        var dopoLaMeta = (evento.clientX - dimensioni.left) > dimensioni.width / 2;
+        contenitore.insertBefore(inMano, dopoLaMeta ? scheda.nextSibling : scheda);
+      });
+    }
+
+    function accendi() {
+      attivo = true;
+      contenitore.classList.add("in-spostamento");
+      azzera.hidden = false;
+      sposta.textContent = "Ho finito";
+      Array.prototype.forEach.call(contenitore.children, preparaScheda);
+    }
+
+    function spegni() {
+      attivo = false;
+      contenitore.classList.remove("in-spostamento");
+      azzera.hidden = true;
+      sposta.textContent = "Sposta le caselle";
+      Array.prototype.forEach.call(contenitore.children, function (scheda) {
+        scheda.draggable = false;
+        var frecce = scheda.querySelector(".frecce-sposta");
+        if (frecce) { frecce.remove(); }
+      });
+    }
+
+    sposta.addEventListener("click", function () {
+      if (attivo) { spegni(); } else { accendi(); }
+    });
+
+    azzera.addEventListener("click", function () {
+      dimenticaOrdinePersonale(prefisso);
+      spegni();
+      ridisegna();
     });
   }
 
@@ -468,7 +654,7 @@
          sono tante, e in mezzo alle altre facevano massa. Li' diventano
          piastrelle piccole, tutte della stessa misura, messe in fila e
          centrate: nessuna si allunga piu' delle altre. */
-      ordinaDiscipline(discipline, suoi, criterio).forEach(function (nome) {
+      ordinaDiscipline(discipline, suoi, criterio, prefisso).forEach(function (nome) {
         var della = suoi.filter(function (artefatto) {
           return artefatto.disciplina === nome;
         });
@@ -481,6 +667,7 @@
     }
 
     disegnaDiscipline(ORDINE);
+    preparaSpostamento(prefisso, contenitore, function () { disegnaDiscipline(ORDINE); });
 
     /* Le colonne si ricalcolano quando la sezione si apre o la finestra
        cambia larghezza. */

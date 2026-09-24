@@ -36,6 +36,35 @@
       margin-top: var(--spazio);
     }
 
+    /* Quando si spostano le caselle: si vede che sono "prendibili", e
+       quella in mano diventa trasparente. */
+    .griglia.in-spostamento .disciplina {
+      cursor: grab;
+      border-style: dashed;
+    }
+
+    .griglia.in-spostamento .disciplina.in-mano { opacity: 0.4; }
+
+    .frecce-sposta {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.3rem;
+      padding: 0 0.5em 0.5em;
+    }
+
+    .frecce-sposta button {
+      min-width: 44px;
+      min-height: 36px;
+      padding: 0.1em 0.5em;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .pulsante-sposta {
+      padding: 0.35em 0.9em;
+      font-size: 0.85rem;
+    }
+
     /* La fascia degli strumenti generali, sopra alle discipline. */
     .fascia-generali { margin-top: var(--spazio); }
     .fascia-generali .disciplina { margin: 0; }
@@ -511,7 +540,7 @@
     <ul id="elenco-segnalazioni"></ul>
   </section>
 
-  <script src="js/home.js?v=20"></script>
+  <script src="js/home.js?v=21"></script>
   <script>Tema.interruttore("interruttore-tema");</script>
 
   <script>
