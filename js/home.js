@@ -370,14 +370,6 @@
     }
   }
 
-  function dimenticaOrdinePersonale(prefisso) {
-    try {
-      localStorage.removeItem(prefisso + "-mie-discipline");
-    } catch (errore) {
-      /* niente da fare */
-    }
-  }
-
   function ordinaDiscipline(discipline, suoi, criterio, prefisso) {
     var copia = discipline.slice();
 
@@ -411,12 +403,16 @@
   }
 
   /* ------------------------------------------------------------------
-     METTERE LE DISCIPLINE NELL'ORDINE CHE SI VUOLE
+     SPOSTARE LE CASELLE TRASCINANDOLE
 
-     Si preme "Sposta le caselle": da quel momento ogni casella si può
-     trascinare col mouse, e accanto al nome compaiono due frecce per
-     chi usa il telefono o la tastiera. L'ordine si salva da solo su
-     quel computer, e con "Ordine automatico" si torna com'era.
+     Non c'è nessun pulsante da premere: si prende una casella e la si
+     porta dove si vuole. Col mouse basta trascinare; sul telefono si
+     tiene premuto un istante e poi si trascina, altrimenti ogni
+     scorrimento della pagina sposterebbe le caselle per sbaglio.
+     Con la tastiera, mentre il nome di una disciplina è selezionato,
+     si tiene premuto Ctrl e si usano le frecce.
+
+     L'ordine si salva da solo sul computer di chi lo fa.
      ------------------------------------------------------------------ */
 
   function nomiNellOrdineMostrato(contenitore) {
@@ -426,126 +422,123 @@
     });
   }
 
-  function preparaSpostamento(prefisso, contenitore, ridisegna) {
-    var barra = document.getElementById("barra-" + prefisso);
-    if (!barra || document.getElementById("sposta-" + prefisso)) { return; }
-
-    var sposta = document.createElement("button");
-    sposta.type = "button";
-    sposta.id = "sposta-" + prefisso;
-    sposta.className = "pulsante-sposta";
-    sposta.textContent = "Sposta le caselle";
-    sposta.title = "Metti le discipline nell'ordine che preferisci";
-
-    var azzera = document.createElement("button");
-    azzera.type = "button";
-    azzera.className = "pulsante-sposta chiave-secondario";
-    azzera.textContent = "Ordine automatico";
-    azzera.hidden = true;
-    azzera.title = "Rimetti l'ordine deciso dal sito";
-
-    barra.insertBefore(azzera, barra.firstChild);
-    barra.insertBefore(sposta, barra.firstChild);
-
-    var attivo = false;
+  function rendiSpostabili(prefisso, contenitore) {
+    var ATTESA_TOCCO = 300;   /* millesimi da tenere premuto, sul telefono */
+    var SOGLIA = 6;           /* pixel di movimento prima di cominciare */
 
     function salva() {
       salvaOrdinePersonale(prefisso, nomiNellOrdineMostrato(contenitore));
     }
 
-    /* Sposta una casella di un posto, a sinistra o a destra. Serve al
-       telefono e alla tastiera, dove trascinare non si può. */
-    function spostaDi(scheda, passo) {
-      var vicina = passo < 0 ? scheda.previousElementSibling : scheda.nextElementSibling;
-      if (!vicina) { return; }
-      if (passo < 0) { contenitore.insertBefore(scheda, vicina); }
-      else { contenitore.insertBefore(vicina, scheda); }
-      salva();
-      var frecce = scheda.querySelector(".freccia-" + (passo < 0 ? "sinistra" : "destra"));
-      if (frecce) { frecce.focus(); }
-    }
+    Array.prototype.forEach.call(contenitore.children, function (scheda) {
+      var inizio = null;
+      var inMano = false;
+      var attesa = null;
+      var spostata = false;        /* l'ha davvero cambiata di posto */
+      var appenaSpostata = false;  /* per non aprirla subito dopo */
 
-    function aggiungiFrecce(scheda) {
-      if (scheda.querySelector(".frecce-sposta")) { return; }
-      var nome = scheda.querySelector(".disciplina-nome");
-      var comandi = document.createElement("span");
-      comandi.className = "frecce-sposta";
-
-      [["sinistra", "←", "Sposta indietro"],
-       ["destra", "→", "Sposta avanti"]].forEach(function (dati) {
-        var freccia = document.createElement("button");
-        freccia.type = "button";
-        freccia.className = "freccia-" + dati[0];
-        freccia.textContent = dati[1];
-        freccia.title = dati[2] + (nome ? " " + nome.textContent : "");
-        freccia.setAttribute("aria-label", freccia.title);
-        freccia.addEventListener("click", function (evento) {
-          evento.stopPropagation();
-          spostaDi(scheda, dati[0] === "sinistra" ? -1 : 1);
-        });
-        comandi.appendChild(freccia);
-      });
-
-      scheda.appendChild(comandi);
-    }
-
-    var inMano = null;
-
-    function preparaScheda(scheda) {
-      scheda.draggable = true;
-      aggiungiFrecce(scheda);
-
-      scheda.addEventListener("dragstart", function (evento) {
-        inMano = scheda;
+      function comincia() {
+        inMano = true;
+        attesa = null;
+        spostata = false;
         scheda.classList.add("in-mano");
-        if (evento.dataTransfer) { evento.dataTransfer.effectAllowed = "move"; }
+        contenitore.classList.add("si-sposta");
+        /* Finche' la casella e' in mano, il dito non deve far scorrere
+           la pagina sotto di lei. */
+        scheda.style.touchAction = "none";
+      }
+
+      function finisci() {
+        document.removeEventListener("pointermove", muovi);
+        document.removeEventListener("pointerup", finisci);
+        document.removeEventListener("pointercancel", finisci);
+        if (attesa) { clearTimeout(attesa); attesa = null; }
+        if (inMano) {
+          scheda.classList.remove("in-mano");
+          contenitore.classList.remove("si-sposta");
+          scheda.style.touchAction = "";
+          salva();
+          /* Chi ha appena trascinato una casella non voleva aprirla:
+             il clic che arriva subito dopo si lascia cadere. */
+          appenaSpostata = spostata;
+          setTimeout(function () { appenaSpostata = false; }, 400);
+        }
+        inMano = false;
+        inizio = null;
+      }
+
+      scheda.addEventListener("pointerdown", function (evento) {
+        if (evento.button && evento.button !== 0) { return; }
+        inizio = { x: evento.clientX, y: evento.clientY, dito: evento.pointerId };
+        /* I movimenti si ascoltano su tutta la pagina, non sulla
+           casella: mentre la si trascina cambia di posto, e chi
+           ascoltasse solo lei perderebbe il filo. */
+        document.addEventListener("pointermove", muovi);
+        document.addEventListener("pointerup", finisci);
+        document.addEventListener("pointercancel", finisci);
+        if (evento.pointerType === "touch") {
+          attesa = setTimeout(comincia, ATTESA_TOCCO);
+        }
       });
 
-      scheda.addEventListener("dragend", function () {
-        scheda.classList.remove("in-mano");
-        inMano = null;
-        salva();
-      });
+      function muovi(evento) {
+        if (!inizio || evento.pointerId !== inizio.dito) { return; }
+        var spostamento = Math.abs(evento.clientX - inizio.x)
+          + Math.abs(evento.clientY - inizio.y);
 
-      scheda.addEventListener("dragover", function (evento) {
+        if (!inMano) {
+          if (evento.pointerType === "touch") {
+            /* Si è mosso prima del tempo: sta scorrendo la pagina, non
+               spostando la casella. */
+            if (spostamento > 10) { finisci(); }
+            return;
+          }
+          if (spostamento < SOGLIA) { return; }
+          comincia();
+        }
+
         evento.preventDefault();
-        if (!inMano || inMano === scheda) { return; }
-        /* Si decide se mettere la casella prima o dopo guardando da che
-           parte del centro si trova il dito o il mouse. */
-        var dimensioni = scheda.getBoundingClientRect();
-        var dopoLaMeta = (evento.clientX - dimensioni.left) > dimensioni.width / 2;
-        contenitore.insertBefore(inMano, dopoLaMeta ? scheda.nextSibling : scheda);
-      });
-    }
 
-    function accendi() {
-      attivo = true;
-      contenitore.classList.add("in-spostamento");
-      azzera.hidden = false;
-      sposta.textContent = "Ho finito";
-      Array.prototype.forEach.call(contenitore.children, preparaScheda);
-    }
+        /* Si guarda quale casella sta sotto al dito e ci si mette prima
+           o dopo, a seconda di che parte se ne tocca. */
+        var sotto = document.elementFromPoint(evento.clientX, evento.clientY);
+        var vicina = sotto && sotto.closest ? sotto.closest(".disciplina") : null;
+        if (!vicina || vicina === scheda || vicina.parentNode !== contenitore) { return; }
 
-    function spegni() {
-      attivo = false;
-      contenitore.classList.remove("in-spostamento");
-      azzera.hidden = true;
-      sposta.textContent = "Sposta le caselle";
-      Array.prototype.forEach.call(contenitore.children, function (scheda) {
-        scheda.draggable = false;
-        var frecce = scheda.querySelector(".frecce-sposta");
-        if (frecce) { frecce.remove(); }
-      });
-    }
+        var dimensioni = vicina.getBoundingClientRect();
+        var oltreLaMeta = (evento.clientX - dimensioni.left) > dimensioni.width / 2;
+        contenitore.insertBefore(scheda, oltreLaMeta ? vicina.nextSibling : vicina);
+        spostata = true;
+      }
 
-    sposta.addEventListener("click", function () {
-      if (attivo) { spegni(); } else { accendi(); }
-    });
+      scheda.addEventListener("click", function (evento) {
+        if (!appenaSpostata) { return; }
+        appenaSpostata = false;
+        evento.preventDefault();
+        evento.stopPropagation();
+      }, true);
 
-    azzera.addEventListener("click", function () {
-      dimenticaOrdinePersonale(prefisso);
-      spegni();
-      ridisegna();
+
+      /* Con la tastiera: Ctrl e le frecce, mentre la casella è
+         selezionata. Non si vede niente in piu' sullo schermo. */
+      var testata = scheda.querySelector(".disciplina-testata")
+        || scheda.querySelector(".disciplina-spenta-testo");
+      if (testata) {
+        if (testata.tabIndex < 0) { testata.tabIndex = 0; }
+        testata.addEventListener("keydown", function (evento) {
+          if (!evento.ctrlKey) { return; }
+          var passo = evento.key === "ArrowLeft" ? -1
+            : (evento.key === "ArrowRight" ? 1 : 0);
+          if (!passo) { return; }
+          evento.preventDefault();
+          var vicina = passo < 0 ? scheda.previousElementSibling : scheda.nextElementSibling;
+          if (!vicina) { return; }
+          if (passo < 0) { contenitore.insertBefore(scheda, vicina); }
+          else { contenitore.insertBefore(vicina, scheda); }
+          salva();
+          testata.focus();
+        });
+      }
     });
   }
 
@@ -664,10 +657,10 @@
         else { contenitore.appendChild(scheda); }
       });
       requestAnimationFrame(function () { sistemaColonne(contenitore); });
+      rendiSpostabili(prefisso, contenitore);
     }
 
     disegnaDiscipline(ORDINE);
-    preparaSpostamento(prefisso, contenitore, function () { disegnaDiscipline(ORDINE); });
 
     /* Le colonne si ricalcolano quando la sezione si apre o la finestra
        cambia larghezza. */
