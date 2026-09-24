@@ -524,6 +524,8 @@ document.getElementById("generaBtn").addEventListener("click", async function(){
 
   // Il nome dello studente non viene mai incluso qui: resta nel browser,
   // eventualmente solo come promemoria per chi compila.
+  // Nemmeno la data parte: al suo posto si manda la parola [DATA], e la
+  // data vera si rimette nel testo solo quando torna qui nel browser.
   const riguardaTesto = soggetto === "classe"
     ? "l'intera classe (scrivi \"la classe\" come soggetto)"
     : `un singolo studente (usa "${genere === "f" ? "la studentessa" : "lo studente"}" come soggetto)`;
@@ -531,7 +533,7 @@ document.getElementById("generaBtn").addEventListener("click", async function(){
   const userMessage = `Tipo di annotazione: ${tipo}
 Riguarda: ${riguardaTesto}
 Materia: ${materia || "(non indicata)"}
-Data: ${data || "(non indicata)"}
+Data: ${data ? "[DATA] (se nella nota serve la data, scrivi esattamente [DATA], con le parentesi quadre, senza cambiarlo)" : "(non indicata)"}
 Comportamento reiterato: ${reiterato ? "sì" : "no"}
 Convocazione dei genitori disposta: ${convocazione ? "sì" : "no"}
 Descrizione dell'episodio fornita dal docente: ${fatto}`;
@@ -587,8 +589,11 @@ Descrizione dell'episodio fornita dal docente: ${fatto}`;
       throw new Error("nessun testo ricevuto");
     }
 
-    document.getElementById("noteText").textContent = testoGenerato;
-    document.getElementById("noteText").dataset.raw = testoGenerato;
+    // Qui, nel browser, la parola [DATA] torna a essere la data vera.
+    const testoFinale = data ? testoGenerato.split("[DATA]").join(data) : testoGenerato;
+
+    document.getElementById("noteText").textContent = testoFinale;
+    document.getElementById("noteText").dataset.raw = testoFinale;
     document.getElementById("output").classList.add("visibile");
     document.getElementById("copiedMsg").style.display = "none";
     document.getElementById("output").scrollIntoView({behavior:"smooth", block:"start"});
