@@ -363,6 +363,47 @@
     });
   }
 
+  /* Quante colonne fare, perche' non resti una riga spaiata.
+     Si parte dal numero che ci starebbe naturalmente e si cerca il
+     numero di colonne che riempie meglio l'ultima riga: se le schede
+     sono otto e ce ne starebbero quattro per riga, due righe piene; se
+     sono nove, si stringe un po' tutto e se ne mettono cinque, cosi'
+     quella in piu' rientra invece di restare da sola in fondo. */
+  function sistemaColonne(griglia) {
+    var schede = griglia.children.length;
+    var larghezza = griglia.clientWidth;
+    if (!schede || larghezza < 10) { return; }
+
+    var spazio = parseFloat(getComputedStyle(griglia).gap) || 11;
+    var COMODA = 190;   /* larghezza a cui si sta bene */
+    var MINIMA = 140;   /* sotto questa i nomi si spezzano male */
+
+    var massimo = Math.max(1, Math.floor((larghezza + spazio) / (MINIMA + spazio)));
+    var naturale = Math.max(1, Math.min(massimo,
+      Math.round((larghezza + spazio) / (COMODA + spazio))));
+
+    /* Si provano anche due colonne in meno del naturale, non di più:
+       con otto schede e quattro colonne e mezzo di spazio, due righe da
+       quattro stanno meglio di una da cinque e una da tre; ma scendere
+       a una o due colonne farebbe riquadri enormi. */
+    var scelta = naturale;
+    var punteggioMigliore = -1;
+    for (var c = Math.max(1, naturale - 2); c <= massimo; c += 1) {
+      var resto = schede % c;
+      /* Righe tutte piene: il massimo. Altrimenti vince chi lascia
+         l'ultima riga più popolata. A parità, chi si allontana meno
+         dalla larghezza comoda. */
+      var punteggio = (resto === 0)
+        ? 1000 - Math.abs(c - naturale)
+        : resto * 10 - Math.abs(c - naturale);
+      if (punteggio > punteggioMigliore) {
+        punteggioMigliore = punteggio;
+        scelta = c;
+      }
+    }
+    griglia.style.setProperty("--colonne", scelta);
+  }
+
   function costruisciSezione(prefisso, discipline, artefatti) {
     var contenitore = document.getElementById("discipline-" + prefisso);
     var suoi = per(prefisso, artefatti);
@@ -436,9 +477,17 @@
         if (della.length === 0) { fascia.appendChild(scheda); }
         else { contenitore.appendChild(scheda); }
       });
+      requestAnimationFrame(function () { sistemaColonne(contenitore); });
     }
 
     disegnaDiscipline(ORDINE);
+
+    /* Le colonne si ricalcolano quando la sezione si apre o la finestra
+       cambia larghezza. */
+    if (window.ResizeObserver) {
+      new ResizeObserver(function () { sistemaColonne(contenitore); })
+        .observe(contenitore);
+    }
     contenitore.setAttribute("data-ridisegna", "1");
     contenitore.ridisegna = disegnaDiscipline;
 

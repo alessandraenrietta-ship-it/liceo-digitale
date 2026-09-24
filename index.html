@@ -15,7 +15,7 @@
   <!-- La modalità chiara o scura, scelta dall'interruttore sulla pagina
        iniziale. Va letto prima del foglio di stile. -->
   <script src="js/tema.js?v=1"></script>
-  <link rel="stylesheet" href="stile.css?v=9">
+  <link rel="stylesheet" href="stile.css?v=10">
 
   <style>
     /* -------------------------------------------------------------
@@ -44,7 +44,11 @@
        riempire la riga: cosi' non restano spazi vuoti, e se l'ultima
        riga ne ha meno si allargano tutti insieme invece di lasciarne
        uno lungo e gli altri corti. I nomi lunghi vanno a capo. */
-    .griglia > .disciplina { flex: 1 1 11rem; max-width: 18rem; }
+    /* La larghezza la decide il numero di colonne calcolato da home.js:
+       cosi' le righe restano piene e i riquadri sono tutti uguali. */
+    .griglia > .disciplina {
+      flex: 0 0 calc((100% - (var(--colonne, 3) - 1) * 0.7rem) / var(--colonne, 3));
+    }
     .griglia > .disciplina.rilievo { flex: 1 1 100%; max-width: none; }
 
     /* Sul telefono: una colonna sola per i riquadri, due piastrelle per
@@ -507,7 +511,7 @@
     <ul id="elenco-segnalazioni"></ul>
   </section>
 
-  <script src="js/home.js?v=17"></script>
+  <script src="js/home.js?v=20"></script>
   <script>Tema.interruttore("interruttore-tema");</script>
 
   <script>
