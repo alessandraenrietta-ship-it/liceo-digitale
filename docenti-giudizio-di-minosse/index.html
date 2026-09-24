@@ -729,14 +729,14 @@
     stato.dannati = [];
   }
 
-  /* La durata di ogni passo. Il totale sta fra 3 e 4,5 secondi
+  /* La durata di ogni passo. Il totale sta fra 1,8 e 2,6 secondi
      qualunque sia il numero di anime. Il ritmo: lento e solenne
      all'inizio,
      poi la coda accelera, e alla fine frena fino a fermarsi, come una
      ruota della fortuna. Dipende solo da quanti passi sono: non tocca
      in nessun modo il risultato. */
   function durate(passi, rimasti, pocoMovimento) {
-    var totale = pocoMovimento ? 1200 : 3000 + 1500 * (passi - rimasti) / rimasti;
+    var totale = pocoMovimento ? 900 : 1800 + 800 * (passi - rimasti) / rimasti;
     var pesi = [];
     var somma = 0;
     for (var i = 0; i < passi; i += 1) {

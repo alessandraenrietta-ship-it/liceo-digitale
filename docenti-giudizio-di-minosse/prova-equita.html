@@ -155,7 +155,7 @@
     });
     esito(fuori === 0, "il generatore dà sempre un numero intero nell'intervallo giusto, anche per n = 2 o n molto grandi (fuori intervallo: " + fuori + ").");
 
-    /* 5. Le durate: fra 3 e 4,5 secondi, per ogni classe e ogni vincitore */
+    /* 5. Le durate: fra 1,8 e 2,6 secondi, per ogni classe e ogni vincitore */
     var durataMin = Infinity, durataMax = 0;
     for (var R = 1; R <= 40; R += 1) {
       for (var pos = 0; pos < R; pos += 1) {
@@ -163,7 +163,7 @@
         durataMin = Math.min(durataMin, tot); durataMax = Math.max(durataMax, tot);
       }
     }
-    esito(durataMin >= 3000 - 1 && durataMax <= 4500 + 1, "la girata dura sempre fra 3 e 4,5 secondi, per classi da 1 a 40 (minimo " +
+    esito(durataMin >= 1800 - 1 && durataMax <= 2600 + 1, "la girata dura sempre fra 1,8 e 2,6 secondi, per classi da 1 a 40 (minimo " +
       (durataMin / 1000).toFixed(2) + " s, massimo " + (durataMax / 1000).toFixed(2) + " s).");
 
     riepilogo.secondi = ((performance.now() - t0) / 1000).toFixed(1);
