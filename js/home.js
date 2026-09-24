@@ -436,16 +436,34 @@
       var attesa = null;
       var spostata = false;        /* l'ha davvero cambiata di posto */
       var appenaSpostata = false;  /* per non aprirla subito dopo */
+      var presa = null;            /* dove l'ha presa dentro la casella */
 
       function comincia() {
         inMano = true;
         attesa = null;
         spostata = false;
+        /* In che punto della casella l'ha presa: serve perche' resti
+           agganciata li' mentre la si porta in giro. */
+        var dov = scheda.getBoundingClientRect();
+        presa = { x: inizio.x - dov.left, y: inizio.y - dov.top };
         scheda.classList.add("in-mano");
         contenitore.classList.add("si-sposta");
         /* Finche' la casella e' in mano, il dito non deve far scorrere
            la pagina sotto di lei. */
         scheda.style.touchAction = "none";
+        segui(inizio.x, inizio.y);
+      }
+
+      /* La casella resta al suo posto nella fila, ma viene disegnata
+         spostata fin sotto al puntatore: cosi' si vede che la stai
+         portando via. Ogni volta si riparte da dove si troverebbe
+         normalmente, perche' intanto la fila puo' essersi rimescolata. */
+      function segui(x, y) {
+        scheda.style.transform = "";
+        var ferma = scheda.getBoundingClientRect();
+        scheda.style.transform = "translate("
+          + Math.round(x - presa.x - ferma.left) + "px, "
+          + Math.round(y - presa.y - ferma.top) + "px)";
       }
 
       function finisci() {
@@ -457,6 +475,7 @@
           scheda.classList.remove("in-mano");
           contenitore.classList.remove("si-sposta");
           scheda.style.touchAction = "";
+          scheda.style.transform = "";
           salva();
           /* Chi ha appena trascinato una casella non voleva aprirla:
              il clic che arriva subito dopo si lascia cadere. */
@@ -498,9 +517,12 @@
         }
 
         evento.preventDefault();
+        segui(evento.clientX, evento.clientY);
 
-        /* Si guarda quale casella sta sotto al dito e ci si mette prima
-           o dopo, a seconda di che parte se ne tocca. */
+        /* Si guarda quale casella sta sotto al puntatore e ci si mette
+           prima o dopo, a seconda di che parte se ne tocca. Mentre e'
+           in mano la casella non si fa vedere da questa ricerca, per
+           non trovare sempre se stessa. */
         var sotto = document.elementFromPoint(evento.clientX, evento.clientY);
         var vicina = sotto && sotto.closest ? sotto.closest(".disciplina") : null;
         if (!vicina || vicina === scheda || vicina.parentNode !== contenitore) { return; }
@@ -509,6 +531,7 @@
         var oltreLaMeta = (evento.clientX - dimensioni.left) > dimensioni.width / 2;
         contenitore.insertBefore(scheda, oltreLaMeta ? vicina.nextSibling : vicina);
         spostata = true;
+        segui(evento.clientX, evento.clientY);
       }
 
       scheda.addEventListener("click", function (evento) {

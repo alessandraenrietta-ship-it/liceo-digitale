@@ -38,17 +38,33 @@
 
     /* Le caselle si possono prendere e spostare in qualsiasi momento:
        non c'e' nessun pulsante e nessuna freccia, si trascina e basta.
-       Quella che si ha in mano diventa trasparente, le altre scivolano
-       via per farle posto. */
-    .griglia > .disciplina { cursor: grab; }
+       Quella che si ha in mano segue il puntatore. */
+    /* La manina aperta deve vedersi su tutta la casella, non solo
+       sul bordo: la parte centrale e' un pulsante, e senza questa
+       riga mostrerebbe il dito che indica invece della mano. */
+    .griglia > .disciplina,
+    .griglia > .disciplina .disciplina-testata,
+    .griglia > .disciplina .disciplina-spenta-testo { cursor: grab; }
+
+    .griglia.si-sposta,
+    .griglia.si-sposta > .disciplina,
+    .griglia.si-sposta > .disciplina .disciplina-testata { cursor: grabbing; }
+
     .griglia.si-sposta {
       -webkit-user-select: none;
       user-select: none;
     }
+
+    /* Quella che si ha in mano segue il dito, sta sopra alle altre e
+       si stacca un po' dalla pagina, cosi' si vede che la stai
+       muovendo davvero. */
     .griglia.si-sposta > .disciplina.in-mano {
-      cursor: grabbing;
-      opacity: 0.45;
+      position: relative;
+      z-index: 5;
+      opacity: 0.92;
       border-style: dashed;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.28);
+      pointer-events: none;
     }
 
     /* La fascia degli strumenti generali, sopra alle discipline. */
@@ -526,7 +542,7 @@
     <ul id="elenco-segnalazioni"></ul>
   </section>
 
-  <script src="js/home.js?v=22"></script>
+  <script src="js/home.js?v=23"></script>
   <script>Tema.interruttore("interruttore-tema");</script>
 
   <script>
