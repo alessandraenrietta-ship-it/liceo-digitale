@@ -34,7 +34,7 @@
   "use strict";
 
   var ESTRAZIONI = 100000;
-  var STUDENTI = 25;
+  var ANIME = 25;
   var GIRI_COMPLETI = 20000;
   /* Valori critici del chi quadrato con 24 gradi di libertà */
   var CRITICO_5 = 36.415;
@@ -66,25 +66,25 @@
   function prova(M) {
     var t0 = performance.now();
 
-    /* 1. Prima estrazione, 100.000 volte, con 25 studenti */
-    var conteggi = new Array(STUDENTI).fill(0);
+    /* 1. Prima estrazione, 100.000 volte, con 25 anime */
+    var conteggi = new Array(ANIME).fill(0);
     var atterraggiSbagliati = 0;
     var passiSbagliati = 0;
     for (var e = 0; e < ESTRAZIONI; e += 1) {
-      var stato = M.nuovaClasse(classe(STUDENTI));
+      var stato = M.nuovaClasse(classe(ANIME));
       var s = M.preparaSentenza(stato.attesa);
       conteggi[s.anima.numero - 1] += 1;
       /* L'animazione si ferma davvero sul vincitore? */
       if (M.indiceAlPasso(s.passi, stato.attesa.length) !== s.indice) { atterraggiSbagliati += 1; }
       /* Passi = rimasti + posizione (almeno un giro completo) */
-      if (s.passi !== STUDENTI + s.indice + 1 || s.passi <= STUDENTI) { passiSbagliati += 1; }
+      if (s.passi !== ANIME + s.indice + 1 || s.passi <= ANIME) { passiSbagliati += 1; }
     }
     var chi = chiQuadrato(conteggi, ESTRAZIONI);
-    var atteso = ESTRAZIONI / STUDENTI;
+    var atteso = ESTRAZIONI / ANIME;
     var min = Math.min.apply(null, conteggi);
     var max = Math.max.apply(null, conteggi);
 
-    var tabella = "<table><tr><th>Studente</th><th>Uscito per primo</th><th>Frequenza</th><th>Scarto dall'atteso</th></tr>";
+    var tabella = "<table><tr><th>Anima</th><th>Uscita per prima</th><th>Frequenza</th><th>Scarto dall'atteso</th></tr>";
     conteggi.forEach(function (c, i) {
       tabella += "<tr><td>" + (i + 1) + "</td><td>" + c + "</td><td>" + (100 * c / ESTRAZIONI).toFixed(2) +
         " %</td><td>" + ((c - atteso) / atteso * 100).toFixed(1) + " %</td></tr>";
@@ -92,8 +92,8 @@
     tabella += "</table>";
 
     esito(chi < CRITICO_01,
-      "prima estrazione uniforme su " + ESTRAZIONI.toLocaleString("it") + " prove con " + STUDENTI +
-      " studenti. Atteso per ciascuno: " + atteso + ". Minimo " + min + ", massimo " + max +
+      "prima estrazione uniforme su " + ESTRAZIONI.toLocaleString("it") + " prove con " + ANIME +
+      " anime. Atteso per ciascuna: " + atteso + ". Minimo " + min + ", massimo " + max +
       ". Chi quadrato = " + chi.toFixed(2) + " (24 gradi di libertà; soglia 5% = " + CRITICO_5 +
       ", soglia 0,1% = " + CRITICO_01 + ")" + (chi < CRITICO_5 ? "." : ": sopra la soglia del 5%, capita per caso una volta su venti; rilanciare la prova."));
     var div = document.createElement("div");
@@ -108,22 +108,22 @@
     var doppioni = 0;
     var mancanti = 0;
     var perPosto = [];
-    for (var k = 0; k < STUDENTI; k += 1) { perPosto.push(new Array(STUDENTI).fill(0)); }
+    for (var k = 0; k < ANIME; k += 1) { perPosto.push(new Array(ANIME).fill(0)); }
     for (var g = 0; g < GIRI_COMPLETI; g += 1) {
-      var st = M.nuovaClasse(classe(STUDENTI));
+      var st = M.nuovaClasse(classe(ANIME));
       var visti = {};
-      for (var turno = 0; turno < STUDENTI; turno += 1) {
+      for (var turno = 0; turno < ANIME; turno += 1) {
         var sen = M.preparaSentenza(st.attesa);
         var anima = M.condanna(st, sen.indice);
         if (visti[anima.numero]) { doppioni += 1; }
         visti[anima.numero] = true;
         perPosto[turno][anima.numero - 1] += 1;
       }
-      if (Object.keys(visti).length !== STUDENTI || st.attesa.length !== 0) { mancanti += 1; }
+      if (Object.keys(visti).length !== ANIME || st.attesa.length !== 0) { mancanti += 1; }
       if (M.preparaSentenza(st.attesa) !== null) { mancanti += 1; }
     }
     esito(doppioni === 0 && mancanti === 0, GIRI_COMPLETI.toLocaleString("it") +
-      " giri completi da " + STUDENTI + " estrazioni: nessuno estratto due volte (doppioni: " + doppioni +
+      " giri completi da " + ANIME + " estrazioni: nessuno estratto due volte (doppioni: " + doppioni +
       "), e alla fine del giro sono usciti tutti (giri incompleti: " + mancanti + ").");
 
     /* Anche all'estrazione n-esima del giro, fra chi resta, nessuno è favorito */
@@ -134,7 +134,7 @@
       if (c > peggiore) { peggiore = c; postoPeggiore = turno + 1; }
     });
     /* 25 prove insieme: soglia corretta per il numero di prove (0,1% / 25) */
-    esito(peggiore < 62, "per ogni estrazione del giro (la 1a, la 2a, … la 25a) ciascuno studente esce in quella posizione con la stessa frequenza. " +
+    esito(peggiore < 62, "per ogni estrazione del giro (la 1a, la 2a, … la 25a) ciascuna anima esce in quella posizione con la stessa frequenza. " +
       "Il chi quadrato più alto è " + peggiore.toFixed(2) + ", alla " + postoPeggiore + "a estrazione (soglia 62, cioè 0,1% corretto per 25 confronti).");
 
     /* 3. Annulla: l'ultimo dannato torna al suo posto e può riuscire */
@@ -143,7 +143,7 @@
     var tornata = M.annulla(sa);
     var ordineGiusto = sa.attesa.map(function (a) { return a.numero; }).join(",") === "1,2,3,4,5";
     esito(tornata && tornata.numero === 3 && ordineGiusto && sa.dannati.length === 0,
-      "\"Annulla ultima estrazione\" rimette lo studente fra chi aspetta, al suo posto nel cerchio.");
+      "\"Annulla ultima estrazione\" rimette l'anima fra chi aspetta, al suo posto nel cerchio.");
 
     /* 4. Numeri piccoli e grandi: nessun errore, sempre nell'intervallo */
     var fuori = 0;

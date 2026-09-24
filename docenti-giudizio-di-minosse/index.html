@@ -6,7 +6,7 @@
 <title>Il giudizio di Minosse</title>
 <!--
   IL GIUDIZIO DI MINOSSE
-  Estrattore di studenti da usare in classe sulla LIM.
+  Estrae l'anima da mandare nel baratro: da proiettare sulla LIM.
 
   Questo strumento è volutamente un unico file: testo, aspetto e
   funzionamento stanno tutti qui dentro, e non chiede niente a nessun
@@ -484,15 +484,13 @@
     </fieldset>
 
     <div id="modo-numero" class="campo">
-      <label for="quanti">Quanti studenti? (da 2 a 40)</label>
+      <label for="quanti">Quante anime?</label>
       <input type="number" id="quanti" min="2" max="40" value="25" inputmode="numeric">
-      <p class="aiuto">Le anime saranno riconosciute solo dal numero, come sul registro.</p>
     </div>
 
     <div id="modo-incolla" class="campo" hidden>
       <label for="testo-classe">Un nome per riga, nell'ordine del registro</label>
       <textarea id="testo-classe" spellcheck="false" placeholder="Rossi&#10;Bianchi&#10;Verdi"></textarea>
-      <p class="aiuto">Il numero di ciascuno è la sua posizione nell'elenco. Si può incollare direttamente dal registro elettronico.</p>
     </div>
 
     <div class="anteprima" aria-live="polite">
@@ -508,24 +506,23 @@
     <!-- Le classi salvate su questo computer -->
     <div class="salvataggio">
       <div class="campo">
-        <label for="nome-classe">Salva questa classe con un nome (per esempio 3A)</label>
+        <label for="nome-classe">Salva questa classe con un nome</label>
         <div class="riga-salva">
-          <input type="text" id="nome-classe" maxlength="20" placeholder="3A" autocomplete="off">
+          <input type="text" id="nome-classe" maxlength="20" placeholder="scrivi qui il nome, per esempio 3A" autocomplete="off">
           <button type="button" id="salva-classe">Salva</button>
         </div>
         <p class="aiuto" id="esito-salvataggio" role="status"></p>
       </div>
 
       <div id="classi-salvate" hidden>
-        <p class="titolo-classi">Le tue classi, su questo computer</p>
+        <p class="titolo-classi">Le tue classi</p>
         <ul class="elenco-classi" id="elenco-classi"></ul>
       </div>
     </div>
   </section>
 
   <!-- TESTO MODIFICABILE: la nota sulla riservatezza -->
-  <p class="privacy">Gli elenchi non escono da questo computer: le classi salvate
-    restano nel browser, il resto sparisce chiudendo la pagina.</p>
+  <p class="privacy">Gli elenchi restano su questo computer.</p>
 </main>
 
 <!-- ============ IL GIUDIZIO ============ -->
@@ -732,8 +729,9 @@
     stato.dannati = [];
   }
 
-  /* La durata di ogni passo. Il totale sta fra 3 e 4,5 secondi qualunque
-     sia il numero di studenti. Il ritmo: lento e solenne all'inizio,
+  /* La durata di ogni passo. Il totale sta fra 3 e 4,5 secondi
+     qualunque sia il numero di anime. Il ritmo: lento e solenne
+     all'inizio,
      poi la coda accelera, e alla fine frena fino a fermarsi, come una
      ruota della fortuna. Dipende solo da quanti passi sono: non tocca
      in nessun modo il risultato. */
