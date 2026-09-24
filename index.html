@@ -283,14 +283,24 @@
       letter-spacing: 0.04em;
     }
 
-    /* Il video non sta dentro a un riquadro: niente cornice gialla,
-       niente fondo crema, niente scritte. Solo il video. */
+    /* Il video e' largo quanto le caselle che stanno sotto. Per
+       ottenerlo prende la stessa misura massima dei riquadri e gli
+       stessi margini interni, ma trasparenti: cosi' comincia e
+       finisce esattamente dove cominciano e finiscono le caselle,
+       e resta allineato anche se un giorno cambiano le misure. */
     .riquadro-video {
-      max-width: 44rem;
+      max-width: var(--massimo);
       margin: 0 auto var(--spazio);
-      padding: 0;
+      padding: 0 calc(var(--spazio) * 1.5);
       background: none;
-      border: 0;
+      border: 0 solid transparent;
+      border-width: 0 3px;
+    }
+
+    /* Sul telefono i riquadri stringono i margini interni: il
+       video li stringe insieme a loro, se no si scollerebbe. */
+    @media (max-width: 40rem) {
+      .riquadro-video { padding: 0 1.1rem; }
     }
 
     /* L'anteprima della presentazione: un rettangolo 16:9, come lo
@@ -303,8 +313,7 @@
 
     .anteprima-presentazione {
       position: relative;
-      max-width: 44rem;
-      margin: 0 auto var(--spazio);
+      margin: 0 0 var(--spazio);
       aspect-ratio: 16 / 9;
       border: 0;
       border-radius: var(--raggio);
