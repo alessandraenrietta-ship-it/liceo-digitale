@@ -5,6 +5,53 @@ lavora in questa cartella. Il progetto è un piccolo sito didattico
 pubblicato con GitHub Pages.
 
 Repository: https://github.com/alessandraenrietta-ship-it/liceo-digitale
+Sito online: https://alessandraenrietta-ship-it.github.io/liceo-digitale/
+
+## 0. Il contesto: che cos'è il sito
+
+"Liceo digitale" è il sito didattico dell'**I.I.S. Giulio Natta**. Raccoglie
+gli **artefatti** costruiti dai docenti, cioè piccoli strumenti interattivi,
+ognuno in una sua cartella. Alcuni sono per gli studenti, altri sono
+strumenti di lavoro dei docenti.
+
+Come è fatto, in breve. I dettagli sono in `README.md`.
+
+- `index.html` è la pagina iniziale. Ha due sezioni, **studenti** e
+  **docenti**, ognuna con una parola d'ordine. Quelle parole **non
+  proteggono niente**: servono solo a separare i due pubblici, e chi
+  conosce l'indirizzo di una cartella la apre lo stesso.
+- `artefatti.txt` è **il registro**: la home legge da qui l'elenco degli
+  strumenti, una riga per artefatto
+  (`titolo | disciplina | destinatario | cartella | descrizione`).
+  Per aggiungere uno strumento si aggiunge una riga, senza toccare il codice.
+- `stile.css` contiene i colori e lo stile comuni, con il tema chiaro e
+  scuro. I colori si usano sempre con i loro nomi (`var(--verde)`,
+  `var(--testo)`...), mai con i codici scritti a mano.
+- `js/home.js` costruisce la home, `js/tema.js` ricorda il tema chiaro o
+  scuro, `js/chiave.js` disegna il riquadro della chiave personale,
+  `js/qr.js` disegna i codici QR.
+- `specifica-comune.md` contiene le regole da dare ai colleghi che
+  costruiscono un artefatto nuovo.
+- `anteprima.bat` apre il sito sul computer senza pubblicarlo. Aprire
+  `index.html` con un doppio clic non basta.
+
+### Convenzioni tecniche da rispettare
+
+- **Il numero `?v=`.** Quando si modifica `stile.css` o un file in `js/`,
+  si aumenta di uno il numero `?v=` in **tutti** i tag che lo caricano
+  (esempio: `stile.css?v=10` diventa `?v=11`). Senza, i browser continuano
+  a mostrare la versione vecchia.
+- **I commenti nel codice** sono in italiano, semplici e discorsivi, come
+  quelli già presenti.
+- **Gli strumenti con intelligenza artificiale** usano l'API Gemini di
+  Google con la chiave personale del docente, gestita da `js/chiave.js`.
+  Il nome del modello (per esempio `gemini-3.6-flash`) oggi è scritto
+  dentro ogni pagina.
+- **Meno dati possibile a Google.** Negli strumenti con intelligenza
+  artificiale non si inviano nomi, classi o date. Esempio: in
+  `docenti-annotazioni` il nome non si chiede, la data parte come `[DATA]`
+  e viene rimessa nel browser, e prima dell'invio un controllo segnala
+  sigle di classe, date e possibili nomi propri.
 
 ## 1. Sito statico, senza complicazioni
 
@@ -135,3 +182,65 @@ anche dopo averlo cancellato (resta nella cronologia di git). Quindi:
 - **Nessuna chiave API, password o token** nel codice, nemmeno dentro un
   commento o in un file di prova.
 - Nel dubbio su un contenuto, si chiede prima di pubblicarlo.
+
+## 9. Lavoro in collaborazione, tutti su `main`
+
+Al sito lavorano più docenti, e tutti salvano direttamente su `main`,
+senza rami separati. Per non pestarsi i piedi:
+
+- **Ognuno lavora solo nella propria cartella.** I conflitti nascono
+  solo quando due persone modificano lo stesso file nello stesso momento.
+- **I file condivisi** (`index.html`, `artefatti.txt`, `stile.css`, la
+  cartella `js/`, `CLAUDE.md`, `README.md`, `specifica-comune.md`) li
+  modifica la coordinatrice, oppure qualcuno con il suo permesso, per
+  quella volta sola. Se una richiesta tocca uno di questi file, Claude lo
+  fa notare prima di procedere.
+- **Prima di iniziare** a lavorare, Claude scarica le novità (`git pull`).
+- **Prima di ogni `git push`** Claude scarica di nuovo le novità
+  (`git pull --rebase`). Se c'è un conflitto, non lo risolve da solo:
+  lo spiega con parole semplici e si decide insieme.
+- **Prima di salvare una modifica** Claude la prova e la mostra. Se la
+  richiesta lo dice, mostra anche il confronto completo prima di toccare
+  il file vero.
+
+### Ruoli
+
+Da completare con le persone reali. Se non vogliono comparire in un
+repository pubblico, si scrive solo il ruolo, senza nome.
+
+| Ruolo | Chi | Cosa fa | File che tocca |
+|---|---|---|---|
+| Coordinatrice del sito | Alessandra | Decide cosa si pubblica, aggiunge le righe al registro, cura le regole | I file condivisi |
+| Referente di disciplina | Un docente per materia (da definire) | Costruisce e aggiorna gli strumenti della sua materia | Solo le cartelle della sua materia |
+| Referente strumenti docenti | Da definire | Cura annotazioni, orario e aule, Minosse | Le cartelle `docenti-...` |
+| Controllo privacy | Da definire | Prima di pubblicare controlla che non ci siano dati veri, chiavi o password. Tiene i contatti con il responsabile privacy della scuola (DPO) | Nessuno: guarda e dà il via libera |
+
+## 10. Promemoria: cose da fare
+
+Lavori già individuati e non ancora fatti. Quando uno è fatto, si toglie
+da qui.
+
+1. **Chiave sui computer condivisi.** `js/chiave.js` salva la chiave in
+   `localStorage`, quindi resta anche sui PC dell'aula. Valutare di
+   cancellarla alla chiusura del browser (`sessionStorage`), con una
+   casella "Ricorda su questo computer".
+2. **Password della home.** Oggi separano soltanto le sezioni, e le
+   cartelle si raggiungono per indirizzo diretto. Rinominare il campo, o
+   prevedere un accesso vero. Togliere la memoria permanente della
+   sezione aperta.
+3. **Presentazione pesante.** La home carica subito l'iframe della
+   presentazione (circa 1,9 MB, con 4 immagini PNG incorporate), anche se
+   i commenti dicono il contrario. Caricarla al clic, oppure comprimere le
+   immagini. Rispettare `prefers-reduced-motion`, cioè ridurre le
+   animazioni per chi le ha disattivate nel computer.
+4. **Nomi dei modelli Gemini.** Sono scritti in ogni pagina: raccoglierli
+   in un punto solo.
+5. **Home.** Nascondere le discipline senza strumenti. Mostrare "Righe del
+   registro da controllare" solo nell'area docenti.
+6. **Registro.** In `artefatti.txt` la descrizione di "Annotazioni sul
+   registro" dice ancora che il nome resta sul computer: ora il nome non
+   si chiede più, quindi va aggiornata.
+7. **Privacy.** L'uso di Gemini con chiavi gratuite per testi che
+   riguardano studenti va verificato con il DPO della scuola. Le
+   modifiche tecniche riducono il rischio ma non sostituiscono questa
+   verifica.
