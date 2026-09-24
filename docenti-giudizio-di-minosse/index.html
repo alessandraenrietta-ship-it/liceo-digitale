@@ -161,8 +161,8 @@
     margin: 16px 0; padding: 12px 14px; border-radius: 12px;
     background: rgba(0, 0, 0, .35); border: 1px dashed var(--ocra-scura);
   }
-  .anteprima .conteggio { font-size: 22px; font-weight: 700; color: var(--ocra); margin: 0 0 8px; }
-  .anteprima .errore { color: #ffb08a; font-weight: 700; margin: 0; }
+  .anteprima .conteggio { font-size: 22px; font-weight: 700; color: var(--ocra); margin: 0 0 8px; text-align: center; }
+  .anteprima .errore { color: #ffb08a; font-weight: 700; margin: 0; text-align: center; }
   .elenco-anteprima { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; max-height: 190px; overflow: auto; }
   .elenco-anteprima li {
     background: var(--pergamena); color: var(--inchiostro);
@@ -847,7 +847,7 @@
 
     anteprimaAnime = errore ? [] : anime;
     $("anteprima-conteggio").textContent = errore ? "" :
-      "Anteprima: " + anime.length + " anime in attesa di giudizio";
+      anime.length + " anime in attesa di giudizio";
     $("anteprima-errore").textContent = errore;
     $("anteprima-errore").hidden = !errore;
     var elenco = $("anteprima-elenco");
