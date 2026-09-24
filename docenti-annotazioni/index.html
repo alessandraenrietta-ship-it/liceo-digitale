@@ -57,15 +57,6 @@
     outline-offset: 2px;
   }
 
-  .riga2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spazio);
-  }
-  @media (max-width: 40rem) {
-    .riga2 { grid-template-columns: 1fr; }
-  }
-
   .campo {
     margin-bottom: 1.3rem;
   }
@@ -224,25 +215,17 @@
 
   <fieldset class="studente-only">
     <legend>Genere</legend>
-    <!-- TESTO MODIFICABILE: puoi cambiare le righe qui sotto -->
-    <p style="margin:0 0 .5rem;font-size:.9rem;">Serve solo per scrivere "lo studente" o "la studentessa" nella nota.</p>
     <div class="opts">
-      <input type="radio" name="genere" id="genere-m" value="m" checked>
+      <input type="radio" name="genere" id="genere-m" value="m">
       <label for="genere-m">Studente</label>
       <input type="radio" name="genere" id="genere-f" value="f">
       <label for="genere-f">Studentessa</label>
     </div>
   </fieldset>
 
-  <div class="riga2">
-    <div class="campo">
-      <label for="nome" id="nomeLabel">Nome studente (promemoria per te)</label>
-      <input type="text" id="nome" placeholder="Nome Cognome">
-    </div>
-    <div class="campo">
-      <label for="materia">Materia</label>
-      <input type="text" id="materia" placeholder="es. Italiano">
-    </div>
+  <div class="campo">
+    <label for="materia">Materia</label>
+    <input type="text" id="materia" placeholder="es. Italiano">
   </div>
 
   <div class="campo">
@@ -427,15 +410,6 @@ function refreshVisibility(){
   document.querySelectorAll(".studente-only").forEach(el=>{
     el.classList.toggle("hidden", soggetto !== "studente");
   });
-  const nomeLabel = document.getElementById("nomeLabel");
-  const nomeInput = document.getElementById("nome");
-  if(soggetto === "classe"){
-    nomeLabel.textContent = "Classe (promemoria per te)";
-    nomeInput.placeholder = "es. 3A LM";
-  } else {
-    nomeLabel.textContent = "Nome studente (promemoria per te)";
-    nomeInput.placeholder = "Nome Cognome";
-  }
 }
 document.querySelectorAll('input[name="tipo"], input[name="soggetto"]').forEach(el=>{
   el.addEventListener("change", refreshVisibility);
@@ -490,12 +464,21 @@ document.getElementById("generaBtn").addEventListener("click", async function(){
 
   const tipo = document.querySelector('input[name="tipo"]:checked').value;
   const soggetto = document.querySelector('input[name="soggetto"]:checked').value;
-  const genere = document.querySelector('input[name="genere"]:checked').value;
+  // All'apertura nessun genere è scelto: bisogna sceglierlo ogni volta.
+  const genereScelto = document.querySelector('input[name="genere"]:checked');
+  const genere = genereScelto ? genereScelto.value : "";
   const materia = document.getElementById("materia").value.trim();
   const data = formatData(document.getElementById("data").value);
   const fatto = document.getElementById("fatto").value.trim();
   const reiterato = document.getElementById("reiterato").checked;
   const convocazione = document.getElementById("convocazione").checked;
+
+  if(soggetto === "studente" && !genere){
+    errorBox.textContent = "Scegli se si tratta di uno studente o di una studentessa.";
+    errorBox.style.display = "block";
+    document.getElementById("genere-m").focus();
+    return;
+  }
 
   if(!fatto){
     document.getElementById("fatto").focus();
@@ -522,8 +505,8 @@ document.getElementById("generaBtn").addEventListener("click", async function(){
   generaBtn.disabled = true;
   generaBtn.textContent = "Genero...";
 
-  // Il nome dello studente non viene mai incluso qui: resta nel browser,
-  // eventualmente solo come promemoria per chi compila.
+  // Il nome dello studente la pagina non lo chiede nemmeno, quindi non
+  // può partire. Si manda solo la forma da usare come soggetto.
   // Nemmeno la data parte: al suo posto si manda la parola [DATA], e la
   // data vera si rimette nel testo solo quando torna qui nel browser.
   const riguardaTesto = soggetto === "classe"
