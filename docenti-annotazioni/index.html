@@ -373,6 +373,51 @@ function formatData(iso){
   return `${d}/${m}/${y}`;
 }
 
+/* -------------------------------------------------------------
+   CONTROLLO DEI DATI RICONOSCIBILI
+   Guarda la descrizione prima dell'invio e restituisce l'elenco
+   di quello che sembra sospetto (vuoto se non trova niente).
+   È un aiuto, non una garanzia: può segnalare cose innocue e
+   lasciarne passare altre. L'ultima parola resta a chi scrive.
+   ------------------------------------------------------------- */
+function cercaDatiRiconoscibili(testo){
+  const trovati = [];
+
+  // 1. Una sigla di classe: un numero da 1 a 5 seguito da lettere
+  //    maiuscole, attaccate o con uno spazio (3A, 4 BL, 5CS).
+  const classe = testo.match(/\b[1-5] ?[A-Z]{1,3}\b/);
+  if(classe){
+    trovati.push("una sigla di classe (" + classe[0] + ")");
+  }
+
+  // 2. Una data: in numeri (12/10, 12-10-2026, 12.10.26)
+  //    oppure con il mese scritto (12 ottobre).
+  const dataNumeri = testo.match(/\b\d{1,2}[\/\-.]\d{1,2}([\/\-.]\d{2,4})?\b/);
+  const dataMese = testo.match(/\b\d{1,2} ?(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)\b/i);
+  const unaData = dataNumeri || dataMese;
+  if(unaData){
+    trovati.push("una data (" + unaData[0] + ")");
+  }
+
+  // 3. Parole con la maiuscola a metà frase: potrebbero essere nomi
+  //    propri. La prima parola di ogni frase non conta.
+  const maiuscole = [];
+  testo.split(/[.!?\n]+/).forEach(frase => {
+    const parole = frase.trim().split(/\s+/).slice(1);
+    parole.forEach(parola => {
+      const pulita = parola.replace(/^[^A-Za-zÀ-ÖØ-öø-ÿ]+|[^A-Za-zÀ-ÖØ-öø-ÿ]+$/g, "");
+      if(/^[A-ZÀ-ÖØ-Þ][a-zà-öø-ÿ]/.test(pulita) && !maiuscole.includes(pulita)){
+        maiuscole.push(pulita);
+      }
+    });
+  });
+  if(maiuscole.length > 0){
+    trovati.push("parole con la maiuscola a metà frase, forse nomi propri (" + maiuscole.join(", ") + ")");
+  }
+
+  return trovati;
+}
+
 function refreshVisibility(){
   const tipo = document.querySelector('input[name="tipo"]:checked').value;
   document.querySelectorAll(".infrazione-only").forEach(el=>{
@@ -455,6 +500,22 @@ document.getElementById("generaBtn").addEventListener("click", async function(){
   if(!fatto){
     document.getElementById("fatto").focus();
     return;
+  }
+
+  // Prima di spedire la descrizione a Google, si cerca qualcosa che
+  // potrebbe far riconoscere chi è coinvolto. Se c'è, si chiede conferma:
+  // con Annulla non parte niente e si torna a correggere il testo.
+  const sospetti = cercaDatiRiconoscibili(fatto);
+  if(sospetti.length > 0){
+    const vaBene = confirm(
+      "Nella descrizione potrebbero esserci dati che fanno riconoscere qualcuno:\n\n" +
+      sospetti.map(s => "• " + s).join("\n") +
+      "\n\nPremi OK per inviare comunque, oppure Annulla per correggere il testo."
+    );
+    if(!vaBene){
+      document.getElementById("fatto").focus();
+      return;
+    }
   }
 
   const generaBtn = document.getElementById("generaBtn");
