@@ -178,6 +178,15 @@
     font-weight: bold;
     display: none;
   }
+
+  /* L'avviso sopra la descrizione: deve vedersi bene, per questo
+     è in grassetto e nel verde dei titoli. */
+  .avviso-privacy {
+    font-weight: bold;
+    color: var(--verde);
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+  }
 </style>
 </head>
 <body>
@@ -263,7 +272,9 @@
 
   <div class="campo">
     <label for="fatto">Descrizione dell'episodio</label>
-    <textarea id="fatto" rows="5" placeholder="Racconta qui cosa è successo, con parole tue. Esempio: durante la spiegazione ha continuato a parlare ad alta voce con un compagno nonostante due richiami."></textarea>
+    <!-- TESTO MODIFICABILE: puoi cambiare le righe qui sotto -->
+    <p class="avviso-privacy" id="avvisoPrivacy">Il testo va a Google: niente nomi, classi, date o dati riconoscibili.</p>
+    <textarea id="fatto" rows="5" aria-describedby="avvisoPrivacy" placeholder="Racconta qui cosa è successo, con parole tue. Esempio: durante la spiegazione ha continuato a parlare ad alta voce con un compagno nonostante due richiami."></textarea>
   </div>
 
   <button type="button" id="generaBtn">Genera annotazione</button>
