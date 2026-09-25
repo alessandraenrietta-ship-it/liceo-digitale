@@ -57,7 +57,6 @@ html,body{height:100%;margin:0;background:#07131f;color:#fff;
   background-image:radial-gradient(rgba(10,20,30,.85) 28%, transparent 29%);background-size:26px 26px}
 .halftone.tl{top:-60px;left:-60px;-webkit-mask-image:radial-gradient(circle at 20% 20%,#000 0%,transparent 62%);mask-image:radial-gradient(circle at 20% 20%,#000 0%,transparent 62%)}
 .halftone.br{bottom:-70px;right:-40px;-webkit-mask-image:radial-gradient(circle at 80% 80%,#000 0%,transparent 60%);mask-image:radial-gradient(circle at 80% 80%,#000 0%,transparent 60%)}
-.rays{position:absolute;top:-40px;left:-40px;width:760px;height:520px;opacity:.9}
 
 /* ---------- scene ---------- */
 .scene{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .6s ease}
@@ -311,12 +310,6 @@ body.recording, body.recording > * { overflow: hidden; }
         <path d="M120 1080 V1010 L60 950 V860"/>
         <path d="M1920 700 H1860 L1810 750 V860 L1860 910 H1920"/>
         <path d="M1500 1080 V1010 L1560 950 H1700"/><circle cx="1704" cy="950" r="7"/>
-      </g>
-    </svg>
-    <svg class="rays" viewBox="0 0 760 520" aria-hidden="true">
-      <g fill="#101418" opacity=".9">
-        <polygon points="0,60 210,150 0,120"/><polygon points="120,0 230,170 150,0"/>
-        <polygon points="0,200 170,215 0,250"/><polygon points="250,0 300,120 268,0"/>
       </g>
     </svg>
     <div class="halftone tl"></div>
