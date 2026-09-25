@@ -105,6 +105,9 @@ Se sbagli, un clic su un'altra lettera la cambia, e un clic sulla
 stessa lettera la toglie.
 5: Qui vedi quante squadre hanno già risposto.
 6: Quando hanno risposto tutte, mostra la soluzione.
+7: *Teams* riporta alla pagina delle squadre, per esempio per
+correggere un nome. I punti restano, e con *Let's play!* si riprende
+dalla domanda in cui si era rimasti.
 
 [FASE]
 titolo: La soluzione e i punti
