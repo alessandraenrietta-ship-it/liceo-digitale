@@ -800,8 +800,8 @@
      Non è un file audio: lo costruisce il browser sul momento, con
      il rumore (il fruscio della radio fra due stazioni) passato per
      dei filtri. Così non c'è niente da scaricare.
-     - Mentre il cartellino precipita: un sibilo che scende, come
-       qualcosa che cade nel vuoto.
+     - Mentre il cartellino precipita: un fruscio cupo che si fa
+       sempre più grave, come qualcosa di pesante che cade nel buio.
      - Quando tocca il fondo: il rombo delle fiamme che divampano, con
        qualche scoppiettio.
      I tempi degli scoppiettii seguono un seno, non il caso: in questa
@@ -854,32 +854,28 @@
     var ora = audio.currentTime;
     var fine = ora + durataMs / 1000;
 
-    /* Il sibilo: il fruscio passa per una finestra di frequenze che
-       scende dall'acuto al grave. */
-    var s = fruscioFiltrato("bandpass", 2400);
-    s.filtro.Q.value = 1.2;
-    s.filtro.frequency.setValueAtTime(2400, ora);
-    s.filtro.frequency.exponentialRampToValueAtTime(300, fine);
+    /* Un fruscio cupo e sordo, senza fischi: si fa sempre più grave,
+       come qualcosa di pesante che precipita nel buio. Nessuna nota:
+       solo rumore filtrato che lascia passare i suoni bassi. */
+    var s = fruscioFiltrato("lowpass", 900);
+    s.filtro.Q.value = 0.5;
+    s.filtro.frequency.setValueAtTime(900, ora);
+    s.filtro.frequency.exponentialRampToValueAtTime(140, fine);
     s.volume.gain.setValueAtTime(0, ora);
-    s.volume.gain.linearRampToValueAtTime(0.35, ora + 0.15);
-    s.volume.gain.linearRampToValueAtTime(0.25, fine - 0.1);
-    s.volume.gain.linearRampToValueAtTime(0, fine);
+    s.volume.gain.linearRampToValueAtTime(0.9, ora + 0.2);
+    s.volume.gain.linearRampToValueAtTime(1.2, fine - 0.15);
+    s.volume.gain.linearRampToValueAtTime(0.5, fine);
     s.sorgente.start(ora);
     s.sorgente.stop(fine + 0.05);
 
-    /* Sotto, una nota che scende, leggera: dà il senso del precipitare. */
-    var nota = audio.createOscillator();
-    nota.type = "triangle";
-    nota.frequency.setValueAtTime(520, ora);
-    nota.frequency.exponentialRampToValueAtTime(90, fine);
-    var volumeNota = audio.createGain();
-    volumeNota.gain.setValueAtTime(0, ora);
-    volumeNota.gain.linearRampToValueAtTime(0.06, ora + 0.1);
-    volumeNota.gain.linearRampToValueAtTime(0, fine);
-    nota.connect(volumeNota);
-    volumeNota.connect(audio.destination);
-    nota.start(ora);
-    nota.stop(fine + 0.05);
+    /* Sotto, un brontolio profondo che cresce avvicinandosi al
+       baratro: annuncia le fiamme. */
+    var b = fruscioFiltrato("lowpass", 180);
+    b.filtro.Q.value = 0.5;
+    b.volume.gain.setValueAtTime(0, ora);
+    b.volume.gain.linearRampToValueAtTime(1.5, fine);
+    b.sorgente.start(ora);
+    b.sorgente.stop(fine + 0.05);
   }
 
   /* Un passo della coda, da un'anima alla successiva: un fruscio,
