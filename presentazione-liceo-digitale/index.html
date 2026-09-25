@@ -492,12 +492,16 @@ body.recording, body.recording > * { overflow: hidden; }
 
   function render(){
     var idx = -1;
+    /* Aggiunto per il sito Liceo digitale: all'ultimo istante (1:53)
+       nessuna scena era più "accesa" e restava solo lo sfondo vuoto.
+       Ora, arrivati in fondo, resta fermo il cartello finale. */
+    var tv = t >= DUR ? DUR - 1 : t;
     for(var i=0;i<sceneEls.length;i++){
       var s = sceneEls[i], d = s.def;
-      var on = t >= d.start && t < d.end;
+      var on = tv >= d.start && tv < d.end;
       if(on) idx = i;
       s.el.classList.toggle("is-on", on);
-      var local = t - d.start;
+      var local = tv - d.start;
       for(var j=0;j<s.items.length;j++){
         var it = s.items[j];
         it.classList.toggle("on", on && local >= parseInt(it.getAttribute("data-in"),10));
@@ -505,10 +509,10 @@ body.recording, body.recording > * { overflow: hidden; }
     }
 
     var cls, want;
-    if(idx < 0 || t < 300){ cls = "p-off anim-bob"; want = "corsa"; }
+    if(idx < 0 || tv < 300){ cls = "p-off anim-bob"; want = "corsa"; }
     else if(idx === 4){
       // Metodo: cammina da un riquadro all'altro seguendo i tre passi
-      var u = t - scenes[4].start;
+      var u = tv - scenes[4].start;
       if(u < 200){        cls = "m3 anim-bob";               want = "saluto"; }
       else if(u < 1450){  cls = "m1 runm anim-dash";         want = "corsa"; }
       else if(u < 4600){  cls = "m1 anim-bob";               want = "pollice"; }
@@ -532,9 +536,15 @@ body.recording, body.recording > * { overflow: hidden; }
     timeEl.textContent = fmt(t) + " / " + fmt(DUR);
   }
 
+  /* Aggiunto per il sito Liceo digitale: nel riquadro della pagina
+     iniziale la presentazione ricomincia da capo quando finisce;
+     nella pagina intera invece si ferma sul cartello finale. */
+  var ricomincia = false;
+
   function loop(now){
     if(!playing) return;
     t += now - last; last = now;
+    if(t >= DUR && ricomincia){ t = 0; if (!muted) { suona(); } }
     if(t >= DUR){ t = DUR; render(); pause(); return; }
     render();
     requestAnimationFrame(loop);
@@ -617,6 +627,7 @@ body.recording, body.recording > * { overflow: hidden; }
 
     muted = true;
     track.muted = true;
+    ricomincia = true;
 
     /* Un clic sul video apre la presentazione nella sua pagina, a
        tutto schermo e con i comandi: nell'anteprima si guarda, qui si
