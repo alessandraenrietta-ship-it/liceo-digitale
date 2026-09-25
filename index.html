@@ -563,11 +563,6 @@
       text-transform: uppercase;
       color: var(--giallo);
     }
-    .apertura-frase {
-      margin: 0;
-      font-size: 1.15rem;
-      color: var(--testo-su-scuro);
-    }
     .fascia-apertura .riquadro-video {
       max-width: none;
       margin: 0;
@@ -603,7 +598,6 @@
       font-family: var(--titolo-grande);
       text-transform: uppercase;
     }
-    .scheda-frase { margin-bottom: 1.2em; }
     .scheda-accesso .accesso button {
       border-radius: 999px;   /* pulsante a pillola */
       padding-left: 2em;
@@ -637,7 +631,6 @@
       color: var(--testo-su-scuro);
     }
     .scheda-accesso:has(> [id^="area-"]:not([hidden])) > h2 { color: var(--giallo); }
-    .scheda-accesso:has(> [id^="area-"]:not([hidden])) .scheda-frase { display: none; }
 
     /* ---- Le caselle dentro le sezioni aperte ---- */
 
@@ -809,7 +802,6 @@
         <!-- TESTO MODIFICABILE: la riga della scuola, il titolo e la frase sotto -->
         <p class="scuola">I.I.S. Giulio Natta</p>
         <h1 class="titolo-pagina titolo-sito">Liceo digitale</h1>
-        <p class="apertura-frase">Una curvatura del Liceo Scientifico opzione Scienze Applicate che tiene insieme formazione umanistica e formazione tecnologica. Qui trovi gli strumenti didattici digitali costruiti dai docenti.</p>
       </div>
 
       <!-- Il video sta fuori dalle sezioni con la password: la
@@ -837,9 +829,7 @@
 
       <div class="accessi">
         <section class="scheda-accesso scheda-studenti" aria-labelledby="titolo-studenti">
-          <h2 id="titolo-studenti">Per gli studenti</h2>
-          <!-- TESTO MODIFICABILE -->
-          <p class="scheda-frase">Giochi, casi da risolvere ed esercizi per mettere alla prova quello che studi in classe.</p>
+          <h2 id="titolo-studenti">Studenti</h2>
 
           <div id="accesso-studenti" class="accesso">
             <form id="modulo-studenti">
@@ -858,9 +848,7 @@
         </section>
 
         <section class="scheda-accesso scheda-docenti" aria-labelledby="titolo-docenti">
-          <h2 id="titolo-docenti">Per i docenti</h2>
-          <!-- TESTO MODIFICABILE -->
-          <p class="scheda-frase">Tutti gli artefatti didattici, compresi quelli che usano l'intelligenza artificiale, e gli strumenti di lavoro.</p>
+          <h2 id="titolo-docenti">Docenti</h2>
 
           <div id="accesso-docenti" class="accesso">
             <form id="modulo-docenti">
