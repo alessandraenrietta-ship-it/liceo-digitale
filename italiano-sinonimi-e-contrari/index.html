@@ -6,6 +6,7 @@
   <title>Sinonimi e contrari</title>
   <script src="../js/tema.js?v=1"></script>
 <link rel="stylesheet" href="../stile.css?v=10">
+<link rel="stylesheet" href="../fasce.css?v=1">
 
   <style>
     /* -------------------------------------------------------------
@@ -104,16 +105,39 @@
   </style>
 </head>
 
-<body>
+<body class="fasce">
 
-  <p class="ritorno su-scuro"><a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a></p>
+  <!-- La testata: ritorno alla pagina iniziale, logo della scuola e
+       interruttore fra colori chiari e scuri. -->
+  <header class="fascia fascia-testata">
+    <div class="fascia-interno testata-interno">
+      <p class="ritorno"><a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a></p>
+      <span class="marchio">
+        <span class="logo-scuola">
+          <img src="../immagini/logo-natta.png" alt="Logo dell'I.I.S. Giulio Natta" width="46" height="31">
+        </span>
+        Liceo digitale
+      </span>
+      <div id="interruttore-tema" class="riga-tema"></div>
+    </div>
+  </header>
 
-  <h1 class="titolo-pagina">Sinonimi e contrari</h1>
-  <p class="titolo-pagina">Per trovare la parola giusta mentre si scrive un tema.</p>
+  <section class="fascia fascia-titolo">
+    <div class="fascia-interno">
+      <!-- TESTO MODIFICABILE: puoi cambiare le due righe qui sotto. -->
+      <p class="occhiello">Lingua e letteratura italiana</p>
+      <h1 class="titolo-fascia">Sinonimi e contrari</h1>
+      <p class="sottotitolo-fascia">Per trovare la parola giusta mentre si scrive un tema.</p>
+      <!-- FINE TESTO MODIFICABILE -->
+    </div>
+  </section>
+
+  <main class="fascia fascia-lavoro">
+   <div class="fascia-interno">
 
   <div class="riquadro" id="riquadro-chiave"></div>
 
-  <main class="riquadro">
+  <div class="riquadro">
 
     <form id="modulo" novalidate>
       <label for="parola">Parola da cercare</label>
@@ -145,7 +169,14 @@
       </p>
     </noscript>
 
+  </div>
+
+   </div>
   </main>
+
+  <footer class="fascia fascia-piede">
+    <div class="fascia-interno">Liceo digitale &middot; I.I.S. Giulio Natta di Rivoli</div>
+  </footer>
 
   <script src="../js/chiave.js?v=9"></script>
   <script>
@@ -442,6 +473,8 @@
       verifica.hidden = false;
     }
   </script>
+
+  <script>Tema.interruttore("interruttore-tema");</script>
 
 </body>
 </html>

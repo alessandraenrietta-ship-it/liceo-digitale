@@ -1,0 +1,289 @@
+/* =================================================================
+   FASCE.CSS - la grafica a fasce delle pagine del Liceo digitale
+
+   A cosa serve
+   ------------
+   Veste una pagina come la pagina iniziale: una testata blu notte con
+   il logo della scuola, una fascia verde con il titolo, l'area di
+   lavoro su fondo chiaro e un piede blu notte.
+
+   Come si usa in una pagina
+   -------------------------
+   1. Nella testa del file, SUBITO DOPO stile.css:
+
+        <link rel="stylesheet" href="../stile.css?v=10">
+        <link rel="stylesheet" href="../fasce.css?v=1">
+
+      L'ordine conta: questo foglio corregge quello comune, quindi
+      deve venire dopo.
+
+   2. Al corpo si mette la classe "fasce":
+
+        <body class="fasce">
+
+   3. La pagina si costruisce cosi':
+
+        <header class="fascia fascia-testata"> ... </header>
+        <section class="fascia fascia-titolo"> ... </section>
+        <main class="fascia fascia-lavoro"> ... </main>
+        <footer class="fascia fascia-piede"> ... </footer>
+
+      Dentro a ognuna ci va un <div class="fascia-interno">, che e'
+      quello che tiene il contenuto incolonnato e non troppo largo.
+
+   Il pezzo da copiare tale e quale sta in fondo a questo file, in un
+   commento: si incolla e si cambia solo il titolo.
+
+   Chi cambia questo file cambia tutte le pagine che lo richiamano:
+   e' un file condiviso, come stile.css.
+   ================================================================= */
+
+
+/* -----------------------------------------------------------------
+   I COLORI DELLE FASCE
+   Sono gli stessi della pagina iniziale. Nel tema scuro diventano
+   piu' cupi, perche' sul nero il verde acceso stanca gli occhi.
+   ----------------------------------------------------------------- */
+
+:root {
+  --fascia-verde: #026C37;
+  --fascia-teal:  #00596B;
+  --fascia-notte: #00193C;
+  --titolo-grande: "Arial Black", Arial, Helvetica, sans-serif;
+  /* Il fondo dei riquadri dentro all'area di lavoro: bianco pulito,
+     non il crema del resto del sito. */
+  --carta-fascia: #FFFFFF;
+  /* Il retino: la trama di pallini della stampa a fumetti.
+     Due manopole: il colore, che regola quanto si vedono, e il passo,
+     che regola quanto sono fitti. Passo piccolo, pallini vicini. */
+  --retino: rgba(2, 108, 55, 0.13);
+  --retino-passo: 8px;
+}
+
+html[data-tema="scuro"] {
+  --fascia-verde: #0A2B1D;
+  --fascia-teal:  #072A33;
+  --fascia-notte: #01060F;
+  --carta-fascia: #10222C;
+  --retino: rgba(155, 210, 70, 0.10);
+}
+
+
+/* -----------------------------------------------------------------
+   LA PAGINA
+   Le fasce vanno da un bordo all'altro dello schermo, quindi il
+   corpo non ha margini.
+   ----------------------------------------------------------------- */
+
+body.fasce {
+  padding: 0;
+  background: var(--fascia-notte);
+}
+
+.fasce .fascia { padding: 2.4rem var(--spazio); }
+
+/* Il contenuto non si allarga all'infinito sugli schermi grandi. */
+.fasce .fascia-interno {
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+
+/* -----------------------------------------------------------------
+   LA TESTATA
+   A sinistra la freccia per tornare indietro, il logo e il nome del
+   sito; a destra l'interruttore fra colori chiari e scuri.
+   ----------------------------------------------------------------- */
+
+.fasce .fascia-testata {
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+  background: var(--fascia-notte);
+}
+
+.fasce .testata-interno {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.fasce .marchio {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--titolo-grande);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  color: var(--testo-su-scuro);
+}
+
+/* Il logo e' verde su fondo bianco: sul blu notte non si vedrebbe,
+   quindi sta su un tondino bianco. Il bianco resta bianco anche nel
+   tema scuro, altrimenti il logo sparisce. */
+.fasce .logo-scuola {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.55rem;
+  border-radius: 12px;
+  background: #FFFFFF;
+}
+
+.fasce .logo-scuola img { display: block; width: 46px; height: auto; }
+
+/* La freccia di ritorno vive dentro la testata, non piu' da sola in
+   cima alla pagina. */
+.fasce .fascia-testata .ritorno {
+  max-width: none;
+  margin: 0;
+}
+
+.fasce .fascia-testata .ritorno a { color: var(--testo-su-scuro); }
+
+.fasce .fascia-testata .ritorno a:hover .freccia {
+  background: var(--giallo);
+  color: var(--blu-notte);
+}
+
+.fasce .fascia-testata .riga-tema { margin: 0; }
+
+
+/* -----------------------------------------------------------------
+   LA FASCIA DEL TITOLO
+   Verde, con il titolo grande in giallo e, se serve, una riga di
+   spiegazione sotto.
+   ----------------------------------------------------------------- */
+
+.fasce .fascia-titolo { background: var(--fascia-verde); }
+
+.fasce .titolo-fascia {
+  max-width: none;
+  margin: 0;
+  font-family: var(--titolo-grande);
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  line-height: 1;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--giallo);
+}
+
+.fasce .sottotitolo-fascia {
+  max-width: 46rem;
+  margin: 0.9rem 0 0;
+  font-size: 1.05rem;
+  color: var(--testo-su-scuro);
+}
+
+/* La riga piccola sopra al titolo, per esempio il nome della scuola
+   o della disciplina. */
+.fasce .occhiello {
+  margin: 0 0 0.6rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--giallo);
+}
+
+
+/* -----------------------------------------------------------------
+   L'AREA DI LAVORO
+   Qui dentro ci sono i campi da compilare e i risultati, quindi il
+   fondo torna chiaro: sul verde si leggerebbe male e i campi bianchi
+   darebbero fastidio.
+   ----------------------------------------------------------------- */
+
+.fasce .fascia-lavoro {
+  background: var(--fascia-teal);
+  padding-top: 2rem;
+  padding-bottom: 2.4rem;
+}
+
+/* I riquadri dentro all'area di lavoro sono bianchi e tondi, senza il
+   bordo giallo: sul teal il giallo su crema faceva troppo. Al posto
+   del bordo c'e' un'ombra leggera, che li stacca dal fondo senza
+   gridare.
+
+   Sopra al bianco c'e' il retino, la trama di pallini fitti della
+   stampa a fumetti. E' disegnata dal browser, non e' un'immagine,
+   quindi non c'e' niente da scaricare e resta nitida a qualunque
+   ingrandimento. I pallini restano leggeri: sopra ci va il testo da
+   leggere, e una trama piu' forte lo renderebbe faticoso. */
+.fasce .fascia-lavoro .riquadro,
+.fasce .fascia-lavoro .scheda {
+  max-width: none;
+  padding: calc(var(--spazio) * 1.5);
+  border: 0;
+  border-radius: 24px;
+  color: var(--testo);
+  background-color: var(--carta-fascia);
+  background-image: radial-gradient(var(--retino) 1.2px, transparent 1.3px);
+  background-size: var(--retino-passo) var(--retino-passo);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+
+/* -----------------------------------------------------------------
+   IL PIEDE
+   ----------------------------------------------------------------- */
+
+.fasce .fascia-piede {
+  padding-top: 1.2rem;
+  padding-bottom: 1.2rem;
+  font-size: 0.9rem;
+  color: var(--testo-su-scuro);
+  background: var(--fascia-notte);
+}
+
+
+/* -----------------------------------------------------------------
+   SCHERMI STRETTI
+   ----------------------------------------------------------------- */
+
+@media (max-width: 52rem) {
+  .fasce .fascia {
+    padding-top: 1.8rem;
+    padding-bottom: 1.8rem;
+  }
+}
+
+
+/* =================================================================
+   LO SCHELETRO DA COPIARE
+
+   <body class="fasce">
+
+     <header class="fascia fascia-testata">
+       <div class="fascia-interno testata-interno">
+         <p class="ritorno"><a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a></p>
+         <span class="marchio">
+           <span class="logo-scuola">
+             <img src="../immagini/logo-natta.png" alt="Logo dell'I.I.S. Giulio Natta" width="46" height="31">
+           </span>
+           Liceo digitale
+         </span>
+         <div id="interruttore-tema" class="riga-tema"></div>
+       </div>
+     </header>
+
+     <section class="fascia fascia-titolo">
+       <div class="fascia-interno">
+         <h1 class="titolo-fascia">Il titolo della pagina</h1>
+         <p class="sottotitolo-fascia">Una riga che dice a cosa serve.</p>
+       </div>
+     </section>
+
+     <main class="fascia fascia-lavoro">
+       <div class="fascia-interno">
+         ... qui il contenuto dell'artefatto ...
+       </div>
+     </main>
+
+     <footer class="fascia fascia-piede">
+       <div class="fascia-interno">Liceo digitale &middot; I.I.S. Giulio Natta di Rivoli</div>
+     </footer>
+
+     <script>Tema.interruttore("interruttore-tema");</script>
+   ================================================================= */
