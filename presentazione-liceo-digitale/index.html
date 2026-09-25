@@ -233,6 +233,17 @@ html:-webkit-full-screen #hud {
 body.comandi-nascosti #hud { opacity: 0; pointer-events: none; }
 body.comandi-nascosti { cursor: none; }
 
+/* ---------- Aggiunto per il sito Liceo digitale: meno movimento ----------
+   Chi nel computer ha chiesto di ridurre le animazioni vede la
+   presentazione senza la mascotte che saltella e senza scritte che
+   scivolano: scene, frasi e pose compaiono al loro momento, ma di
+   colpo, senza movimento. */
+@media (prefers-reduced-motion: reduce) {
+  #mascot img { animation: none !important; }
+  #mascot, #mascot .pose, .scene, [data-in] { transition: none !important; }
+  [data-in], [data-in][data-slide] { transform: none !important; }
+}
+
 /* ---------- Aggiunto per il sito Liceo digitale: anteprima ----------
    Quando la presentazione sta dentro al riquadro della pagina
    iniziale si vede soltanto il video: niente comandi, che in un
@@ -715,12 +726,23 @@ body.recording, body.recording > * { overflow: hidden; }
     });
 
     aggiornaAltoparlante();
-    play();
+
+    /* Aggiunto per il sito Liceo digitale: chi nel computer ha scelto
+       "riduci le animazioni" (per esempio perché il movimento gli dà
+       fastidio o lo distrae) non trova un video che parte da solo.
+       Vede ferma la prima scena, già completa, e con un clic apre la
+       presentazione per guardarla quando vuole. */
+    var menoMovimento = window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var SCENA_FERMA = 9000;
+
+    if (menoMovimento) { seek(SCENA_FERMA); } else { play(); }
 
     /* La pagina iniziale chiama questa quando toglie il disegno di
        copertina: la presentazione riparte da capo, così chi guarda non
        si perde i primi secondi passati dietro alla copertina. */
     window.riavviaAnteprima = function () {
+      if (menoMovimento) { seek(SCENA_FERMA); return; }
       seek(0);
       play();
     };
