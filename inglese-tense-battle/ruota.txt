@@ -1,0 +1,82 @@
+# ============================================================
+# TENSE BATTLE - LA RUOTA DELLE DOMANDE (SPEAKING WHEEL)
+# ============================================================
+#
+# Questo file contiene le domande della ruota, la seconda parte
+# del gioco, quella in cui le squadre parlano.
+# Puoi modificarlo con un qualsiasi editor di testo (Blocco note
+# va benissimo) e salvarlo: il sito cambia subito.
+#
+# COME È FATTO
+# ------------
+# Le domande sono divise per tempo verbale. Ogni gruppo comincia
+# con la riga che contiene solo la parola TEMPO fra parentesi
+# quadre, e poi contiene:
+#
+#   nome:          il nome del tempo verbale, come compare sul sito
+#   colore:        il colore degli spicchi della ruota. Scrivi una
+#                  di queste parole:
+#                    blu, verde, blu scuro, ocra, viola, rosa
+#   per iniziare:  i modi di cominciare la risposta, separati dal
+#                  puntino ·
+#   domanda:       una domanda della ruota. Scrivi una riga
+#                  domanda: per ogni domanda che vuoi aggiungere
+#
+# Per aggiungere un tempo verbale nuovo, copia un gruppo intero
+# qui sotto e cambiane il contenuto.
+#
+# ALTRE COSE DA SAPERE
+# --------------------
+# - Le righe che iniziano con # sono commenti: il sito le ignora.
+# - Le righe vuote servono solo a rendere il file leggibile.
+# - La ruota ha tanti spicchi quante sono le domande. Con più di
+#   30 domande gli spicchi diventano molto stretti.
+# - Se sbagli a scrivere un gruppo il sito non si blocca: lo
+#   salta e, nella pagina delle squadre, ti dice quale rivedere.
+#
+# ============================================================
+
+
+[TEMPO]
+nome: Present simple
+colore: blu
+per iniziare: I think… · In my opinion… · It depends on… · People usually…
+domanda: Who should make the first move? Why?
+domanda: Can men and women be just friends?
+domanda: Who should pay on a first date?
+domanda: What's a good idea for a first move?
+domanda: Should couples share their phone passwords?
+domanda: What's more important in a partner: looks, humour or personality?
+
+[TEMPO]
+nome: Present continuous
+colore: verde
+per iniziare: Yes, they are… · Nowadays, people are… · These days, we're… · At the moment, I'm…
+domanda: Are dating apps changing the way people fall in love?
+domanda: Is social media making relationships more difficult?
+domanda: Are young people becoming less romantic?
+domanda: Is ghosting becoming normal?
+domanda: Are couples spending too much time on their phones these days?
+domanda: What series or game are you getting into at the moment?
+domanda: What are you and your friends planning for after the exams?
+
+[TEMPO]
+nome: Past simple
+colore: blu scuro
+per iniziare: They met when… · It happened… · First… then… in the end…
+domanda: How did your parents or grandparents meet? Tell the story!
+domanda: Who was your first crush when you were a kid? (A celebrity is OK!)
+domanda: What was the best concert or event you went to?
+domanda: What did you do the last time you were really bored?
+
+[TEMPO]
+nome: Present perfect
+colore: ocra
+per iniziare: I've never… · Yes, I have! Once, I… · The most … I've ever…
+domanda: Have you ever done something crazy for love?
+domanda: Have you ever sent a message to the wrong person? What happened?
+domanda: Have you ever helped a friend with a love problem?
+domanda: Have you ever been friend-zoned?
+domanda: What's the best relationship advice you've ever received?
+domanda: Have you ever got completely lost? Where?
+domanda: What's the most adventurous thing you've ever done?
