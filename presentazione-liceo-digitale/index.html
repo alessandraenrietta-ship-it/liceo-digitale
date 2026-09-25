@@ -15,6 +15,11 @@
     document.documentElement.className += " incorporata";
   }
 </script>
+<!-- Aggiunto per il sito Liceo digitale: la grafica a fasce, come nelle
+     altre pagine del sito. tema.js serve perché le fasce seguano la
+     scelta fra colori chiari e scuri fatta sulla pagina iniziale. -->
+<script src="../js/tema.js?v=1"></script>
+<link rel="stylesheet" href="../fasce.css?v=1">
 <!--
   I CARATTERI STANNO DENTRO A QUESTO FILE
   La presentazione usa i caratteri Anton e Barlow. Prima venivano
@@ -180,15 +185,6 @@ button:focus-visible,#scrub:focus-visible{outline:3px solid var(--wire);outline-
   border:1px solid rgba(255,255,255,.18);cursor:pointer;color:#dce9f5}
 .chip.active{background:var(--wire);color:#101418;border-color:var(--wire);font-weight:700}
 .hint{opacity:.6;font-size:13px}
-/* Il ritorno alla pagina iniziale: stessa forma di tutto il sito,
-   la freccia tonda alta 44 pixel, con i colori della presentazione. */
-.ritorno-sito{display:inline-flex;align-items:center;gap:.6em;min-height:44px;
-  color:var(--cream);font-weight:600;text-decoration:none}
-.ritorno-sito .freccia{display:inline-flex;align-items:center;justify-content:center;
-  width:44px;height:44px;border:2px solid currentColor;border-radius:50%;font-size:1.2rem;line-height:1}
-.ritorno-sito:hover{text-decoration:underline}
-.ritorno-sito:hover .freccia{background:var(--cream);color:var(--navy)}
-.ritorno-sito:focus-visible{outline:3px solid var(--wire);outline-offset:3px}
 
 /* ---------- Aggiunto per il sito Liceo digitale: comandi sotto il video ----------
    Anche su schermi larghi ma "quadrati" (la LIM, il tablet, i vecchi
@@ -200,7 +196,7 @@ button:focus-visible,#scrub:focus-visible{outline:3px solid var(--wire);outline-
    quelle, che vengono dopo, restano valide. */
 body { display: flex; flex-direction: column; }
 #viewport { flex: 1 1 auto; min-height: 0; height: auto; }
-#hud { position: static; background: #061018; }
+#hud { position: static; background: var(--fascia-notte, #00193C); }
 
 /* ---------- Aggiunto per il sito Liceo digitale: schermi piccoli ----------
    Sul telefono la presentazione diventa piccola e i pulsanti vanno a
@@ -215,7 +211,7 @@ body { display: flex; flex-direction: column; }
   /* 16:9 sulla larghezza, ma senza superare lo schermo quando il
      telefono e' girato in orizzontale. */
   #viewport { height: min(56.25vw, 78vh); min-height: 170px; }
-  #hud { position: static; background: #061018; }
+  #hud { position: static; background: var(--fascia-notte, #00193C); }
 }
 html:fullscreen #viewport, html:-webkit-full-screen #viewport,
 body.recording #viewport { height: 100vh; height: 100dvh; }
@@ -292,9 +288,86 @@ html.incorporata, html.incorporata body { background: var(--navy); }
 .audio-incorporata:focus-visible { outline: 3px solid var(--wire); outline-offset: 2px; }
 html:fullscreen, html:fullscreen body,
 body.recording, body.recording > * { overflow: hidden; }
+
+/* ---------- Aggiunto per il sito Liceo digitale: la grafica a fasce ----------
+   Nella pagina intera la presentazione si veste come il resto del
+   sito: in alto la testata blu notte con il logo, al centro il video
+   su fondo verde acqua, con gli angoli tondi come nella pagina
+   iniziale, e in fondo i comandi su blu notte. I colori e la testata
+   vengono da fasce.css.
+   Nell'anteprima della pagina iniziale, a schermo intero e in
+   modalità registrazione non cambia niente: lì si vede solo il video. */
+.fascia-testata { flex: none; }
+/* Qui non c'è l'interruttore dei colori a destra: freccia e logo
+   stanno insieme a sinistra, invece di finire ai due capi. */
+.fascia-testata .testata-interno { justify-content: flex-start; }
+html.incorporata .fascia-testata,
+body.recording .fascia-testata { display: none; }
+html:fullscreen .fascia-testata { display: none; }
+html:-webkit-full-screen .fascia-testata { display: none; }
+
+/* La freccia tonda per tornare alla pagina iniziale. */
+.fascia-testata .ritorno a {
+  display: inline-flex; align-items: center; min-height: 44px; text-decoration: none;
+}
+.fascia-testata .ritorno .freccia {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border: 2px solid currentColor;
+  border-radius: 50%; font-size: 1.2rem; line-height: 1;
+}
+.fascia-testata .ritorno a:focus-visible { outline: 3px solid var(--wire); outline-offset: 3px; }
+
+/* Il fondo verde acqua intorno al video, e il video staccato dai
+   bordi. Gli angoli tondi sono misurati sulla presentazione a
+   grandezza piena: quando si rimpicciolisce, si rimpiccioliscono
+   anche loro. */
+html:not(.incorporata):not(:fullscreen) body.fasce:not(.recording) {
+  background: var(--fascia-teal);
+}
+html:not(.incorporata):not(:fullscreen) body.fasce:not(.recording) #viewport {
+  width: auto;
+  margin: 1.2rem;
+}
+html:not(.incorporata):not(:fullscreen) body.fasce:not(.recording) #stage {
+  border-radius: 48px;
+}
+
+/* I comandi: il pulsante principale giallo, come "Entra" nella pagina
+   iniziale, e tutti i pulsanti con gli angoli tondi. */
+#hud button { border-radius: 999px; }
+#hud button.primary { background: #FFF33F; color: #00193C; border-color: #FFF33F; }
+#hud button.primary:hover { background: #FFFFFF; border-color: #FFFFFF; }
+#scrub { accent-color: #FFF33F; }
+
+/* Sul telefono il video è più piccolo: meno spazio intorno, e il
+   rettangolo segue la forma dello schermo di un video. */
+@media (max-width: 820px), (max-height: 560px) {
+  html:not(.incorporata):not(:fullscreen) body.fasce:not(.recording) #viewport {
+    margin: 0.75rem;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    max-height: 78vh;
+  }
+}
 </style>
 </head>
-<body>
+<body class="fasce">
+
+<!-- Aggiunto per il sito Liceo digitale: la testata blu notte, come
+     nelle altre pagine, con il ritorno alla pagina iniziale e il logo
+     della scuola. Non si vede nell'anteprima della pagina iniziale, a
+     schermo intero e in modalità registrazione. -->
+<header class="fascia fascia-testata">
+  <div class="fascia-interno testata-interno">
+    <p class="ritorno"><a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> <span class="testo-ritorno">Liceo digitale</span></a></p>
+    <span class="marchio">
+      <span class="logo-scuola">
+        <img src="../immagini/logo-natta.png" alt="Logo dell'I.I.S. Giulio Natta" width="46" height="31">
+      </span>
+      Liceo digitale
+    </span>
+  </div>
+</header>
 
 <div id="viewport">
   <div id="stage">
@@ -441,9 +514,6 @@ body.recording, body.recording > * { overflow: hidden; }
     <button id="rec">Modalità registrazione</button>
     <button id="full">Schermo intero</button>
   </div>
-  <!-- Aggiunto per il sito Liceo digitale: collegamento per tornare
-       alla pagina iniziale del sito. -->
-  <div class="row"><a class="ritorno-sito" href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a></div>
   <div class="row"><span class="hint">Musica: “No Copyright Music” di nastelbom, licenza Pixabay. Barra spaziatrice play/pausa · frecce ±2 s · Esc esce dalla registrazione.</span></div>
 </div>
 
