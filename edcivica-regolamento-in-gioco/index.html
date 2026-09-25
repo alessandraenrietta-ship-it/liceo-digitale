@@ -249,7 +249,7 @@
   <div id="viewGruppi" style="display:none"></div>
 
   <div class="footer-note" id="footerNote">
-    le risposte restano su questo computer · <button class="reset-link" onclick="resetGame()">reimposta il gioco</button>
+    <span id="notaRisposte">le risposte restano su questo computer · </span><button class="reset-link" onclick="resetGame()">reimposta il gioco</button>
   </div>
 </div>
 </main>
@@ -547,21 +547,135 @@ let currentCaseId = null;
 /* ------------------------------------------------------------------
    LA BACHECA
 
-   Le risposte restano su QUESTO computer, nella memoria del browser.
-   Non vengono inviate da nessuna parte e nessuno le vede da fuori.
+   Le risposte arrivano in bacheca in due modi.
 
-   Il gioco si conduce da un solo schermo, quello proiettato: i gruppi
-   leggono il caso e discutono, poi dettano la risposta e la si
-   registra qui. Così i testi scritti dai ragazzi non escono dalla
-   scuola.
+   1. Registrate sullo schermo proiettato. Restano su QUESTO computer,
+      nella memoria del browser, e non escono da qui.
+
+   2. Inviate dai telefoni dei gruppi. Questo succede solo se nel file
+      foglio-google.txt, qui accanto, c'è l'indirizzo del Foglio Google
+      delle risposte. Il telefono manda la risposta al foglio, e lo
+      schermo proiettato, ogni pochi secondi, va a leggere lì le
+      risposte della sua partita. Il foglio sta nell'account Google
+      della scuola: come metterlo in piedi è spiegato in
+      foglio-google/ISTRUZIONI.md.
+
+   Se il file è vuoto, il gioco funziona come prima: dal telefono si
+   legge e si cerca, e la risposta si detta all'insegnante.
 
    La versione consegnata usava invece un servizio esterno, con la sua
    chiave scritta qui dentro. Su un sito pubblico quella chiave sarebbe
    stata leggibile da chiunque, e la bacheca scrivibile e cancellabile
-   da chiunque: per questo è stata tolta.
+   da chiunque: per questo è stata tolta. Il Foglio Google non ha
+   bisogno di chiavi, e da fuori non si può né cancellare né
+   modificare niente.
    ------------------------------------------------------------------ */
 
 const BACHECA_STORAGE = 'liceo-digitale-bacheca-regolamento';
+
+/* L'indirizzo del Foglio Google, letto da foglio-google.txt. Resta
+   vuoto se il file è vuoto, o se l'indirizzo non ha la forma giusta. */
+let indirizzoFoglio = '';
+
+async function leggiIndirizzoFoglio(){
+  try{
+    const r = await fetch('foglio-google.txt', {cache:'no-store'});
+    if(!r.ok) return;
+    const righe = (await r.text()).split(/\r?\n/)
+      .map(function(riga){ return riga.trim(); })
+      .filter(function(riga){ return riga && riga.charAt(0) !== '#'; });
+    const indirizzo = righe[0] || '';
+    /* Si accetta solo un indirizzo di Apps Script: se per sbaglio nel
+       file finisce altro, le risposte non partono verso posti strani. */
+    if(/^https:\/\/script\.google\.com\/[A-Za-z0-9_\-\/.]+\/exec$/.test(indirizzo)){
+      indirizzoFoglio = indirizzo;
+    }
+  }catch(e){
+    /* Senza il file il gioco funziona come prima. */
+  }
+}
+
+/* IL CODICE DELLA PARTITA
+   Sei caratteri, inventati a caso da questo computer e messi dentro al
+   codice QR. Le risposte dei telefoni arrivano con il codice, e la
+   bacheca mostra solo quelle del suo. Reimpostando il gioco si cambia
+   codice, e le risposte della partita prima spariscono dalla bacheca
+   (nel foglio restano). Mancano 0, O, 1 e I, che si confondono. */
+const PARTITA_STORAGE = 'liceo-digitale-regolamento-partita';
+const LETTERE_PARTITA = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const FORMA_PARTITA = /^[A-HJ-NP-Z2-9]{6}$/;
+
+function nuovaPartita(){
+  const casuali = new Uint32Array(6);
+  crypto.getRandomValues(casuali);
+  let codice = '';
+  casuali.forEach(function(n){ codice += LETTERE_PARTITA.charAt(n % LETTERE_PARTITA.length); });
+  try{ localStorage.setItem(PARTITA_STORAGE, codice); }catch(e){}
+  return codice;
+}
+
+/* Sul telefono il codice non si inventa: arriva dal codice QR, in
+   fondo all'indirizzo (?gruppi&partita=...). */
+const PARTITA_DAL_QR = new URLSearchParams(location.search).get('partita') || '';
+
+function codicePartita(){
+  if(FORMA_PARTITA.test(PARTITA_DAL_QR)) return PARTITA_DAL_QR;
+  try{
+    const salvato = localStorage.getItem(PARTITA_STORAGE);
+    if(salvato && FORMA_PARTITA.test(salvato)) return salvato;
+  }catch(e){}
+  return nuovaPartita();
+}
+
+/* Le risposte arrivate dai telefoni, lette dal foglio. Se il foglio
+   non risponde si tengono quelle lette l'ultima volta, e si segnala. */
+let risposteDalFoglio = [];
+let foglioNonRisponde = false;
+let letturaInCorso = false;
+
+async function leggiRisposteDalFoglio(){
+  if(!indirizzoFoglio || letturaInCorso) return;
+  letturaInCorso = true;
+  try{
+    const r = await fetch(indirizzoFoglio + '?partita=' + encodeURIComponent(codicePartita()));
+    const dati = await r.json();
+    if(!dati.ok) throw new Error(dati.errore);
+    risposteDalFoglio = dati.risposte
+      .filter(function(x){ return CASES[x.caso]; })
+      .map(function(x){ return {
+        groupName: x.gruppo,
+        caseId: x.caso,
+        caseTitle: CASES[x.caso].title,
+        elapsedSeconds: x.secondi,
+        sanzione: x.sanzione, organo: x.organo, procedura: x.procedura, perche: x.perche,
+        submittedAt: x.arrivata
+      }; });
+    foglioNonRisponde = false;
+  }catch(e){
+    console.error('Errore lettura dal foglio', e);
+    foglioNonRisponde = true;
+  }finally{
+    letturaInCorso = false;
+  }
+}
+
+/* Dal telefono di un gruppo: manda la risposta al foglio. Restituisce
+   vero se il foglio l'ha ricevuta. Il tipo "text/plain" non è un
+   errore: è quello che Google accetta da una pagina di un altro sito. */
+async function inviaAlFoglio(risposta){
+  try{
+    const r = await fetch(indirizzoFoglio, {
+      method: 'POST',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(risposta)
+    });
+    const dati = await r.json();
+    return dati.ok === true;
+  }catch(e){
+    console.error('Errore invio al foglio', e);
+    return false;
+  }
+}
 
 async function getBoard(){
   try{
@@ -660,6 +774,7 @@ function initCaseForm(caseId){
     <div class="card">
       <h3>Nome del gruppo</h3>
       <input type="text" id="groupNameInput-${caseId}" placeholder="es. Gruppo Azzurro" maxlength="40">
+      ${MODO_GRUPPI ? `<p class="hint" style="margin-top:-4px;">Un nome di fantasia: non scrivete i vostri nomi.</p>` : ''}
       <button class="primary" onclick="startCase('${caseId}')">Apri il caso e avvia il cronometro</button>
     </div>
   `;
@@ -703,7 +818,7 @@ function startCase(caseId){
       <textarea id="ansProcedura-${caseId}" placeholder="Quali passaggi prevede il regolamento?"></textarea>
       <label>Perché (il principio che la giustifica)</label>
       <textarea class="perche" id="ansPerche-${caseId}" placeholder="Collegate la sanzione al principio educativo dello Statuto o del Regolamento: perché è proporzionata, cosa vuole ottenere, che valore protegge?"></textarea>
-      <button class="primary" onclick="submitAnswer('${caseId}')">Ho finito: invia la risposta</button>
+      <button class="primary" id="invia-${caseId}" onclick="submitAnswer('${caseId}')">Ho finito: invia la risposta</button>
       <button class="ghost" onclick="initCaseForm('${caseId}')">Cambia gruppo (senza inviare)</button>
     </div>
   `;
@@ -736,9 +851,30 @@ async function submitAnswer(caseId){
   }
 
   const st = caseState[caseId];
-  clearInterval(st.timerInterval);
   const elapsedSeconds = Math.floor((Date.now() - st.startTime)/1000);
 
+  /* Dal telefono la risposta va al Foglio Google. Se non parte, il
+     modulo resta com'è, con il testo già scritto, e si può riprovare. */
+  if(MODO_GRUPPI){
+    const pulsante = document.getElementById('invia-'+caseId);
+    pulsante.disabled = true;
+    pulsante.textContent = 'Invio in corso...';
+    const arrivata = await inviaAlFoglio({
+      partita: codicePartita(), caso: caseId, gruppo: st.group,
+      secondi: elapsedSeconds, sanzione, organo, procedura, perche
+    });
+    if(!arrivata){
+      pulsante.disabled = false;
+      pulsante.textContent = 'Ho finito: invia la risposta';
+      showToast('La risposta non è partita. Controllate la connessione e riprovate.');
+      return;
+    }
+    clearInterval(st.timerInterval);
+    mostraInviata(caseId, elapsedSeconds);
+    return;
+  }
+
+  clearInterval(st.timerInterval);
   const board = await getBoard();
   board.push({
     groupName: st.group,
@@ -764,20 +900,42 @@ async function submitAnswer(caseId){
   `;
 }
 
+/* Sul telefono, dopo l'invio: la bacheca da qui non si vede, sta sullo
+   schermo proiettato. */
+function mostraInviata(caseId, elapsedSeconds){
+  const m = Math.floor(elapsedSeconds/60).toString().padStart(2,'0');
+  const s = (elapsedSeconds%60).toString().padStart(2,'0');
+  document.getElementById('view-'+caseId).innerHTML = `
+    <div class="card">
+      <h2>Risposta inviata</h2>
+      <p style="font-size:14px; color:var(--text)">Tempo impiegato: <strong style="color:var(--amber)">${m}:${s}</strong></p>
+      <p style="font-size:13.5px; color:var(--muted)">La vostra risposta è arrivata sullo schermo della classe. Aspettate che la prof apra la discussione.</p>
+      <button class="ghost" onclick="initCaseForm('${caseId}')">Scrivi un'altra risposta</button>
+    </div>
+  `;
+}
+
 const boardOpenRows = new Set();
 const boardOpenCompares = new Set();
 
 async function renderBoard(){
-  const board = await getBoard();
+  await leggiRisposteDalFoglio();
+  const board = (await getBoard()).concat(risposteDalFoglio);
   const el = document.getElementById('viewBoard');
 
+  /* Se il foglio non risponde lo si dice, ma la bacheca resta: si
+     vedono le risposte già arrivate e quelle registrate qui. */
+  const avviso = indirizzoFoglio && foglioNonRisponde
+    ? `<div class="card"><div class="hint"><strong>Le risposte dai telefoni non arrivano.</strong> Controlla la connessione: la bacheca riprova da sola fra pochi secondi.</div></div>`
+    : '';
+
   if(board.length === 0){
-    el.innerHTML = `<div class="card"><div class="empty">Nessun gruppo ha ancora inviato una risposta.</div></div>`;
+    el.innerHTML = avviso + `<div class="card"><div class="empty">Nessun gruppo ha ancora inviato una risposta.</div></div>`;
     return;
   }
 
   const sorted = [...board].sort((a,b)=>a.submittedAt-b.submittedAt);
-  el.innerHTML = `<div class="card"><h3>Risposte della classe</h3>` +
+  el.innerHTML = avviso + `<div class="card"><h3>Risposte della classe</h3>` +
     sorted.map((r,i)=>{
       const m = Math.floor(r.elapsedSeconds/60).toString().padStart(2,'0');
       const s = (r.elapsedSeconds%60).toString().padStart(2,'0');
@@ -829,8 +987,13 @@ function escapeHtml(str){
 }
 
 async function resetGame(){
-  showConfirmModal('Sicura di voler azzerare la bacheca? Verranno cancellate tutte le risposte inviate finora.', async function(){
+  const messaggio = indirizzoFoglio
+    ? 'Sicura di voler azzerare la bacheca? Le risposte di questa partita spariscono dalla bacheca (nel Foglio Google restano), e cambia il codice QR: i gruppi dovranno inquadrarlo di nuovo.'
+    : 'Sicura di voler azzerare la bacheca? Verranno cancellate tutte le risposte inviate finora.';
+  showConfirmModal(messaggio, async function(){
     await setBoard([]);
+    nuovaPartita();
+    risposteDalFoglio = [];
     boardOpenRows.clear();
     boardOpenCompares.clear();
     ['c1','c2','c3','c4','c5'].forEach(function(id){
@@ -897,24 +1060,31 @@ function renderInfrazioni(){
 
    La scheda "Inquadra col telefono" mostra un codice QR da proiettare. Chi lo
    inquadra apre la stessa pagina con ?gruppi in fondo all'indirizzo, e
-   in quel caso la pagina si presenta diversa: si vedono il testo dei
-   casi e tutto l'archivio dei documenti, e spariscono il modulo di
-   risposta, il cronometro e la bacheca.
+   in quel caso la pagina si presenta diversa: non ci sono la bacheca
+   e il codice QR, che servono solo allo schermo proiettato.
 
-   PERCHÉ LA VERSIONE DEI GRUPPI NON PUÒ INVIARE NIENTE
-   Le risposte stanno nella memoria del browser di un solo computer,
-   quello proiettato. Fra un telefono e la LIM non c'è nessun
-   collegamento. Se lasciassimo il modulo di risposta anche sui
-   telefoni, i ragazzi premerebbero "invia" e la risposta resterebbe
-   nel loro telefono: in cattedra non arriverebbe niente, e nessuno se
-   ne accorgerebbe. Per questo la versione dei gruppi serve solo a
-   leggere e cercare: la risposta si detta a voce.
+   DUE MODI, A SECONDA DEL FOGLIO GOOGLE
+   - Con l'indirizzo del foglio in foglio-google.txt, il codice QR
+     porta anche il codice della partita, e sul telefono c'è il modulo
+     di risposta con il cronometro, come sullo schermo proiettato. La
+     risposta va al foglio, e da lì in bacheca.
+   - Senza, la versione dei gruppi serve solo a leggere e cercare: la
+     risposta si detta a voce. Il modulo non c'è apposta: la risposta
+     resterebbe nel telefono, in cattedra non arriverebbe niente, e
+     nessuno se ne accorgerebbe.
    ================================================================== */
 
 const MODO_GRUPPI = new URLSearchParams(location.search).has('gruppi');
 
+/* Il telefono può inviare solo se c'è il foglio e se il codice QR
+   portava il codice della partita. */
+function invioDalTelefono(){
+  return indirizzoFoglio !== '' && FORMA_PARTITA.test(PARTITA_DAL_QR);
+}
+
 function indirizzoPerGruppi(){
-  return location.origin + location.pathname + '?gruppi';
+  const base = location.origin + location.pathname + '?gruppi';
+  return indirizzoFoglio ? base + '&partita=' + codicePartita() : base;
 }
 
 function renderGruppi(){
@@ -980,20 +1150,41 @@ function mostraCasoPerGruppi(caseId){
 function preparaModoGruppi(){
   document.getElementById('tabBoard').style.display = 'none';
   document.getElementById('tabGruppi').style.display = 'none';
-  document.querySelector('.sub').textContent =
-    'Leggete il caso del vostro gruppo e cercate la risposta nei documenti della scuola. ' +
-    'Quando l\'avete trovata, dettatela all\'insegnante: la registra lei sullo schermo della classe.';
-  document.getElementById('footerNote').textContent =
-    'versione per i gruppi · da qui si legge e si cerca, non si invia';
+  if(invioDalTelefono()){
+    document.querySelector('.sub').textContent =
+      'Leggete il caso del vostro gruppo e cercate la risposta nei documenti della scuola. ' +
+      'Quando l\'avete trovata, inviatela da qui: arriva sullo schermo della classe.';
+    document.getElementById('footerNote').textContent =
+      'versione per i gruppi · la risposta arriva sullo schermo della classe';
+  } else {
+    document.querySelector('.sub').textContent =
+      'Leggete il caso del vostro gruppo e cercate la risposta nei documenti della scuola. ' +
+      'Quando l\'avete trovata, dettatela all\'insegnante: la registra lei sullo schermo della classe.';
+    document.getElementById('footerNote').textContent =
+      'versione per i gruppi · da qui si legge e si cerca, non si invia';
+  }
 }
 
-if(MODO_GRUPPI){
-  preparaModoGruppi();
-  ['c1','c2','c3','c4','c5'].forEach(mostraCasoPerGruppi);
-} else {
-  ['c1','c2','c3','c4','c5'].forEach(initCaseForm);
-  initPolling();
+/* Sullo schermo proiettato, con il foglio attivo, la nota in fondo non
+   dice più che le risposte restano su questo computer. */
+function aggiornaNotaPiede(){
+  if(!indirizzoFoglio) return;
+  const nota = document.getElementById('notaRisposte');
+  if(nota) nota.remove();
 }
+
+/* Si parte dopo aver letto foglio-google.txt: da lì dipende che cosa
+   si vede sul telefono. */
+leggiIndirizzoFoglio().then(function(){
+  if(MODO_GRUPPI){
+    preparaModoGruppi();
+    ['c1','c2','c3','c4','c5'].forEach(invioDalTelefono() ? initCaseForm : mostraCasoPerGruppi);
+  } else {
+    ['c1','c2','c3','c4','c5'].forEach(initCaseForm);
+    aggiornaNotaPiede();
+    initPolling();
+  }
+});
 </script>
 
 <script>Tema.interruttore("interruttore-tema");</script>
