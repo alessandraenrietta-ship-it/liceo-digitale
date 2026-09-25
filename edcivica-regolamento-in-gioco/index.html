@@ -777,7 +777,7 @@ async function renderBoard(){
   }
 
   const sorted = [...board].sort((a,b)=>a.submittedAt-b.submittedAt);
-  el.innerHTML = qrHtml + `<div class="card"><h3>Risposte della classe</h3>` +
+  el.innerHTML = `<div class="card"><h3>Risposte della classe</h3>` +
     sorted.map((r,i)=>{
       const m = Math.floor(r.elapsedSeconds/60).toString().padStart(2,'0');
       const s = (r.elapsedSeconds%60).toString().padStart(2,'0');
