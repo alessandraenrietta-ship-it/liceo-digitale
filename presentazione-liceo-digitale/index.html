@@ -631,7 +631,18 @@ body.recording, body.recording > * { overflow: hidden; }
      ritardo, e va bene cosi'. */
   function suona(){
     try{ track.currentTime = t/1000; }catch(e){}
-    track.play().catch(function(){});
+    track.play().catch(function(err){
+      /* Aggiunto per il sito Liceo digitale: se il browser non lascia
+         partire la musica da sola (succede quando la pagina si apre e
+         nessuno ha ancora cliccato lì dentro), il video va avanti
+         muto e il pulsante dice "Musica: off". Basta premerlo per
+         sentirla. */
+      if (err && err.name === "NotAllowedError" && window.self === window.top) {
+        muted = true;
+        track.muted = true;
+        document.getElementById("mute").textContent = "Musica: off";
+      }
+    });
   }
 
   function seek(ms){
@@ -674,6 +685,23 @@ body.recording, body.recording > * { overflow: hidden; }
 
   render();
 
+  /* ---------- Aggiunto per il sito Liceo digitale: la pagina intera ----------
+     Un clic sul video lo fa partire o lo mette in pausa, come in
+     qualsiasi lettore video: prima bisognava trovare il pulsante
+     "Riproduci" qui sotto.
+     E se si arriva qui cliccando il video nella pagina iniziale
+     (l'indirizzo finisce con #avvia), la presentazione parte subito
+     invece di restare ferma all'inizio. */
+  if (window.self === window.top) {
+    stage.style.cursor = "pointer";
+    stage.addEventListener("click", function(){ playing ? pause() : play(); });
+
+    if (location.hash === "#avvia") {
+      try { history.replaceState(null, "", location.pathname + location.search); } catch(e){}
+      play();
+    }
+  }
+
   /* ---------- Aggiunto per il sito Liceo digitale ----------
      Se la presentazione sta dentro al riquadro della pagina iniziale
      (cioè dentro una cornice), si vede solo il video: parte da sola,
@@ -696,7 +724,8 @@ body.recording, body.recording > * { overflow: hidden; }
     var palco = document.getElementById("stage");
     palco.title = "Apri la presentazione";
     palco.addEventListener("click", function () {
-      window.top.location.href = location.href;
+      /* #avvia dice alla pagina intera di partire subito. */
+      window.top.location.href = location.href.split("#")[0] + "#avvia";
     });
 
     /* Il tasto del suono sta in alto a destra: misurando tutte e otto
