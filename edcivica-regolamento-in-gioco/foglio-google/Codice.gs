@@ -1,3 +1,8 @@
+/** @OnlyCurrentDoc */
+/* La riga qui sopra dice a Google che il programma tocca soltanto il
+   foglio a cui e' collegato, e nessun altro file dell'account. Cosi',
+   quando chiede il permesso, Google chiede solo quello. */
+
 /**
  * IL REGOLAMENTO IN GIOCO: LE RISPOSTE DAI TELEFONI
  * Parte che gira sul server di Google (Apps Script), collegata a un
