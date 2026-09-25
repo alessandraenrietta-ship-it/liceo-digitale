@@ -60,8 +60,7 @@ DA COMPILARE | Informatica | docenti | informatica-DACOMPILARE | DA COMPILARE
 Aureolissima - Punti Paradiso | Religione cattolica | docenti | religione-aureolissima | Gioco a punti per la classe: il docente assegna i Punti Paradiso, gli studenti li chiedono e li guadagnano con quiz e domande a sorpresa. Nomi veri non servono: si usano nickname. Tutto resta sul computer di chi la usa.
 Il Regolamento in Gioco | Educazione civica | entrambi | edcivica-regolamento-in-gioco | Gioco a squadre sul regolamento d'istituto: cinque casi da risolvere cercando sanzione, organo competente e procedura, con cronometro e bacheca delle risposte. Si conduce dallo schermo proiettato.
 
-# Riga non confermata: da togliere se la disciplina non viene coperta.
-DA COMPILARE | Diritto | docenti | diritto-DACOMPILARE | DA COMPILARE
+Diritto in pratica | Diritto | docenti | diritto-in-pratica | Bacheca con quattro attività: per il primo anno la piramide delle fonti e che cosa si può fare a ogni età, per il secondo anno il viaggio di una legge e i compiti degli organi dello Stato.
 
 
 # STRUMENTI DI LAVORO
