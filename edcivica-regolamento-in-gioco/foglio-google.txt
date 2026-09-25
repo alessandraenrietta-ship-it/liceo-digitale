@@ -22,3 +22,4 @@
 # Per tornare come prima basta cancellare l'indirizzo.
 # ==================================================================
 
+https://script.google.com/macros/s/AKfycbxmuAtPhy0FSvhPc8THyP7AdtJdGAnT5eyv0OSXyz9UorXMn6QyTa6i1VyTc717ziM/exec
