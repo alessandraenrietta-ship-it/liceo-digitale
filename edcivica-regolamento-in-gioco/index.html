@@ -14,8 +14,10 @@
      loro. I nomi restano quelli di prima per non riscrivere tutto il
      foglio di stile del gioco. */
   :root{
-    --surface: var(--fondo-lettura);
-    --surface-2: var(--fondo-lettura);
+    /* Il fondo dei riquadri: il bianco delle pagine a fasce, al posto
+       del crema. Nel tema scuro fasce.css lo fa diventare blu scuro. */
+    --surface: var(--carta-fascia);
+    --surface-2: var(--carta-fascia);
     --line: var(--verde);
     --accent: var(--verde);
     --accent-dim: var(--teal);
@@ -26,8 +28,18 @@
     --radius: var(--raggio);
     /* Fondo delle caselle di testo e dei blocchi di risposta: prima
        questi due nomi non erano definiti, e il browser li ignorava. */
-    --bg: var(--fondo-lettura);
-    --bg-grad: var(--fondo-lettura);
+    --bg: var(--carta-fascia);
+    --bg-grad: var(--carta-fascia);
+  }
+
+  /* Sopra al bianco il retino, la trama di pallini delle pagine a
+     fasce: nei riquadri, nelle linguette dei casi, nel cronometro e
+     nelle righe della bacheca. Le caselle dove si scrive restano
+     bianche lisce, perché il testo si legga bene. Il "body" davanti
+     serve perché valga anche sulle regole scritte più sotto. */
+  body .card, body .tab-case, body .tab-main, body .timer, body .board-row{
+    background-image: radial-gradient(var(--retino) 1.2px, transparent 1.3px);
+    background-size: var(--retino-passo) var(--retino-passo);
   }
   *{box-sizing:border-box;}
 
