@@ -86,7 +86,6 @@
     display: flex; flex-wrap: wrap; gap: 0.5rem;
     align-items: center; justify-content: space-between; margin-bottom: 1rem;
   }
-  .barra .titolo-settimana { font-weight: bold; font-size: 1.05rem; }
 
   /* I pulsanti sono fatti come quelli del resto del sito: verde pieno,
      scritta bianca in grassetto, angoli da 10px, e il teal quando ci
@@ -198,7 +197,6 @@
 
   <div class="barra">
     <button type="button" id="indietro">&larr; Settimana precedente</button>
-    <span class="titolo-settimana" id="titolo-settimana"></span>
     <button type="button" id="avanti">Settimana successiva &rarr;</button>
   </div>
 
@@ -517,7 +515,6 @@
       return;
     }
 
-    elemento('titolo-settimana').textContent = 'Settimana dal ' + s.giorni[0].leggibile;
 
     s.giorni.forEach(function (giorno) {
       var blocco = nuovo('div', 'giorno' + (giorno.passato ? ' passato' : ''));
