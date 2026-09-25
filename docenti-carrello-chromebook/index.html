@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prenotazione Chromebook</title>
+<style>
+  :root {
+    color-scheme: light;
+    --verde: #3E883B;
+    --verde-scuro: #026535;
+    --blu: #1F5FA8;
+    --carta: #FFFFFF;
+    --fondo: #F3F5F2;
+    --testo: #1C2B22;
+    --tenue: #5A6A60;
+    --bordo: #D3DBD5;
+    --occupata: #EEF3F8;
+    --avviso: #FFF4D6;
+    --avviso-bordo: #C9962B;
+    --rosso: #A32020;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0 0 2rem;
+    background: var(--fondo);
+    color: var(--testo);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .prototipo {
+    background: var(--avviso);
+    border-bottom: 2px solid var(--avviso-bordo);
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  .prototipo strong { text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* Il ritorno alla pagina iniziale, come in tutte le altre pagine
+     del sito: la freccia dentro al cerchio, in alto a sinistra. */
+  .ritorno { margin: 0; padding: 8px 16px 0; font-size: 16px; }
+  .ritorno a {
+    display: inline-flex; align-items: center; gap: .6em;
+    min-height: 44px; font-weight: 700; text-decoration: none;
+    color: var(--verde-scuro);
+  }
+  .ritorno .freccia {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; border: 2px solid currentColor;
+    border-radius: 50%; font-size: 1.2rem; line-height: 1;
+    background: var(--carta);
+  }
+  .ritorno a:hover { text-decoration: underline; }
+  .ritorno a:hover .freccia { background: var(--verde-scuro); color: var(--carta); }
+
+  header {
+    background: var(--verde-scuro);
+    color: #FFFFFF;
+    padding: 1rem;
+  }
+  header h1 { margin: 0; font-size: 1.35rem; }
+  header p { margin: 0.25rem 0 0; font-size: 0.9rem; opacity: 0.9; }
+
+  .identita {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
+    margin-top: 0.6rem; font-size: 0.9rem;
+  }
+  .identita select {
+    font-family: inherit; font-size: 0.95rem; min-height: 40px;
+    padding: 0.3rem 0.4rem; border-radius: 6px; border: 2px solid #FFFFFF;
+    background: #FFFFFF; color: var(--testo); max-width: 100%;
+  }
+
+  main { padding: 1rem; max-width: 1100px; margin: 0 auto; }
+
+  .barra {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    align-items: center; justify-content: space-between; margin-bottom: 1rem;
+  }
+  .barra .titolo-settimana { font-weight: bold; font-size: 1.05rem; }
+
+  button {
+    font-family: inherit; font-size: 1rem; min-height: 44px;
+    padding: 0.5rem 0.9rem; border: 2px solid var(--verde-scuro);
+    border-radius: 6px; background: var(--carta); color: var(--verde-scuro); cursor: pointer;
+  }
+  button:hover { background: #EAF2EA; }
+  button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid var(--blu); outline-offset: 2px; }
+  button[disabled] { opacity: 0.5; cursor: default; }
+  button.primario { background: var(--verde); border-color: var(--verde); color: #FFFFFF; }
+  button.primario:hover { background: var(--verde-scuro); border-color: var(--verde-scuro); }
+  button.discreto { border-color: var(--bordo); color: var(--tenue); }
+  button.pericolo { border-color: var(--rosso); color: var(--rosso); }
+
+  .messaggio {
+    margin: 0 0 1rem; padding: 0.7rem 0.9rem; border-radius: 6px;
+    border-left: 6px solid var(--verde); background: #EAF2EA;
+  }
+  .messaggio.errore { border-left-color: var(--rosso); background: #FBECEC; }
+  .messaggio[hidden] { display: none; }
+
+  .settimana {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.8rem; align-items: start;
+  }
+  .giorno { background: var(--carta); border: 1px solid var(--bordo); border-radius: 8px; overflow: hidden; }
+  .giorno > h2 { margin: 0; padding: 0.6rem 0.8rem; background: var(--verde); color: #FFFFFF; font-size: 1rem; }
+  .giorno.passato > h2 { background: var(--tenue); }
+
+  .ora {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
+    justify-content: space-between; padding: 0.55rem 0.8rem; border-top: 1px solid var(--bordo);
+  }
+  .ora:first-of-type { border-top: 0; }
+  .ora.presa { background: var(--occupata); }
+  .quando { font-size: 0.9rem; color: var(--tenue); white-space: nowrap; }
+  .quando strong { display: block; color: var(--testo); font-size: 1rem; }
+  .chi { flex: 1 1 8rem; min-width: 0; }
+  .chi .classe { font-weight: bold; color: var(--blu); }
+  .chi .docente { display: block; font-size: 0.82rem; color: var(--tenue); overflow-wrap: anywhere; }
+  .libera-testo { color: var(--tenue); font-size: 0.9rem; }
+  .ora button { min-height: 40px; padding: 0.35rem 0.7rem; font-size: 0.92rem; }
+
+  .modulo {
+    flex: 1 1 100%; border-top: 1px dashed var(--bordo); margin-top: 0.4rem; padding-top: 0.6rem;
+    display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: flex-end;
+  }
+  .campo { display: flex; flex-direction: column; gap: 0.2rem; }
+  .campo label { font-size: 0.82rem; color: var(--tenue); }
+  .campo select, .campo input {
+    font-family: inherit; font-size: 1rem; min-height: 44px; padding: 0.4rem;
+    border: 2px solid var(--bordo); border-radius: 6px; background: #FFFFFF; color: var(--testo);
+  }
+  .campo input { width: 5.5rem; }
+
+  .nota { color: var(--tenue); font-size: 0.85rem; margin: 1rem 0 0; }
+  .caricamento { padding: 1rem; color: var(--tenue); }
+
+  /* Il registro: la stessa cosa che nella versione vera sta nella scheda Prenotazioni del foglio. */
+  .registro { margin-top: 2rem; }
+  .registro h2 { font-size: 1.1rem; margin: 0 0 0.3rem; }
+  .registro p { margin: 0 0 0.6rem; color: var(--tenue); font-size: 0.9rem; }
+  .tabella { overflow-x: auto; background: var(--carta); border: 1px solid var(--bordo); border-radius: 8px; }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 0.9rem; }
+  th, td { text-align: left; padding: 0.45rem 0.7rem; border-bottom: 1px solid var(--bordo); }
+  th { background: #EAF2EA; font-weight: bold; }
+  tr:last-child td { border-bottom: 0; }
+  td.num { font-variant-numeric: tabular-nums; }
+  .stato { display: inline-block; padding: 0 0.5rem; border-radius: 999px; font-size: 0.8rem; font-weight: bold; }
+  .stato.confermata { background: #DDEFDC; color: var(--verde-scuro); }
+  .stato.annullata { background: #F0E2E2; color: var(--rosso); }
+
+  @media (max-width: 480px) {
+    .ora { align-items: flex-start; }
+    .chi { flex: 1 1 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="prototipo" role="note">
+  <strong>Prototipo</strong> · Tutti i nomi, gli indirizzi e le classi sono inventati. Le prenotazioni vengono salvate davvero, ma solo come prova.
+</div>
+
+<p class="ritorno"><a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a></p>
+
+<header>
+  <h1>Prenotazione Chromebook</h1>
+  <p id="sottotitolo">Caricamento in corso.</p>
+  <div class="identita">
+    <label for="chi-sono">Stai provando come:</label>
+    <select id="chi-sono"></select>
+  </div>
+</header>
+
+<main>
+  <p class="messaggio" id="messaggio" role="status" hidden></p>
+
+  <div class="barra">
+    <button type="button" id="indietro">&larr; Settimana precedente</button>
+    <span class="titolo-settimana" id="titolo-settimana"></span>
+    <button type="button" id="avanti">Settimana successiva &rarr;</button>
+  </div>
+
+  <p><button type="button" class="discreto" id="oggi">Torna a questa settimana</button></p>
+
+  <div class="settimana" id="settimana">
+    <p class="caricamento">Sto leggendo le prenotazioni.</p>
+  </div>
+
+  <p class="nota" id="nota"></p>
+
+  <section class="registro" aria-labelledby="titolo-registro">
+    <h2 id="titolo-registro">Registro delle prenotazioni</h2>
+    <p>Qui si vede tutto quello che è stato salvato, anche le prenotazioni annullate: annullare non cancella, cambia lo stato.</p>
+    <div class="tabella">
+      <table>
+        <thead><tr><th>Data</th><th>Ora</th><th>Classe</th><th>Chromebook</th><th>Docente</th><th>Stato</th></tr></thead>
+        <tbody id="registro"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ------------------------------------------------------------------
+   SERVER DI PROVA
+   Fa le stesse cose di Codice.gs (legge le impostazioni, costruisce la
+   settimana, prenota, annulla, ricontrolla tutto), ma invece del Foglio
+   Google usa:
+   - il database condiviso della pagina, se è aperta dal link di Claude
+     (così più persone vedono le stesse prenotazioni);
+   - la memoria del browser, se il file è aperto con un doppio clic.
+   ------------------------------------------------------------------ */
+(function () {
+  var IMPOSTAZIONI_DI_PROVA = {
+    disponibili: 30,
+    giorni: [1, 2, 3, 4, 5],
+    ore: [
+      {numero: '1', inizio: '08:00', fine: '09:00'},
+      {numero: '2', inizio: '09:00', fine: '10:00'},
+      {numero: '3', inizio: '10:00', fine: '11:00'},
+      {numero: '4', inizio: '11:00', fine: '12:00'},
+      {numero: '5', inizio: '12:00', fine: '13:00'},
+      {numero: '6', inizio: '13:00', fine: '14:00'}
+    ],
+    classi: [
+      {nome: '1C LD', studenti: 24},
+      {nome: '1B LD', studenti: 22},
+      {nome: '2C LD', studenti: 25}
+    ],
+    docenti: [
+      {email: 'mario.rossi@esempio.it', amministratore: false},
+      {email: 'giulia.bianchi@esempio.it', amministratore: false},
+      {email: 'anna.verdi@esempio.it', amministratore: true}
+    ]
+  };
+
+  var GIORNI = ['domenica','lunedì','martedì','mercoledì','giovedì','venerdì','sabato'];
+  var MESI = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+  function due(n) { return String(n).padStart(2, '0'); }
+  function chiave(d) { return d.getFullYear() + '-' + due(d.getMonth() + 1) + '-' + due(d.getDate()); }
+  function daChiave(c) { var p = c.split('-'); return new Date(+p[0], p[1] - 1, +p[2], 12); }
+  function sommaGiorni(c, n) { var d = daChiave(c); d.setDate(d.getDate() + n); return chiave(d); }
+  function lunediDi(c) { var d = daChiave(c); var g = d.getDay(); d.setDate(d.getDate() - (g === 0 ? 6 : g - 1)); return chiave(d); }
+  function leggibile(c) { var d = daChiave(c); return GIORNI[d.getDay()] + ' ' + d.getDate() + ' ' + MESI[d.getMonth()]; }
+  function oggi() { return chiave(new Date()); }
+  function errore(testo) { var e = new Error(testo); e.message = testo; return e; }
+  function attendi(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  /* ---------- dove si salvano i dati ---------- */
+
+  var archivio = null;
+  var ascoltatori = [];
+  function avvisaTutti() { ascoltatori.forEach(function (f) { try { f(); } catch (e) {} }); }
+
+  function archivioLocale() {
+    var CHIAVE = 'prototipo-carrello-prenotazioni';
+    function leggi() { try { return JSON.parse(localStorage.getItem(CHIAVE) || '[]'); } catch (e) { return memoria; } }
+    function scrivi(righe) { memoria = righe; try { localStorage.setItem(CHIAVE, JSON.stringify(righe)); } catch (e) {} }
+    var memoria = [];
+    window.addEventListener('storage', function (e) { if (e.key === CHIAVE) { avvisaTutti(); } });
+    return {
+      tipo: 'locale',
+      impostazioni: function () { return Promise.resolve(IMPOSTAZIONI_DI_PROVA); },
+      righe: function (dal, al) {
+        return Promise.resolve(leggi().filter(function (r) { return (!dal || r.data >= dal) && (!al || r.data <= al); }));
+      },
+      riga: function (id) { return Promise.resolve(leggi().filter(function (r) { return r.id === id; })[0] || null); },
+      serratura: function () { return Promise.resolve(true); },
+      aggiungi: function (r) {
+        var righe = leggi(); r.id = 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+        righe.push(r); scrivi(righe); setTimeout(avvisaTutti, 0); return Promise.resolve(r.id);
+      },
+      modifica: function (id, campi) {
+        var righe = leggi().map(function (r) { return r.id === id ? Object.assign({}, r, campi) : r; });
+        scrivi(righe); setTimeout(avvisaTutti, 0); return Promise.resolve();
+      }
+    };
+  }
+
+  function archivioCondiviso(db) {
+    var col = db.collection('prenotazioni');
+    var chiSono = 'vista-' + Math.random().toString(36).slice(2);
+    function conId(snap) { return snap.docs.map(function (d) { return Object.assign({id: d.id}, d.data()); }); }
+    col.onSnapshot(function () { avvisaTutti(); }, function () {});
+    return {
+      tipo: 'condiviso',
+      impostazioni: function () {
+        return db.doc('config/impostazioni').get().then(function (s) {
+          return s.exists ? Object.assign({}, IMPOSTAZIONI_DI_PROVA, s.data()) : IMPOSTAZIONI_DI_PROVA;
+        });
+      },
+      righe: function (dal, al) {
+        var q = col;
+        if (dal) { q = q.where('data', '>=', dal); }
+        if (al) { q = q.where('data', '<=', al); }
+        return q.get().then(conId);
+      },
+      riga: function (id) {
+        return col.doc(id).get().then(function (s) { return s.exists ? Object.assign({id: s.id}, s.data()) : null; });
+      },
+      /* Come LockService: una serratura breve sull'ora, poi dentro si ricontrolla. */
+      serratura: function (data, ora) {
+        return db.doc('serrature/' + data + '_' + ora).acquire({holder: chiSono, ttlMs: 8000})
+          .then(function (r) { return r.acquired; });
+      },
+      aggiungi: function (r) { var ref = col.doc(); return ref.set(r).then(function () { return ref.id; }); },
+      modifica: function (id, campi) { return col.doc(id).update(campi); }
+    };
+  }
+
+  function traduciErrore(e) {
+    if (e && e.code === 'invalid_argument') {
+      return errore('Non hai il permesso di salvare su questa pagina. Chiedi a chi l\'ha condivisa di darti il ruolo di Collaboratore.');
+    }
+    if (e && e.code === 'quota_exceeded') { return errore('L\'archivio di prova è pieno.'); }
+    if (e && e.message && !e.code) { return e; }
+    return errore('Salvataggio non riuscito. Controlla la connessione e riprova.');
+  }
+
+  var pronto = (async function () {
+    var c = window.claude;
+    var db = (c && c.use) ? await c.use('db') : null;
+    archivio = db ? archivioCondiviso(db) : archivioLocale();
+    return archivio;
+  })();
+
+  /* ---------- chi sta usando la pagina (finto) ---------- */
+
+  var IO = null;
+  function utente(imp) {
+    var trovato = imp.docenti.filter(function (d) { return d.email === IO; })[0];
+    if (!trovato) { throw errore('Scegli in alto con quale docente di prova vuoi entrare.'); }
+    return trovato;
+  }
+
+  /* ---------- la settimana ---------- */
+
+  function occupata(righe, data, ora) {
+    return righe.filter(function (r) { return r.data === data && String(r.ora) === String(ora) && r.stato === 'confermata'; })[0] || null;
+  }
+
+  async function costruisci(lunedi) {
+    var a = await pronto;
+    var imp = await a.impostazioni();
+    var io = utente(imp);
+    lunedi = lunediDi(lunedi || oggi());
+    var fine = sommaGiorni(lunedi, 6);
+    var righe = await a.righe(lunedi, fine);
+    var o = oggi();
+    var giorni = [];
+    for (var i = 0; i < 7; i += 1) {
+      var data = sommaGiorni(lunedi, i);
+      if (imp.giorni.indexOf(daChiave(data).getDay()) === -1) { continue; }
+      giorni.push({
+        data: data,
+        leggibile: leggibile(data),
+        passato: data < o,
+        caselle: imp.ore.map(function (ora) {
+          var p = occupata(righe, data, ora.numero);
+          var base = {ora: ora.numero, inizio: ora.inizio, fine: ora.fine, passata: data < o};
+          if (!p) { base.libera = true; return base; }
+          return Object.assign(base, {libera: false, id: p.id, classe: p.classe, quanti: p.quanti, docente: p.docente,
+            mia: p.docente === io.email, annullabile: data >= o && (p.docente === io.email || io.amministratore)});
+        })
+      });
+    }
+    return {lunedi: lunedi, precedente: sommaGiorni(lunedi, -7), successiva: sommaGiorni(lunedi, 7), giorni: giorni};
+  }
+
+  /* ---------- le funzioni che la pagina chiama ---------- */
+
+  var server = {
+    avvio: async function (lunedi) {
+      var a = await pronto;
+      var imp = await a.impostazioni();
+      var io = utente(imp);
+      return {email: io.email, amministratore: !!io.amministratore, disponibili: imp.disponibili,
+        classi: imp.classi, oggi: oggi(), settimana: await costruisci(lunedi), condiviso: a.tipo === 'condiviso'};
+    },
+
+    settimana: function (lunedi) { return costruisci(lunedi); },
+
+    /* Tutti i controlli si rifanno qui, come in Codice.gs: la pagina si può sempre manomettere. */
+    prenota: async function (r) {
+      var a = await pronto;
+      var imp = await a.impostazioni();
+      var io = utente(imp);
+      var classe = imp.classi.filter(function (c) { return c.nome === r.classe; })[0];
+      if (!classe) { throw errore('La classe ' + r.classe + ' non è fra quelle ammesse.'); }
+      var quanti = Math.floor(Number(r.quanti));
+      if (!quanti || quanti < 1 || quanti > imp.disponibili) {
+        throw errore('Il numero di Chromebook deve essere fra 1 e ' + imp.disponibili + '.');
+      }
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(r.data)) { throw errore('La data non è valida.'); }
+      if (r.data < oggi()) { throw errore('Non si può prenotare un giorno già passato.'); }
+      if (imp.giorni.indexOf(daChiave(r.data).getDay()) === -1) { throw errore('Quel giorno non c\'è lezione.'); }
+      var ora = imp.ore.filter(function (o) { return String(o.numero) === String(r.ora); })[0];
+      if (!ora) { throw errore('Quell\'ora non esiste.'); }
+
+      var presa = false;
+      for (var tentativo = 0; tentativo < 3 && !presa; tentativo += 1) {
+        presa = await a.serratura(r.data, ora.numero);
+        if (!presa) { await attendi(700); }
+      }
+      if (!presa) { throw errore('Qualcuno sta prenotando proprio adesso. Riprova tra qualche secondo.'); }
+
+      /* Dentro alla serratura si ricontrolla che l'ora sia ancora libera. */
+      var gia = occupata(await a.righe(r.data, r.data), r.data, ora.numero);
+      if (gia) { throw errore('Il carrello è appena stato prenotato da ' + gia.docente + ' per la ' + gia.classe + '.'); }
+
+      await a.aggiungi({
+        data: r.data, ora: ora.numero, classe: classe.nome, quanti: quanti,
+        docente: io.email, stato: 'confermata', inserita: new Date().toISOString(),
+        annullataDa: '', annullataIl: ''
+      });
+      return {messaggio: 'Prenotato: ' + classe.nome + ', ' + quanti + ' Chromebook, ' + leggibile(r.data) + ', ' + ora.numero + 'ª ora.',
+        settimana: await costruisci(r.data)};
+    },
+
+    annulla: async function (id) {
+      var a = await pronto;
+      var imp = await a.impostazioni();
+      var io = utente(imp);
+      var riga = await a.riga(id);
+      if (!riga || riga.stato !== 'confermata') { throw errore('Questa prenotazione non c\'è più o è già stata annullata.'); }
+      if (riga.data < oggi()) { throw errore('Non si annulla una prenotazione di un giorno passato.'); }
+      if (riga.docente !== io.email && !io.amministratore) { throw errore('Puoi annullare solo le tue prenotazioni.'); }
+      await a.modifica(id, {stato: 'annullata', annullataDa: io.email, annullataIl: new Date().toISOString()});
+      return {messaggio: 'Prenotazione annullata. La riga resta nel registro con lo stato "annullata".',
+        settimana: await costruisci(riga.data)};
+    },
+
+    registro: async function () {
+      var a = await pronto;
+      var righe = await a.righe(null, null);
+      return righe.sort(function (x, y) {
+        return (y.data + due(y.ora)).localeCompare(x.data + due(x.ora)) || String(y.inserita).localeCompare(String(x.inserita));
+      }).slice(0, 60);
+    },
+
+    docenti: async function () { var a = await pronto; return (await a.impostazioni()).docenti; },
+    usa: function (email) { IO = email; },
+    ascolta: function (f) { ascoltatori.push(f); }
+  };
+
+  /* Lo stesso modo di chiamare di google.script.run, così la pagina resta quella di Pagina.html. */
+  function esecutore(ok, ko) {
+    var e = {
+      withSuccessHandler: function (f) { return esecutore(f, ko); },
+      withFailureHandler: function (f) { return esecutore(ok, f); }
+    };
+    ['avvio', 'settimana', 'prenota', 'annulla'].forEach(function (nome) {
+      e[nome] = function (arg) {
+        Promise.resolve().then(function () { return server[nome](arg); })
+          .then(function (x) { if (ok) { ok(x); } }, function (err) { if (ko) { ko(traduciErrore(err)); } });
+      };
+    });
+    return e;
+  }
+  window.google = {script: {run: esecutore(null, null)}};
+  window.prototipo = server;
+}());
+</script>
+
+<script>
+  var dati = null;
+  var settimanaMostrata = null;
+  var inCorso = false;
+
+  function elemento(id) { return document.getElementById(id); }
+
+  function mostraMessaggio(testo, errore) {
+    var p = elemento('messaggio');
+    p.textContent = testo;
+    p.className = 'messaggio' + (errore ? ' errore' : '');
+    p.hidden = !testo;
+    if (testo) { p.scrollIntoView({ block: 'nearest' }); }
+  }
+
+  function occupato(si) {
+    inCorso = si;
+    var bottoni = document.querySelectorAll('button');
+    for (var i = 0; i < bottoni.length; i += 1) { bottoni[i].disabled = si; }
+  }
+
+  function nuovo(tag, classe, testo) {
+    var e = document.createElement(tag);
+    if (classe) { e.className = classe; }
+    if (testo !== undefined) { e.textContent = testo; }
+    return e;
+  }
+
+  function disegnaSettimana(s) {
+    settimanaMostrata = s;
+    var contenitore = elemento('settimana');
+    contenitore.textContent = '';
+
+    if (!s.giorni.length) {
+      contenitore.appendChild(nuovo('p', 'caricamento', 'In questa settimana non ci sono giorni di lezione.'));
+      return;
+    }
+
+    elemento('titolo-settimana').textContent = 'Settimana dal ' + s.giorni[0].leggibile;
+
+    s.giorni.forEach(function (giorno) {
+      var blocco = nuovo('div', 'giorno' + (giorno.passato ? ' passato' : ''));
+      blocco.appendChild(nuovo('h2', null, giorno.leggibile));
+      giorno.caselle.forEach(function (casella) { blocco.appendChild(disegnaOra(giorno, casella)); });
+      contenitore.appendChild(blocco);
+    });
+    disegnaRegistro();
+  }
+
+  function disegnaOra(giorno, casella) {
+    var riga = nuovo('div', 'ora' + (casella.libera ? '' : ' presa'));
+
+    var quando = nuovo('div', 'quando');
+    quando.appendChild(nuovo('strong', null, casella.ora + 'ª ora'));
+    quando.appendChild(document.createTextNode(casella.inizio + ' - ' + casella.fine));
+    riga.appendChild(quando);
+
+    if (casella.libera) {
+      riga.appendChild(nuovo('div', 'chi libera-testo', 'Libera'));
+      if (!casella.passata) {
+        var prenota = nuovo('button', 'primario', 'Prenota');
+        prenota.type = 'button';
+        prenota.addEventListener('click', function () { apriModulo(riga, giorno, casella); });
+        riga.appendChild(prenota);
+      }
+      return riga;
+    }
+
+    var chi = nuovo('div', 'chi');
+    chi.appendChild(nuovo('span', 'classe', casella.classe));
+    chi.appendChild(document.createTextNode(' · ' + casella.quanti + ' Chromebook'));
+    chi.appendChild(nuovo('span', 'docente', casella.docente + (casella.mia ? ' (tu)' : '')));
+    riga.appendChild(chi);
+
+    if (casella.annullabile) {
+      var togli = nuovo('button', 'discreto', 'Annulla');
+      togli.type = 'button';
+      togli.addEventListener('click', function () { chiediAnnullamento(riga, togli, casella); });
+      riga.appendChild(togli);
+    }
+    return riga;
+  }
+
+  function apriModulo(riga, giorno, casella) {
+    var aperti = document.querySelectorAll('.modulo');
+    for (var i = 0; i < aperti.length; i += 1) { aperti[i].remove(); }
+
+    var modulo = nuovo('div', 'modulo');
+
+    var campoClasse = nuovo('div', 'campo');
+    var etichettaClasse = nuovo('label', null, 'Classe');
+    etichettaClasse.htmlFor = 'classe-scelta';
+    var scelta = document.createElement('select');
+    scelta.id = 'classe-scelta';
+    dati.classi.forEach(function (c) {
+      var opzione = document.createElement('option');
+      opzione.value = c.nome;
+      opzione.textContent = c.nome;
+      opzione.dataset.studenti = c.studenti;
+      scelta.appendChild(opzione);
+    });
+    campoClasse.appendChild(etichettaClasse);
+    campoClasse.appendChild(scelta);
+
+    var campoQuanti = nuovo('div', 'campo');
+    var etichettaQuanti = nuovo('label', null, 'Quanti Chromebook');
+    etichettaQuanti.htmlFor = 'quanti-scelti';
+    var quanti = document.createElement('input');
+    quanti.id = 'quanti-scelti';
+    quanti.type = 'number';
+    quanti.min = '1';
+    quanti.max = String(dati.disponibili);
+    quanti.step = '1';
+    quanti.inputMode = 'numeric';
+    campoQuanti.appendChild(etichettaQuanti);
+    campoQuanti.appendChild(quanti);
+
+    function allineaQuanti() {
+      var opzione = scelta.options[scelta.selectedIndex];
+      var studenti = Number(opzione && opzione.dataset.studenti) || 0;
+      quanti.value = String(Math.min(studenti || dati.disponibili, dati.disponibili));
+    }
+    allineaQuanti();
+    scelta.addEventListener('change', allineaQuanti);
+
+    var conferma = nuovo('button', 'primario', 'Conferma la prenotazione');
+    conferma.type = 'button';
+    conferma.addEventListener('click', function () { inviaPrenotazione(giorno, casella, scelta.value, quanti.value); });
+
+    var lascia = nuovo('button', 'discreto', 'Lascia stare');
+    lascia.type = 'button';
+    lascia.addEventListener('click', function () { modulo.remove(); });
+
+    modulo.appendChild(campoClasse);
+    modulo.appendChild(campoQuanti);
+    modulo.appendChild(conferma);
+    modulo.appendChild(lascia);
+    riga.appendChild(modulo);
+    scelta.focus();
+  }
+
+  function inviaPrenotazione(giorno, casella, classe, quanti) {
+    var numero = Math.floor(Number(quanti));
+    if (!numero || numero < 1) { mostraMessaggio('Indica quanti Chromebook userai: almeno uno.', true); return; }
+    if (numero > dati.disponibili) {
+      mostraMessaggio('I Chromebook disponibili sono ' + dati.disponibili + ', quindi non puoi indicarne ' + numero + '.', true);
+      return;
+    }
+    occupato(true);
+    mostraMessaggio('Sto prenotando.', false);
+    google.script.run
+      .withSuccessHandler(function (esito) { occupato(false); mostraMessaggio(esito.messaggio, false); disegnaSettimana(esito.settimana); })
+      .withFailureHandler(function (errore) { occupato(false); mostraMessaggio(errore.message || String(errore), true); ricarica(settimanaMostrata.lunedi); })
+      .prenota({ data: giorno.data, ora: casella.ora, classe: classe, quanti: numero });
+  }
+
+  /* Nella pagina di Claude le finestre di conferma del browser non compaiono:
+     la conferma si fa con un secondo clic sullo stesso pulsante. */
+  function chiediAnnullamento(riga, pulsante, casella) {
+    if (pulsante.dataset.pronto !== 'si') {
+      pulsante.dataset.pronto = 'si';
+      pulsante.className = 'pericolo';
+      pulsante.textContent = 'Sì, annulla la ' + casella.classe;
+      var no = nuovo('button', 'discreto', 'No');
+      no.type = 'button';
+      no.addEventListener('click', function () { disegnaSettimana(settimanaMostrata); });
+      riga.appendChild(no);
+      return;
+    }
+    occupato(true);
+    mostraMessaggio('Sto annullando.', false);
+    google.script.run
+      .withSuccessHandler(function (esito) { occupato(false); mostraMessaggio(esito.messaggio, false); disegnaSettimana(esito.settimana); })
+      .withFailureHandler(function (errore) { occupato(false); mostraMessaggio(errore.message || String(errore), true); ricarica(settimanaMostrata.lunedi); })
+      .annulla(casella.id);
+  }
+
+  function ricarica(lunedi, silenzioso) {
+    if (!silenzioso) { occupato(true); }
+    google.script.run
+      .withSuccessHandler(function (s) { if (!silenzioso) { occupato(false); } disegnaSettimana(s); })
+      .withFailureHandler(function (errore) { if (!silenzioso) { occupato(false); } mostraMessaggio(errore.message || String(errore), true); })
+      .settimana(lunedi);
+  }
+
+  function data(c) { var p = c.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; }
+  function disegnaRegistro() {
+    prototipo.registro().then(function (righe) {
+      var corpo = elemento('registro');
+      corpo.textContent = '';
+      if (!righe.length) {
+        var tr = nuovo('tr'); var td = nuovo('td', null, 'Ancora nessuna prenotazione. Prova a farne una qui sopra.');
+        td.colSpan = 6; tr.appendChild(td); corpo.appendChild(tr); return;
+      }
+      righe.forEach(function (r) {
+        var tr = nuovo('tr');
+        tr.appendChild(nuovo('td', 'num', data(r.data)));
+        tr.appendChild(nuovo('td', 'num', r.ora + 'ª'));
+        tr.appendChild(nuovo('td', null, r.classe));
+        tr.appendChild(nuovo('td', 'num', String(r.quanti)));
+        tr.appendChild(nuovo('td', null, r.docente));
+        var st = nuovo('td'); st.appendChild(nuovo('span', 'stato ' + r.stato, r.stato)); tr.appendChild(st);
+        corpo.appendChild(tr);
+      });
+    }, function () {});
+  }
+
+  function parti() {
+    google.script.run
+      .withSuccessHandler(function (risposta) {
+        dati = risposta;
+        elemento('sottotitolo').textContent = 'Stai prenotando come ' + risposta.email
+          + (risposta.amministratore ? ' (amministratore)' : '')
+          + '. Chromebook disponibili: ' + risposta.disponibili + '.';
+        elemento('nota').textContent = 'Il carrello è uno solo e non si divide: in ogni ora lo può avere una sola classe. '
+          + 'Il numero di Chromebook che indichi serve a chi prepara il carrello, non cambia la disponibilità. '
+          + (risposta.condiviso
+            ? 'Le prenotazioni di prova sono condivise: chi apre questo link vede le stesse.'
+            : 'Le prenotazioni di prova restano salvate solo in questo browser.');
+        disegnaSettimana(risposta.settimana);
+      })
+      .withFailureHandler(function (errore) {
+        elemento('sottotitolo').textContent = 'Non sono riuscito a partire.';
+        elemento('settimana').textContent = '';
+        mostraMessaggio(errore.message || String(errore), true);
+      })
+      .avvio(settimanaMostrata ? settimanaMostrata.lunedi : null);
+  }
+
+  elemento('indietro').addEventListener('click', function () { if (!inCorso) { ricarica(settimanaMostrata.precedente); } });
+  elemento('avanti').addEventListener('click', function () { if (!inCorso) { ricarica(settimanaMostrata.successiva); } });
+  elemento('oggi').addEventListener('click', function () { if (!inCorso) { ricarica(null); } });
+
+  /* Scelta del docente di prova: serve a provare i permessi (solo le proprie, o tutte per l'amministratore). */
+  prototipo.docenti().then(function (docenti) {
+    var sel = elemento('chi-sono');
+    var salvato = null;
+    try { salvato = localStorage.getItem('prototipo-carrello-io'); } catch (e) {}
+    docenti.forEach(function (d) {
+      var o = document.createElement('option');
+      o.value = d.email;
+      o.textContent = d.email + (d.amministratore ? ' (amministratore)' : '');
+      sel.appendChild(o);
+    });
+    if (docenti.some(function (d) { return d.email === salvato; })) { sel.value = salvato; }
+    prototipo.usa(sel.value);
+    sel.addEventListener('change', function () {
+      try { localStorage.setItem('prototipo-carrello-io', sel.value); } catch (e) {}
+      prototipo.usa(sel.value);
+      mostraMessaggio('', false);
+      parti();
+    });
+    parti();
+  });
+
+  /* Quando un collega prenota, la settimana si aggiorna da sola. */
+  var attesa = null;
+  prototipo.ascolta(function () {
+    clearTimeout(attesa);
+    attesa = setTimeout(function () {
+      if (!inCorso && settimanaMostrata && !document.querySelector('.modulo') && !document.querySelector('[data-pronto="si"]')) {
+        ricarica(settimanaMostrata.lunedi, true);
+      }
+    }, 400);
+  });
+</script>
+</body>
+</html>
