@@ -640,7 +640,10 @@ async function leggiRisposteDalFoglio(){
     const r = await fetch(indirizzoFoglio + '?partita=' + encodeURIComponent(codicePartita()));
     const dati = await r.json();
     if(!dati.ok) throw new Error(dati.errore);
+    /* Le righe del foglio sono già in ordine di arrivo: se manca l'ora,
+       si usa la posizione, così l'ordine resta giusto. */
     risposteDalFoglio = dati.risposte
+      .map(function(x, i){ if(!x.arrivata) x.arrivata = i + 1; return x; })
       .filter(function(x){ return CASES[x.caso]; })
       .map(function(x){ return {
         groupName: x.gruppo,
@@ -670,9 +673,29 @@ async function inviaAlFoglio(risposta){
       body: JSON.stringify(risposta)
     });
     const dati = await r.json();
-    return dati.ok === true;
+    if(dati.ok === true) return true;
   }catch(e){
     console.error('Errore invio al foglio', e);
+  }
+  /* Quando il programma di Google "dorme" da un po', la prima risposta
+     può arrivare dopo molti secondi, o sbagliata, anche se la riga nel
+     foglio è stata scritta. Prima di dire che non è partita, si guarda
+     nel foglio: se la risposta c'è già, è arrivata. Così i gruppi non
+     la mandano due volte. */
+  return await rispostaGiaNelFoglio(risposta);
+}
+
+async function rispostaGiaNelFoglio(risposta){
+  try{
+    const r = await fetch(indirizzoFoglio + '?partita=' + encodeURIComponent(risposta.partita));
+    const dati = await r.json();
+    if(!dati.ok) return false;
+    return dati.risposte.some(function(x){
+      return x.caso === risposta.caso && x.gruppo === risposta.gruppo &&
+        x.sanzione === risposta.sanzione && x.organo === risposta.organo &&
+        x.procedura === risposta.procedura && x.perche === risposta.perche;
+    });
+  }catch(e){
     return false;
   }
 }
@@ -811,13 +834,13 @@ function startCase(caseId){
     <div class="card">
       <h3>La vostra risposta</h3>
       <label>Sanzione individuata</label>
-      <textarea id="ansSanzione-${caseId}" placeholder="Quale sanzione prevede il regolamento?"></textarea>
+      <textarea maxlength="2000" id="ansSanzione-${caseId}" placeholder="Quale sanzione prevede il regolamento?"></textarea>
       <label>Organo competente</label>
-      <textarea id="ansOrgano-${caseId}" placeholder="Chi decide ed eventualmente interviene?"></textarea>
+      <textarea maxlength="2000" id="ansOrgano-${caseId}" placeholder="Chi decide ed eventualmente interviene?"></textarea>
       <label>Procedura</label>
-      <textarea id="ansProcedura-${caseId}" placeholder="Quali passaggi prevede il regolamento?"></textarea>
+      <textarea maxlength="2000" id="ansProcedura-${caseId}" placeholder="Quali passaggi prevede il regolamento?"></textarea>
       <label>Perché (il principio che la giustifica)</label>
-      <textarea class="perche" id="ansPerche-${caseId}" placeholder="Collegate la sanzione al principio educativo dello Statuto o del Regolamento: perché è proporzionata, cosa vuole ottenere, che valore protegge?"></textarea>
+      <textarea maxlength="2000" class="perche" id="ansPerche-${caseId}" placeholder="Collegate la sanzione al principio educativo dello Statuto o del Regolamento: perché è proporzionata, cosa vuole ottenere, che valore protegge?"></textarea>
       <button class="primary" id="invia-${caseId}" onclick="submitAnswer('${caseId}')">Ho finito: invia la risposta</button>
       <button class="ghost" onclick="initCaseForm('${caseId}')">Cambia gruppo (senza inviare)</button>
     </div>
@@ -858,7 +881,10 @@ async function submitAnswer(caseId){
   if(MODO_GRUPPI){
     const pulsante = document.getElementById('invia-'+caseId);
     pulsante.disabled = true;
-    pulsante.textContent = 'Invio in corso...';
+    /* La prima risposta dopo una pausa può metterci anche mezzo minuto:
+       lo si dice, perché nessuno chiuda la pagina pensando che sia
+       bloccata. */
+    pulsante.textContent = 'Invio in corso... può volerci fino a mezzo minuto';
     const arrivata = await inviaAlFoglio({
       partita: codicePartita(), caso: caseId, gruppo: st.group,
       secondi: elapsedSeconds, sanzione, organo, procedura, perche
