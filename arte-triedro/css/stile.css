@@ -772,7 +772,7 @@ text { font-family: var(--bastoni); }
   align-items: center;
   gap: .6em;
   min-height: 44px;
-  color: var(--accento);
+  color: var(--blu);
   font-weight: 700;
   text-decoration: none;
 }
@@ -792,4 +792,4 @@ text { font-family: var(--bastoni); }
 }
 
 .ritorno a:hover { text-decoration: underline; }
-.ritorno a:hover .freccia { background: var(--accento); color: var(--carta-chiara); }
+.ritorno a:hover .freccia { background: var(--blu); color: var(--carta-chiara); }
