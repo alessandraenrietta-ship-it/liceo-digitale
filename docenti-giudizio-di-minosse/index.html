@@ -796,14 +796,14 @@
     });
   }
 
-  /* ---------- Il suono della caduta ----------
+  /* ---------- Il suono ----------
      Non è un file audio: lo costruisce il browser sul momento, con
      il rumore (il fruscio della radio fra due stazioni) passato per
      dei filtri. Così non c'è niente da scaricare.
-     - Mentre il cartellino precipita: un fruscio cupo che si fa
-       sempre più grave, come qualcosa di pesante che cade nel buio.
-     - Quando tocca il fondo: il rombo delle fiamme che divampano, con
-       qualche scoppiettio.
+     - Mentre gira la coda: un fruscio e un "tac" a ogni passo.
+     - Mentre il cartellino precipita: silenzio.
+     - Quando tocca il fondo: un tonfo, e il rombo delle fiamme che
+       divampano, con qualche scoppiettio.
      I tempi degli scoppiettii seguono un seno, non il caso: in questa
      pagina il caso serve solo per l'estrazione. */
   var NOME_SUONO = "liceo-digitale-minosse-suono";
@@ -849,33 +849,32 @@
     return { sorgente: sorgente, filtro: filtro, volume: volume };
   }
 
-  function suonoCaduta(durataMs) {
+  /* Il tonfo: il cartellino che sbatte sul fondo del baratro. Una
+     nota molto grave che cala di colpo, come un colpo di grancassa,
+     e sopra un fruscio sordo e cortissimo, che è l'urto. */
+  function suonoTonfo() {
     if (!suonoAcceso || !audio) { return; }
     var ora = audio.currentTime;
-    var fine = ora + durataMs / 1000;
 
-    /* Un fruscio cupo e sordo, senza fischi: si fa sempre più grave,
-       come qualcosa di pesante che precipita nel buio. Nessuna nota:
-       solo rumore filtrato che lascia passare i suoni bassi. */
-    var s = fruscioFiltrato("lowpass", 900);
-    s.filtro.Q.value = 0.5;
-    s.filtro.frequency.setValueAtTime(900, ora);
-    s.filtro.frequency.exponentialRampToValueAtTime(140, fine);
-    s.volume.gain.setValueAtTime(0, ora);
-    s.volume.gain.linearRampToValueAtTime(0.9, ora + 0.2);
-    s.volume.gain.linearRampToValueAtTime(1.2, fine - 0.15);
-    s.volume.gain.linearRampToValueAtTime(0.5, fine);
-    s.sorgente.start(ora);
-    s.sorgente.stop(fine + 0.05);
+    var colpo = audio.createOscillator();
+    colpo.type = "sine";
+    colpo.frequency.setValueAtTime(120, ora);
+    colpo.frequency.exponentialRampToValueAtTime(40, ora + 0.3);
+    var volumeColpo = audio.createGain();
+    volumeColpo.gain.setValueAtTime(0, ora);
+    volumeColpo.gain.linearRampToValueAtTime(0.9, ora + 0.005);
+    volumeColpo.gain.exponentialRampToValueAtTime(0.001, ora + 0.45);
+    colpo.connect(volumeColpo);
+    volumeColpo.connect(audio.destination);
+    colpo.start(ora);
+    colpo.stop(ora + 0.5);
 
-    /* Sotto, un brontolio profondo che cresce avvicinandosi al
-       baratro: annuncia le fiamme. */
-    var b = fruscioFiltrato("lowpass", 180);
-    b.filtro.Q.value = 0.5;
-    b.volume.gain.setValueAtTime(0, ora);
-    b.volume.gain.linearRampToValueAtTime(1.5, fine);
-    b.sorgente.start(ora);
-    b.sorgente.stop(fine + 0.05);
+    var urto = fruscioFiltrato("lowpass", 500);
+    urto.volume.gain.setValueAtTime(0, ora);
+    urto.volume.gain.linearRampToValueAtTime(0.6, ora + 0.003);
+    urto.volume.gain.exponentialRampToValueAtTime(0.001, ora + 0.12);
+    urto.sorgente.start(ora);
+    urto.sorgente.stop(ora + 0.15);
   }
 
   /* Un passo della coda, da un'anima alla successiva: un fruscio,
@@ -1328,6 +1327,7 @@
 
     function atterra() {
       caduta = null;
+      suonoTonfo();
       suonoFiamme();
       el.hidden = true;
       el.classList.remove("cresce");
@@ -1352,7 +1352,7 @@
        spostamento a destra e a sinistra è calcolato con un seno, non a
        caso: in questa pagina il caso serve solo per l'estrazione, e
        deve restare l'unico posto in cui si usa. */
-    suonoCaduta(1150);
+    /* Mentre cade non si sente niente: il suono arriva con il tonfo. */
     var scia = setInterval(function () {
       var ora = el.getBoundingClientRect();
       rogo(ora.left + ora.width / 2, ora.top + ora.height * 0.78, 0.85);
