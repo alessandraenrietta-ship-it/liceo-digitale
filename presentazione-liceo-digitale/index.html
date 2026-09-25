@@ -186,6 +186,18 @@ button:focus-visible,#scrub:focus-visible{outline:3px solid var(--wire);outline-
 .ritorno-sito:hover .freccia{background:var(--cream);color:var(--navy)}
 .ritorno-sito:focus-visible{outline:3px solid var(--wire);outline-offset:3px}
 
+/* ---------- Aggiunto per il sito Liceo digitale: comandi sotto il video ----------
+   Anche su schermi larghi ma "quadrati" (la LIM, il tablet, i vecchi
+   monitor 4:3) la barra dei comandi galleggiava sopra la presentazione
+   e ne copriva l'ultimo quarto: la mascotte e frasi come "Nessuna
+   materia sacrificata". Ora la pagina è una colonna: sopra il video,
+   che si rimpicciolisce quanto serve, sotto i comandi, che non lo
+   coprono mai. Sta PRIMA delle regole per gli schermi piccoli, così
+   quelle, che vengono dopo, restano valide. */
+body { display: flex; flex-direction: column; }
+#viewport { flex: 1 1 auto; min-height: 0; height: auto; }
+#hud { position: static; background: #061018; }
+
 /* ---------- Aggiunto per il sito Liceo digitale: schermi piccoli ----------
    Sul telefono la presentazione diventa piccola e i pulsanti vanno a
    capo su piu' righe: la barra dei comandi, che galleggia in fondo allo
@@ -203,6 +215,23 @@ button:focus-visible,#scrub:focus-visible{outline:3px solid var(--wire);outline-
 }
 html:fullscreen #viewport, html:-webkit-full-screen #viewport,
 body.recording #viewport { height: 100vh; height: 100dvh; }
+
+/* A schermo intero il video prende tutto lo schermo e i comandi
+   tornano a galleggiare sopra, ma spariscono da soli dopo tre secondi
+   mentre la presentazione va. Riappaiono muovendo il mouse o toccando
+   lo schermo. */
+html:fullscreen #hud {
+  position: fixed;
+  background: linear-gradient(to top, rgba(4,12,20,.96), rgba(4,12,20,.82) 70%, transparent);
+  transition: opacity .4s ease;
+}
+html:-webkit-full-screen #hud {
+  position: fixed;
+  background: linear-gradient(to top, rgba(4,12,20,.96), rgba(4,12,20,.82) 70%, transparent);
+  transition: opacity .4s ease;
+}
+body.comandi-nascosti #hud { opacity: 0; pointer-events: none; }
+body.comandi-nascosti { cursor: none; }
 
 /* ---------- Aggiunto per il sito Liceo digitale: anteprima ----------
    Quando la presentazione sta dentro al riquadro della pagina
@@ -561,11 +590,31 @@ body.recording, body.recording > * { overflow: hidden; }
     if (!muted) { suona(); }
     last = performance.now();
     requestAnimationFrame(loop);
+    mostraComandi();
   }
   function pause(){
     playing = false; playBtn.textContent = "Riproduci";
     track.pause();
+    mostraComandi();
   }
+
+  /* Aggiunto per il sito Liceo digitale: a schermo intero i comandi si
+     nascondono da soli tre secondi dopo l'ultimo movimento, ma solo
+     mentre la presentazione va. In pausa restano sempre visibili. */
+  var timerComandi = null;
+  function mostraComandi(){
+    document.body.classList.remove("comandi-nascosti");
+    clearTimeout(timerComandi);
+    timerComandi = setTimeout(function(){
+      if (playing && document.fullscreenElement) {
+        document.body.classList.add("comandi-nascosti");
+      }
+    }, 3000);
+  }
+  ["mousemove", "touchstart", "keydown"].forEach(function(evento){
+    document.addEventListener(evento, mostraComandi, {passive: true});
+  });
+  document.addEventListener("fullscreenchange", mostraComandi);
   /* Fa partire la musica dal punto giusto. La prima volta il browser
      deve ancora scaricare il file: parte con qualche istante di
      ritardo, e va bene cosi'. */
