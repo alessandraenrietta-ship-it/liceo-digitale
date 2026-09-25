@@ -74,6 +74,11 @@ Orario e aule | | docenti | docenti-orario-aule | Cerca una classe o un insegnan
 
 Il giudizio di Minosse | | docenti | docenti-giudizio-di-minosse | Estrae chi viene interrogato, da proiettare sulla LIM: Minosse avvolge la coda e manda un'anima nel baratro. Estrazione equa, senza ripetizioni fino a fine giro. Le classi si incollano dal registro e si possono salvare sul proprio computer.
 
+# Prototipo: le prenotazioni restano sul computer di chi prova la
+# pagina. Quando la versione vera sarà pubblicata su Google, questa
+# riga andrà cambiata.
+Prenotazione Chromebook | | docenti | docenti-carrello-chromebook | Prototipo per prenotare il carrello dei Chromebook: si sceglie il giorno e l'ora della settimana, e ogni ora la può avere una classe sola. Nomi, indirizzi e classi sono inventati, e le prenotazioni di prova restano sul computer di chi apre la pagina.
+
 # Il campo disciplina resta vuoto per gli strumenti che non
 # appartengono a una disciplina.
 #
