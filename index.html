@@ -470,10 +470,312 @@
     }
 
     .segnalazioni li { margin-bottom: 0.5em; }
+
+    /* =============================================================
+       GRAFICA A FASCE (prova settembre 2026)
+       La pagina e' divisa in fasce larghe quanto lo schermo, di colori
+       diversi, come nell'anteprima approvata. Tutto quello che segue
+       vale SOLO per questa pagina: le altre pagine del sito restano
+       come sono.
+       ============================================================= */
+
+    /* I colori delle fasce. Sono gli stessi codici di stile.css (il
+       verde, il teal e il blu notte del logo; per lo scuro, i colori
+       del gradiente scuro). Stanno qui perche' in modalita' scura
+       --verde diventa verde chiaro, che come fondo di una fascia non
+       va bene. Se la grafica viene approvata, andranno spostati in
+       stile.css insieme agli altri colori. */
+    :root {
+      --fascia-verde: #026C37;
+      --fascia-teal:  #00596B;
+      --fascia-notte: #00193C;
+      --titolo-grande: "Arial Black", Arial, Helvetica, sans-serif;
+    }
+    html[data-tema="scuro"] {
+      --fascia-verde: #0A2B1D;
+      --fascia-teal:  #072A33;
+      --fascia-notte: #01060F;
+    }
+
+    body.home {
+      padding: 0;
+      background: var(--fascia-notte);
+    }
+
+    .fascia { padding: 3rem var(--spazio); }
+    .fascia-interno { max-width: 72rem; margin: 0 auto; }
+
+    /* La testata */
+    .fascia-testata {
+      padding-top: 0.8rem;
+      padding-bottom: 0.8rem;
+      background: var(--fascia-notte);
+    }
+    .testata-interno {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .marchio {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--titolo-grande);
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      color: var(--testo-su-scuro);
+    }
+    .logo-scuola {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.35rem 0.55rem;
+      border-radius: 12px;
+      background: #FFFFFF;   /* il fondo bianco del logo, uguale nei due temi */
+    }
+    .logo-scuola img { display: block; width: 46px; height: auto; }
+    .fascia-testata .riga-tema { margin: 0; }
+
+    /* La prima fascia: testo a sinistra, video a destra */
+    .fascia-apertura { background: var(--fascia-verde); }
+    .apertura-interno {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+      gap: 2.5rem;
+      align-items: center;
+    }
+    .fascia-apertura .scuola {
+      margin: 0 0 0.8rem;
+      font-size: 0.95rem;
+      font-weight: bold;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--giallo);
+    }
+    .fascia-apertura .titolo-sito {
+      max-width: none;
+      margin: 0 0 1.2rem;
+      font-family: var(--titolo-grande);
+      font-size: clamp(2.4rem, 6vw, 4.4rem);
+      line-height: 0.95;
+      text-align: left;
+      text-transform: uppercase;
+      color: var(--giallo);
+    }
+    .apertura-frase {
+      margin: 0;
+      font-size: 1.15rem;
+      color: var(--testo-su-scuro);
+    }
+    .fascia-apertura .riquadro-video {
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+    .fascia-apertura .anteprima-presentazione {
+      margin: 0;
+      border-radius: 24px;
+    }
+
+    /* La fascia degli ingressi */
+    .fascia-accessi { background: var(--fascia-teal); }
+    .titolo-fascia {
+      margin: 0 0 1.5rem;
+      font-family: var(--titolo-grande);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      text-transform: uppercase;
+      color: var(--giallo);
+    }
+    .accessi {
+      --raggio: 16px;   /* angoli piu' tondi per le caselle qui dentro */
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+    .scheda-accesso {
+      padding: 2rem;
+      border-radius: 28px;
+    }
+    .scheda-accesso > h2 {
+      margin-bottom: 0.4em;
+      font-family: var(--titolo-grande);
+      text-transform: uppercase;
+    }
+    .scheda-frase { margin-bottom: 1.2em; }
+    .scheda-accesso .accesso button {
+      border-radius: 999px;   /* pulsante a pillola */
+      padding-left: 2em;
+      padding-right: 2em;
+    }
+
+    /* Studenti: riquadro verde, titolo e pulsante gialli */
+    .scheda-studenti { background: var(--fascia-verde); color: var(--testo-su-scuro); }
+    .scheda-studenti > h2,
+    .scheda-studenti .messaggio-errore { color: var(--giallo); }
+    .scheda-studenti label { color: var(--testo-su-scuro); }
+    .scheda-studenti .accesso button { background: var(--giallo); color: var(--blu-notte); }
+    .scheda-studenti .accesso button:hover { background: var(--testo-su-scuro); }
+
+    /* Docenti: riquadro giallo, titolo e pulsante verdi */
+    .scheda-docenti { background: var(--giallo); color: var(--blu-notte); }
+    .scheda-docenti > h2 { color: var(--fascia-verde); }
+    .scheda-docenti label,
+    .scheda-docenti .messaggio-errore { color: var(--blu-notte); }
+    .scheda-docenti input { border-color: var(--blu-notte); }
+    .scheda-docenti .accesso button { background: var(--fascia-verde); color: var(--testo-su-scuro); }
+    .scheda-docenti .accesso button:hover { background: var(--fascia-notte); }
+
+    /* Quando si entra in una sezione, tutti e due i riquadri prendono
+       l'intera riga, uno sotto l'altro: cosi' non resta uno spazio
+       vuoto accanto al riquadro chiuso. Quello aperto diventa verde,
+       con il titolo giallo, come le caselle che contiene. */
+    .accessi:has([id^="area-"]:not([hidden])) { grid-template-columns: minmax(0, 1fr); }
+    .scheda-accesso:has(> [id^="area-"]:not([hidden])) {
+      background: var(--fascia-verde);
+      color: var(--testo-su-scuro);
+    }
+    .scheda-accesso:has(> [id^="area-"]:not([hidden])) > h2 { color: var(--giallo); }
+    .scheda-accesso:has(> [id^="area-"]:not([hidden])) .scheda-frase { display: none; }
+
+    /* ---- Le caselle dentro le sezioni aperte ---- */
+
+    /* Il colore delle caselle: un verde piu' scuro della fascia, per
+       staccarle dal fondo. */
+    :root { --casella: #014A26; }
+    html[data-tema="scuro"] { --casella: #154A31; }
+
+    /* La barra in cima: menu dell'ordine e pulsante Esci */
+    .scheda-accesso .etichetta-ordine { color: var(--testo-su-scuro); }
+    .scheda-accesso .pulsante-esci {
+      color: var(--giallo);
+      border-color: var(--giallo);
+      border-radius: 999px;
+    }
+    .scheda-accesso .pulsante-esci:hover { background: var(--giallo); color: var(--blu-notte); }
+
+    /* Ogni casella e' alta quanto il suo contenuto: se se ne apre una,
+       le vicine non si allungano insieme a lei. */
+    .scheda-accesso .griglia { align-items: flex-start; }
+
+    /* Le discipline con qualcosa dentro: caselle verdi scure, senza
+       bordo, con il nome in bianco. */
+    .scheda-accesso .disciplina {
+      background: var(--casella);
+      border: 0;
+      border-radius: 20px;
+      color: var(--testo-su-scuro);
+    }
+    .scheda-accesso .disciplina-testata { color: var(--testo-su-scuro); padding: 1em 1.2em; }
+    .scheda-accesso .disciplina-nome { color: var(--testo-su-scuro); }
+
+    /* Al posto della fascia verde sul lato, una lineetta gialla sopra
+       il nome: dice che dentro c'e' qualcosa di pronto da aprire. */
+    .scheda-accesso .disciplina.con-artefatto { border-left-width: 0; }
+    .scheda-accesso .disciplina.con-artefatto .disciplina-testata::before {
+      content: "";
+      display: block;
+      width: 2.2rem;
+      height: 6px;
+      margin-bottom: 0.6em;
+      border-radius: 3px;
+      background: var(--giallo);
+    }
+
+    /* Il nome non e' piu' sottolineato: accanto compare un piu' quando
+       la casella e' chiusa, un meno quando e' aperta. */
+    .scheda-accesso .disciplina-testata .disciplina-nome { text-decoration: none; }
+    .scheda-accesso .disciplina-testata:hover .disciplina-nome { text-decoration: underline; }
+    .scheda-accesso .disciplina:not(.rilievo) .disciplina-testata .disciplina-nome::after {
+      content: "  +";
+      color: var(--giallo);
+    }
+    .scheda-accesso .disciplina:not(.rilievo) .disciplina-testata[aria-expanded="true"] .disciplina-nome::after {
+      content: "  \2013";
+    }
+
+    .scheda-accesso .elenco-artefatti { border-top: 2px solid rgba(255, 255, 255, 0.25); }
+    .scheda-accesso .artefatto-titolo { color: var(--giallo); }
+
+    /* Le discipline ancora in costruzione: solo il contorno tratteggiato */
+    .scheda-accesso .disciplina.spenta {
+      background: transparent;
+      border: 2px dashed rgba(255, 255, 255, 0.5);
+    }
+    .scheda-accesso .disciplina.spenta .disciplina-nome { color: rgba(255, 255, 255, 0.85); }
+
+    /* La casella che si sta trascinando */
+    .scheda-accesso .griglia.si-sposta > .disciplina.in-mano { outline: 3px dashed var(--giallo); }
+
+    /* Gli strumenti generali: nessun riquadro intorno, il titolo giallo
+       e uno strumento per pillola. */
+    .scheda-accesso .disciplina.rilievo { background: transparent; }
+    .scheda-accesso .disciplina.rilievo .disciplina-testata {
+      padding: 0 0.15em 0.6em;
+      text-align: left;
+    }
+    .scheda-accesso .disciplina.rilievo .disciplina-nome {
+      font-family: var(--titolo-grande);
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      color: var(--giallo);
+    }
+    .scheda-accesso .disciplina.rilievo .elenco-artefatti {
+      justify-content: flex-start;
+      padding: 0 0 0.4em;
+      border-top: 0;
+    }
+    .scheda-accesso .disciplina.rilievo .elenco-artefatti li {
+      display: flex;
+      align-items: center;
+      gap: 0.7em;
+      max-width: none;
+      min-height: 3.4rem;
+      padding: 0.6em 1.4em;
+      border: 0;
+      border-radius: 999px;
+      background: var(--casella);
+    }
+    .scheda-accesso .disciplina.rilievo .elenco-artefatti li.pronto { border-left-width: 0; }
+    .scheda-accesso .disciplina.rilievo .elenco-artefatti li.pronto::before {
+      content: "";
+      flex-shrink: 0;
+      width: 0.8rem;
+      height: 0.8rem;
+      border-radius: 50%;
+      background: var(--giallo);
+    }
+    .scheda-accesso .disciplina.rilievo .elenco-artefatti li.pronto .artefatto-titolo {
+      color: var(--testo-su-scuro);
+    }
+    .scheda-accesso .disciplina.rilievo .elenco-artefatti li.in-costruzione {
+      background: transparent;
+      border: 2px dashed rgba(255, 255, 255, 0.5);
+    }
+
+    .fascia-accessi .segnalazioni { max-width: none; margin: 1.5rem 0 0; }
+
+    /* Il piede della pagina */
+    .fascia-piede {
+      padding-top: 1.2rem;
+      padding-bottom: 1.2rem;
+      font-size: 0.9rem;
+      color: var(--testo-su-scuro);
+      background: var(--fascia-notte);
+    }
+
+    /* Su schermi stretti tutto in una colonna */
+    @media (max-width: 52rem) {
+      .apertura-interno,
+      .accessi { grid-template-columns: minmax(0, 1fr); }
+      .fascia { padding-top: 2.2rem; padding-bottom: 2.2rem; }
+      .scheda-accesso { padding: 1.4rem; }
+    }
   </style>
 </head>
 
-<body>
+<body class="home">
 
   <!--
     Questa pagina non contiene l'elenco degli artefatti: lo legge dal
@@ -481,75 +783,115 @@
     aggiungere o togliere qualcosa dal sito si modifica quel file.
   -->
 
-  <!-- L'interruttore fra colori chiari e scuri. La scelta vale per
+  <!-- La testata: il segno del Liceo digitale a sinistra, l'interruttore
+       fra colori chiari e scuri a destra. La scelta dei colori vale per
        tutte le pagine del sito e resta ricordata su questo computer. -->
-  <div id="interruttore-tema" class="riga-tema"></div>
+  <header class="fascia fascia-testata">
+    <div class="fascia-interno testata-interno">
+      <span class="marchio">
+        <!-- Il logo dell'I.I.S. Giulio Natta. E' verde su fondo bianco,
+             quindi sta su un tondino bianco: sul blu notte della testata
+             il verde scuro non si vedrebbe. -->
+        <span class="logo-scuola">
+          <img src="immagini/logo-natta.png" alt="Logo dell'I.I.S. Giulio Natta" width="46" height="31">
+        </span>
+        Liceo digitale
+      </span>
+      <div id="interruttore-tema" class="riga-tema"></div>
+    </div>
+  </header>
 
-  <!-- TESTO MODIFICABILE: il titolo e la riga della scuola -->
-  <h1 class="titolo-pagina titolo-sito">Liceo digitale</h1>
-  <p class="titolo-pagina scuola">I.I.S. Giulio Natta</p>
+  <!-- La prima fascia: titolo, scuola, due righe di presentazione e,
+       accanto, il video della presentazione. -->
+  <section class="fascia fascia-apertura" aria-label="Presentazione del Liceo digitale">
+    <div class="fascia-interno apertura-interno">
+      <div class="apertura-testo">
+        <!-- TESTO MODIFICABILE: la riga della scuola, il titolo e la frase sotto -->
+        <p class="scuola">I.I.S. Giulio Natta</p>
+        <h1 class="titolo-pagina titolo-sito">Liceo digitale</h1>
+        <p class="apertura-frase">Una curvatura del Liceo Scientifico opzione Scienze Applicate che tiene insieme formazione umanistica e formazione tecnologica. Qui trovi gli strumenti didattici digitali costruiti dai docenti.</p>
+      </div>
 
-  <!-- TESTO MODIFICABILE: puoi cambiare le due righe qui sotto.
-       Questo riquadro sta fuori dalle sezioni con la password: la
-       presentazione la vede chiunque apra il sito, anche le famiglie. -->
-  <section class="riquadro riquadro-video" aria-label="Presentazione del Liceo digitale">
-    <!-- L'anteprima: finché non si clicca è solo un disegno leggero.
-         La presentazione vera (che pesa) si carica soltanto quando
-         qualcuno la avvia, così la pagina iniziale resta veloce. -->
-    <div class="anteprima-presentazione" id="anteprima-presentazione">
-      <noscript>
-        <p class="senza-javascript">
-          <a href="presentazione-liceo-digitale/">Guarda la presentazione</a>
-        </p>
-      </noscript>
+      <!-- Il video sta fuori dalle sezioni con la password: la
+           presentazione la vede chiunque apra il sito, anche le famiglie.
+           La presentazione vera (che pesa) si carica dallo script in
+           fondo alla pagina. -->
+      <div class="riquadro-video">
+        <div class="anteprima-presentazione" id="anteprima-presentazione">
+          <noscript>
+            <p class="senza-javascript">
+              <a href="presentazione-liceo-digitale/">Guarda la presentazione</a>
+            </p>
+          </noscript>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="riquadro" aria-labelledby="titolo-studenti">
-    <h2 id="titolo-studenti">Per gli studenti</h2>
+  <!-- La seconda fascia: i due ingressi, studenti e docenti. Quando si
+       entra in una sezione, il suo riquadro si allarga a tutta la riga. -->
+  <section class="fascia fascia-accessi" aria-labelledby="titolo-accessi">
+    <div class="fascia-interno">
+      <!-- TESTO MODIFICABILE: il titolo della fascia -->
+      <h2 id="titolo-accessi" class="titolo-fascia">Da dove vuoi entrare?</h2>
 
-    <div id="accesso-studenti" class="accesso">
-      <form id="modulo-studenti">
-        <label for="parola-studenti">Password</label>
-        <input type="password" id="parola-studenti" name="parola-studenti"
-               autocomplete="off">
-        <button type="submit">Entra</button>
-        <p id="errore-studenti" class="messaggio-errore" role="alert"></p>
-      </form>
-    </div>
+      <div class="accessi">
+        <section class="scheda-accesso scheda-studenti" aria-labelledby="titolo-studenti">
+          <h2 id="titolo-studenti">Per gli studenti</h2>
+          <!-- TESTO MODIFICABILE -->
+          <p class="scheda-frase">Giochi, casi da risolvere ed esercizi per mettere alla prova quello che studi in classe.</p>
 
-    <div id="area-studenti" hidden>
-      <div class="barra-sezione" id="barra-studenti"></div>
-      <div id="discipline-studenti" class="griglia"></div>
+          <div id="accesso-studenti" class="accesso">
+            <form id="modulo-studenti">
+              <label for="parola-studenti">Password</label>
+              <input type="password" id="parola-studenti" name="parola-studenti"
+                     autocomplete="off">
+              <button type="submit">Entra</button>
+              <p id="errore-studenti" class="messaggio-errore" role="alert"></p>
+            </form>
+          </div>
+
+          <div id="area-studenti" hidden>
+            <div class="barra-sezione" id="barra-studenti"></div>
+            <div id="discipline-studenti" class="griglia"></div>
+          </div>
+        </section>
+
+        <section class="scheda-accesso scheda-docenti" aria-labelledby="titolo-docenti">
+          <h2 id="titolo-docenti">Per i docenti</h2>
+          <!-- TESTO MODIFICABILE -->
+          <p class="scheda-frase">Tutti gli artefatti didattici, compresi quelli che usano l'intelligenza artificiale, e gli strumenti di lavoro.</p>
+
+          <div id="accesso-docenti" class="accesso">
+            <form id="modulo-docenti">
+              <label for="parola-docenti">Password</label>
+              <input type="password" id="parola-docenti" name="parola-docenti"
+                     autocomplete="off">
+              <button type="submit">Entra</button>
+              <p id="errore-docenti" class="messaggio-errore" role="alert"></p>
+            </form>
+          </div>
+
+          <div id="area-docenti" hidden>
+            <div class="barra-sezione" id="barra-docenti"></div>
+            <div id="discipline-docenti" class="griglia"></div>
+          </div>
+        </section>
+      </div>
+
+      <section class="riquadro segnalazioni" id="segnalazioni" hidden
+               aria-labelledby="titolo-segnalazioni">
+        <h2 id="titolo-segnalazioni">Righe del registro da controllare</h2>
+        <p>Queste righe di <strong>artefatti.txt</strong> non sono state capite
+           e sono state saltate. Il resto del sito funziona lo stesso.</p>
+        <ul id="elenco-segnalazioni"></ul>
+      </section>
     </div>
   </section>
 
-  <section class="riquadro" aria-labelledby="titolo-docenti">
-    <h2 id="titolo-docenti">Per i docenti</h2>
-
-    <div id="accesso-docenti" class="accesso">
-      <form id="modulo-docenti">
-        <label for="parola-docenti">Password</label>
-        <input type="password" id="parola-docenti" name="parola-docenti"
-               autocomplete="off">
-        <button type="submit">Entra</button>
-        <p id="errore-docenti" class="messaggio-errore" role="alert"></p>
-      </form>
-    </div>
-
-    <div id="area-docenti" hidden>
-      <div class="barra-sezione" id="barra-docenti"></div>
-      <div id="discipline-docenti" class="griglia"></div>
-    </div>
-  </section>
-
-  <section class="riquadro segnalazioni" id="segnalazioni" hidden
-           aria-labelledby="titolo-segnalazioni">
-    <h2 id="titolo-segnalazioni">Righe del registro da controllare</h2>
-    <p>Queste righe di <strong>artefatti.txt</strong> non sono state capite
-       e sono state saltate. Il resto del sito funziona lo stesso.</p>
-    <ul id="elenco-segnalazioni"></ul>
-  </section>
+  <footer class="fascia fascia-piede">
+    <div class="fascia-interno">Liceo digitale · I.I.S. Giulio Natta di Rivoli</div>
+  </footer>
 
   <script src="js/home.js?v=23"></script>
   <script>Tema.interruttore("interruttore-tema");</script>
