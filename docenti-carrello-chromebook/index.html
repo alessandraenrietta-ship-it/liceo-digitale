@@ -19,6 +19,10 @@
     --avviso: #FFF4D6;
     --avviso-bordo: #C9962B;
     --rosso: #A32020;
+    /* Gli stessi due colori dei pulsanti del sito: il verde del logo e
+       il teal di quando ci passi sopra il mouse. */
+    --pulsante-fondo: #026C37;
+    --pulsante-sopra: #00596B;
   }
 
   * { box-sizing: border-box; }
@@ -84,18 +88,29 @@
   }
   .barra .titolo-settimana { font-weight: bold; font-size: 1.05rem; }
 
+  /* I pulsanti sono fatti come quelli del resto del sito: verde pieno,
+     scritta bianca in grassetto, angoli da 10px, e il teal quando ci
+     passi sopra il mouse. I valori vengono da stile.css, il foglio
+     comune, ma sono riscritti qui perché questa pagina sta in piedi
+     da sola. */
   button {
-    font-family: inherit; font-size: 1rem; min-height: 44px;
-    padding: 0.5rem 0.9rem; border: 2px solid var(--verde-scuro);
-    border-radius: 6px; background: var(--carta); color: var(--verde-scuro); cursor: pointer;
+    font-family: inherit; font-size: 1rem; font-weight: bold; min-height: 44px;
+    padding: 0.7em 1.4em; border: none; border-radius: 10px;
+    background: var(--pulsante-fondo); color: #FFFFFF; cursor: pointer;
   }
-  button:hover { background: #EAF2EA; }
+  button:hover { background: var(--pulsante-sopra); }
   button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid var(--blu); outline-offset: 2px; }
-  button[disabled] { opacity: 0.5; cursor: default; }
-  button.primario { background: var(--verde); border-color: var(--verde); color: #FFFFFF; }
-  button.primario:hover { background: var(--verde-scuro); border-color: var(--verde-scuro); }
-  button.discreto { border-color: var(--bordo); color: var(--tenue); }
-  button.pericolo { border-color: var(--rosso); color: var(--rosso); }
+  button[disabled] { background: #9A9A9A; cursor: not-allowed; }
+  button.primario { background: var(--pulsante-fondo); }
+  /* I pulsanti di secondo piano, come Annulla e Lascia stare: stessa
+     forma, ma vuoti, così non competono con quello principale. */
+  button.discreto {
+    background: var(--carta); color: var(--pulsante-fondo);
+    box-shadow: inset 0 0 0 2px var(--pulsante-fondo);
+  }
+  button.discreto:hover { background: #EAF2EA; }
+  button.pericolo { background: var(--rosso); }
+  button.pericolo:hover { background: #7E1818; }
 
   .messaggio {
     margin: 0 0 1rem; padding: 0.7rem 0.9rem; border-radius: 6px;
@@ -138,7 +153,6 @@
   }
   .campo input { width: 5.5rem; }
 
-  .nota { color: var(--tenue); font-size: 0.85rem; margin: 1rem 0 0; }
   .caricamento { padding: 1rem; color: var(--tenue); }
 
   /* Il registro: la stessa cosa che nella versione vera sta nella scheda Prenotazioni del foglio. */
@@ -163,17 +177,18 @@
 </head>
 <body>
 
-<div class="prototipo" role="note">
-  <strong>Prototipo</strong> · Tutti i nomi, gli indirizzi e le classi sono inventati. Le prenotazioni vengono salvate davvero, ma solo come prova.
-</div>
-
 <p class="ritorno"><a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a></p>
+
+<div class="prototipo" role="note">
+  <strong>Prototipo</strong>
+</div>
 
 <header>
   <h1>Prenotazione Chromebook</h1>
-  <p id="sottotitolo">Caricamento in corso.</p>
+  <!-- Resta vuoto: si accende solo se la pagina non riesce a partire. -->
+  <p id="sottotitolo" hidden></p>
   <div class="identita">
-    <label for="chi-sono">Stai provando come:</label>
+    <label for="chi-sono">Stai prenotando come:</label>
     <select id="chi-sono"></select>
   </div>
 </header>
@@ -187,17 +202,12 @@
     <button type="button" id="avanti">Settimana successiva &rarr;</button>
   </div>
 
-  <p><button type="button" class="discreto" id="oggi">Torna a questa settimana</button></p>
-
   <div class="settimana" id="settimana">
     <p class="caricamento">Sto leggendo le prenotazioni.</p>
   </div>
 
-  <p class="nota" id="nota"></p>
-
   <section class="registro" aria-labelledby="titolo-registro">
     <h2 id="titolo-registro">Registro delle prenotazioni</h2>
-    <p>Qui si vede tutto quello che è stato salvato, anche le prenotazioni annullate: annullare non cancella, cambia lo stato.</p>
     <div class="tabella">
       <table>
         <thead><tr><th>Data</th><th>Ora</th><th>Classe</th><th>Chromebook</th><th>Docente</th><th>Stato</th></tr></thead>
@@ -336,7 +346,7 @@
   var IO = null;
   function utente(imp) {
     var trovato = imp.docenti.filter(function (d) { return d.email === IO; })[0];
-    if (!trovato) { throw errore('Scegli in alto con quale docente di prova vuoi entrare.'); }
+    if (!trovato) { throw errore('Scegli in alto con quale docente vuoi prenotare.'); }
     return trovato;
   }
 
@@ -544,7 +554,7 @@
     riga.appendChild(chi);
 
     if (casella.annullabile) {
-      var togli = nuovo('button', 'discreto', 'Annulla');
+      var togli = nuovo('button', 'discreto', 'Disdici prenotazione');
       togli.type = 'button';
       togli.addEventListener('click', function () { chiediAnnullamento(riga, togli, casella); });
       riga.appendChild(togli);
@@ -598,7 +608,7 @@
     conferma.type = 'button';
     conferma.addEventListener('click', function () { inviaPrenotazione(giorno, casella, scelta.value, quanti.value); });
 
-    var lascia = nuovo('button', 'discreto', 'Lascia stare');
+    var lascia = nuovo('button', 'discreto', 'Annulla');
     lascia.type = 'button';
     lascia.addEventListener('click', function () { modulo.remove(); });
 
@@ -631,7 +641,7 @@
     if (pulsante.dataset.pronto !== 'si') {
       pulsante.dataset.pronto = 'si';
       pulsante.className = 'pericolo';
-      pulsante.textContent = 'Sì, annulla la ' + casella.classe;
+      pulsante.textContent = 'Sì, disdici la ' + casella.classe;
       var no = nuovo('button', 'discreto', 'No');
       no.type = 'button';
       no.addEventListener('click', function () { disegnaSettimana(settimanaMostrata); });
@@ -680,18 +690,11 @@
     google.script.run
       .withSuccessHandler(function (risposta) {
         dati = risposta;
-        elemento('sottotitolo').textContent = 'Stai prenotando come ' + risposta.email
-          + (risposta.amministratore ? ' (amministratore)' : '')
-          + '. Chromebook disponibili: ' + risposta.disponibili + '.';
-        elemento('nota').textContent = 'Il carrello è uno solo e non si divide: in ogni ora lo può avere una sola classe. '
-          + 'Il numero di Chromebook che indichi serve a chi prepara il carrello, non cambia la disponibilità. '
-          + (risposta.condiviso
-            ? 'Le prenotazioni di prova sono condivise: chi apre questo link vede le stesse.'
-            : 'Le prenotazioni di prova restano salvate solo in questo browser.');
         disegnaSettimana(risposta.settimana);
       })
       .withFailureHandler(function (errore) {
         elemento('sottotitolo').textContent = 'Non sono riuscito a partire.';
+        elemento('sottotitolo').hidden = false;
         elemento('settimana').textContent = '';
         mostraMessaggio(errore.message || String(errore), true);
       })
@@ -700,7 +703,6 @@
 
   elemento('indietro').addEventListener('click', function () { if (!inCorso) { ricarica(settimanaMostrata.precedente); } });
   elemento('avanti').addEventListener('click', function () { if (!inCorso) { ricarica(settimanaMostrata.successiva); } });
-  elemento('oggi').addEventListener('click', function () { if (!inCorso) { ricarica(null); } });
 
   /* Scelta del docente di prova: serve a provare i permessi (solo le proprie, o tutte per l'amministratore). */
   prototipo.docenti().then(function (docenti) {
