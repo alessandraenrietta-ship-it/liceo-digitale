@@ -77,6 +77,16 @@
     return a;
   }
 
+  /* Dopo i due punti si scrive con la minuscola: quando la pagina
+     unisce due testi con i due punti (per esempio "Caso 1 di 6: il
+     regolamento del Comune"), la prima lettera del secondo diventa
+     minuscola. Attenzione: vale anche per i nomi propri, quindi un
+     titolo di caso non dovrebbe cominciare con un nome proprio. */
+  function minuscola(testo) {
+    var t = String(testo || "");
+    return t.charAt(0).toLowerCase() + t.slice(1);
+  }
+
   function soloLettori(testo) {
     return el("span", "solo-lettori", testo);
   }
@@ -511,7 +521,7 @@
         var fatto = eFatto(a.id, q.titolo);
         var b = bottone((i + 1) + (fatto ? " ✓" : ""));
         b.title = q.titolo;
-        b.setAttribute("aria-label", parola + " " + (i + 1) + ": " + q.titolo + (fatto ? ", risolto" : ""));
+        b.setAttribute("aria-label", parola + " " + (i + 1) + ": " + minuscola(q.titolo) + (fatto ? ", risolto" : ""));
         if (i === attuale) { b.setAttribute("aria-current", "step"); }
         b.addEventListener("click", function () { apri(i, true); });
         li.appendChild(b);
@@ -524,7 +534,7 @@
       disegnaTappe();
       svuota(area);
       var q = domande[i];
-      var h = el("h4", null, parola + " " + (i + 1) + " di " + domande.length + ": " + q.titolo);
+      var h = el("h4", null, parola + " " + (i + 1) + " di " + domande.length + ": " + minuscola(q.titolo));
       area.appendChild(h);
       if (q.storia) { area.appendChild(el("p", "storia", q.storia)); }
       var dopo = el("div", "riga-pulsanti");
@@ -763,7 +773,7 @@
         b.addEventListener("click", function () {
           bottoni.forEach(function (x) { x.setAttribute("aria-pressed", "false"); });
           b.setAttribute("aria-pressed", "true");
-          spiega.textContent = l.nome + ": " + (l.spiegazione || "");
+          spiega.textContent = l.nome + ": " + minuscola(l.spiegazione);
         });
         bottoni.push(b);
         p.appendChild(b);
@@ -1032,7 +1042,7 @@
             (az.prima ? "; a certe condizioni già dai " + anniTesto(az.prima.eta) : "") + ".";
           if (az.da === 0) { regola = "Si può fin dalla nascita."; }
           esito.appendChild(el("p", bene ? "esito bene" : "esito",
-            (bene ? "✓ Giusto! " : "✗ Non è così. ") + "La risposta è: " + FRASI_STATO[giusto].slice(2) + "."));
+            (bene ? "✓ Giusto! " : "✗ Non è così. ") + "La risposta è: " + minuscola(FRASI_STATO[giusto].slice(2)) + "."));
           var sp = el("p", "spiega-opzione", regola + " " +
             (giusto === "condizioni" && az.prima.testo ? az.prima.testo + " " : "") + az.spiegazione);
           esito.appendChild(sp);
