@@ -220,6 +220,12 @@
   .guida a:hover{text-decoration:underline}
   .guida a:hover .freccia{background:var(--simple);color:#fff}
 
+  /* Il riquadro "partita in corso", nella prima schermata */
+  .ripresa{background:var(--card);border:3px solid var(--pop);border-radius:2.4vh;padding:1.8vh 2.6vh;display:flex;align-items:center;gap:2vh;flex-wrap:wrap;justify-content:center;box-shadow:0 .8vh 2vh rgba(27,34,64,.1);max-width:92vw}
+  .ripresa p{font-size:2.5vh;margin:0}
+  .ripresa p small{display:block;font-size:1.9vh;color:var(--muted)}
+  .ripresa .big{font-size:2.4vh;padding:1vh 2.6vh}
+
   /* Il riquadro che segnala le righe scritte male nei file di testo,
      oppure i file che non si riescono a leggere. */
   .avviso{background:#FFF1F4;color:#8A1538;border:3px solid var(--no);border-radius:2vh;padding:1.6vh 2.4vh;font-size:2vh;width:min(1100px,92vw);max-height:22vh;overflow:auto}
@@ -241,6 +247,13 @@
 <!-- ============ WE'RE HIRING ============ -->
 <section id="hiring" class="screen">
   <p class="ritorno"><a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a></p>
+  <!-- Compare solo se su questo computer c'è una partita salvata
+       nelle ultime 3 ore: si sceglie se riprenderla o ricominciare. -->
+  <div class="ripresa" id="ripresa" hidden>
+    <p id="ripresaTesto"></p>
+    <button class="big pink" id="riprendi">Resume ▶</button>
+    <button class="big ghost" id="nuova">New game</button>
+  </div>
   <p class="guida"><a href="istruzioni.html">Istruzioni per il docente <span class="freccia" aria-hidden="true">?</span></a></p>
   <!-- TESTO MODIFICABILE: puoi cambiare le scritte che stanno fra i
        segni > e < nelle righe qui sotto, fino alla riga
@@ -624,6 +637,68 @@ function leggiRuota(testo, errori){
 }
 let WS = { rot:0, cur:-1, used:{}, round:0, spinning:false };
 
+/* ================= LA PARTITA SALVATA =================
+   Mentre si gioca, la partita viene salvata nel browser di questo
+   computer: squadre, domanda a cui si è arrivati, lettere scelte,
+   punti e giri della ruota. Non va su internet e gli altri computer
+   non la vedono. Se la pagina si chiude per sbaglio, alla riapertura
+   un riquadro chiede se riprenderla o ricominciare.
+   Dopo SCADENZA ore la partita salvata si cancella da sola: la LIM la
+   usano classi diverse, e l'ora dopo si deve ripartire puliti. */
+const SALVATAGGIO = "tense-battle-partita";
+const SCADENZA = 3;
+
+function schermataAttuale(){
+  return ["game", "wheel", "final"].find(id => !$(id).hidden) || "game";
+}
+function salva(){
+  if (!S.started) return;
+  try {
+    localStorage.setItem(SALVATAGGIO, JSON.stringify({
+      quando:Date.now(), domande:Q.length, ruota:W.length, schermata:schermataAttuale(),
+      S:{teams:S.teams, names:S.names, cols:S.cols, secs:S.secs, i:S.i, shown:S.shown, revealed:S.revealed, pick:S.pick, score:S.score},
+      WS:{rot:WS.rot, used:WS.used, round:WS.round}
+    }));
+  } catch(e) { /* in navigazione anonima non si può salvare: pazienza */ }
+}
+function cancellaSalvataggio(){
+  try { localStorage.removeItem(SALVATAGGIO); } catch(e) {}
+}
+/* Rilegge la partita salvata. Se è troppo vecchia, oppure se nel
+   frattempo sono cambiate le domande, la cancella e non la propone. */
+function leggiSalvataggio(){
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(SALVATAGGIO)); } catch(e) {}
+  if (!d || !d.S) return null;
+  if (Date.now() - d.quando > SCADENZA * 3600 * 1000 || d.domande !== Q.length || d.ruota !== W.length) {
+    cancellaSalvataggio(); return null;
+  }
+  return d;
+}
+function proponiRipresa(){
+  const d = leggiSalvataggio();
+  if (!d) return;
+  const ora = new Date(d.quando).toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit"});
+  const dove = d.schermata === "wheel" ? `speaking wheel, round ${d.WS.round}` : `question ${d.S.i + 1} of ${Q.length}`;
+  $("ripresaTesto").innerHTML = `<b>A game is in progress</b> · ${d.S.teams} teams · ${dove}<small>Saved at ${ora}</small>`;
+  $("ripresa").hidden = false;
+  $("riprendi").onclick = () => {
+    Object.assign(S, d.S, {started:true});
+    Object.assign(WS, d.WS);
+    $("ripresa").hidden = true; $("hiring").hidden = true;
+    $("wsvg").style.transition = "none"; $("wsvg").style.transform = `rotate(${WS.rot}deg)`;
+    requestAnimationFrame(() => $("wsvg").style.transition = "");
+    if (WS.round) $("wround").textContent = "Round " + WS.round;
+    if (d.schermata === "wheel") showWheel();
+    else if (d.schermata === "final") showFinal();
+    else { $("game").hidden = false; drawQ(); }
+  };
+  $("nuova").onclick = () => { cancellaSalvataggio(); $("ripresa").hidden = true; };
+}
+/* Si salva dopo ogni clic o tasto, e quando la pagina si chiude. */
+["click", "keydown", "input"].forEach(ev => document.addEventListener(ev, () => setTimeout(salva, 0)));
+window.addEventListener("pagehide", salva);
+
 function drawWheel(){
   const n = W.length, a = 2 * Math.PI / n, R = 98;
   let h = "";
@@ -651,7 +726,7 @@ function spin(){
   $("helps").hidden = true; $("wtimerBox").hidden = true;
   let ticks = 0; const tk = setInterval(() => { if (ticks++ < 22) ding(900 - ticks * 25, .03); else clearInterval(tk); }, 170);
   setTimeout(() => {
-    WS.spinning = false; WS.cur = i; WS.used[i] = true; WS.round++;
+    WS.spinning = false; WS.cur = i; WS.used[i] = true; WS.round++; salva();
     const q = W[i], T = WT[q[1]];
     $("wround").textContent = "Round " + WS.round;
     $("qcard").innerHTML = `<div class="num">QUESTION ${i + 1}</div><div class="qq">${esc(q[0])}</div><div class="chip" style="background:${T.c}">${T.n}</div>`;
@@ -756,6 +831,7 @@ Promise.all([
     : "No questions yet: check domande.txt";
   $("start").disabled = !Q.length;
   $("toWheel").hidden = !W.length;
+  if (Q.length) proponiRipresa();
 });
 </script>
 </body>

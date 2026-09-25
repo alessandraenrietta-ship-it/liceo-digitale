@@ -86,9 +86,12 @@ riconosce subito la risposta.
 5: Le regole del gioco, da leggere insieme alla classe: risposta
 giusta un punto, motivo giusto un altro punto.
 6: Quando è tutto pronto, si comincia.
-consiglio: Nomi e punti non vengono salvati da nessuna parte: se
-chiudi la pagina si perdono. Per questo, a partita cominciata, il
-browser chiede conferma prima di chiuderla.
+consiglio: Durante la partita, squadre e punti vengono salvati solo
+nel browser di questo computer: non vanno su internet. Se la pagina si
+chiude per sbaglio, riaprendola compare il riquadro *A game is in
+progress*: con *Resume* si riprende da dove si era rimasti, con *New
+game* si ricomincia da zero. Dopo tre ore la partita salvata si
+cancella da sola, così la classe dell'ora dopo parte pulita.
 
 [FASE]
 titolo: La domanda
