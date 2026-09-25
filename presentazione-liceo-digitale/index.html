@@ -126,8 +126,13 @@ ul.bullets li b{font-weight:800}
 [data-in].on[data-slide]{transform:none}
 
 /* ---------- Nattaman ---------- */
+/* Aggiunto per il sito Liceo digitale: la stessa velocità scritta nello
+   script in fondo (VELOCITA). Serve a far arrivare la mascotte al suo
+   posto in tempo: se la presentazione va più svelta, anche i suoi
+   spostamenti devono esserlo. I due numeri vanno tenuti uguali. */
+:root{--velocita:1.5}
 #mascot{position:absolute;bottom:0;left:1400px;width:520px;
-  transition:left .9s cubic-bezier(.3,.9,.3,1),bottom .9s ease,width .9s ease,opacity .5s ease}
+  transition:left calc(.9s / var(--velocita)) cubic-bezier(.3,.9,.3,1),bottom calc(.9s / var(--velocita)) ease,width calc(.9s / var(--velocita)) ease,opacity .5s ease}
 #mascot img{display:block;width:100%;height:auto;
   filter:drop-shadow(0 22px 26px rgba(4,16,30,.45))}
 #mascot .pose{position:absolute;bottom:0;left:0;width:100%;opacity:0;transition:opacity .45s ease}
@@ -143,7 +148,7 @@ ul.bullets li b{font-weight:800}
 #mascot.m1{left:184px;width:360px;bottom:0}
 #mascot.m2{left:650px;width:360px;bottom:0}
 #mascot.m3{left:1116px;width:360px;bottom:0}
-#mascot.runm{transition:left 1.15s cubic-bezier(.22,.78,.3,1)}
+#mascot.runm{transition:left calc(1.15s / var(--velocita)) cubic-bezier(.22,.78,.3,1)}
 @keyframes hop{0%,62%,100%{transform:translateY(0)}72%{transform:translateY(-52px)}82%{transform:translateY(0)}90%{transform:translateY(-20px)}}
 #mascot.anim-hop img{animation:hop 2.6s ease-in-out infinite}
 #mascot.p-farleft{left:-620px;width:560px;bottom:0;opacity:1}
@@ -456,6 +461,20 @@ body.recording, body.recording > * { overflow: hidden; }
   var DUR = 113500;
   var FADE_START = 109500;
 
+  /* Aggiunto per il sito Liceo digitale: LA VELOCITÀ.
+     Tutti i tempi qui sotto (scene, scritte, mascotte) sono quelli
+     originali, pensati per 1:53. Questo numero li accelera tutti
+     insieme. La MUSICA invece no: suona alla sua velocità normale e
+     sfuma quando la presentazione finisce.
+       1    = velocità originale, 1:53
+       1.25 = un quarto più veloce, circa 1:31
+       1.5  = una volta e mezza, circa 1:16
+     Se lo si cambia, va cambiato anche il numero --velocita nello
+     stile qui sopra, che accelera i passi della mascotte. */
+  var VELOCITA = 1.5;
+  /* La musica sfuma negli ultimi 4 secondi veri, come prima. */
+  FADE_START = DUR - 4000 * VELOCITA;
+
   var scenes = [
     {id:"s1", start:0,      end:10500,  label:"1 · Aggancio",       pose:"saluto",  pos:"p-runin", anim:"anim-bob"},
     {id:"s2", start:10500,  end:19500,  label:"2 · Identità",       pose:"saluto",  pos:"p-right", anim:"anim-bob"},
@@ -490,6 +509,19 @@ body.recording, body.recording > * { overflow: hidden; }
 
   scrub.max = DUR;
   track.volume = 0.55;
+  /* Il punto della musica che corrisponde al punto della presentazione.
+     La presentazione va più svelta, la musica no: dopo 10 secondi veri
+     le scene sono andate avanti di 15, la musica di 10. */
+  function secondiMusica(){ return t / VELOCITA / 1000; }
+
+  /* La prima volta la musica parte in ritardo, perché deve ancora
+     scaricarsi, e resterebbe indietro rispetto alle scene. Appena
+     comincia davvero a suonare, la si rimette al punto giusto. */
+  track.addEventListener("playing", function(){
+    if (Math.abs(track.currentTime - secondiMusica()) > 0.3) {
+      try{ track.currentTime = secondiMusica(); }catch(e){}
+    }
+  });
 
   scenes.forEach(function(s){
     var b = document.createElement("button");
@@ -573,7 +605,8 @@ body.recording, body.recording > * { overflow: hidden; }
     }
 
     scrub.value = Math.round(t);
-    timeEl.textContent = fmt(t) + " / " + fmt(DUR);
+    /* Il tempo mostrato è quello vero, già accelerato. */
+    timeEl.textContent = fmt(t / VELOCITA) + " / " + fmt(DUR / VELOCITA);
   }
 
   /* Aggiunto per il sito Liceo digitale: nel riquadro della pagina
@@ -583,7 +616,7 @@ body.recording, body.recording > * { overflow: hidden; }
 
   function loop(now){
     if(!playing) return;
-    t += now - last; last = now;
+    t += (now - last) * VELOCITA; last = now;
     if(t >= DUR && ricomincia){ t = 0; if (!muted) { suona(); } }
     if(t >= DUR){ t = DUR; render(); pause(); return; }
     render();
@@ -630,7 +663,7 @@ body.recording, body.recording > * { overflow: hidden; }
      deve ancora scaricare il file: parte con qualche istante di
      ritardo, e va bene cosi'. */
   function suona(){
-    try{ track.currentTime = t/1000; }catch(e){}
+    try{ track.currentTime = secondiMusica(); }catch(e){}
     track.play().catch(function(err){
       /* Aggiunto per il sito Liceo digitale: se il browser non lascia
          partire la musica da sola (succede quando la pagina si apre e
@@ -650,7 +683,7 @@ body.recording, body.recording > * { overflow: hidden; }
     /* Aggiunto per il sito Liceo digitale: se l'audio e' spento non si
        tocca la traccia. Bastava spostarla per far partire lo scarico
        dei 5 MB, anche senza suonare. */
-    if (!muted) { try{ track.currentTime = t/1000; }catch(e){} }
+    if (!muted) { try{ track.currentTime = secondiMusica(); }catch(e){} }
     render();
   }
 
@@ -679,8 +712,8 @@ body.recording, body.recording > * { overflow: hidden; }
   document.addEventListener("keydown", function(e){
     if(e.code === "Space"){ e.preventDefault(); playing ? pause() : play(); }
     if(e.key === "Escape"){ document.body.classList.remove("recording"); }
-    if(e.key === "ArrowRight"){ e.preventDefault(); seek(t + 2000); }
-    if(e.key === "ArrowLeft"){ e.preventDefault(); seek(t - 2000); }
+    if(e.key === "ArrowRight"){ e.preventDefault(); seek(t + 2000 * VELOCITA); }
+    if(e.key === "ArrowLeft"){ e.preventDefault(); seek(t - 2000 * VELOCITA); }
   });
 
   render();
