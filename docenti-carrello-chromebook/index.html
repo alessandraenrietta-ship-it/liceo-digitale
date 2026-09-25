@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Prenotazione Chromebook</title>
+<script src="../js/tema.js?v=1"></script>
+<link rel="stylesheet" href="../fasce.css?v=1">
 <style>
   :root {
     color-scheme: light;
@@ -45,34 +47,20 @@
   }
   .prototipo strong { text-transform: uppercase; letter-spacing: 0.05em; }
 
-  /* Il ritorno alla pagina iniziale, come in tutte le altre pagine
-     del sito: la freccia dentro al cerchio, in alto a sinistra. */
-  .ritorno { margin: 0; padding: 8px 16px 0; font-size: 16px; }
-  .ritorno a {
-    display: inline-flex; align-items: center; gap: .6em;
-    min-height: 44px; font-weight: 700; text-decoration: none;
-    color: var(--verde-scuro);
-  }
+  /* Il ritorno alla pagina iniziale e la testata li disegna
+     fasce.css, il foglio comune della grafica del sito: qui non
+     serve più scriverli. Restano solo la freccia tonda e la riga
+     "Stai prenotando come", che sta dentro alla fascia verde. */
   .ritorno .freccia {
     display: inline-flex; align-items: center; justify-content: center;
     width: 44px; height: 44px; border: 2px solid currentColor;
     border-radius: 50%; font-size: 1.2rem; line-height: 1;
-    background: var(--carta);
   }
-  .ritorno a:hover { text-decoration: underline; }
-  .ritorno a:hover .freccia { background: var(--verde-scuro); color: var(--carta); }
-
-  header {
-    background: var(--verde-scuro);
-    color: #FFFFFF;
-    padding: 1rem;
-  }
-  header h1 { margin: 0; font-size: 1.35rem; }
-  header p { margin: 0.25rem 0 0; font-size: 0.9rem; opacity: 0.9; }
 
   .identita {
     display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
-    margin-top: 0.6rem; font-size: 0.9rem;
+    margin-top: 1rem; font-size: 0.9rem;
+    color: #FFFFFF;
   }
   .identita select {
     font-family: inherit; font-size: 0.95rem; min-height: 40px;
@@ -198,25 +186,44 @@
   }
 </style>
 </head>
-<body>
+<body class="fasce">
 
-<p class="ritorno"><a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a></p>
+<!-- La testata: ritorno alla pagina iniziale, logo della scuola e
+     interruttore fra colori chiari e scuri. -->
+<header class="fascia fascia-testata">
+  <div class="fascia-interno testata-interno">
+    <p class="ritorno"><a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> <span class="testo-ritorno">Liceo digitale</span></a></p>
+    <span class="marchio">
+      <span class="logo-scuola">
+        <img src="../immagini/logo-natta.png" alt="Logo dell'I.I.S. Giulio Natta" width="46" height="31">
+      </span>
+      Liceo digitale
+    </span>
+    <div id="interruttore-tema" class="riga-tema"></div>
+  </div>
+</header>
 
 <div class="prototipo" role="note">
   <strong>Prototipo</strong>
 </div>
 
-<header>
-  <h1>Prenotazione Chromebook</h1>
-  <!-- Resta vuoto: si accende solo se la pagina non riesce a partire. -->
-  <p id="sottotitolo" hidden></p>
-  <div class="identita">
-    <label for="chi-sono">Stai prenotando come:</label>
-    <select id="chi-sono"></select>
+<section class="fascia fascia-titolo">
+  <div class="fascia-interno">
+    <!-- TESTO MODIFICABILE: puoi cambiare le due righe qui sotto. -->
+    <p class="occhiello">Strumenti per i docenti</p>
+    <h1 class="titolo-fascia">Prenotazione Chromebook</h1>
+    <!-- FINE TESTO MODIFICABILE -->
+    <!-- Resta vuoto: si accende solo se la pagina non riesce a partire. -->
+    <p id="sottotitolo" hidden></p>
+    <div class="identita">
+      <label for="chi-sono">Stai prenotando come:</label>
+      <select id="chi-sono"></select>
+    </div>
   </div>
-</header>
+</section>
 
-<main>
+<main class="fascia fascia-lavoro">
+ <div class="fascia-interno">
   <p class="messaggio" id="messaggio" role="status" hidden></p>
 
   <div class="barra">
@@ -237,7 +244,13 @@
       </table>
     </div>
   </section>
+
+ </div>
 </main>
+
+<footer class="fascia fascia-piede">
+  <div class="fascia-interno">Liceo digitale &middot; I.I.S. Giulio Natta di Rivoli</div>
+</footer>
 
 <script>
 /* ------------------------------------------------------------------
@@ -766,5 +779,7 @@
     }, 400);
   });
 </script>
+
+<script>Tema.interruttore("interruttore-tema");</script>
 </body>
 </html>

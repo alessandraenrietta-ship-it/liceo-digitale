@@ -17,6 +17,10 @@
       L'ordine conta: questo foglio corregge quello comune, quindi
       deve venire dopo.
 
+      Una pagina che non usa stile.css puo' richiamare solo questo
+      foglio: i colori che gli servirebbero da li' hanno tutti un
+      valore di scorta scritto qui dentro.
+
    2. Al corpo si mette la classe "fasce":
 
         <body class="fasce">
@@ -80,7 +84,7 @@ body.fasce {
   background: var(--fascia-notte);
 }
 
-.fasce .fascia { padding: 2.4rem var(--spazio); }
+.fasce .fascia { padding: 2.4rem var(--spazio, 1.25rem); }
 
 /* Il contenuto non si allarga all'infinito sugli schermi grandi. */
 .fasce .fascia-interno {
@@ -116,7 +120,7 @@ body.fasce {
   font-family: var(--titolo-grande);
   font-size: 1.1rem;
   text-transform: uppercase;
-  color: var(--testo-su-scuro);
+  color: var(--testo-su-scuro, #FFFFFF);
 }
 
 /* Il logo e' verde su fondo bianco: sul blu notte non si vedrebbe,
@@ -140,7 +144,7 @@ body.fasce {
   margin: 0;
 }
 
-.fasce .fascia-testata .ritorno a { color: var(--testo-su-scuro); }
+.fasce .fascia-testata .ritorno a { color: var(--testo-su-scuro, #FFFFFF); }
 
 /* Accanto alla freccia non si scrive niente: il tondino con la freccia
    si capisce da solo, e le parole facevano doppione con il nome del
@@ -159,8 +163,8 @@ body.fasce {
 .fasce .fascia-testata .ritorno a { gap: 0; }
 
 .fasce .fascia-testata .ritorno a:hover .freccia {
-  background: var(--giallo);
-  color: var(--blu-notte);
+  background: var(--giallo, #FFF33F);
+  color: var(--blu-notte, #00193C);
 }
 
 .fasce .fascia-testata .riga-tema { margin: 0; }
@@ -182,14 +186,14 @@ body.fasce {
   line-height: 1;
   text-align: left;
   text-transform: uppercase;
-  color: var(--giallo);
+  color: var(--giallo, #FFF33F);
 }
 
 .fasce .sottotitolo-fascia {
   max-width: 46rem;
   margin: 0.9rem 0 0;
   font-size: 1.05rem;
-  color: var(--testo-su-scuro);
+  color: var(--testo-su-scuro, #FFFFFF);
 }
 
 /* La riga piccola sopra al titolo, per esempio il nome della scuola
@@ -200,7 +204,7 @@ body.fasce {
   font-weight: bold;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--giallo);
+  color: var(--giallo, #FFF33F);
 }
 
 
@@ -226,14 +230,19 @@ body.fasce {
    stampa a fumetti. E' disegnata dal browser, non e' un'immagine,
    quindi non c'e' niente da scaricare e resta nitida a qualunque
    ingrandimento. I pallini restano leggeri: sopra ci va il testo da
-   leggere, e una trama piu' forte lo renderebbe faticoso. */
+   leggere, e una trama piu' forte lo renderebbe faticoso.
+
+   I tre nomi (riquadro, scheda, box) sono i modi in cui i vari
+   artefatti chiamano i loro riquadri: valgono solo dentro all'area di
+   lavoro di una pagina a fasce, quindi non toccano nient'altro. */
 .fasce .fascia-lavoro .riquadro,
-.fasce .fascia-lavoro .scheda {
+.fasce .fascia-lavoro .scheda,
+.fasce .fascia-lavoro .box {
   max-width: none;
-  padding: calc(var(--spazio) * 1.5);
+  padding: calc(var(--spazio, 1.25rem) * 1.5);
   border: 0;
   border-radius: 24px;
-  color: var(--testo);
+  color: var(--testo, #00193C);
   background-color: var(--carta-fascia);
   background-image: radial-gradient(var(--retino) 1.2px, transparent 1.3px);
   background-size: var(--retino-passo) var(--retino-passo);
@@ -249,7 +258,7 @@ body.fasce {
   padding-top: 1.2rem;
   padding-bottom: 1.2rem;
   font-size: 0.9rem;
-  color: var(--testo-su-scuro);
+  color: var(--testo-su-scuro, #FFFFFF);
   background: var(--fascia-notte);
 }
 
