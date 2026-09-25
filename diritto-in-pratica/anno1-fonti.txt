@@ -1,0 +1,161 @@
+# ============================================================
+# PRIMO ANNO - LA PIRAMIDE DELLE FONTI
+# ============================================================
+#
+# Questo file contiene i testi di un'attività della bacheca di
+# Diritto. Puoi modificarlo con il Blocco note e salvarlo: la
+# pagina cambia da sola, non serve toccare il codice.
+#
+# COME È FATTO
+# ------------
+# In cima ci sono le righe che descrivono l'attività nella
+# bacheca: titolo, icona, argomento e descrizione.
+#
+# Poi vengono le fonti del diritto, ognuna in un blocco che
+# comincia con la riga [LIVELLO]. VANNO SCRITTE IN ORDINE, dalla
+# più forte (in cima alla piramide) alla più debole: la pagina le
+# mescola e lo studente deve rimetterle in quest'ordine.
+#
+#   nome:         il nome della fonte, breve
+#   spiegazione:  che cos'è e perché sta a quel livello
+#
+# Infine i casi da risolvere. Ogni caso comincia con [CASO]:
+#
+#   titolo:   il nome del caso, breve
+#   storia:   la situazione da cui si parte
+#   domanda:  la domanda vera e propria
+#   tipo:     scrivi multipla se le risposte giuste sono più di una
+#
+# e poi le risposte, una per riga:
+#
+#   + risposta giusta     | spiegazione che compare quando la si sceglie
+#   - risposta sbagliata  | spiegazione che compare quando la si sceglie
+#
+# ALTRE COSE DA SAPERE
+# --------------------
+# - Le righe che iniziano con # sono commenti: il sito le ignora.
+# - Se un testo è lungo puoi andare a capo: le righe che non
+#   iniziano con una parola chiave si attaccano alla precedente.
+# - Se una riga è scritta male il sito non si blocca: la salta e
+#   in cima all'attività dice quale riga rivedere.
+# - Le risposte vengono mescolate: l'ordine in cui le scrivi non
+#   conta.
+# ============================================================
+
+titolo: La piramide delle fonti
+icona: 🔺
+argomento: Le fonti del diritto e la loro gerarchia
+descrizione: Metti in ordine le fonti del diritto, dalla più forte alla più debole, poi risolvi i casi in cui due norme dicono cose diverse.
+
+
+# ------------------------------------------------------------
+# I LIVELLI DELLA PIRAMIDE, DALL'ALTO IN BASSO
+# ------------------------------------------------------------
+
+[LIVELLO]
+nome: Costituzione e leggi costituzionali
+spiegazione: Stanno in cima: nessuna altra norma può andare contro
+di loro. Per cambiare la Costituzione serve una procedura speciale,
+più lunga e difficile di quella di una legge normale (articolo 138).
+
+[LIVELLO]
+nome: Norme dell'Unione europea
+spiegazione: I regolamenti e le direttive dell'Unione europea
+prevalgono sulle leggi italiane, perché l'Italia ha accettato di
+limitare una parte della propria sovranità (articoli 11 e 117 della
+Costituzione). Non possono però violare i principi fondamentali
+della Costituzione.
+
+[LIVELLO]
+nome: Leggi ordinarie e atti con forza di legge
+spiegazione: Sono le leggi approvate dal Parlamento e i decreti del
+Governo che hanno la stessa forza: i decreti-legge e i decreti
+legislativi. Allo stesso livello stanno le leggi regionali, ognuna
+nelle materie che la Costituzione affida alle Regioni.
+
+[LIVELLO]
+nome: Regolamenti
+spiegazione: Li emanano il Governo, i ministri e gli enti locali,
+come i Comuni. Servono a mettere in pratica le leggi nei dettagli e
+non possono andare contro di esse.
+
+[LIVELLO]
+nome: Usi e consuetudini
+spiegazione: Sono comportamenti ripetuti nel tempo, che le persone
+considerano obbligatori. Valgono solo dove la legge li richiama o
+dove non dice niente: non possono mai andare contro la legge.
+
+
+# ------------------------------------------------------------
+# I CASI: DUE NORME DICONO COSE DIVERSE, QUALE SI APPLICA?
+# ------------------------------------------------------------
+
+[CASO]
+titolo: Il regolamento del Comune
+storia: Una legge dello Stato dice che, per aprire un piccolo
+chiosco di fiori, basta presentare una comunicazione al Comune. Il
+Comune di Borgo Fantasia approva un regolamento che chiede in più
+un permesso speciale, da attendere per sei mesi.
+domanda: Chi vuole aprire il chiosco, quale norma deve seguire?
++ La legge dello Stato | Il regolamento sta più in basso nella piramide e non può contraddire la legge. È il criterio gerarchico: quando due norme di livello diverso sono in contrasto, vince quella di livello più alto.
+- Il regolamento del Comune, perché è più vicino ai cittadini | Essere più vicini ai cittadini non dà più forza. Il regolamento serve a mettere in pratica la legge, non a cambiarla.
+- Il regolamento, perché è stato approvato dopo | Il criterio del "più recente" vale solo fra norme dello stesso livello. Qui i livelli sono diversi, e conta la gerarchia.
+- Tutte e due: bisogna rispettarle entrambe | Non si possono rispettare due regole che si contraddicono. Il diritto ha dei criteri proprio per decidere quale delle due si applica.
+
+[CASO]
+titolo: Due leggi, due anni diversi
+storia: Una legge del 2015 stabilisce che i monopattini possono
+circolare solo sulle piste ciclabili. Una legge del 2023 dice che
+possono circolare anche sulle strade urbane, ma non parla della
+legge precedente.
+domanda: Oggi, quale regola vale?
++ Quella della legge del 2023 | Le due leggi hanno lo stesso livello, quindi vince la più recente: è il criterio cronologico. La legge del 2015, in quella parte, è abrogata anche se nessuno lo ha scritto: si parla di abrogazione tacita.
+- Quella della legge del 2015, perché c'era prima | Arrivare prima non dà più forza. Il Parlamento può sempre cambiare idea, e la legge nuova prende il posto della vecchia.
+- Nessuna delle due finché un giudice non decide | Non serve aspettare un giudice: la regola è già chiara. Fra due leggi dello stesso livello si applica la più recente.
+- Decide ogni vigile urbano quale applicare | I vigili applicano le regole, non le scelgono. Un diritto che cambiasse secondo chi lo applica non sarebbe uguale per tutti.
+
+[CASO]
+titolo: La legge contro la Costituzione
+storia: Il Parlamento approva una legge che vieta a chiunque di
+riunirsi in piazza, anche in modo pacifico e senza armi. La
+Costituzione, all'articolo 17, dice invece che i cittadini hanno
+il diritto di riunirsi pacificamente e senza armi.
+domanda: Chi può eliminare questa legge?
++ La Corte costituzionale | La Corte costituzionale controlla che le leggi rispettino la Costituzione. Se la dichiara illegittima, la legge dal giorno dopo la pubblicazione della sentenza non si può più applicare.
+- Qualunque giudice, che può semplicemente ignorarla | Il giudice che ha un dubbio non può ignorare la legge: deve sospendere il processo e mandare la questione alla Corte costituzionale. Solo lei può eliminarla.
+- I cittadini, che possono non rispettarla | Una legge resta obbligatoria finché non viene eliminata nei modi previsti. Chi la ritiene ingiusta può contestarla, ma non può decidere da solo di non rispettarla.
+- Il Presidente del Consiglio dei ministri | Il Governo non ha il potere di annullare le leggi del Parlamento. Il controllo sulle leggi spetta a un organo di garanzia, indipendente dalla politica.
+
+[CASO]
+titolo: L'usanza del paese
+storia: Nel paese di Valfonda, da sempre, la domenica mattina tutti
+parcheggiano sul marciapiede davanti alla chiesa, e nessuno ha mai
+protestato. Il Codice della strada però vieta di parcheggiare sui
+marciapiedi.
+domanda: L'usanza del paese permette di parcheggiare lì?
++ No: un'usanza non può andare contro la legge | Gli usi stanno all'ultimo gradino della piramide. Contano solo dove la legge li richiama o dove non dice nulla, mai contro una legge. Una multa, quella domenica, sarebbe giusta.
+- Sì, perché si fa da sempre | Da quanto tempo si fa una cosa non conta, se va contro una legge: la consuetudine "contro la legge" non è ammessa.
+- Sì, ma solo la domenica mattina | Il giorno della settimana non cambia niente. Il divieto del Codice della strada vale sempre.
+- Dipende da che cosa decide il parroco | Il parroco non ha nessun potere di cambiare le regole della circolazione. Le regole valgono per tutti allo stesso modo.
+
+[CASO]
+titolo: La regola generale e la regola speciale
+storia: Una legge stabilisce una regola per tutti i contratti. Un'altra
+legge, dello stesso livello, stabilisce una regola diversa solo per
+i contratti di affitto delle case.
+domanda: Per un contratto di affitto di una casa, quale regola si applica?
++ Quella speciale, pensata per gli affitti | Quando due norme dello stesso livello riguardano la stessa cosa, prevale quella più specifica: è il criterio di specialità. La regola generale continua a valere per tutti gli altri contratti.
+- Quella generale, perché vale per tutti | Proprio perché vale per tutti, la regola generale lascia il posto a quella costruita apposta per un caso particolare.
+- Tutte e due insieme, facendo una media | Le norme non si mescolano. Se dicono cose diverse, se ne applica una sola.
+- Nessuna delle due: le parti scrivono quello che vogliono | Le parti di un contratto hanno molta libertà, ma devono rispettare le norme che la legge rende obbligatorie.
+
+[CASO]
+titolo: Il decreto-legge dimenticato
+storia: Dopo un'alluvione, il Governo approva un decreto-legge con
+aiuti urgenti per le famiglie colpite. Passano sessanta giorni e il
+Parlamento non lo converte in legge.
+domanda: Che cosa succede al decreto-legge?
++ Perde efficacia fin dall'inizio, come se non ci fosse mai stato | Lo dice l'articolo 77 della Costituzione: il decreto-legge è un atto provvisorio. Se il Parlamento non lo converte in legge entro sessanta giorni, perde efficacia dal primo giorno. Il Parlamento può però fare una legge per sistemare le situazioni nate nel frattempo.
+- Diventa legge in automatico | Il silenzio del Parlamento non vale come approvazione: è proprio il Parlamento che deve decidere, con un voto.
+- Resta in vigore finché il Governo non lo ritira | Il limite dei sessanta giorni serve proprio a impedire che il Governo faccia leggi da solo e a lungo.
+- Lo converte in legge il Presidente della Repubblica | Il Presidente firma la legge di conversione, ma non può sostituirsi al Parlamento nel votarla.

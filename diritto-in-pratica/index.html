@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diritto in pratica</title>
+<meta name="description" content="Bacheca di Diritto per il primo e il secondo anno: quattro attività interattive su fonti del diritto, capacità di agire, formazione delle leggi e organi dello Stato.">
+<script src="../js/tema.js?v=1"></script>
+<link rel="stylesheet" href="../stile.css?v=10">
+
+<style>
+  /* -------------------------------------------------------------
+     Qui c'è solo la DISPOSIZIONE delle cose sulla pagina.
+     I colori arrivano tutti da stile.css: si usano i loro nomi
+     (var(--verde) e simili), mai i codici scritti a mano, così la
+     pagina segue anche la modalità scura.
+     ------------------------------------------------------------- */
+
+  .sottotitolo { font-size: 1.1rem; }
+
+  .nota-piccola { font-size: 0.9rem; }
+
+  /* ----- la bacheca ----- */
+
+  .schede {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--spazio);
+  }
+
+  .scheda {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1.1rem;
+    color: var(--testo);
+    background: var(--campo);
+    border: 2px solid var(--verde);
+    border-radius: var(--raggio);
+    text-decoration: none;
+  }
+
+  a.scheda:hover { border-width: 4px; padding: calc(1.1rem - 2px); }
+
+  .scheda h3 { margin: 0; }
+  .scheda p { margin: 0; }
+
+  .scheda-icona { font-size: 2rem; line-height: 1; }
+
+  .scheda-argomento {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: var(--teal);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .scheda-apri {
+    margin-top: auto;
+    padding-top: 0.4rem;
+    font-weight: bold;
+    color: var(--verde);
+  }
+
+  .scheda.spenta { border-style: dashed; }
+
+  /* La barra dei progressi: accanto c'è sempre la frase scritta,
+     così non si deve capire niente dal solo colore. */
+  .barra {
+    height: 0.7rem;
+    border: 2px solid var(--verde);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .barra-piena {
+    height: 100%;
+    background: var(--verde);
+  }
+
+  .progresso { font-size: 0.9rem; font-weight: bold; }
+
+  /* ----- testata di un'attività ----- */
+
+  .torna {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: bold;
+  }
+
+  .etichetta-anno {
+    margin: 0 0 0.3em;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--teal);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  h2:focus, h3:focus, h4:focus { outline: none; }
+  h2:focus-visible, h3:focus-visible, h4:focus-visible { outline: 3px solid var(--giallo); }
+
+  .storia {
+    padding: 0.8em 1em;
+    background: var(--campo);
+    border-left: 6px solid var(--verde);
+    border-radius: var(--raggio);
+  }
+
+  /* ----- le domande con le risposte da scegliere ----- */
+
+  .testo-domanda { font-weight: bold; font-size: 1.1rem; }
+
+  .opzioni {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 0.8rem;
+  }
+
+  button.opzione {
+    display: flex;
+    gap: 0.6em;
+    align-items: flex-start;
+    width: 100%;
+    text-align: left;
+    font-weight: normal;
+    color: var(--testo);
+    background: var(--campo);
+    border: 2px solid var(--verde);
+  }
+
+  button.opzione:hover { background: var(--fondo-lettura); }
+
+  button.opzione[aria-pressed="true"] {
+    border-width: 4px;
+    padding: calc(0.7em - 2px) calc(1.4em - 2px);
+    font-weight: bold;
+  }
+
+  button.opzione.giusta { border-width: 4px; padding: calc(0.7em - 2px) calc(1.4em - 2px); font-weight: bold; }
+  button.opzione.sbagliata { border-style: dashed; }
+
+  .segno {
+    flex: 0 0 1.4em;
+    font-weight: bold;
+    color: var(--verde);
+  }
+
+  .spiega-opzione {
+    margin: 0.3rem 0 0 0.6rem;
+    padding: 0.5em 0.8em;
+    font-size: 0.95rem;
+    border-left: 4px solid var(--teal);
+  }
+
+  .esito {
+    margin: 0.4rem 0 0.8rem;
+    font-weight: bold;
+  }
+
+  .esito:empty { display: none; }
+
+  .esito.bene { color: var(--verde); }
+
+  .riga-pulsanti {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  button.secondario {
+    color: var(--verde);
+    background: transparent;
+    border: 2px solid var(--verde);
+  }
+
+  button.secondario:hover { color: var(--pulsante-testo); background: var(--verde); }
+
+  /* ----- le tappe (i numeri dei casi e dei passi) ----- */
+
+  .tappe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tappe button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.35em 0.8em;
+    font-size: 0.9rem;
+    color: var(--verde);
+    background: var(--campo);
+    border: 2px solid var(--verde);
+  }
+
+  .tappe button:hover { background: var(--fondo-lettura); }
+
+  .tappe button[aria-current="step"] {
+    color: var(--pulsante-testo);
+    background: var(--pulsante-fondo);
+  }
+
+  /* ----- la piramide da ordinare ----- */
+
+  .ordina {
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ordina li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+    padding: 0.4rem 0.4rem 0.4rem 0.8rem;
+    background: var(--campo);
+    border: 2px solid var(--verde);
+    border-radius: var(--raggio);
+  }
+
+  .ordina li.fuori-posto { border-style: dashed; }
+
+  .ordina .posto { font-weight: bold; color: var(--teal); min-width: 1.5em; }
+  .ordina .nome-fonte { flex: 1; }
+  .ordina .segno { flex: 0 0 auto; }
+
+  .ordina button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.2em 0.6em;
+  }
+
+  .piramide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0 0 1rem;
+  }
+
+  .piramide button {
+    width: 100%;
+    text-align: center;
+    color: var(--pulsante-testo);
+    background: var(--pulsante-fondo);
+  }
+
+  .piramide button[aria-pressed="true"] {
+    outline: 4px solid var(--giallo);
+    outline-offset: 2px;
+  }
+
+  /* ----- l'età ----- */
+
+  .eta-grande {
+    display: block;
+    margin: 0.2rem 0 0.6rem;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    color: var(--verde);
+  }
+
+  input[type="range"] {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    accent-color: var(--verde);
+    min-height: 44px;
+  }
+
+  .riassunto-eta {
+    padding: 0.8em 1em;
+    background: var(--campo);
+    border-radius: var(--raggio);
+  }
+
+  .azioni {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .azioni li {
+    display: grid;
+    grid-template-columns: 2.2rem 1fr;
+    gap: 0.2rem 0.6rem;
+    padding: 0.7rem 0;
+    border-top: 1px solid var(--teal);
+  }
+
+  .azioni .icona-azione { font-size: 1.5rem; grid-row: span 3; }
+  .azioni .nome-azione { font-weight: bold; }
+  .azioni .stato { font-weight: bold; }
+  .azioni .stato.si { color: var(--verde); }
+  .azioni .spiega { font-size: 0.95rem; margin: 0; }
+
+  .situazione {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.3rem 1rem;
+    padding: 0.8em 1em;
+    background: var(--campo);
+    border-left: 6px solid var(--verde);
+    border-radius: var(--raggio);
+    margin: 0 0 1rem;
+  }
+
+  .situazione dt { font-weight: bold; color: var(--teal); }
+  .situazione dd { margin: 0; font-weight: bold; }
+
+  /* ----- la mappa degli organi ----- */
+
+  .compito-attuale {
+    padding: 1rem;
+    margin: 0 0 1rem;
+    text-align: center;
+    background: var(--campo);
+    border: 3px solid var(--verde);
+    border-radius: var(--raggio);
+  }
+
+  .compito-attuale .testo-compito {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin: 0.3rem 0;
+  }
+
+  .mappa {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+    gap: 0.7rem;
+  }
+
+  .organo {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid var(--verde);
+    border-radius: var(--raggio);
+    background: var(--campo);
+    overflow: hidden;
+  }
+
+  .organo > button {
+    border-radius: 0;
+    padding: 0.7em 0.6em;
+    text-align: center;
+  }
+
+  .organo .icona-organo { display: block; font-size: 1.6rem; }
+  .organo .potere { display: block; font-size: 0.8rem; font-weight: normal; }
+
+  .organo ul {
+    margin: 0;
+    padding: 0.5rem 0.6rem 0.6rem 1.6rem;
+    font-size: 0.9rem;
+  }
+
+  .organo ul:empty { display: none; }
+
+  .organo li { margin-bottom: 0.3rem; }
+
+  .avviso {
+    padding: 0.8em 1em;
+    background: var(--campo);
+    border: 2px dashed var(--teal);
+    border-radius: var(--raggio);
+  }
+
+  .avviso ul { margin: 0.4rem 0 0; }
+
+  @media (max-width: 40rem) {
+    .situazione { grid-template-columns: 1fr; }
+    .mappa { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+
+<body>
+
+<p class="ritorno su-scuro"><a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a></p>
+
+<!-- TESTO MODIFICABILE: puoi cambiare le due righe qui sotto.
+     I testi delle attività invece stanno nei quattro file .txt di
+     questa cartella. -->
+<h1 class="titolo-pagina">Diritto in pratica</h1>
+<p class="titolo-pagina sottotitolo">Primo e secondo anno · quattro attività da svolgere a scuola o a casa</p>
+
+<main id="app">
+  <div class="riquadro"><p>Carico le attività…</p></div>
+</main>
+
+<script src="diritto.js?v=1"></script>
+</body>
+</html>
