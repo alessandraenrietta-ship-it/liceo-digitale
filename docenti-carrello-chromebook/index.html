@@ -80,7 +80,9 @@
     background: #FFFFFF; color: var(--testo); max-width: 100%;
   }
 
-  main { padding: 1rem; max-width: 1100px; margin: 0 auto; }
+  /* Più largo di prima: con i giorni tutti in fila, a 1100 pixel le
+     colonne diventavano troppo strette. */
+  main { padding: 1rem; max-width: 1400px; margin: 0 auto; }
 
   .barra {
     display: flex; flex-wrap: wrap; gap: 0.5rem;
@@ -118,11 +120,20 @@
   .messaggio.errore { border-left-color: var(--rosso); background: #FBECEC; }
   .messaggio[hidden] { display: none; }
 
+  /* I giorni stanno tutti su una riga sola, quanti che siano: ognuno si
+     prende una colonna della stessa larghezza. */
   .settimana {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 0.8rem; align-items: start;
+    display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+    gap: 0.8rem; align-items: stretch;
   }
-  .giorno { background: var(--carta); border: 1px solid var(--bordo); border-radius: 8px; overflow: hidden; }
+  /* Le righe sono le stesse per tutti i giorni: la 2ª ora di lunedì sta
+     alla stessa altezza della 2ª ora di venerdì, anche quando in una
+     c'è un pulsante e nell'altra no. L'altezza di ogni riga la decide
+     il giorno che in quell'ora ha più roba dentro. */
+  .giorno {
+    display: grid; grid-template-rows: subgrid; grid-row: 1 / -1;
+    background: var(--carta); border: 1px solid var(--bordo); border-radius: 8px; overflow: hidden;
+  }
   .giorno > h2 { margin: 0; padding: 0.6rem 0.8rem; background: var(--verde); color: #FFFFFF; font-size: 1rem; }
   .giorno.passato > h2 { background: var(--tenue); }
 
@@ -167,6 +178,19 @@
   .stato { display: inline-block; padding: 0 0.5rem; border-radius: 999px; font-size: 0.8rem; font-weight: bold; }
   .stato.confermata { background: #DDEFDC; color: var(--verde-scuro); }
   .stato.annullata { background: #F0E2E2; color: var(--rosso); }
+
+  /* Sotto ai 900 pixel i giorni in fila diventerebbero colonnine
+     illeggibili: si rimettono uno sotto l'altro. */
+  @media (max-width: 900px) {
+    .settimana {
+      grid-auto-flow: row; grid-auto-columns: auto;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-rows: none !important;
+    }
+    /* Incolonnati non c'è niente da allineare: ogni giorno torna un
+       riquadro normale, e si riprende il suo posto nella colonna. */
+    .giorno { display: block; grid-row: auto; grid-template-rows: none; }
+  }
 
   @media (max-width: 480px) {
     .ora { align-items: flex-start; }
@@ -515,6 +539,14 @@
       return;
     }
 
+
+    /* Una riga per il nome del giorno, più una per ogni ora: sono le
+       righe che i giorni si dividono, per restare allineati fra loro. */
+    var quanteOre = 0;
+    s.giorni.forEach(function (giorno) {
+      if (giorno.caselle.length > quanteOre) { quanteOre = giorno.caselle.length; }
+    });
+    contenitore.style.gridTemplateRows = 'auto repeat(' + quanteOre + ', auto)';
 
     s.giorni.forEach(function (giorno) {
       var blocco = nuovo('div', 'giorno' + (giorno.passato ? ' passato' : ''));
