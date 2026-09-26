@@ -228,19 +228,14 @@ da qui.
    cartelle si raggiungono per indirizzo diretto. Rinominare il campo, o
    prevedere un accesso vero. Togliere la memoria permanente della
    sezione aperta.
-3. **Presentazione pesante.** La home carica subito l'iframe della
-   presentazione (circa 1,9 MB, con 4 immagini PNG incorporate), anche se
-   i commenti dicono il contrario. Caricarla al clic, oppure comprimere le
-   immagini. Rispettare `prefers-reduced-motion`, cioè ridurre le
-   animazioni per chi le ha disattivate nel computer.
-4. **Nomi dei modelli Gemini.** Sono scritti in ogni pagina: raccoglierli
+3. **Nomi dei modelli Gemini.** Sono scritti in ogni pagina: raccoglierli
    in un punto solo.
-5. **Home.** Nascondere le discipline senza strumenti. Mostrare "Righe del
+4. **Home.** Nascondere le discipline senza strumenti. Mostrare "Righe del
    registro da controllare" solo nell'area docenti.
-6. **Registro.** In `artefatti.txt` la descrizione di "Annotazioni sul
+5. **Registro.** In `artefatti.txt` la descrizione di "Annotazioni sul
    registro" dice ancora che il nome resta sul computer: ora il nome non
    si chiede più, quindi va aggiornata.
-7. **Privacy.** L'uso di Gemini con chiavi gratuite per testi che
+6. **Privacy.** L'uso di Gemini con chiavi gratuite per testi che
    riguardano studenti va verificato con il DPO della scuola. Le
    modifiche tecniche riducono il rischio ma non sostituiscono questa
    verifica.
