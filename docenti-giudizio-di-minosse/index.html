@@ -473,7 +473,7 @@
 
 <!-- Aggiunto per il sito Liceo digitale: collegamento per tornare
      alla pagina iniziale del sito. -->
-<p class="ritorno"><a href="../index.html"><span class="freccia" aria-hidden="true">&larr;</span> Liceo digitale</a></p>
+<p class="ritorno"><a href="../index.html" aria-label="Torna a Liceo digitale"><span class="freccia" aria-hidden="true">&larr;</span></a></p>
 
 <!-- ============ IMPOSTAZIONE DELLA CLASSE ============ -->
 <main id="impostazione" class="impostazione">
@@ -538,6 +538,7 @@
     <h1>Il giudizio di Minosse</h1>
     <div class="contatore" id="contatore" aria-live="polite">Anime in attesa: <strong id="n-attesa">0</strong> · Dannati: <strong id="n-dannati">0</strong></div>
     <div class="comandi-alti">
+      <button type="button" class="discreto" id="suono" aria-pressed="true">Suono: acceso</button>
       <button type="button" class="discreto" id="schermo-intero">Schermo intero</button>
       <button type="button" class="discreto" id="cambia-classe">Carica un'altra classe</button>
     </div>
@@ -793,6 +794,148 @@
     window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", function (e) {
       pocoMovimento = e.matches;
     });
+  }
+
+  /* ---------- Il suono ----------
+     Non è un file audio: lo costruisce il browser sul momento, con
+     il rumore (il fruscio della radio fra due stazioni) passato per
+     dei filtri. Così non c'è niente da scaricare.
+     - Mentre gira la coda: un fruscio e un "tac" a ogni passo.
+     - Mentre il cartellino precipita: silenzio.
+     - Quando tocca il fondo: un tonfo, e il rombo delle fiamme che
+       divampano, con qualche scoppiettio.
+     I tempi degli scoppiettii seguono un seno, non il caso: in questa
+     pagina il caso serve solo per l'estrazione. */
+  var NOME_SUONO = "liceo-digitale-minosse-suono";
+  var suonoAcceso = true;
+  try { suonoAcceso = localStorage.getItem(NOME_SUONO) !== "spento"; } catch (e) {}
+
+  var audio = null;    /* il "mixer" del browser, creato al primo Giudica */
+  var fruscio = null;  /* due secondi di rumore, preparati una volta sola */
+
+  /* I browser suonano solo dopo un clic di chi usa la pagina: per
+     questo il mixer si accende quando si preme Giudica. */
+  function preparaSuono() {
+    if (!suonoAcceso) { return; }
+    var Mixer = window.AudioContext || window.webkitAudioContext;
+    if (!Mixer) { return; }
+    if (!audio) {
+      audio = new Mixer();
+      fruscio = audio.createBuffer(1, audio.sampleRate * 2, audio.sampleRate);
+      var dati = fruscio.getChannelData(0);
+      /* Un rumore che non usa il caso: la somma di tanti seni con
+         frequenze che non vanno d'accordo fra loro. All'orecchio è un
+         fruscio come un altro. */
+      for (var i = 0; i < dati.length; i += 1) {
+        dati[i] = (Math.sin(i * 12.9898) * 43758.5453) % 1;
+      }
+    }
+    if (audio.state === "suspended") { audio.resume(); }
+  }
+
+  /* Un pezzo di fruscio, passato per un filtro, con il suo volume. */
+  function fruscioFiltrato(tipo, frequenza) {
+    var sorgente = audio.createBufferSource();
+    sorgente.buffer = fruscio;
+    sorgente.loop = true;
+    var filtro = audio.createBiquadFilter();
+    filtro.type = tipo;
+    filtro.frequency.value = frequenza;
+    var volume = audio.createGain();
+    volume.gain.value = 0;
+    sorgente.connect(filtro);
+    filtro.connect(volume);
+    volume.connect(audio.destination);
+    return { sorgente: sorgente, filtro: filtro, volume: volume };
+  }
+
+  /* Il tonfo: il cartellino che sbatte sul fondo del baratro. Una
+     nota molto grave che cala di colpo, come un colpo di grancassa,
+     e sopra un fruscio sordo e cortissimo, che è l'urto. */
+  function suonoTonfo() {
+    if (!suonoAcceso || !audio) { return; }
+    var ora = audio.currentTime;
+
+    var colpo = audio.createOscillator();
+    colpo.type = "sine";
+    colpo.frequency.setValueAtTime(120, ora);
+    colpo.frequency.exponentialRampToValueAtTime(40, ora + 0.3);
+    var volumeColpo = audio.createGain();
+    volumeColpo.gain.setValueAtTime(0, ora);
+    volumeColpo.gain.linearRampToValueAtTime(0.9, ora + 0.005);
+    volumeColpo.gain.exponentialRampToValueAtTime(0.001, ora + 0.45);
+    colpo.connect(volumeColpo);
+    volumeColpo.connect(audio.destination);
+    colpo.start(ora);
+    colpo.stop(ora + 0.5);
+
+    var urto = fruscioFiltrato("lowpass", 500);
+    urto.volume.gain.setValueAtTime(0, ora);
+    urto.volume.gain.linearRampToValueAtTime(0.6, ora + 0.003);
+    urto.volume.gain.exponentialRampToValueAtTime(0.001, ora + 0.12);
+    urto.sorgente.start(ora);
+    urto.sorgente.stop(ora + 0.15);
+  }
+
+  /* Un passo della coda, da un'anima alla successiva: un fruscio,
+     come la coda che frusta l'aria, e un "tac" quando arriva, come la
+     ruota della fortuna. Si suona a ogni passo, quindi segue da solo
+     il movimento: quando la coda accelera i tac si avvicinano e il
+     fruscio si fa più acuto, quando rallenta si allargano e scendono. */
+  function suonoCoda(durataMs) {
+    if (!suonoAcceso || !audio) { return; }
+    var ora = audio.currentTime;
+    var durata = Math.max(0.04, durataMs * 0.85 / 1000);
+    /* Da 0 (passo lento, circa mezzo secondo) a 1 (passo velocissimo). */
+    var rapidita = Math.min(1, Math.max(0, 1 - (durataMs - 25) / 400));
+
+    var f = fruscioFiltrato("bandpass", 300 + 2200 * rapidita);
+    f.filtro.Q.value = 2;
+    f.volume.gain.setValueAtTime(0, ora);
+    f.volume.gain.linearRampToValueAtTime(0.05 + 0.08 * (1 - rapidita), ora + durata * 0.4);
+    f.volume.gain.linearRampToValueAtTime(0, ora + durata);
+    f.sorgente.start(ora);
+    f.sorgente.stop(ora + durata + 0.02);
+
+    var tac = audio.createOscillator();
+    tac.type = "square";
+    tac.frequency.value = 500 + 700 * rapidita;
+    var volumeTac = audio.createGain();
+    var arrivo = ora + durata;
+    volumeTac.gain.setValueAtTime(0, arrivo);
+    volumeTac.gain.linearRampToValueAtTime(0.08, arrivo + 0.002);
+    volumeTac.gain.exponentialRampToValueAtTime(0.001, arrivo + 0.035);
+    tac.connect(volumeTac);
+    volumeTac.connect(audio.destination);
+    tac.start(arrivo);
+    tac.stop(arrivo + 0.04);
+  }
+
+  function suonoFiamme() {
+    if (!suonoAcceso || !audio) { return; }
+    var ora = audio.currentTime;
+
+    /* Il rombo: fruscio grave che esplode e poi si spegne piano,
+       in circa due secondi. */
+    var r = fruscioFiltrato("lowpass", 700);
+    r.filtro.frequency.setValueAtTime(1800, ora);
+    r.filtro.frequency.exponentialRampToValueAtTime(350, ora + 2);
+    r.volume.gain.setValueAtTime(0, ora);
+    r.volume.gain.linearRampToValueAtTime(0.7, ora + 0.04);
+    r.volume.gain.exponentialRampToValueAtTime(0.001, ora + 2.2);
+    r.sorgente.start(ora);
+    r.sorgente.stop(ora + 2.3);
+
+    /* Gli scoppiettii: colpi brevissimi e acuti, sparsi nel rombo. */
+    for (var i = 0; i < 12; i += 1) {
+      var quando = ora + 0.05 + 1.6 * ((Math.sin(i * 7.3) + 1) / 2);
+      var c = fruscioFiltrato("highpass", 2500);
+      c.volume.gain.setValueAtTime(0, quando);
+      c.volume.gain.linearRampToValueAtTime(0.3, quando + 0.003);
+      c.volume.gain.exponentialRampToValueAtTime(0.001, quando + 0.04);
+      c.sorgente.start(quando);
+      c.sorgente.stop(quando + 0.06);
+    }
   }
 
   function etichetta(anima) {
@@ -1107,6 +1250,7 @@
 
     inCorso = true;
     saltaFase = false;
+    preparaSuono();
     $("fine").hidden = true;
     aggiornaComandi();
     $("salta").focus();
@@ -1122,6 +1266,7 @@
       var d = tempi[p - 1];
       accendi(i);
       giraCoda(i, rimasti, d);
+      suonoCoda(d);
       stringiSpira(d);
       return aspetta(d).then(prossimoPasso);
     }
@@ -1182,6 +1327,8 @@
 
     function atterra() {
       caduta = null;
+      suonoTonfo();
+      suonoFiamme();
       el.hidden = true;
       el.classList.remove("cresce");
       M.condanna(stato, sentenza.indice);
@@ -1205,6 +1352,7 @@
        spostamento a destra e a sinistra è calcolato con un seno, non a
        caso: in questa pagina il caso serve solo per l'estrazione, e
        deve restare l'unico posto in cui si usa. */
+    /* Mentre cade non si sente niente: il suono arriva con il tonfo. */
     var scia = setInterval(function () {
       var ora = el.getBoundingClientRect();
       rogo(ora.left + ora.width / 2, ora.top + ora.height * 0.78, 0.85);
@@ -1372,6 +1520,19 @@
     e.preventDefault();
     giudica();
   });
+
+  /* Il pulsante del suono. La scelta si ricorda su questo computer. */
+  var bottoneSuono = $("suono");
+  function mostraSuono() {
+    bottoneSuono.textContent = suonoAcceso ? "Suono: acceso" : "Suono: spento";
+    bottoneSuono.setAttribute("aria-pressed", suonoAcceso ? "true" : "false");
+  }
+  bottoneSuono.addEventListener("click", function () {
+    suonoAcceso = !suonoAcceso;
+    try { localStorage.setItem(NOME_SUONO, suonoAcceso ? "acceso" : "spento"); } catch (e) {}
+    mostraSuono();
+  });
+  mostraSuono();
 
   /* Schermo intero */
   var bottoneSchermo = $("schermo-intero");

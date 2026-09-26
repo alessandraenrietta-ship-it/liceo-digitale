@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tense Battle</title>
+<!-- Adattato per il sito Liceo digitale.
+     Le domande non stanno più qui dentro: sono in domande.txt (la
+     battaglia) e in ruota.txt (la ruota per parlare), che si
+     modificano con il Blocco note.
+     Il gioco tiene i suoi colori, pensati per la proiezione sulla LIM.
+     Il carattere Fredoka, che prima veniva scaricato da Google, è
+     stato tolto: il sito non carica niente da altri siti. Al suo
+     posto si usa un carattere già presente sul computer. -->
+<style>
+  :root{
+    --ink:#1B2240; --muted:#5B6485; --bg:#EEF5FF; --card:#FFFFFF; --line:#D9E2F2;
+    --simple:#1F4E78; --simpleL:#DCE8F4;
+    --cont:#2E7D5B;   --contL:#E2F0E8;
+    --perf:#A86B00;   --perfL:#FBF0D5;
+    --pop:#FF5C8A; --sun:#FFC933; --sky:#3FA9F5; --mint:#35C98E; --grape:#8B6CF2;
+    --ok:#1FA968; --no:#E5484D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Trebuchet MS',system-ui,sans-serif;color:var(--ink);background:var(--bg);overflow:hidden}
+  body::before,body::after{content:"";position:fixed;border-radius:50%;z-index:0;filter:blur(2px);opacity:.55}
+  body::before{width:46vh;height:46vh;background:#FFE3EC;top:-14vh;right:-10vh}
+  body::after{width:38vh;height:38vh;background:#DFF7EC;bottom:-12vh;left:-10vh}
+  [hidden]{display:none!important}
+  button{font-family:inherit;cursor:pointer;border:none}
+  .screen{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column}
+
+  /* ---------- setup ---------- */
+  #setup{align-items:center;justify-content:center;gap:2.2vh;padding:3vh}
+  .logo{display:flex;align-items:center;gap:1.4vh;font-weight:700;font-size:8vh;letter-spacing:.02em;line-height:1}
+  .logo .t1{color:var(--simple)} .logo .t2{color:var(--pop)}
+  .logo svg{width:8vh;height:8vh}
+  .tag{font-size:2.6vh;color:var(--muted)}
+  .panel{background:var(--card);border-radius:3vh;padding:3vh 3.5vh;box-shadow:0 1.2vh 3vh rgba(27,34,64,.08);width:min(1100px,92vw)}
+  .row{display:flex;align-items:center;gap:2vh;flex-wrap:wrap;margin-bottom:2vh}
+  .row:last-child{margin-bottom:0}
+  .lbl{font-weight:600;font-size:2.4vh;min-width:22vh}
+  .pill{background:#F1F5FC;border-radius:99px;padding:.8vh 2vh;font-size:2.3vh;font-weight:500;color:var(--ink)}
+  .pill.on{background:var(--simple);color:#fff}
+  .names{display:grid;grid-template-columns:repeat(auto-fill,minmax(20vh,1fr));gap:1.2vh;flex:1}
+  .names input{font-family:inherit;font-size:2.3vh;padding:1vh 1.4vh;border:2px solid var(--line);border-radius:1.4vh;width:100%}
+  .swatches{display:flex;gap:.8vh}
+  .sw{width:4.2vh;height:4.2vh;border-radius:1vh;border:3px solid transparent}
+  .sw.on{border-color:var(--ink)}
+  .optpick{display:flex;align-items:center;gap:1vh;margin-right:2.5vh}
+  .optpick b{font-size:2.6vh;width:3vh}
+  .go{background:var(--pop);color:#fff;font-size:3.4vh;font-weight:600;padding:1.6vh 6vh;border-radius:99px;box-shadow:0 .8vh 0 #C93A66;transition:transform .1s}
+  .go:disabled{opacity:.45;cursor:default}
+  .go:active{transform:translateY(.5vh);box-shadow:0 .3vh 0 #C93A66}
+  .rules{display:flex;gap:2vh;flex-wrap:wrap;justify-content:center;font-size:2.3vh;color:var(--muted)}
+  .rules span b{color:var(--ink)}
+
+
+  /* ---------- hiring ---------- */
+  #hiring{align-items:center;justify-content:center;gap:3vh;padding:3vh}
+  .hire{font-size:10vh;font-weight:700;line-height:1;color:var(--pop);letter-spacing:.02em;transform:rotate(-2deg)}
+  .hire span{color:var(--simple)}
+  .hsub{font-size:3vh;color:var(--muted);margin-top:-1vh}
+  .jobs{display:flex;gap:3vh;justify-content:center;flex-wrap:wrap}
+  .job{background:var(--card);border-radius:3vh;padding:3vh;width:40vh;box-shadow:0 1.2vh 3vh rgba(27,34,64,.1);display:flex;flex-direction:column;gap:1.2vh;position:relative}
+  .job .ic{width:9vh;height:9vh;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .job .ic svg{width:5vh;height:5vh}
+  .job h3{font-size:3.4vh;line-height:1.1}
+  .job p{font-size:2.5vh;color:var(--ink)}
+  .job .sk{font-size:2.1vh;color:var(--muted)}
+  .job .open{position:absolute;top:2.4vh;right:2.4vh;font-size:1.7vh;font-weight:700;letter-spacing:.1em;padding:.5vh 1.2vh;border-radius:99px;background:#E7F8EF;color:var(--ok)}
+  .apply{background:var(--card);border-radius:2.4vh;padding:2vh 3.4vh;font-size:3vh;text-align:center;box-shadow:0 .8vh 2vh rgba(27,34,64,.08)}
+  .apply b{color:var(--pop)}
+  .apply small{display:block;font-size:2vh;color:var(--muted);margin-top:.6vh}
+
+  /* ---------- game ---------- */
+  header{display:flex;align-items:center;gap:2vh;padding:1.6vh 3vh}
+  header .logo{font-size:3.6vh} header .logo svg{width:3.8vh;height:3.8vh}
+  .dots{display:flex;gap:.7vh;flex:1;justify-content:center;flex-wrap:wrap}
+  .dot{width:1.6vh;height:1.6vh;border-radius:50%;background:#CBD6EA}
+  .dot.ch{background:#FFD36B}
+  .dot.done{background:var(--mint)} .dot.cur{background:var(--pop);transform:scale(1.35)}
+  .qnum{font-weight:600;font-size:2.6vh;color:var(--muted)}
+  .hbtn{background:var(--card);color:var(--ink);font-size:2.2vh;font-weight:500;padding:.9vh 1.8vh;border-radius:99px;box-shadow:0 .4vh 1vh rgba(27,34,64,.08)}
+  /* Il ritorno al sito dentro alle intestazioni: è un collegamento, ma
+     ha la stessa forma degli altri pulsanti che gli stanno accanto. */
+  a.hbtn{display:inline-flex;align-items:center;gap:.5em;text-decoration:none;white-space:nowrap}
+  a.hbtn:hover{background:var(--simple);color:#fff}
+  .timer{display:flex;align-items:center;gap:1vh}
+  .ring{width:6vh;height:6vh;position:relative}
+  .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .ring span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:2.4vh}
+  .timer.warn span{color:var(--no)}
+
+  main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3vh;padding:0 4vh;min-height:0}
+  .sentence{background:var(--card);border-radius:3vh;padding:3vh 4vh;font-size:5.2vh;font-weight:500;line-height:1.35;text-align:center;
+    box-shadow:0 1.2vh 3vh rgba(27,34,64,.08);max-width:1500px;width:100%}
+  .sentence{position:relative}
+  .chb{position:absolute;top:-2vh;left:3vh;background:var(--sun);color:var(--ink);font-size:2vh;font-weight:700;letter-spacing:.12em;padding:.6vh 1.6vh;border-radius:99px;box-shadow:0 .5vh 1vh rgba(0,0,0,.12)}
+  .gap{display:inline-block;min-width:16vh;border-bottom:.6vh dashed var(--pop);color:transparent;margin:0 .6vh;line-height:1.1}
+  .fill{display:inline-block;padding:0 1.2vh;border-radius:1.2vh;font-weight:700;animation:pop .45s ease}
+  .options{display:flex;gap:4vh;justify-content:center;flex-wrap:wrap}
+  .postit{width:30vh;min-height:21vh;padding:2.2vh;border-radius:.6vh .6vh 2.6vh .6vh;box-shadow:0 1.2vh 1.8vh rgba(27,34,64,.18);
+    display:flex;flex-direction:column;gap:1vh;position:relative;transition:opacity .3s, transform .3s, filter .3s}
+  .postit:nth-child(1){transform:rotate(-2.5deg)} .postit:nth-child(2){transform:rotate(1.5deg)} .postit:nth-child(3){transform:rotate(-1deg)}
+  .postit .L{font-size:5vh;font-weight:700;line-height:1;opacity:.85}
+  .postit .T{font-size:3.3vh;font-weight:600;line-height:1.15}
+  .postit.dim{opacity:.28;filter:grayscale(.6)}
+  .postit.win{transform:rotate(0) scale(1.08);animation:bounce .6s ease}
+  .badge{position:absolute;top:-2vh;right:-2vh;width:6vh;height:6vh;border-radius:50%;background:var(--ok);display:flex;align-items:center;justify-content:center;
+    box-shadow:0 .6vh 1.2vh rgba(0,0,0,.2);animation:pop .4s ease}
+  .badge svg{width:3.4vh;height:3.4vh}
+
+  .reveal{display:flex;align-items:stretch;gap:2vh;max-width:1500px;width:100%;animation:up .4s ease}
+  .tense{border-radius:2.4vh;padding:2vh 2.6vh;color:#fff;display:flex;flex-direction:column;justify-content:center;min-width:34vh}
+  .tense small{font-size:1.9vh;letter-spacing:.12em;opacity:.85;font-weight:600}
+  .tense b{font-size:3.2vh;line-height:1.1}
+  .why{flex:1;border-radius:2.4vh;padding:2vh 2.6vh;background:var(--card);border:3px solid;display:flex;flex-direction:column;justify-content:center;gap:.8vh}
+  .why .fq{font-size:2.9vh;font-weight:600}
+  .why .ex{font-size:2.6vh;color:var(--muted)}
+  .why .ex b{color:var(--ink)}
+  .trap{font-size:2.3vh;background:#FFF1F4;color:#B4234F;border-radius:1vh;padding:.6vh 1.2vh;align-self:flex-start}
+
+  .ctrl{display:flex;gap:1.6vh}
+  .big{font-size:2.8vh;font-weight:600;padding:1.3vh 3.6vh;border-radius:99px;color:#fff;background:var(--simple);box-shadow:0 .6vh 0 #143653}
+  .big.pink{background:var(--pop);box-shadow:0 .6vh 0 #C93A66}
+  .big.ghost{background:var(--card);color:var(--ink);box-shadow:0 .6vh 0 #C9D3E6}
+  .big:active{transform:translateY(.4vh)}
+
+  footer{display:flex;gap:1.4vh;padding:1.6vh 3vh 2.2vh;justify-content:center;flex-wrap:wrap}
+  .team{background:var(--card);border-radius:2vh;padding:1.1vh 1.4vh;display:flex;align-items:center;gap:1.2vh;box-shadow:0 .5vh 1.4vh rgba(27,34,64,.08);min-width:22vh}
+  .team .nm{font-weight:600;font-size:2.3vh;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .team .sc{font-weight:700;font-size:3.4vh;min-width:4.4vh;text-align:center;color:var(--simple)}
+  .team .sc.bump{animation:pop .4s ease}
+  .tg{display:flex;flex-direction:column;gap:.5vh}
+  .tg button{font-size:1.6vh;font-weight:600;padding:.4vh 1vh;border-radius:99px;background:#EEF2F9;color:var(--muted);display:flex;align-items:center;gap:.5vh}
+  .tg button.on{background:var(--ok);color:#fff}
+  .tg button.on.r{background:var(--grape)}
+  .tg button:disabled{opacity:.45;cursor:default}
+
+  .picks{display:flex;gap:.5vh}
+  .pk{width:4vh;height:4vh;border-radius:1vh;font-weight:700;font-size:2vh;color:var(--ink);background:#EEF2F9;border:2px solid transparent}
+  .pk.on{background:var(--pc);border-color:var(--ink)}
+  .team.right .pk.on{border-color:var(--ok);box-shadow:0 0 0 2px var(--ok)}
+  .team.wrong .pk.on{opacity:.55}
+  .pk.ok:not(.on){outline:2px dashed var(--ok);outline-offset:1px}
+  .team.right{box-shadow:0 0 0 3px var(--ok)}
+  .team.wrong{box-shadow:0 0 0 3px #F3B5B7}
+  .rsn{font-size:1.6vh;font-weight:600;padding:.6vh 1.1vh;border-radius:99px;background:#EEF2F9;color:var(--muted)}
+  .rsn.on{background:var(--grape);color:#fff}
+  .picked{font-size:2vh;color:var(--muted);font-weight:500;min-height:2.4vh}
+  .keys{position:fixed;bottom:.6vh;right:1.4vh;font-size:1.5vh;color:#98A2BF;z-index:2}
+
+
+  /* ---------- speaking wheel ---------- */
+  #wheel header .logo{font-size:3.6vh}
+  .wwrap{flex:1;display:flex;gap:4vh;align-items:center;justify-content:center;padding:0 4vh;min-height:0}
+  .wheelbox{position:relative;width:62vh;height:62vh;flex:none}
+  .wheelbox svg.w{width:100%;height:100%;transition:transform 4.5s cubic-bezier(.15,.7,.2,1);filter:drop-shadow(0 1.2vh 2vh rgba(27,34,64,.18))}
+  /* La ruota è disegnata in un quadrato che gira con lei: gli angoli,
+     invisibili, a volte coprivano i pulsanti delle squadre e ne
+     bloccavano il clic. La ruota non si clicca (si gira con SPIN),
+     quindi i clic passano oltre. */
+  .wheelbox svg.w{pointer-events:none}
+  .pointer{position:absolute;top:-1.6vh;left:50%;transform:translateX(-50%);width:0;height:0;border-left:2.6vh solid transparent;border-right:2.6vh solid transparent;border-top:4.6vh solid var(--pop);filter:drop-shadow(0 .4vh .4vh rgba(0,0,0,.25));z-index:2}
+  .hub{position:absolute;inset:0;margin:auto;width:13vh;height:13vh;border-radius:50%;background:#fff;box-shadow:0 .6vh 1.4vh rgba(0,0,0,.15);
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:2.8vh;color:var(--pop);cursor:pointer;border:none}
+  .qpanel{flex:1;max-width:820px;display:flex;flex-direction:column;gap:2vh}
+  .qcard{background:var(--card);border-radius:3vh;padding:3vh 3.4vh;box-shadow:0 1.2vh 3vh rgba(27,34,64,.08);min-height:22vh;display:flex;flex-direction:column;justify-content:center;gap:1.4vh}
+  .qcard .num{font-size:2vh;font-weight:600;color:var(--muted);letter-spacing:.1em}
+  .qcard .qq{font-size:4.2vh;font-weight:600;line-height:1.2}
+  .qcard .chip{align-self:flex-start;color:#fff;font-weight:600;font-size:2.1vh;padding:.6vh 1.8vh;border-radius:99px}
+  .helps{display:flex;gap:2vh}
+  .help{flex:1;background:var(--card);border-radius:2.2vh;padding:1.8vh 2.2vh;box-shadow:0 .6vh 1.6vh rgba(27,34,64,.06)}
+  .help small{display:block;font-size:1.7vh;font-weight:700;letter-spacing:.12em;color:var(--muted);margin-bottom:.8vh}
+  .help div{font-size:2.4vh;line-height:1.5}
+  .wtimer{display:flex;align-items:center;gap:1.4vh}
+  .wtimer .clock{font-size:5vh;font-weight:700;min-width:15vh;color:var(--simple);font-variant-numeric:tabular-nums}
+  .wtimer .clock.warn{color:var(--no)}
+  .phase{font-size:2.2vh;font-weight:700;letter-spacing:.12em;color:#fff;background:var(--grape);padding:.8vh 1.8vh;border-radius:99px}
+  .phase.talk{background:var(--mint)}
+  .rules2{font-size:2.1vh;color:var(--muted)}
+  .rules2 b{color:var(--ink)}
+
+  /* ---------- final ---------- */
+  #final{align-items:center;justify-content:center;gap:3vh}
+  #final h1{font-size:7vh;color:var(--simple)}
+  #final h1 span{color:var(--pop)}
+  .podium{display:flex;align-items:flex-end;gap:2.5vh}
+  .step{width:24vh;border-radius:2.4vh 2.4vh 0 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:2vh;color:#fff;animation:up .6s ease both}
+  .step .p{font-size:6vh;font-weight:700;line-height:1}
+  .step .n{font-size:2.8vh;font-weight:600;text-align:center;padding:0 1vh}
+  .step .s{font-size:2.4vh;opacity:.9}
+  .others{display:flex;gap:1.4vh;flex-wrap:wrap;justify-content:center;font-size:2.4vh}
+  .others span{background:var(--card);border-radius:99px;padding:.8vh 2vh}
+  canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:5}
+
+  @keyframes pop{0%{transform:scale(.4);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+  @keyframes bounce{0%{transform:scale(1)}40%{transform:scale(1.15) rotate(-2deg)}70%{transform:scale(1.02)}100%{transform:scale(1.08)}}
+  @keyframes up{from{transform:translateY(3vh);opacity:0}to{transform:none;opacity:1}}
+  @keyframes shake{0%,100%{transform:none}25%{transform:translateX(-1vh)}75%{transform:translateX(1vh)}}
+  .shake{animation:shake .4s ease 2}
+
+  /* ---------- aggiunte per il sito Liceo digitale ---------- */
+
+  /* Il ritorno alla pagina iniziale: stessa forma delle altre pagine
+     del sito (una freccia tonda di 44 pixel, comoda anche col dito). */
+  .ritorno{position:absolute;top:2vh;left:2vh;z-index:3;margin:0}
+  .ritorno a{display:inline-flex;align-items:center;gap:.6em;min-height:44px;color:var(--simple);font-weight:700;font-size:16px;text-decoration:none}
+  .ritorno .freccia{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:2px solid currentColor;border-radius:50%;font-size:1.2rem;line-height:1;background:var(--card)}
+  .ritorno a:hover{text-decoration:underline}
+  .ritorno a:hover .freccia{background:var(--simple);color:#fff}
+
+  /* Il collegamento alla guida per il docente, in alto a destra:
+     stessa forma del ritorno, con il punto di domanda. */
+  .guida{position:absolute;top:2vh;right:2vh;z-index:3;margin:0}
+  .guida a{display:inline-flex;align-items:center;gap:.6em;min-height:44px;color:var(--simple);font-weight:700;font-size:16px;text-decoration:none}
+  .guida .freccia{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:2px solid currentColor;border-radius:50%;font-size:1.2rem;line-height:1;background:var(--card)}
+  .guida a:hover{text-decoration:underline}
+  .guida a:hover .freccia{background:var(--simple);color:#fff}
+
+  /* Il riquadro "partita in corso", nella prima schermata */
+  .ripresa{background:var(--card);border:3px solid var(--pop);border-radius:2.4vh;padding:1.8vh 2.6vh;display:flex;align-items:center;gap:2vh;flex-wrap:wrap;justify-content:center;box-shadow:0 .8vh 2vh rgba(27,34,64,.1);max-width:92vw}
+  .ripresa p{font-size:2.5vh;margin:0}
+  .ripresa p small{display:block;font-size:1.9vh;color:var(--muted)}
+  .ripresa .big{font-size:2.4vh;padding:1vh 2.6vh}
+
+  /* Il riquadro che segnala le righe scritte male nei file di testo,
+     oppure i file che non si riescono a leggere. */
+  .avviso{background:#FFF1F4;color:#8A1538;border:3px solid var(--no);border-radius:2vh;padding:1.6vh 2.4vh;font-size:2vh;width:min(1100px,92vw);max-height:22vh;overflow:auto}
+  .avviso strong{display:block;margin-bottom:.4vh}
+  .avviso ul{margin:.6vh 0 0 2.4vh}
+
+  /* Sul telefono lo schermo è piccolo: la pagina si può scorrere. */
+  @media (max-width:700px), (max-height:500px){
+    body{overflow:auto}
+    .screen{height:auto;min-height:100vh}
+    .ritorno,.guida{position:static;align-self:flex-start}
+    /* Nell'intestazione i pulsanti vanno a capo invece di schiacciarsi. */
+    header{flex-wrap:wrap}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ WE'RE HIRING ============ -->
+<section id="hiring" class="screen">
+  <p class="ritorno"><a href="../index.html" aria-label="Torna a Liceo digitale"><span class="freccia" aria-hidden="true">&larr;</span></a></p>
+  <!-- Compare solo se su questo computer c'è una partita salvata
+       nelle ultime 3 ore: si sceglie se riprenderla o ricominciare. -->
+  <div class="ripresa" id="ripresa" hidden>
+    <p id="ripresaTesto"></p>
+    <button class="big pink" id="riprendi">Resume ▶</button>
+    <button class="big ghost" id="nuova">New game</button>
+  </div>
+  <p class="guida"><a href="istruzioni.html">Istruzioni per il docente <span class="freccia" aria-hidden="true">?</span></a></p>
+  <!-- TESTO MODIFICABILE: puoi cambiare le scritte che stanno fra i
+       segni > e < nelle righe qui sotto, fino alla riga
+       FINE TESTO MODIFICABILE. Non cancellare i segni stessi. -->
+  <div class="hire">WE'RE <span>HIRING!</span></div>
+  <div class="hsub">Three jobs in every team. Apply now!</div>
+  <div class="jobs">
+    <div class="job"><div class="open">OPEN</div><div class="ic" style="background:var(--pop)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg></div>
+      <h3>Conversation manager</h3><p>Gives turns to everyone.<br>Watches the time.</p><div class="sk">Skills: organising, being fair</div></div>
+    <div class="job"><div class="open">OPEN</div><div class="ic" style="background:var(--sky)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.6 1 2.5h6c0-.9.2-1.7 1-2.5A6 6 0 0 0 12 3z"/></svg></div>
+      <h3>Language tutor</h3><p>Helps with words.<br>Doesn't answer for others!</p><div class="sk">Skills: vocabulary, explaining things</div></div>
+    <div class="job"><div class="open">OPEN</div><div class="ic" style="background:var(--mint)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M8.5 12.5l2 2 4-4"/></svg></div>
+      <h3>Checker</h3><p>Listens to the team.<br>Ticks the tenses on the checklist.</p><div class="sk">Skills: listening, noticing details</div></div>
+  </div>
+  <div class="apply">I'd like to be the <b>…</b> because I'm good at <b>…</b><small>Final decision: HR department (your teacher)</small></div>
+  <!-- FINE TESTO MODIFICABILE -->
+  <button class="go" id="toSetup">Set up the teams ▶</button>
+</section>
+
+<!-- ============ SETUP ============ -->
+<section id="setup" class="screen" hidden>
+  <p class="ritorno"><a href="../index.html" aria-label="Torna a Liceo digitale"><span class="freccia" aria-hidden="true">&larr;</span></a></p>
+  <div class="logo">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><g fill="#FF5C8A"><path d="M32 6l4 7 8-2 1 8 8 3-4 7 5 6-7 4 1 8-8-1-3 8-7-4-7 4-3-8-8 1 1-8-7-4 5-6-4-7 8-3 1-8 8 2z"/></g><circle cx="32" cy="32" r="10" fill="#fff"/><circle cx="32" cy="32" r="5" fill="#1F4E78"/></svg>
+    <span class="t1">TENSE</span><span class="t2">BATTLE</span>
+  </div>
+  <!-- Il numero delle domande lo scrive il gioco, contandole in domande.txt -->
+  <div class="tag" id="tag">Loading the questions…</div>
+  <div class="avviso" id="avviso" hidden></div>
+
+  <div class="panel">
+    <div class="row"><div class="lbl">Teams</div><div id="teamCount" style="display:flex;gap:1vh"></div></div>
+    <div class="row" style="align-items:flex-start"><div class="lbl">Team names</div><div class="names" id="names"></div></div>
+    <div class="row"><div class="lbl">Post-it colours</div><div id="colours" style="display:flex;flex-wrap:wrap;gap:1vh"></div></div>
+    <div class="row"><div class="lbl">Timer</div><div id="timerPick" style="display:flex;gap:1vh"></div></div>
+  </div>
+
+  <div class="rules">
+    <span><b>1</b> · <b id="secsRule">20</b> seconds to agree</span>
+    <span><b>2</b> · one post-it per team</span>
+    <span><b>3</b> · right answer = <b>+1</b></span>
+    <span><b>4</b> · right reason = <b>+1</b></span>
+  </div>
+  <div style="display:flex;gap:2vh;align-items:center"><button class="big ghost" id="toHiring">◀ We're hiring</button><button class="go" id="start" disabled>Let's play!</button></div>
+</section>
+
+<!-- ============ GAME ============ -->
+<section id="game" class="screen" hidden>
+  <header>
+    <a class="hbtn" href="../index.html" aria-label="Torna a Liceo digitale"><span aria-hidden="true">&larr;</span></a>
+    <div class="logo"><svg viewBox="0 0 64 64" aria-hidden="true"><g fill="#FF5C8A"><path d="M32 6l4 7 8-2 1 8 8 3-4 7 5 6-7 4 1 8-8-1-3 8-7-4-7 4-3-8-8 1 1-8-7-4 5-6-4-7 8-3 1-8 8 2z"/></g><circle cx="32" cy="32" r="10" fill="#fff"/><circle cx="32" cy="32" r="5" fill="#1F4E78"/></svg><span class="t1">TENSE</span><span class="t2">BATTLE</span></div>
+    <div class="qnum" id="qnum"></div>
+    <div class="dots" id="dots"></div>
+    <div class="timer" id="timer">
+      <div class="ring"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.5" fill="#fff" stroke="#E3E9F5" stroke-width="4"/><circle id="arc" cx="18" cy="18" r="15.5" fill="none" stroke="#FF5C8A" stroke-width="4" stroke-linecap="round" stroke-dasharray="97.4" stroke-dashoffset="0"/></svg><span id="tleft">20</span></div>
+      <button class="hbtn" id="tbtn">Start timer</button>
+    </div>
+    <button class="hbtn" id="toSetup2">&#9664; Teams</button>
+    <button class="hbtn" id="toFinal">Results</button>
+  </header>
+
+  <main>
+    <div class="sentence" id="sentence"></div>
+    <div class="options" id="options"></div>
+    <div class="reveal" id="reveal" hidden>
+      <div class="tense" id="tense"><small>TENSE</small><b></b></div>
+      <div class="why" id="why"></div>
+    </div>
+    <div class="ctrl">
+      <button class="big ghost" id="prev">◀ Back</button>
+      <button class="big pink" id="show">Show answer</button>
+      <button class="big" id="next">Next ▶</button>
+    </div>
+    <div class="picked" id="picked"></div>
+  </main>
+
+  <footer id="teams"></footer>
+  <div class="keys">Click the letter each team shows · ← → navigate · Space show answer · T timer</div>
+</section>
+
+
+<!-- ============ SPEAKING WHEEL ============ -->
+<section id="wheel" class="screen" hidden>
+  <header>
+    <a class="hbtn" href="../index.html" aria-label="Torna a Liceo digitale"><span aria-hidden="true">&larr;</span></a>
+    <div class="logo"><span class="t1">FRIENDS,</span><span class="t2">LOVE &amp; LIFE</span></div>
+    <div class="qnum" id="wround">Round 1</div>
+    <div class="rules2" style="flex:1;text-align:center">Everyone answers in <b>2–4 sentences</b> · next speaker asks <b>one follow-up</b> · <b>“Pass!”</b> = skip</div>
+    <button class="hbtn" id="wToFinal">Results</button>
+  </header>
+  <div class="wwrap">
+    <div class="wheelbox">
+      <div class="pointer"></div>
+      <svg class="w" id="wsvg" viewBox="-100 -100 200 200"></svg>
+      <button class="hub" id="spin">SPIN</button>
+    </div>
+    <div class="qpanel">
+      <div class="qcard" id="qcard"><div class="qq" style="color:var(--muted)">Spin the wheel!</div></div>
+      <div class="helps" id="helps" hidden>
+        <div class="help"><small>START WITH</small><div id="starters"></div></div>
+        <div class="help"><small>FOLLOW-UP QUESTIONS</small><div>Why? · Really? · Who with?<br>How long…? · What happened next?</div></div>
+      </div>
+      <div class="wtimer" id="wtimerBox" hidden>
+        <div class="phase" id="wphase">THINK</div><div class="clock" id="wclock">2:00</div>
+        <button class="big pink" id="wstart">Start</button>
+        <button class="big ghost" id="wplus">+1 min</button>
+      </div>
+    </div>
+  </div>
+  <footer id="wteams"></footer>
+</section>
+
+<!-- ============ FINAL ============ -->
+<section id="final" class="screen" hidden>
+  <p class="ritorno"><a href="../index.html" aria-label="Torna a Liceo digitale"><span class="freccia" aria-hidden="true">&larr;</span></a></p>
+  <h1>And the winner <span>is…</span></h1>
+  <div class="podium" id="podium"></div>
+  <div class="others" id="others"></div>
+  <div class="ctrl"><button class="big ghost" id="back">◀ Back to the questions</button><button class="big pink" id="toWheel">Speaking wheel ▶</button></div>
+</section>
+<canvas id="confetti"></canvas>
+
+<script>
+/* ================= LE DOMANDE =================
+   Le domande non sono scritte qui: il gioco le legge da domande.txt
+   quando si apre la pagina, e le mette in Q. Ogni domanda diventa:
+   s = la frase, o = le tre risposte, c = quale è giusta (0 = A,
+   1 = B, 2 = C), t = il tempo verbale, fam = la famiglia (simple,
+   cont oppure perf, che decide il colore), fq = la domanda guida,
+   ex = la spiegazione, trap = la trappola, ch = è una sfida. */
+let Q = [];
+
+/* Legge il testo di domande.txt. Una domanda scritta male non blocca
+   il gioco: viene saltata, e il motivo finisce nell'elenco "errori". */
+function leggiDomande(testo, errori){
+  const FAM = {simple:"simple", continuous:"cont", perfect:"perf"};
+  const CHIAVI = ["frase","a","b","c","giusta","tempo","famiglia","domanda guida","spiegazione","trappola","sfida"];
+  const blocchi = [];
+  let cur = null;
+  testo.split(/\r?\n/).forEach((riga, k) => {
+    const r = riga.trim();
+    if (!r || r[0] === "#") return;
+    if (r.toUpperCase() === "[DOMANDA]") { cur = {riga:k + 1, campi:{}}; blocchi.push(cur); return; }
+    const m = r.match(/^([^:]+):(.*)$/);
+    const chiave = m ? m[1].trim().toLowerCase() : "";
+    if (!cur) { errori.push(`domande.txt, riga ${k + 1}: manca la riga [DOMANDA] prima di questa`); return; }
+    if (!m || !CHIAVI.includes(chiave)) { errori.push(`domande.txt, riga ${k + 1}: non capisco questa riga ("${r.slice(0, 40)}")`); return; }
+    cur.campi[chiave] = m[2].trim();
+  });
+  const out = [];
+  blocchi.forEach(bl => {
+    const f = bl.campi, dove = `domande.txt, domanda che inizia alla riga ${bl.riga}`;
+    const manca = ["frase","a","b","c","giusta","tempo","domanda guida","spiegazione"].filter(x => !f[x]);
+    if (manca.length) { errori.push(`${dove}: manca ${manca.join(", ")}. Domanda saltata.`); return; }
+    if (!f.frase.includes("___")) { errori.push(`${dove}: nella frase manca il buco ___. Domanda saltata.`); return; }
+    const c = "ABC".indexOf(f.giusta.toUpperCase());
+    if (f.giusta.length !== 1 || c < 0) { errori.push(`${dove}: in "giusta" va scritto A, B oppure C. Domanda saltata.`); return; }
+    let fam = FAM[(f.famiglia || "").toLowerCase()];
+    if (!fam) { errori.push(`${dove}: in "famiglia" va scritto simple, continuous oppure perfect. Uso simple.`); fam = "simple"; }
+    out.push({s:f.frase, o:[f.a, f.b, f.c], c, t:f.tempo, fam, fq:f["domanda guida"], ex:f.spiegazione,
+      trap:f.trappola || "", ch:/^s[iì]$/i.test(f.sfida || "")});
+  });
+  return out;
+}
+
+const NAMES = ["Pistons","Gears","Bolts","Sparks","Turbines","Rotors","Drills"];
+const PAL = [["yellow","#FFE66D"],["pink","#FF9EBB"],["green","#8BE3A6"],["blue","#8FD0FF"],["orange","#FFBE6B"],["purple","#C9B3FF"]];
+const FAMC = {simple:["#1F4E78","#DCE8F4"], cont:["#2E7D5B","#E2F0E8"], perf:["#A86B00","#FBF0D5"]};
+
+let S = { teams:5, names:NAMES.slice(), cols:["#FFE66D","#FF9EBB","#8BE3A6"], secs:20,
+          i:0, shown:{}, revealed:{}, pick:{}, score:{}, started:false };
+
+const $ = id => document.getElementById(id);
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+/* Le parole fra due asterischi, *così*, diventano grassetto. */
+const bold = t => esc(t).replace(/\*([^*]+)\*/g, "<b>$1</b>");
+const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+/* ---------- setup ---------- */
+function drawSetup(){
+  $("teamCount").innerHTML = [3,4,5,6,7].map(n => `<button class="pill ${n===S.teams?'on':''}" data-n="${n}">${n}</button>`).join("");
+  $("teamCount").querySelectorAll("button").forEach(b => b.onclick = () => { S.teams = +b.dataset.n; drawSetup(); });
+  $("names").innerHTML = Array.from({length:S.teams}, (_, k) => `<input data-k="${k}" value="${esc(S.names[k])}" maxlength="18">`).join("");
+  $("names").querySelectorAll("input").forEach(inp => inp.oninput = () => { S.names[+inp.dataset.k] = inp.value || NAMES[+inp.dataset.k]; });
+  $("colours").innerHTML = ["A","B","C"].map((L, k) =>
+    `<div class="optpick"><b>${L}</b><div class="swatches">${PAL.map(p => `<button class="sw ${S.cols[k]===p[1]?'on':''}" title="${p[0]}" style="background:${p[1]}" data-k="${k}" data-c="${p[1]}"></button>`).join("")}</div></div>`).join("");
+  $("colours").querySelectorAll(".sw").forEach(b => b.onclick = () => { S.cols[+b.dataset.k] = b.dataset.c; drawSetup(); });
+  $("timerPick").innerHTML = [15,20,30].map(n => `<button class="pill ${n===S.secs?'on':''}" data-n="${n}">${n} s</button>`).join("");
+  $("timerPick").querySelectorAll("button").forEach(b => b.onclick = () => { S.secs = +b.dataset.n; drawSetup(); });
+  $("secsRule").textContent = S.secs;
+}
+
+/* ---------- scoring ---------- */
+function cell(q, t){ S.score[q] = S.score[q] || {}; S.score[q][t] = S.score[q][t] || {a:false, r:false}; return S.score[q][t]; }
+function total(t){ let n = 0; for (const q in S.score) { const c = S.score[q][t]; if (c) n += (c.a?1:0) + (c.r?1:0); } return n; }
+
+function drawTeams(){
+  const q = Q[S.i], rev = !!S.revealed[S.i];
+  S.pick[S.i] = S.pick[S.i] || {};
+  $("teams").innerHTML = Array.from({length:S.teams}, (_, t) => {
+    const c = cell(S.i, t), pk = S.pick[S.i][t];
+    const state = rev && pk != null ? (pk === q.c ? 'right' : 'wrong') : '';
+    return `<div class="team ${state}"><div class="nm">${esc(S.names[t])}</div>
+      <div class="picks">${[0,1,2].map(k => `<button class="pk ${pk===k?'on':''} ${rev && k===q.c ? 'ok' : ''}" data-t="${t}" data-k="${k}" style="--pc:${S.cols[k]}">${"ABC"[k]}</button>`).join("")}</div>
+      <button class="rsn ${c.r?'on':''}" data-t="${t}" title="right reason +1">✓ reason</button>
+      <div class="sc" id="sc${t}">${total(t)}</div></div>`;
+  }).join("");
+  const n = Object.keys(S.pick[S.i]).length;
+  $("picked").textContent = rev ? "" : `${n} / ${S.teams} teams answered`;
+  $("teams").querySelectorAll(".pk").forEach(b => b.onclick = () => {
+    const t = +b.dataset.t, k = +b.dataset.k;
+    if (S.pick[S.i][t] === k) delete S.pick[S.i][t]; else S.pick[S.i][t] = k;
+    autoScore(S.i); drawTeams(); ding(600, .05);
+  });
+  $("teams").querySelectorAll(".rsn").forEach(b => b.onclick = () => {
+    const t = +b.dataset.t, c = cell(S.i, t); c.r = !c.r;
+    drawTeams(); $("sc" + t).classList.add("bump"); if (c.r) ding(880, .12);
+  });
+}
+/* the answer point is automatic: it counts only once the answer has been shown */
+function autoScore(qi){
+  const rev = !!S.revealed[qi], pk = S.pick[qi] || {};
+  for (let t = 0; t < S.teams; t++) cell(qi, t).a = rev && pk[t] === Q[qi].c;
+}
+
+/* ---------- question ---------- */
+function drawQ(){
+  const q = Q[S.i], shown = !!S.shown[S.i];
+  $("qnum").textContent = `Question ${S.i + 1} / ${Q.length}`;
+  $("dots").innerHTML = Q.map((x, k) => `<div class="dot ${x.ch?'ch':''} ${k===S.i?'cur':(S.shown[k]?'done':'')}"></div>`).join("");
+  const parts = q.s.split("___");
+  const [dark, light] = FAMC[q.fam];
+  const fills = parts.length > 2 ? q.o[q.c].split(" / ") : [q.o[q.c]];
+  $("sentence").innerHTML = (q.ch ? `<span class="chb">CHALLENGE</span>` : "") + parts.map((p, k) => esc(p) + (k < parts.length - 1 ?
+    (shown ? `<span class="fill" style="background:${light};color:${dark}">${esc(fills[k] || "")}</span>` : `<span class="gap">______</span>`) : "")).join("");
+  $("options").innerHTML = q.o.map((o, k) =>
+    `<div class="postit ${shown ? (k===q.c ? 'win' : 'dim') : ''}" style="background:${S.cols[k]}">
+       <div class="L">${"ABC"[k]}</div><div class="T">${esc(o)}</div>
+       ${shown && k===q.c ? `<div class="badge">${CHECK}</div>` : ''}</div>`).join("");
+  $("reveal").hidden = !shown;
+  if (shown){
+    $("tense").style.background = dark;
+    $("tense").querySelector("b").textContent = q.t;
+    $("why").style.borderColor = dark;
+    $("why").innerHTML = `<div class="fq" style="color:${dark}">${esc(q.fq)}</div><div class="ex">${bold(q.ex)}</div>` +
+      (q.trap ? `<div class="trap">${esc(q.trap)}</div>` : "");
+  }
+  $("show").textContent = shown ? "Hide answer" : "Show answer";
+  $("prev").style.visibility = S.i === 0 ? "hidden" : "visible";
+  $("next").textContent = S.i === Q.length - 1 ? "Results ▶" : "Next ▶";
+  resetTimer();
+  drawTeams();
+}
+
+function toggleShow(){
+  S.shown[S.i] = !S.shown[S.i];
+  if (S.shown[S.i]) { stopTimer(); ding(523, .1); setTimeout(() => ding(784, .18), 110);
+    if (!S.revealed[S.i]) { S.revealed[S.i] = true; autoScore(S.i);
+      setTimeout(() => document.querySelectorAll("#teams .sc").forEach(e => e.classList.add("bump")), 50); } }
+  drawQ();
+}
+function go(d){
+  const n = S.i + d;
+  if (n >= Q.length) return showFinal();
+  if (n < 0) return;
+  S.i = n; drawQ();
+}
+
+/* ---------- timer ---------- */
+let tId = null, tLeft = 0;
+function resetTimer(){ stopTimer(); tLeft = S.secs; paintTimer(); $("tbtn").textContent = "Start timer"; }
+function stopTimer(){ if (tId) { clearInterval(tId); tId = null; } }
+function paintTimer(){
+  $("tleft").textContent = tLeft;
+  $("arc").style.strokeDashoffset = 97.4 * (1 - tLeft / S.secs);
+  $("timer").classList.toggle("warn", tLeft <= 5);
+}
+function startTimer(){
+  if (tId) { stopTimer(); $("tbtn").textContent = "Resume"; return; }
+  if (tLeft <= 0) tLeft = S.secs;
+  $("tbtn").textContent = "Pause";
+  tId = setInterval(() => {
+    tLeft--; paintTimer();
+    if (tLeft <= 3 && tLeft > 0) ding(440, .06);
+    if (tLeft <= 0) { stopTimer(); $("tbtn").textContent = "Restart"; ding(330, .35);
+      $("sentence").classList.add("shake"); setTimeout(() => $("sentence").classList.remove("shake"), 900); }
+  }, 1000);
+}
+
+/* ---------- sound (tiny beeps, no files) ---------- */
+let AC = null;
+function ding(f, d){
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type = "triangle"; o.frequency.value = f; g.gain.value = .12;
+    o.connect(g); g.connect(AC.destination); o.start();
+    g.gain.exponentialRampToValueAtTime(.001, AC.currentTime + d); o.stop(AC.currentTime + d + .02);
+  } catch(e) {}
+}
+
+/* ---------- final ---------- */
+function showFinal(){
+  stopTimer();
+  $("game").hidden = true; $("wheel").hidden = true; $("final").hidden = false;
+  const r = Array.from({length:S.teams}, (_, t) => ({n:S.names[t], s:total(t)})).sort((a, b) => b.s - a.s);
+  let place = 0, prev = null;
+  r.forEach((x, k) => { if (x.s !== prev) { place = k + 1; prev = x.s; } x.p = place; });
+  const top = r.slice(0, 3), order = [1, 0, 2], H = {1:"34vh", 2:"26vh", 3:"20vh"}, COL = {1:"#FF5C8A", 2:"#3FA9F5", 3:"#35C98E"};
+  $("podium").innerHTML = order.filter(k => top[k]).map((k, j) => {
+    const x = top[k];
+    return `<div class="step" style="height:${H[x.p] || '18vh'};background:${COL[x.p] || '#8B6CF2'};animation-delay:${j * .15}s">
+      <div class="p">${x.p}</div><div class="n">${esc(x.n)}</div><div class="s">${x.s} ${x.s === 1 ? 'point' : 'points'}</div></div>`;
+  }).join("");
+  $("others").innerHTML = r.slice(3).map(x => `<span><b>${x.p}.</b> ${esc(x.n)} · ${x.s}</span>`).join("");
+  confetti();
+  [523, 659, 784, 1046].forEach((f, k) => setTimeout(() => ding(f, .2), k * 140));
+}
+function confetti(){
+  const cv = $("confetti"), cx = cv.getContext("2d");
+  cv.width = innerWidth; cv.height = innerHeight;
+  const cols = ["#FF5C8A","#FFC933","#3FA9F5","#35C98E","#8B6CF2"];
+  const P = Array.from({length:180}, () => ({x:Math.random() * cv.width, y:-Math.random() * cv.height, r:4 + Math.random() * 6,
+    vy:2 + Math.random() * 3, vx:-1.5 + Math.random() * 3, a:Math.random() * 6, c:cols[Math.floor(Math.random() * cols.length)]}));
+  let f = 0;
+  (function tick(){
+    cx.clearRect(0, 0, cv.width, cv.height);
+    P.forEach(p => { p.y += p.vy; p.x += p.vx; p.a += .1;
+      cx.save(); cx.translate(p.x, p.y); cx.rotate(p.a); cx.fillStyle = p.c; cx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r); cx.restore(); });
+    if (++f < 260) requestAnimationFrame(tick); else cx.clearRect(0, 0, cv.width, cv.height);
+  })();
+}
+
+
+/* ================= SPEAKING WHEEL ================= */
+/* Le domande della ruota non sono scritte qui: il gioco le legge da
+   ruota.txt. W contiene le domande, ognuna con il numero del suo
+   tempo verbale; WT contiene i tempi verbali, con i loro colori
+   (c e c2: gli spicchi della ruota sono alternati scuro e chiaro)
+   e i modi di iniziare la risposta (st). */
+let W = [], WT = [];
+
+/* I colori che si possono scrivere in ruota.txt. */
+const COLORI = {
+  "blu":["#2F6FB0","#5B93CF"], "verde":["#2E8B62","#4FB285"], "blu scuro":["#1F4E78","#3C6E9C"],
+  "ocra":["#B7791F","#D69A3A"], "viola":["#6A4FC9","#8B6CF2"], "rosa":["#C93A66","#FF5C8A"]
+};
+
+/* Legge il testo di ruota.txt. Un gruppo scritto male viene saltato
+   e segnalato, il resto della ruota funziona lo stesso. */
+function leggiRuota(testo, errori){
+  const blocchi = [];
+  let cur = null;
+  testo.split(/\r?\n/).forEach((riga, k) => {
+    const r = riga.trim();
+    if (!r || r[0] === "#") return;
+    if (r.toUpperCase() === "[TEMPO]") { cur = {riga:k + 1, nome:"", colore:"", st:"", dom:[]}; blocchi.push(cur); return; }
+    const m = r.match(/^([^:]+):(.*)$/);
+    const chiave = m ? m[1].trim().toLowerCase() : "", val = m ? m[2].trim() : "";
+    if (!cur) { errori.push(`ruota.txt, riga ${k + 1}: manca la riga [TEMPO] prima di questa`); return; }
+    if (chiave === "nome") cur.nome = val;
+    else if (chiave === "colore") cur.colore = val.toLowerCase();
+    else if (chiave === "per iniziare") cur.st = val;
+    else if (chiave === "domanda") { if (val) cur.dom.push(val); }
+    else errori.push(`ruota.txt, riga ${k + 1}: non capisco questa riga ("${r.slice(0, 40)}")`);
+  });
+  const nomiColori = Object.keys(COLORI);
+  blocchi.forEach(bl => {
+    const dove = `ruota.txt, gruppo che inizia alla riga ${bl.riga}`;
+    if (!bl.nome) { errori.push(`${dove}: manca il nome del tempo. Gruppo saltato.`); return; }
+    if (!bl.dom.length) { errori.push(`${dove}: non ci sono domande. Gruppo saltato.`); return; }
+    let col = COLORI[bl.colore];
+    if (!col) {
+      col = COLORI[nomiColori[WT.length % nomiColori.length]];
+      errori.push(`${dove}: il colore "${bl.colore}" non lo conosco. Ne scelgo uno io.`);
+    }
+    const n = WT.length;
+    WT.push({n:bl.nome, c:col[0], c2:col[1], st:bl.st});
+    bl.dom.forEach(d => W.push([d, n]));
+  });
+}
+let WS = { rot:0, cur:-1, used:{}, round:0, spinning:false };
+
+/* ================= LA PARTITA SALVATA =================
+   Mentre si gioca, la partita viene salvata nel browser di questo
+   computer: squadre, domanda a cui si è arrivati, lettere scelte,
+   punti e giri della ruota. Non va su internet e gli altri computer
+   non la vedono. Se la pagina si chiude per sbaglio, alla riapertura
+   un riquadro chiede se riprenderla o ricominciare.
+   Dopo SCADENZA ore la partita salvata si cancella da sola: la LIM la
+   usano classi diverse, e l'ora dopo si deve ripartire puliti. */
+const SALVATAGGIO = "tense-battle-partita";
+const SCADENZA = 3;
+
+function schermataAttuale(){
+  return ["game", "wheel", "final"].find(id => !$(id).hidden) || "game";
+}
+function salva(){
+  if (!S.started) return;
+  try {
+    localStorage.setItem(SALVATAGGIO, JSON.stringify({
+      quando:Date.now(), domande:Q.length, ruota:W.length, schermata:schermataAttuale(),
+      S:{teams:S.teams, names:S.names, cols:S.cols, secs:S.secs, i:S.i, shown:S.shown, revealed:S.revealed, pick:S.pick, score:S.score},
+      WS:{rot:WS.rot, used:WS.used, round:WS.round}
+    }));
+  } catch(e) { /* in navigazione anonima non si può salvare: pazienza */ }
+}
+function cancellaSalvataggio(){
+  try { localStorage.removeItem(SALVATAGGIO); } catch(e) {}
+}
+/* Rilegge la partita salvata. Se è troppo vecchia, oppure se nel
+   frattempo sono cambiate le domande, la cancella e non la propone. */
+function leggiSalvataggio(){
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(SALVATAGGIO)); } catch(e) {}
+  if (!d || !d.S) return null;
+  if (Date.now() - d.quando > SCADENZA * 3600 * 1000 || d.domande !== Q.length || d.ruota !== W.length) {
+    cancellaSalvataggio(); return null;
+  }
+  return d;
+}
+function proponiRipresa(){
+  const d = leggiSalvataggio();
+  if (!d) return;
+  const ora = new Date(d.quando).toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit"});
+  const dove = d.schermata === "wheel" ? `speaking wheel, round ${d.WS.round}` : `question ${d.S.i + 1} of ${Q.length}`;
+  $("ripresaTesto").innerHTML = `<b>A game is in progress</b> · ${d.S.teams} teams · ${dove}<small>Saved at ${ora}</small>`;
+  $("ripresa").hidden = false;
+  $("riprendi").onclick = () => {
+    Object.assign(S, d.S, {started:true});
+    Object.assign(WS, d.WS);
+    $("ripresa").hidden = true; $("hiring").hidden = true;
+    $("wsvg").style.transition = "none"; $("wsvg").style.transform = `rotate(${WS.rot}deg)`;
+    requestAnimationFrame(() => $("wsvg").style.transition = "");
+    if (WS.round) $("wround").textContent = "Round " + WS.round;
+    if (d.schermata === "wheel") showWheel();
+    else if (d.schermata === "final") showFinal();
+    else { $("game").hidden = false; drawQ(); }
+  };
+  $("nuova").onclick = () => { cancellaSalvataggio(); $("ripresa").hidden = true; };
+}
+/* Si salva dopo ogni clic o tasto, e quando la pagina si chiude. */
+["click", "keydown", "input"].forEach(ev => document.addEventListener(ev, () => setTimeout(salva, 0)));
+window.addEventListener("pagehide", salva);
+
+function drawWheel(){
+  const n = W.length, a = 2 * Math.PI / n, R = 98;
+  let h = "";
+  W.forEach((q, i) => {
+    const a0 = i * a - Math.PI / 2, a1 = (i + 1) * a - Math.PI / 2;
+    const x0 = R * Math.cos(a0), y0 = R * Math.sin(a0), x1 = R * Math.cos(a1), y1 = R * Math.sin(a1);
+    const T = WT[q[1]], col = WS.used[i] ? "#D5DCE8" : (i % 2 ? T.c2 : T.c);
+    h += `<path d="M0 0 L${x0.toFixed(2)} ${y0.toFixed(2)} A${R} ${R} 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)} Z" fill="${col}" stroke="#fff" stroke-width="1.2"/>`;
+    const am = (i + .5) * a - Math.PI / 2, tr = 80;
+    h += `<text x="${(tr * Math.cos(am)).toFixed(2)}" y="${(tr * Math.sin(am)).toFixed(2)}" fill="#fff" font-size="9" font-weight="700" text-anchor="middle" dominant-baseline="central" font-family="Trebuchet MS, sans-serif">${i + 1}</text>`;
+  });
+  h += `<circle r="98" fill="none" stroke="#fff" stroke-width="3"/>`;
+  $("wsvg").innerHTML = h;
+}
+function spin(){
+  if (WS.spinning) return;
+  const free = W.map((_, i) => i).filter(i => !WS.used[i]);
+  if (!free.length) { WS.used = {}; drawWheel(); return; }
+  const i = free[Math.floor(Math.random() * free.length)], seg = 360 / W.length;
+  const center = (i + .5) * seg, cur = ((WS.rot % 360) + 360) % 360;
+  WS.rot += 360 * 5 + ((360 - center - cur) % 360 + 360) % 360;
+  WS.spinning = true; stopW();
+  $("wsvg").style.transform = `rotate(${WS.rot}deg)`;
+  $("qcard").innerHTML = `<div class="qq" style="color:var(--muted)">…</div>`;
+  $("helps").hidden = true; $("wtimerBox").hidden = true;
+  let ticks = 0; const tk = setInterval(() => { if (ticks++ < 22) ding(900 - ticks * 25, .03); else clearInterval(tk); }, 170);
+  setTimeout(() => {
+    WS.spinning = false; WS.cur = i; WS.used[i] = true; WS.round++; salva();
+    const q = W[i], T = WT[q[1]];
+    $("wround").textContent = "Round " + WS.round;
+    $("qcard").innerHTML = `<div class="num">QUESTION ${i + 1}</div><div class="qq">${esc(q[0])}</div><div class="chip" style="background:${T.c}">${T.n}</div>`;
+    $("starters").textContent = T.st;
+    $("helps").hidden = false; $("wtimerBox").hidden = false;
+    setPhase("think"); drawWheel(); drawWTeams();
+    ding(523, .12); setTimeout(() => ding(784, .2), 120);
+  }, 4600);
+}
+let wId = null, wLeft = 120, wPhase = "think";
+const PH = { think:[120, "THINK · 2 min"], talk:[240, "TALK · 4 min"] };
+function setPhase(ph){ wPhase = ph; wLeft = PH[ph][0]; $("wphase").textContent = PH[ph][1]; $("wphase").classList.toggle("talk", ph === "talk"); paintW(); }
+function paintW(){ const m = Math.floor(wLeft / 60), s = wLeft % 60; $("wclock").textContent = m + ":" + String(s).padStart(2, "0"); $("wclock").classList.toggle("warn", wLeft <= 30); }
+function stopW(){ if (wId) { clearInterval(wId); wId = null; } $("wstart").textContent = "Start"; }
+function startW(){
+  if (wId) { stopW(); $("wstart").textContent = "Resume"; return; }
+  if (wLeft <= 0) setPhase(wPhase);
+  $("wstart").textContent = "Pause";
+  wId = setInterval(() => { wLeft--; paintW();
+    if (wLeft <= 0) {
+      if (wPhase === "think") { ding(523, .15); setTimeout(() => ding(659, .15), 150); setTimeout(() => ding(784, .25), 300);
+        setPhase("talk"); }
+      else { stopW(); ding(330, .4); setTimeout(() => ding(262, .5), 350); $("wphase").textContent = "TIME'S UP · best sentence!"; }
+    } }, 1000);
+}
+function drawWTeams(){
+  const key = "w" + WS.round;
+  $("wteams").innerHTML = Array.from({length:S.teams}, (_, t) => {
+    const c = WS.round ? cell(key, t) : {a:false, r:false};
+    return `<div class="team"><div class="nm">${esc(S.names[t])}</div>
+      <div class="tg"><button class="${c.a?'on':''}" data-t="${t}" data-k="a" ${WS.round?'':'disabled'}>✓ everyone spoke</button><button class="r ${c.r?'on':''}" data-t="${t}" data-k="r" ${WS.round?'':'disabled'}>✓ best sentence</button></div>
+      <div class="sc" id="wsc${t}">${total(t)}</div></div>`;
+  }).join("");
+  $("wteams").querySelectorAll(".tg button").forEach(b => b.onclick = () => {
+    const t = +b.dataset.t, c = cell(key, t); c[b.dataset.k] = !c[b.dataset.k];
+    drawWTeams(); $("wsc" + t).classList.add("bump"); if (c[b.dataset.k]) ding(b.dataset.k === "a" ? 660 : 880, .12);
+  });
+}
+function showWheel(){
+  stopTimer(); $("final").hidden = true; $("game").hidden = true; $("wheel").hidden = false;
+  drawWheel(); drawWTeams();
+}
+$("spin").onclick = spin;
+$("wstart").onclick = startW;
+$("wplus").onclick = () => { wLeft += 60; paintW(); };
+$("toWheel").onclick = showWheel;
+$("wToFinal").onclick = () => { stopW(); $("wheel").hidden = true; showFinal(); };
+
+/* ---------- wiring ---------- */
+$("toSetup").onclick = () => { $("hiring").hidden = true; $("setup").hidden = false; };
+$("toHiring").onclick = () => { $("setup").hidden = true; $("hiring").hidden = false; };
+/* Dal gioco si torna alle squadre: i punti restano dove sono, e con
+   "Let's play!" si riprende dalla domanda in cui si era rimasti. */
+$("toSetup2").onclick = () => { stopTimer(); $("game").hidden = true; $("setup").hidden = false; drawSetup(); };
+$("start").onclick = () => { S.started = true; $("setup").hidden = true; $("game").hidden = false; drawQ(); };
+$("show").onclick = toggleShow;
+$("next").onclick = () => go(1);
+$("prev").onclick = () => go(-1);
+$("tbtn").onclick = startTimer;
+$("toFinal").onclick = showFinal;
+$("back").onclick = () => { $("final").hidden = true; $("game").hidden = false; drawQ(); };
+document.addEventListener("keydown", e => {
+  if (!$("wheel").hidden && e.key === " ") { e.preventDefault(); spin(); return; }
+  if ($("game").hidden || e.target.tagName === "INPUT") return;
+  if (e.key === "ArrowRight") go(1);
+  else if (e.key === "ArrowLeft") go(-1);
+  else if (e.key === " ") { e.preventDefault(); toggleShow(); }
+  else if (e.key.toLowerCase() === "t") startTimer();
+});
+window.addEventListener("beforeunload", e => { if (S.started) { e.preventDefault(); e.returnValue = ""; } });
+drawSetup();
+
+/* ---------- lettura dei file di testo ---------- */
+function caricaTesto(nome){
+  return fetch(nome, {cache:"no-store"}).then(r => { if (!r.ok) throw new Error("risposta del server " + r.status); return r.text(); });
+}
+function mostraAvviso(titolo, righe){
+  const box = $("avviso");
+  box.innerHTML += `<strong>${esc(titolo)}</strong>` + (righe.length ? `<ul>${righe.map(r => `<li>${esc(r)}</li>`).join("")}</ul>` : "");
+  box.hidden = false;
+}
+function nonLeggo(nome, e){
+  mostraAvviso(`Non riesco a leggere il file ${nome}.`, [location.protocol === "file:"
+    ? "Hai aperto la pagina facendo doppio clic sul file: così i browser non lasciano leggere gli altri file della cartella. Apri il sito con anteprima.bat oppure dal suo indirizzo su GitHub Pages."
+    : `Controlla che ${nome} si trovi nella stessa cartella di index.html. Dettaglio tecnico: ${e.message}`]);
+}
+Promise.all([
+  caricaTesto("domande.txt").then(t => {
+    const err = [];
+    Q = leggiDomande(t, err);
+    if (err.length) mostraAvviso("Alcune righe di domande.txt vanno riviste. Il resto del gioco funziona.", err);
+  }).catch(e => nonLeggo("domande.txt", e)),
+  caricaTesto("ruota.txt").then(t => {
+    const err = [];
+    leggiRuota(t, err);
+    if (err.length) mostraAvviso("Alcune righe di ruota.txt vanno riviste. Il resto del gioco funziona.", err);
+  }).catch(e => nonLeggo("ruota.txt", e))
+]).then(() => {
+  const nch = Q.filter(q => q.ch).length;
+  $("tag").textContent = Q.length
+    ? `${Q.length} questions${nch ? ` · ${nch} challenge ${nch === 1 ? "question" : "questions"}` : ""} · the right answer AND the right reason`
+    : "No questions yet: check domande.txt";
+  $("start").disabled = !Q.length;
+  $("toWheel").hidden = !W.length;
+  if (Q.length) proponiRipresa();
+});
+</script>
+</body>
+</html>

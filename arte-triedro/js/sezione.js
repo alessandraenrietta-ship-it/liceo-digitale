@@ -20,9 +20,10 @@ const Sezione = (function () {
   const NORMALI = {
     orizzontale: () => [0, 0, 1],                        // parallelo al P.O.
     verticale: () => [0, -1, 0],                         // parallelo al P.V.
-    profilo: () => [-1, 0, 0],                           // parallelo al P.L.
+    profilo: () => [1, 0, 0],                            // parallelo al P.L.
     // perpendicolare al P.V. e inclinato sul P.O.: nel prospetto il piano si
-    // vede di taglio, ed è il caso classico degli esercizi
+    // vede di taglio, ed è il caso classico degli esercizi. L'inclinazione è
+    // orientata in modo che la prima traccia cada a sinistra della pianta.
     inclinato: gradi => {
       const a = Geo.deg2rad(gradi);
       return Geo.normalize([Math.sin(a), 0, Math.cos(a)]);
@@ -136,15 +137,18 @@ const Sezione = (function () {
     });
 
     const anelli = chiudiAnelli(segmenti).map(a => orientaAnello(a, p.n));
+    // le facce da qui in avanti sono quelle nuove, create dal taglio: servono
+    // a parte perché nella resa ombreggiata vanno di un altro colore
+    const primaDelTaglio = facceRitagliate.length;
     anelli.forEach(a => facceRitagliate.push(a));
 
-    const risultato = ricostruisci(solido, facceRitagliate, anelli);
+    const risultato = ricostruisci(solido, facceRitagliate, anelli, primaDelTaglio);
     solido._sezione = { chiave: chiave, risultato: risultato };
     return risultato;
   }
 
   // Ricompone vertici e facce unificando i punti coincidenti.
-  function ricostruisci(solido, facce, anelli) {
+  function ricostruisci(solido, facce, anelli, primaDelTaglio) {
     const vertici = [];
     const mappa = new Map();
     function indice(p) {
@@ -155,19 +159,24 @@ const Sezione = (function () {
       return vertici.length - 1;
     }
     const facceIndicizzate = [];
-    for (const f of facce) {
+    const facceTagliate = [];
+    facce.forEach((f, k) => {
       const indici = [];
       for (const p of f) {
         const i = indice(p);
         if (!indici.length || indici[indici.length - 1] !== i) indici.push(i);
       }
       if (indici.length > 2 && indici[0] === indici[indici.length - 1]) indici.pop();
-      if (indici.length >= 3) facceIndicizzate.push(indici);
-    }
+      if (indici.length >= 3) {
+        facceIndicizzate.push(indici);
+        facceTagliate.push(k >= primaDelTaglio);
+      }
+    });
     return {
       solido: {
         id: solido.id, nome: solido.nome, categoria: solido.categoria,
-        vertici: vertici, facce: facceIndicizzate, anelli: anelli
+        vertici: vertici, facce: facceIndicizzate, anelli: anelli,
+        facceTagliate: facceTagliate
       },
       anelli: anelli
     };
@@ -227,6 +236,56 @@ const Sezione = (function () {
     };
   }
 
+  // Ribaltamento del piano di sezione sul piano verticale, attorno alla propria
+  // seconda traccia tα'', che resta ferma ed è la cerniera. Ruota tutto il
+  // piano: oltre alla figura di sezione si ribalta anche la prima traccia, che
+  // arriva sul P.V. perpendicolare a tα''.
+  function ribaltamentoSulPV(anelli, centroProspetto) {
+    if (!anelli.length) return null;
+    const n = Geo.normaleFaccia(anelli[0]);
+    const denominatore = n[0] * n[0] + n[2] * n[2];
+    if (denominatore < 1e-9) return null;   // piano parallelo al P.V.: già in vera forma
+    const d = Geo.dot(n, anelli[0][0]);
+
+    const v = Geo.normalize(Geo.cross(n, [0, 1, 0]));   // direzione della cerniera tα''
+    const q0 = [d * n[0] / denominatore, 0, d * n[2] / denominatore];
+    const dentroIlPiano = Geo.normalize(Geo.cross(v, n));      // nel piano, ⊥ cerniera
+    const dentroIlPV = Geo.normalize(Geo.cross(v, [0, 1, 0])); // nel P.V., ⊥ cerniera
+
+    function ribalta(P, verso) {
+      const s = Geo.sub(P, q0);
+      const lungo = Geo.dot(s, v);
+      const distanza = Geo.dot(s, dentroIlPiano);
+      return Geo.add(Geo.add(q0, Geo.scale(v, lungo)), Geo.scale(dentroIlPV, distanza * verso));
+    }
+
+    // dei due versi possibili si sceglie quello che porta la figura dalla parte
+    // più libera, lontano dal prospetto del solido
+    const verso = [1, -1].map(s => {
+      const punti = anelli[0].map(P => ribalta(P, s));
+      const centro = punti.reduce((a, p) => Geo.add(a, p), [0, 0, 0]).map(c => c / punti.length);
+      return { s: s, distanza: Math.hypot(centro[0] - centroProspetto[0], centro[2] - centroProspetto[2]) };
+    }).sort((a, b) => b.distanza - a.distanza)[0].s;
+
+    // la prima traccia tα' (piano ∩ P.O.) ribaltata insieme al resto del piano
+    const denomOriz = n[0] * n[0] + n[1] * n[1];
+    let tracciaRibaltata = null;
+    if (denomOriz > 1e-9) {
+      const u = Geo.normalize(Geo.cross(n, [0, 0, 1]));
+      const p0 = [d * n[0] / denomOriz, d * n[1] / denomOriz, 0];
+      tracciaRibaltata = {
+        a: ribalta(Geo.add(p0, Geo.scale(u, -60)), verso),
+        b: ribalta(Geo.add(p0, Geo.scale(u, 60)), verso)
+      };
+    }
+
+    return {
+      anelli: anelli.map(anello => anello.map(P => ribalta(P, verso))),
+      cerniera: { punto: q0, direzione: v },
+      tracciaRibaltata: tracciaRibaltata
+    };
+  }
+
   // Rettangolo che rappresenta il piano di sezione, esteso attorno al solido.
   function rettangoloDelPiano(p, margine) {
     const b = p.limiti;
@@ -246,5 +305,5 @@ const Sezione = (function () {
     ];
   }
 
-  return { piano, taglia, veraForma, ribaltamentoSulPO, rettangoloDelPiano };
+  return { piano, taglia, veraForma, ribaltamentoSulPO, ribaltamentoSulPV, rettangoloDelPiano };
 })();

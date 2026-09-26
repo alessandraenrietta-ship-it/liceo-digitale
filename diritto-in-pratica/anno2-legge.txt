@@ -1,0 +1,139 @@
+# ============================================================
+# SECONDO ANNO - IL VIAGGIO DI UNA LEGGE
+# ============================================================
+#
+# Questo file contiene i testi di un'attività della bacheca di
+# Diritto. Puoi modificarlo con il Blocco note e salvarlo: la
+# pagina cambia da sola, non serve toccare il codice.
+#
+# COME È FATTO
+# ------------
+# In cima ci sono le righe che descrivono l'attività nella
+# bacheca: titolo, icona, argomento, descrizione. La riga storia
+# è la situazione da cui parte tutto il viaggio.
+#
+# Poi vengono le tappe, nell'ordine in cui si percorrono. Ogni
+# tappa comincia con la riga [PASSO]:
+#
+#   titolo:    il nome della tappa, breve
+#   premessa:  che cosa è successo intanto (facoltativa)
+#   tipo:      scrivi multipla se le risposte giuste sono più di una
+#   domanda:   la domanda vera e propria
+#
+# e poi le risposte, una per riga:
+#
+#   + risposta giusta     | spiegazione che compare quando la si sceglie
+#   - risposta sbagliata  | spiegazione che compare quando la si sceglie
+#
+# ALTRE COSE DA SAPERE
+# --------------------
+# - Le righe che iniziano con # sono commenti: il sito le ignora.
+# - Se un testo è lungo puoi andare a capo: le righe che non
+#   iniziano con una parola chiave si attaccano alla precedente.
+# - Se una riga è scritta male il sito non si blocca: la salta e
+#   in cima all'attività dice quale riga rivedere.
+# - Le risposte vengono mescolate: l'ordine in cui le scrivi non
+#   conta.
+# ============================================================
+
+titolo: Il viaggio di una legge
+icona: 📜
+argomento: Il Parlamento e la formazione delle leggi
+descrizione: Accompagna una proposta di legge dalla prima idea fino alla Gazzetta Ufficiale, e scegli a ogni tappa che cosa succede.
+storia: Nella tua città molte persone vorrebbero una legge che
+obblighi tutte le scuole d'Italia ad avere fontanelle di acqua
+potabile gratuita. Segui la proposta tappa dopo tappa: a ogni
+passaggio scegli che cosa prevede la Costituzione.
+
+
+[PASSO]
+titolo: L'iniziativa
+tipo: multipla
+domanda: Chi può presentare una proposta di legge al Parlamento?
++ Il Governo | È il caso più frequente: il Governo presenta i suoi "disegni di legge" (articolo 71 della Costituzione).
++ Ogni singolo deputato o senatore | Ogni parlamentare, anche da solo, può presentare una proposta di legge.
++ Almeno 50.000 elettori | È l'iniziativa popolare: servono le firme di almeno 50.000 elettori e un testo già scritto in articoli (articolo 71).
++ Un Consiglio regionale | Anche i Consigli regionali possono presentare proposte di legge al Parlamento (articolo 121).
+- Il Presidente della Repubblica | Il Presidente non propone le leggi: interviene alla fine del viaggio, con la promulgazione.
+- Il Comune della tua città | I Comuni non hanno l'iniziativa legislativa. Il sindaco può però chiedere a un parlamentare di presentare la proposta.
+- Un singolo cittadino, da solo | Da solo no: servono almeno 50.000 firme. Un cittadino può però promuovere la raccolta di firme.
+
+[PASSO]
+titolo: In commissione
+premessa: Sono state raccolte 60.000 firme e la proposta viene
+presentata alla Camera dei deputati.
+domanda: Che cosa succede per prima cosa?
++ La esamina una commissione di deputati che si occupano di scuola | Le commissioni permanenti sono piccoli gruppi di parlamentari divisi per materia. Studiano la proposta, ascoltano esperti e propongono modifiche. Poi il testo passa all'aula.
+- Si vota subito il testo in aula | Prima del voto in aula il testo va studiato. Se ne occupa una commissione, che prepara il lavoro per tutti.
+- Passa al Presidente della Repubblica per un parere | Il Presidente della Repubblica non dà pareri sulle proposte: la vede solo alla fine, quando è già stata approvata.
+- Viene sottoposta a un referendum | Il referendum abrogativo serve a cancellare leggi già in vigore, non ad approvarne di nuove.
+
+[PASSO]
+titolo: Il voto in aula
+premessa: La commissione ha finito il suo lavoro e il testo arriva
+nell'aula della Camera.
+domanda: Come si vota la proposta?
++ Prima articolo per articolo, poi il testo intero con un voto finale | Lo stabilisce l'articolo 72 della Costituzione. Durante l'esame dei singoli articoli i deputati possono proporre modifiche, chiamate emendamenti.
+- Con un solo voto sul titolo | Il titolo non basta: ogni articolo della legge va discusso e votato.
+- Decide il Presidente della Camera, da solo | Il Presidente della Camera dirige i lavori, ma non vota al posto dei deputati.
+- Votano i cittadini su internet | In una democrazia rappresentativa le leggi le votano i rappresentanti eletti dai cittadini.
+
+[PASSO]
+titolo: Quanti voti servono
+domanda: Quanti voti servono perché la Camera approvi la legge?
++ La maggioranza dei presenti, se in aula c'è almeno la metà più uno dei deputati | Lo dice l'articolo 64: il voto è valido se è presente la maggioranza dei componenti (il "numero legale") e la legge passa con la maggioranza dei presenti.
+- Tutti i deputati devono essere d'accordo | L'unanimità renderebbe quasi impossibile approvare una legge. In democrazia decide la maggioranza, nel rispetto delle minoranze.
+- Sempre i due terzi dei deputati | Maggioranze più alte servono solo in casi speciali, per esempio per alcune leggi di revisione della Costituzione. Per una legge ordinaria no.
+- Basta che i favorevoli siano almeno cento | Non conta un numero fisso: conta la proporzione fra favorevoli e presenti.
+
+[PASSO]
+titolo: Al Senato
+premessa: La Camera approva. Il testo passa al Senato, che cambia
+un articolo: "almeno una fontanella per piano" diventa "almeno una
+fontanella per edificio".
+domanda: E adesso che cosa succede?
++ Il testo torna alla Camera, perché le due Camere devono approvare esattamente lo stesso testo | Il nostro Parlamento ha un bicameralismo perfetto: Camera e Senato hanno gli stessi poteri. Il testo passa dall'una all'altra finché entrambe non approvano la stessa versione. Questo andare e venire si chiama navetta.
+- Vale la versione del Senato, perché ha votato per ultimo | Nessuna delle due Camere conta più dell'altra: devono essere d'accordo su ogni parola.
+- Si fa una media fra le due versioni | Non esiste una media fra due testi. Una delle Camere deve accettare la versione dell'altra, oppure si continua a modificare.
+- Decide il Governo quale versione tenere | Il Governo non ha questo potere. La funzione legislativa spetta alle due Camere (articolo 70).
+
+[PASSO]
+titolo: Sulla scrivania del Presidente
+premessa: Camera e Senato hanno approvato lo stesso testo. La legge
+arriva al Presidente della Repubblica, che però ha un dubbio: la
+legge non dice con quali soldi si pagheranno le fontanelle.
+domanda: Che cosa può fare il Presidente?
++ Rimandarla alle Camere con un messaggio che spiega il motivo, chiedendo una nuova votazione | È il rinvio previsto dall'articolo 74. Il Presidente è un garante della Costituzione, che chiede fra l'altro di indicare come coprire le nuove spese (articolo 81).
+- Rifiutarsi per sempre di firmarla | Il Presidente non ha un potere di veto definitivo: può solo chiedere alle Camere di ripensarci.
+- Correggere lui stesso il testo | Il Presidente non può modificare le leggi: questo spetta al Parlamento.
+- Chiedere alla Corte costituzionale un parere prima di firmare | In Italia la Corte costituzionale giudica le leggi dopo che sono entrate in vigore, non prima.
+
+[PASSO]
+titolo: La seconda votazione
+premessa: Le Camere discutono il messaggio del Presidente e
+approvano di nuovo la legge, senza cambiare nulla.
+domanda: Il Presidente può rimandarla indietro un'altra volta?
++ No: a questo punto deve promulgarla | Il rinvio si può fare una sola volta. Se le Camere approvano di nuovo, il Presidente deve promulgare la legge, cioè firmarla e ordinarne la pubblicazione.
+- Sì, tutte le volte che vuole | Se potesse rimandarla all'infinito, avrebbe di fatto un potere di veto, e deciderebbe lui al posto del Parlamento.
+- Sì, ma solo se nel frattempo è cambiato il Governo | Il Governo non c'entra: il rinvio è uno solo, qualunque cosa succeda.
+- Deve scegliere se firmarla o dimettersi | Non è previsto nulla del genere. La Costituzione dice semplicemente che, dopo la nuova approvazione, la legge deve essere promulgata.
+
+[PASSO]
+titolo: L'entrata in vigore
+premessa: Il Presidente promulga la legge.
+domanda: Da quando la legge è obbligatoria per tutti?
++ Viene pubblicata sulla Gazzetta Ufficiale ed entra in vigore dopo 15 giorni, se la legge non dice un termine diverso | Quei 15 giorni si chiamano vacatio legis: servono perché tutti possano conoscere la legge (articolo 73). Da quel momento nessuno può dire di non rispettarla perché non la conosceva.
+- Dal momento in cui il Presidente la firma | Una legge che nessuno ha potuto leggere non può essere obbligatoria. Prima deve essere pubblicata.
+- Dal giorno in cui la Camera l'ha votata la prima volta | Il voto di una sola Camera non basta, e mancano ancora la promulgazione e la pubblicazione.
+- Da quando ogni scuola ha ricevuto una copia | La legge non si spedisce a chi la deve applicare: si pubblica sulla Gazzetta Ufficiale, che chiunque può leggere, anche online.
+
+[PASSO]
+titolo: E se poi non va bene?
+premessa: Due anni dopo, qualcuno pensa che la legge sia sbagliata.
+tipo: multipla
+domanda: In quali modi una legge in vigore può essere cancellata?
++ Il Parlamento approva una nuova legge che la abroga | Il Parlamento può sempre cambiare le leggi che ha fatto: la legge nuova prende il posto di quella vecchia.
++ Con un referendum abrogativo | Lo possono chiedere 500.000 elettori o cinque Consigli regionali (articolo 75). Se vota più della metà degli aventi diritto e vincono i sì, la legge è abrogata.
++ La Corte costituzionale la dichiara illegittima | Succede se la legge va contro la Costituzione. Dal giorno dopo la pubblicazione della sentenza non si applica più.
+- Il Presidente della Repubblica la ritira | Una volta promulgata, il Presidente non può più ritirarla.
+- Il sindaco decide di non applicarla nella sua città | Le leggi dello Stato valgono in tutta Italia allo stesso modo: un sindaco non può metterle da parte.

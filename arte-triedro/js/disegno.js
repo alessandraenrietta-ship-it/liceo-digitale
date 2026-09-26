@@ -20,6 +20,17 @@ const Disegno = (function () {
     return el('line', { x1: x1, y1: y1, x2: x2, y2: y2, class: classe });
   }
 
+  // Arco di centro l'origine, usato per ribaltare le profondità dalla pianta
+  // alla vista laterale.
+  function arco(x1, y1, x2, y2, raggio, classe) {
+    return el('path', {
+      d: 'M ' + x1.toFixed(2) + ' ' + y1.toFixed(2) +
+         ' A ' + Math.abs(raggio).toFixed(2) + ' ' + Math.abs(raggio).toFixed(2) +
+         ' 0 0 0 ' + x2.toFixed(2) + ' ' + y2.toFixed(2),
+      class: classe
+    });
+  }
+
   function limiti(solido) {
     const v = solido.vertici;
     return {
@@ -151,7 +162,7 @@ const Disegno = (function () {
     const lunghezza = Math.max(b.x1 - b.x0, b.y1 - b.y0, b.z1 - b.z0) * 1.3;
     const g = el('g', { class: 'tracce-piano' });
 
-    function tracciaSu(assePiano, vista, riquadro, etichetta) {
+    function tracciaSu(assePiano, vista, riquadro, etichetta, versoEtichetta) {
       // retta { dot(n,p) = d } ∩ { assePiano = 0 }
       const versore = assePiano === 'z' ? [0, 0, 1] : [0, 1, 0];
       const direzione = Geo.cross(n, versore);
@@ -167,9 +178,14 @@ const Disegno = (function () {
       const tratto = ritagliaSegmento(pa, pc, riquadro);
       if (!tratto) return;
       g.appendChild(linea(tratto[0][0], tratto[0][1], tratto[1][0], tratto[1][1], 'traccia-piano'));
-      const estremo = tratto[0][1] < tratto[1][1] ? tratto[0] : tratto[1];  // il più in alto
+      const piuInAlto = tratto[0][1] < tratto[1][1] ? tratto[0] : tratto[1];
+      const piuInBasso = tratto[0][1] < tratto[1][1] ? tratto[1] : tratto[0];
+      const estremo = versoEtichetta === 'basso' ? piuInBasso : piuInAlto;
       const t = el('text', {
-        x: estremo[0] + dimTesto * 0.35, y: estremo[1] - dimTesto * 0.35,
+        x: estremo[0] + dimTesto * 0.35,
+        // in basso l'etichetta scende sotto il titolo della vista, per non
+        // finirgli sopra
+        y: estremo[1] + (versoEtichetta === 'basso' ? dimTesto * 2.1 : -dimTesto * 0.35),
         class: 'etichetta-traccia', 'font-size': dimTesto
       });
       t.textContent = etichetta;
@@ -179,12 +195,24 @@ const Disegno = (function () {
     // ciascuna traccia resta nella fascia della propria vista e arriva fino
     // alla linea di terra, dove le due si incontrano
     const m = dimensione * 0.25;
-    const sinistra = b.x0 - dimensione, destra = b.y1 + dimensione;
+    const sinistra = -b.x1 - dimensione, destra = b.y1 + dimensione;
+    // l'etichetta della prima traccia va in basso, altrimenti finisce
+    // sopra quella della linea di terra
     tracciaSu('z', Geo.vistaOrtogonale('pianta'),
-      { x0: sinistra, x1: destra, y0: 0, y1: b.y1 + m }, 'tα′');
+      { x0: sinistra, x1: destra, y0: 0, y1: b.y1 + m }, 'tα′', 'basso');
     tracciaSu('y', Geo.vistaOrtogonale('prospetto'),
-      { x0: sinistra, x1: destra, y0: -b.z1 - m, y1: 0 }, 'tα″');
+      { x0: sinistra, x1: destra, y0: -b.z1 - m, y1: 0 }, 'tα″', 'alto');
     gruppo.appendChild(g);
+  }
+
+  // Tiene del segmento solo la parte che sta sopra la linea di terra, cioè
+  // dalla parte del P.V. (nel disegno la L.T. è la retta y = 0).
+  function sopraLaLineaDiTerra(a, b) {
+    if (a[1] <= 0 && b[1] <= 0) return [a, b];
+    if (a[1] > 0 && b[1] > 0) return null;
+    const t = a[1] / (a[1] - b[1]);
+    const taglio = [a[0] + t * (b[0] - a[0]), 0];
+    return a[1] <= 0 ? [a, taglio] : [taglio, b];
   }
 
   // Ritaglio di un segmento su un rettangolo (algoritmo di Liang-Barsky).
@@ -210,43 +238,54 @@ const Disegno = (function () {
   // Ribaltamento della sezione sul P.O. nelle proiezioni ortogonali: la figura
   // arriva in vera grandezza nella posizione che le assegna la costruzione,
   // legata alla pianta dalle rette perpendicolari alla traccia.
-  function disegnaRibaltamento(gruppo, solido, dimensione, dimTesto) {
+  // Ribaltamento della sezione sul P.V., attorno alla seconda traccia tα'':
+  // ruota tutto il piano, quindi arriva sul prospetto anche la prima traccia,
+  // perpendicolare alla cerniera. Gli elementi ribaltati si indicano fra
+  // parentesi, come vuole la convenzione.
+  function disegnaRibaltamento(gruppo, solido, dimensione, dimTesto, opzioni) {
     const anelli = solido.anelli;
     if (!anelli || !anelli.length) return false;
     const b = limiti(solido);
-    const centro = [(b.x0 + b.x1) / 2, (b.y0 + b.y1) / 2, (b.z0 + b.z1) / 2];
-    const r = Sezione.ribaltamentoSulPO(anelli, centro);
+    const centroProspetto = [(b.x0 + b.x1) / 2, 0, (b.z0 + b.z1) / 2];
+    const r = Sezione.ribaltamentoSulPV(anelli, centroProspetto);
     if (!r) return false;
 
-    // se la cerniera cade lontanissima (piano quasi orizzontale) il disegno
-    // diventerebbe enorme: in quel caso si rinuncia al ribaltamento
-    const distanzaCerniera = Math.abs(Geo.dot(Geo.sub(centro, r.cerniera.punto),
-      Geo.normalize(Geo.cross([0, 0, 1], r.cerniera.direzione))));
-    if (distanzaCerniera > dimensione * 4) return false;
-
-    const pianta = Geo.vistaOrtogonale('pianta');
+    const prospetto = Geo.vistaOrtogonale('prospetto');
     const g = el('g', { class: 'ribaltamento-sezione' });
 
-    // La figura ribaltata viene allontanata lungo la stessa perpendicolare,
-    // quanto basta perché non si sovrapponga alle viste: la costruzione non
-    // cambia, restano perpendicolari alla cerniera anche le rette di richiamo.
-    const fineViste = Math.max(...solido.vertici.map(v => Geo.dot(v, r.perpendicolare)));
-    const inizioFigura = Math.min(...[].concat.apply([], r.anelli).map(p => Geo.dot(p, r.perpendicolare)));
-    const scostamento = Math.max(0, fineViste + dimensione * 0.35 - inizioFigura);
-    const spostamento = Geo.scale(r.perpendicolare, scostamento);
-    const ribaltati = r.anelli.map(a => a.map(p => Geo.add(p, spostamento)));
+    // la prima traccia ribaltata, perpendicolare alla cerniera. Ruotando, la
+    // traccia sale sul P.V.: si ferma dunque sulla linea di terra, che è il
+    // confine fra i due piani.
+    if (r.tracciaRibaltata) {
+      const tratto = sopraLaLineaDiTerra(
+        prospetto.project(r.tracciaRibaltata.a),
+        prospetto.project(r.tracciaRibaltata.b));
+      if (tratto) {
+        const ta = tratto[0], tb = tratto[1];
+        g.appendChild(linea(ta[0], ta[1], tb[0], tb[1], 'traccia-ribaltata'));
+        // l'etichetta va all'estremo più lontano dalla linea di terra
+        const estremo = ta[1] < tb[1] ? ta : tb;
+        const et = el('text', {
+          x: estremo[0] + dimTesto * 0.35, y: estremo[1] - dimTesto * 0.35,
+          class: 'etichetta-traccia', 'font-size': dimTesto
+        });
+        et.textContent = '(tα′)';
+        g.appendChild(et);
+      }
+    }
 
-    // rette di ribaltamento: ogni punto si sposta perpendicolarmente alla traccia
+    // rette di ribaltamento: ogni punto ruota attorno alla cerniera, quindi nel
+    // disegno si sposta lungo la perpendicolare a tα''
     const passo = Math.max(1, Math.ceil(anelli[0].length / 12));
     anelli.forEach((anello, i) => {
       for (let k = 0; k < anello.length; k += passo) {
-        const p1 = pianta.project(anello[k]);
-        const p2 = pianta.project(ribaltati[i][k]);
+        const p1 = prospetto.project(anello[k]);
+        const p2 = prospetto.project(r.anelli[i][k]);
         g.appendChild(linea(p1[0], p1[1], p2[0], p2[1], 'richiamo'));
       }
     });
 
-    const anelli2D = ribaltati.map(a => a.map(p => pianta.project(p)));
+    const anelli2D = r.anelli.map(a => a.map(p => prospetto.project(p)));
     disegnaTratteggio(g, anelli2D, dimensione * 0.05);
     for (const anello of anelli2D) {
       g.appendChild(el('polygon', {
@@ -255,18 +294,60 @@ const Disegno = (function () {
       }));
     }
 
+    if (opzioni && opzioni.etichette) {
+      etichettaPuntiSezione(g, anelli, r.anelli, prospetto, dimTesto);
+    }
+
     const centroRibaltato = anelli2D[0].reduce((s, p) => [s[0] + p[0], s[1] + p[1]], [0, 0])
       .map(c => c / anelli2D[0].length);
+    // la didascalia sta sopra la figura ribaltata, dove non incontra le viste
     const titolo = el('text', {
-      x: centroRibaltato[0], y: Math.max(...anelli2D[0].map(p => p[1])) + dimTesto * 1.4,
+      x: centroRibaltato[0], y: Math.min(...anelli2D[0].map(p => p[1])) - dimTesto * 2.2,
       class: 'titolo-vista', 'font-size': dimTesto, 'text-anchor': 'middle'
     });
-    titolo.textContent = scostamento > 0
-      ? 'sezione ribaltata attorno a tα′ (allontanata per chiarezza)'
-      : 'sezione ribaltata attorno a tα′';
+    titolo.textContent = 'sezione ribaltata sul P.V. attorno a tα″';
     g.appendChild(titolo);
     gruppo.appendChild(g);
     return true;
+  }
+
+  // I punti della sezione si numerano; i loro ribaltati portano lo stesso
+  // numero fra parentesi, secondo la convenzione.
+  function etichettaPuntiSezione(gruppo, anelli, ribaltati, vista, dimTesto) {
+    if (anelli[0].length > 12) return;   // sui solidi curvi sarebbero illeggibili
+    const dimensione = dimTesto * 0.9;
+    const daEtichettare = [[], []];
+    let numero = 1;
+    anelli.forEach((anello, i) => {
+      anello.forEach((punto, k) => {
+        daEtichettare[0].push({ p: vista.project(punto), testo: String(numero) });
+        // solo i ribaltati vanno fra parentesi
+        daEtichettare[1].push({ p: vista.project(ribaltati[i][k]), testo: '(' + numero + ')' });
+        numero++;
+      });
+    });
+    daEtichettare.forEach((gruppoVoci, quale) => {
+      const centro = gruppoVoci.reduce((s, v) => [s[0] + v.p[0], s[1] + v.p[1]], [0, 0])
+        .map(c => c / (gruppoVoci.length || 1));
+      gruppoVoci.forEach(v => { v.centro = centro; });
+      // nella vista la sezione si vede di taglio: i numeri starebbero sopra il
+      // solido, quindi si scostano perpendicolarmente alla traccia
+      if (quale === 0) {
+        const primo = gruppoVoci[0].p;
+        const ultimo = gruppoVoci[gruppoVoci.length - 1].p;
+        let dx = ultimo[0] - primo[0], dy = ultimo[1] - primo[1];
+        const d = Math.hypot(dx, dy);
+        if (d > 1e-6) {
+          const perpendicolare = [-dy / d, dx / d];
+          const verso = perpendicolare[1] < 0 ? 1 : -1;   // verso l'alto, fuori dal solido
+          gruppoVoci.forEach(v => {
+            v.direzione = [perpendicolare[0] * verso, perpendicolare[1] * verso];
+          });
+        }
+      }
+      disponiEtichette(gruppoVoci, dimensione)
+        .forEach(v => scriviEtichetta(gruppo, v, dimensione));
+    });
   }
 
   // --- Segmenti proiettati di un solido in una vista ---
@@ -313,28 +394,116 @@ const Disegno = (function () {
       const profondita = vista.puntoDiVista
         ? -Geo.length(Geo.sub(vista.puntoDiVista, centro))
         : Geo.dot(centro, Geo.normalize(vista.viewDir));
-      return { indici: f, normale: normali[i], profondita: profondita, davanti: Geo.dot(normali[i], verso) > 0 };
+      return {
+        indici: f, normale: normali[i], profondita: profondita,
+        tagliata: !!(solido.facceTagliate && solido.facceTagliate[i]),
+        davanti: Geo.dot(normali[i], verso) > 0
+      };
     }).filter(f => f.davanti);
     facce.sort((a, b) => b.profondita - a.profondita);
     for (const f of facce) {
       const luce = Math.max(0, Geo.dot(f.normale, LUCE));
-      const tono = Math.round(212 - 62 * luce);
       const punti = f.indici.map(k => {
         const p = vista.project(solido.vertici[k]);
         return (p[0] + off[0]).toFixed(2) + ',' + (p[1] + off[1]).toFixed(2);
       }).join(' ');
       gruppo.appendChild(el('polygon', {
         points: punti,
-        fill: 'rgb(' + tono + ',' + tono + ',' + (tono + 6) + ')',
-        class: 'faccia'
+        fill: coloreFaccia(luce, f.tagliata),
+        class: f.tagliata ? 'faccia faccia-tagliata' : 'faccia'
       }));
     }
+  }
+
+  // La superficie tagliata dal piano di sezione si distingue dalle altre:
+  // stesso chiaroscuro, ma in tinta calda, come il tratteggio della sezione.
+  function coloreFaccia(luce, tagliata) {
+    if (tagliata) {
+      return 'rgb(' + Math.round(224 - 50 * luce) + ',' +
+        Math.round(152 - 60 * luce) + ',' + Math.round(124 - 56 * luce) + ')';
+    }
+    const tono = Math.round(212 - 62 * luce);
+    return 'rgb(' + tono + ',' + tono + ',' + (tono + 6) + ')';
   }
 
   // Notazione del disegno tecnico: A' è la prima proiezione (sul P.O.),
   // A'' la seconda (sul P.V.), A''' la terza (sul P.L.).
   const APICI = { pianta: '′', prospetto: '″', laterale: '‴' };
   const MAX_VERTICI_ETICHETTATI = 16;
+
+  // Dispone le etichette attorno alla figura: prima le scosta dal disegno
+  // lungo la direzione che va dal centro al punto, poi le allontana fra loro
+  // finché non si sovrappongono più.
+  function disponiEtichette(voci, dimensione) {
+    const scostamento = dimensione * 1.1;
+    voci.forEach(v => {
+      // se si conoscono gli spigoli che arrivano nel punto, l'etichetta va
+      // dalla parte opposta: è la direzione in cui non c'è disegno
+      let dx, dy;
+      if (v.direzione) {
+        dx = v.direzione[0]; dy = v.direzione[1];
+      } else {
+        dx = v.p[0] - v.centro[0]; dy = v.p[1] - v.centro[1];
+      }
+      const d = Math.hypot(dx, dy) || 1;
+      v.pos = [v.p[0] + dx / d * scostamento, v.p[1] + dy / d * scostamento];
+      v.versoDestra = dx >= 0;
+    });
+
+    const larghezza = dimensione * 1.7, altezza = dimensione * 1.2;
+    for (let giro = 0; giro < 8; giro++) {
+      let spostato = false;
+      for (let i = 0; i < voci.length; i++) {
+        for (let j = i + 1; j < voci.length; j++) {
+          const a = voci[i].pos, b = voci[j].pos;
+          let dx = b[0] - a[0], dy = b[1] - a[1];
+          if (Math.abs(dx) >= larghezza || Math.abs(dy) >= altezza) continue;
+          if (Math.abs(dx) < 1e-6 && Math.abs(dy) < 1e-6) { dx = 0; dy = 1; }
+          const lunghezza = Math.hypot(dx, dy) || 1;
+          const spinta = dimensione * 0.45;
+          a[0] -= dx / lunghezza * spinta; a[1] -= dy / lunghezza * spinta;
+          b[0] += dx / lunghezza * spinta; b[1] += dy / lunghezza * spinta;
+          spostato = true;
+        }
+      }
+      if (!spostato) break;
+    }
+    return voci;
+  }
+
+  function scriviEtichetta(gruppo, voce, dimensione, classe) {
+    const t = el('text', {
+      x: voce.pos[0], y: voce.pos[1],
+      class: classe || 'etichetta-vertice',
+      'font-size': dimensione,
+      'text-anchor': voce.versoDestra ? 'start' : 'end',
+      'dominant-baseline': 'middle'
+    });
+    t.textContent = voce.testo;
+    gruppo.appendChild(t);
+  }
+
+  // Direzione in cui, attorno a un vertice, non arriva nessuno spigolo:
+  // è lì che l'etichetta non copre il disegno.
+  function direzioneLibera(solido, topo, indici, vista) {
+    let sx = 0, sy = 0, quanti = 0;
+    for (const spigolo of topo.spigoli) {
+      for (const indice of indici) {
+        let altro = null;
+        if (spigolo.a === indice) altro = spigolo.b;
+        else if (spigolo.b === indice) altro = spigolo.a;
+        if (altro === null) continue;
+        const p = vista.project(solido.vertici[indice]);
+        const q = vista.project(solido.vertici[altro]);
+        const dx = q[0] - p[0], dy = q[1] - p[1];
+        const d = Math.hypot(dx, dy);
+        if (d < 1e-6) continue;
+        sx += dx / d; sy += dy / d; quanti++;
+      }
+    }
+    if (!quanti || Math.hypot(sx, sy) < 1e-6) return null;
+    return [-sx, -sy];
+  }
 
   function disegnaEtichette(gruppo, solido, vista, off, dimensione) {
     if (solido.vertici.length > MAX_VERTICI_ETICHETTATI) return;
@@ -349,24 +518,26 @@ const Disegno = (function () {
       const v = solido.vertici[i];
       const p = vista.project(v);
       const esistente = punti.find(q => Math.hypot(q.p[0] - p[0], q.p[1] - p[1]) < dimensione * 0.15);
-      const voce = { lettera: LETTERE[i], profondita: profonditaDi(v) };
+      const voce = { lettera: LETTERE[i], profondita: profonditaDi(v), indice: i };
       if (esistente) esistente.vertici.push(voce);
       else punti.push({ p: p, vertici: [voce] });
     }
-    for (const punto of punti) {
+    const centro = punti.reduce((s, q) => [s[0] + q.p[0], s[1] + q.p[1]], [0, 0])
+      .map(c => c / (punti.length || 1));
+    const topo = Geo.costruisciTopologia(solido);
+    const voci = punti.map(punto => {
       punto.vertici.sort((a, b) => a.profondita - b.profondita);
-      const lettere = punto.vertici.map(v => v.lettera + apice);
-      const t = el('text', {
-        x: punto.p[0] + off[0] + dimensione * 0.4,
-        y: punto.p[1] + off[1] - dimensione * 0.3,
-        class: 'etichetta-vertice',
-        'font-size': dimensione
-      });
-      t.textContent = lettere.length > 1
-        ? lettere[0] + '(' + lettere.slice(1).join(' ') + ')'
-        : lettere[0];
-      gruppo.appendChild(t);
-    }
+      // punti che cadono nello stesso posto: si indicano coincidenti con ≡.
+      // Le parentesi restano riservate agli elementi ribaltati.
+      const testo = punto.vertici.map(v => v.lettera + apice).join('≡');
+      return {
+        p: [punto.p[0] + off[0], punto.p[1] + off[1]],
+        testo: testo,
+        centro: centro,
+        direzione: direzioneLibera(solido, topo, punto.vertici.map(v => v.indice), vista)
+      };
+    });
+    disponiEtichette(voci, dimensione).forEach(v => scriviEtichetta(gruppo, v, dimensione));
   }
 
   // --- Proiezioni ortogonali: collocazione nel triedro, richiami, ribaltamento ---
@@ -382,12 +553,12 @@ const Disegno = (function () {
     const allontanamento = p.allontanamento === undefined ? dimensione * 0.45 : p.allontanamento;
     const distanzaPL = p.distanzaPL === undefined ? dimensione * 0.45 : p.distanzaPL;
     const quota = p.quota === undefined ? 0 : p.quota;
-
     const chiave = allontanamento + '/' + distanzaPL + '/' + quota;
     if (solido._collocato && solido._collocato.chiave === chiave) return solido._collocato.solido;
 
     const b = b0;
-    const dx = -distanzaPL - b.x1;      // a sinistra del piano laterale
+    // primo triedro: tutte le coordinate positive
+    const dx = distanzaPL - b.x0;       // di là dal piano laterale
     const dy = allontanamento - b.y0;   // davanti al piano verticale
     const dz = quota - b.z0;            // appoggiato al P.O. o sollevato di "quota"
     const trasla = v => [v[0] + dx, v[1] + dy, v[2] + dz];
@@ -397,6 +568,7 @@ const Disegno = (function () {
       categoria: solido.categoria,
       vertici: solido.vertici.map(trasla),
       facce: solido.facce,
+      facceTagliate: solido.facceTagliate,
       anelli: trasformaAnelli(solido.anelli, trasla),
       trasforma: trasla
     };
@@ -420,7 +592,7 @@ const Disegno = (function () {
   function estensione(solido, margine) {
     const b = limiti(solido);
     return {
-      sinistra: b.x0 - margine,
+      sinistra: -b.x1 - margine,
       destra: b.y1 + margine,
       alto: -b.z1 - margine,
       basso: b.y1 + margine,
@@ -433,11 +605,11 @@ const Disegno = (function () {
     const b = e.b;
     // con una sola vista si traccia il solo tratto di L.T. che le compete
     const da = vistaSingola === 'laterale' ? b.y0 - margine : e.sinistra;
-    const a = vistaSingola === 'laterale' ? b.y1 + margine : (vistaSingola ? b.x1 + margine : e.destra);
+    const a = vistaSingola === 'laterale' ? b.y1 + margine : (vistaSingola ? -b.x0 + margine : e.destra);
     gruppo.appendChild(linea(da, 0, a, 0, 'linea-terra'));
     if (!vistaSingola) gruppo.appendChild(linea(0, e.alto, 0, e.basso, 'linea-terra'));
     const t = el('text', {
-      x: da, y: -dimTesto * 0.45,
+      x: da, y: -dimTesto * 0.9,
       class: 'etichetta-lt', 'font-size': dimTesto
     });
     t.textContent = 'L.T.';
@@ -452,23 +624,17 @@ const Disegno = (function () {
     const ys = valoriDistinti(solido.vertici.map(v => v[1]), 8);
 
     // prospetto -> pianta: richiami verticali
-    for (const x of xs) gruppo.appendChild(linea(x, -b.z1 - margine * 0.4, x, b.y1 + margine * 0.4, 'richiamo'));
+    for (const x of xs) gruppo.appendChild(linea(-x, -b.z1 - margine * 0.4, -x, b.y1 + margine * 0.4, 'richiamo'));
     // prospetto -> vista laterale: richiami orizzontali
-    for (const z of zs) gruppo.appendChild(linea(b.x0 - margine * 0.4, -z, b.y1 + margine * 0.4, -z, 'richiamo'));
-    // pianta -> linea di ribaltamento a 45° -> vista laterale
+    for (const z of zs) gruppo.appendChild(linea(e.sinistra, -z, b.y1 + margine * 0.4, -z, 'richiamo'));
+    // pianta -> arco centrato nell'origine -> vista laterale: la profondità
+    // letta sotto la linea di terra si riporta a destra della verticale
     for (const y of ys) {
-      gruppo.appendChild(linea(b.x0 - margine * 0.4, y, y, y, 'richiamo'));
-      gruppo.appendChild(linea(y, y, y, -b.z1 - margine * 0.4, 'richiamo'));
+      if (Math.abs(y) < 1e-6) continue;
+      gruppo.appendChild(linea(e.sinistra, y, 0, y, 'richiamo'));
+      gruppo.appendChild(arco(0, y, y, 0, y, 'arco-ribaltamento'));
+      gruppo.appendChild(linea(y, 0, y, -b.z1 - margine * 0.4, 'richiamo'));
     }
-    // la linea di ribaltamento passa per l'origine dei tre piani
-    const fine = b.y1 + margine * 0.6;
-    gruppo.appendChild(linea(0, 0, fine, fine, 'ribaltamento'));
-    const testo = el('text', {
-      x: fine + dimTesto * 0.3, y: fine + dimTesto * 0.35,
-      class: 'nota-disegno', 'font-size': dimTesto * 0.92
-    });
-    testo.textContent = 'ribaltamento 45°';
-    gruppo.appendChild(testo);
   }
 
   // I tre piani di proiezione ribaltati sul foglio: si incontrano nell'origine
@@ -535,16 +701,73 @@ const Disegno = (function () {
       const dove = vistaInVeraForma(opzioni.sezione.tipo);
       if (dove) {
         const nota = el('text', {
-          x: b.x0, y: b.y1 + margine * 1.6, class: 'nota-disegno', 'font-size': dimTesto
+          x: -b.x1, y: b.y1 + margine * 2.6, class: 'nota-disegno', 'font-size': dimTesto
         });
         nota.textContent = 'La sezione è già in vera forma ' + dove + '.';
         g.appendChild(nota);
-      } else if (!disegnaRibaltamento(g, solido, dimensione, dimTesto)) {
+      } else if (!disegnaRibaltamento(g, solido, dimensione, dimTesto, opzioni)) {
         disegnaVeraForma(g, solido.anelli, [b.y1 + margine * 3, -b.z1], dimensione, dimTesto);
       }
     }
+    separaEtichette(g);
     svg.appendChild(g);
     adattaViewBox(svg, g, margine);
+  }
+
+  // Passata finale su tutto il disegno: le etichette mobili (vertici e punti
+  // di sezione) si scostano finché nessuna copre un'altra. I titoli e le sigle
+  // delle tracce restano dove sono e fanno da ostacolo.
+  function separaEtichette(gruppo) {
+    const voci = [];
+    gruppo.querySelectorAll('text').forEach(nodo => {
+      const dimensione = parseFloat(nodo.getAttribute('font-size')) || 10;
+      const ancora = nodo.getAttribute('text-anchor');
+      // stima larga della larghezza: meglio scostare un po' troppo che lasciare
+      // due scritte appiccicate
+      const larghezza = dimensione * 0.75 * Math.max(nodo.textContent.length, 1);
+      voci.push({
+        nodo: nodo,
+        x: parseFloat(nodo.getAttribute('x')) || 0,
+        y: parseFloat(nodo.getAttribute('y')) || 0,
+        larghezza: larghezza,
+        altezza: dimensione,
+        ancora: ancora,
+        mobile: nodo.getAttribute('class') === 'etichetta-vertice'
+      });
+    });
+    if (!voci.some(v => v.mobile)) return;
+
+    const riquadro = v => {
+      const sinistra = v.ancora === 'end' ? v.x - v.larghezza
+        : v.ancora === 'middle' ? v.x - v.larghezza / 2 : v.x;
+      return { x0: sinistra, x1: sinistra + v.larghezza, y0: v.y - v.altezza * 0.9, y1: v.y + v.altezza * 0.4 };
+    };
+
+    for (let giro = 0; giro < 16; giro++) {
+      let spostato = false;
+      for (let i = 0; i < voci.length; i++) {
+        for (let j = i + 1; j < voci.length; j++) {
+          const a = voci[i], b = voci[j];
+          if (!a.mobile && !b.mobile) continue;
+          const ra = riquadro(a), rb = riquadro(b);
+          if (ra.x1 <= rb.x0 || rb.x1 <= ra.x0 || ra.y1 <= rb.y0 || rb.y1 <= ra.y0) continue;
+          let dx = (ra.x0 + ra.x1) / 2 - (rb.x0 + rb.x1) / 2;
+          let dy = (ra.y0 + ra.y1) / 2 - (rb.y0 + rb.y1) / 2;
+          if (Math.abs(dx) < 1e-6 && Math.abs(dy) < 1e-6) { dx = 0; dy = -1; }
+          const lunghezza = Math.hypot(dx, dy) || 1;
+          const spinta = Math.max(a.altezza, b.altezza) * 0.5;
+          const quanti = (a.mobile ? 1 : 0) + (b.mobile ? 1 : 0);
+          if (a.mobile) { a.x += dx / lunghezza * spinta / quanti * 2; a.y += dy / lunghezza * spinta / quanti * 2; }
+          if (b.mobile) { b.x -= dx / lunghezza * spinta / quanti * 2; b.y -= dy / lunghezza * spinta / quanti * 2; }
+          spostato = true;
+        }
+      }
+      if (!spostato) break;
+    }
+    voci.filter(v => v.mobile).forEach(v => {
+      v.nodo.setAttribute('x', v.x.toFixed(2));
+      v.nodo.setAttribute('y', v.y.toFixed(2));
+    });
   }
 
   // Un piano parallelo a un piano di proiezione dà la sezione in vera forma
@@ -559,9 +782,9 @@ const Disegno = (function () {
   function titoloVista(vista, b, dimTesto, margine) {
     // il titolo sta sopra la propria vista, tranne la pianta che lo porta sotto
     const posizioni = {
-      prospetto: [b.x0, -b.z1 - margine * 0.45],
+      prospetto: [-b.x1, -b.z1 - margine * 0.45],
       laterale: [b.y0, -b.z1 - margine * 0.45],
-      pianta: [b.x0, b.y1 + margine * 0.8]
+      pianta: [-b.x1, b.y1 + margine * 0.8]
     };
     const p = posizioni[vista.nome];
     const t = el('text', { x: p[0], y: p[1], class: 'titolo-vista', 'font-size': dimTesto });
@@ -571,10 +794,10 @@ const Disegno = (function () {
 
   // --- Prospettiva ---
 
-  // Colloca il solido dietro il quadro: ruotato di "alfa" attorno all'asse
-  // verticale (0° = prospettiva centrale), appoggiato o sollevato secondo la
-  // quota, e allontanato dal quadro come nelle proiezioni ortogonali.
-  function collocaDietroIlQuadro(solido, posizione, alfaDeg) {
+  // Colloca il solido per la prospettiva: ruotato di "alfa" attorno all'asse
+  // verticale (0° = prospettiva centrale) e messo oltre il quadro, secondo la
+  // disposizione del metodo: punto di vista, quadro, oggetto.
+  function collocaPerProspettiva(solido, posizione, alfaDeg) {
     const p = posizione || {};
     const b0 = limiti(solido);
     const dimensione = Math.max(b0.x1 - b0.x0, b0.y1 - b0.y0, b0.z1 - b0.z0);
@@ -582,25 +805,28 @@ const Disegno = (function () {
     const quota = p.quota === undefined ? 0 : p.quota;
 
     const chiave = allontanamento + '/' + quota + '/' + alfaDeg;
-    if (solido._dietroQuadro && solido._dietroQuadro.chiave === chiave) return solido._dietroQuadro.solido;
-
+    if (solido._perProspettiva && solido._perProspettiva.chiave === chiave) {
+      return solido._perProspettiva.solido;
+    }
     const m = Geo.rotZ(Geo.deg2rad(alfaDeg));
     const ruotati = solido.vertici.map(v => Geo.matVec(m, v));
-    const minY = Math.min(...ruotati.map(v => v[1]));
+    const maxY = Math.max(...ruotati.map(v => v[1]));
     const minZ = Math.min(...ruotati.map(v => v[2]));
     const cx = (Math.min(...ruotati.map(v => v[0])) + Math.max(...ruotati.map(v => v[0]))) / 2;
+    // oltre il quadro: y negativo, cioè dalla parte opposta all'osservatore
     const trasforma = v => {
       const r = Geo.matVec(m, v);
-      return [r[0] - cx, r[1] - minY + allontanamento, r[2] - minZ + quota];
+      return [r[0] - cx, r[1] - maxY - allontanamento, r[2] - minZ + quota];
     };
     const collocato = {
       id: solido.id, nome: solido.nome, categoria: solido.categoria,
-      vertici: ruotati.map(v => [v[0] - cx, v[1] - minY + allontanamento, v[2] - minZ + quota]),
+      vertici: ruotati.map(v => [v[0] - cx, v[1] - maxY - allontanamento, v[2] - minZ + quota]),
       facce: solido.facce,
+      facceTagliate: solido.facceTagliate,
       anelli: trasformaAnelli(solido.anelli, trasforma),
       trasforma: trasforma
     };
-    solido._dietroQuadro = { chiave: chiave, solido: collocato };
+    solido._perProspettiva = { chiave: chiave, solido: collocato };
     return collocato;
   }
 
@@ -617,7 +843,7 @@ const Disegno = (function () {
   function disegnaProspettiva(svg, solidoOriginale, vista, opzioni) {
     svuota(svg);
     const sezione = applicaSezione(solidoOriginale, opzioni);
-    const solido = collocaDietroIlQuadro(sezione.solido, opzioni.posizione, opzioni.alfa);
+    const solido = collocaPerProspettiva(sezione.solido, opzioni.posizione, opzioni.alfa);
     const g = el('g', {});
     const b = limiti(solido);
     const dimensione = Math.max(b.x1 - b.x0, b.y1 - b.y0, b.z1 - b.z0);
@@ -663,7 +889,7 @@ const Disegno = (function () {
     g.appendChild(presa);
     g.appendChild(linea(sinistra, yOrizzonte, destra, yOrizzonte, 'linea-orizzonte'));
     // sotto la linea, per non finire sopra l'etichetta di un punto di fuga
-    etichetta(g, "linea d'orizzonte", sinistra, yOrizzonte + dimTesto * 1.15, 'etichetta-orizzonte', dimTesto);
+    etichetta(g, 'L.O.', sinistra, yOrizzonte + dimTesto * 1.15, 'etichetta-orizzonte', dimTesto);
 
     const gv = el('g', { class: 'vista vista-prospettiva' });
     const ombreggiato = opzioni.resa === 'ombreggiato';
@@ -756,13 +982,18 @@ const Disegno = (function () {
   function disegnaAssonometria(svg, solidoOriginale, vista, opzioni) {
     svuota(svg);
     const sezione = applicaSezione(solidoOriginale, opzioni);
-    const solido = sezione.solido;
+    // Con il triedro il solido è collocato esattamente come nelle proiezioni
+    // ortogonali: primo triedro, cioè x, y, z tutte positive.
+    const solido = opzioni.triedro
+      ? collocaNelTriedro(sezione.solido, opzioni.posizione)
+      : sezione.solido;
     const g = el('g', {});
     const b = limiti(solido);
     const dimensione = Math.max(b.x1 - b.x0, b.y1 - b.y0, b.z1 - b.z0);
     const dimTesto = dimensione * 0.075;
 
     if (opzioni.griglia) disegnaGrigliaBase(g, solido, vista, dimensione);
+    if (opzioni.triedro) disegnaTriedro(g, solido, vista, dimTesto);
     if (opzioni.assi) {
       disegnaAssiRiferimento(g, vista, dimensione, dimTesto,
         { conDati: opzioni.assiConDati, inEvidenza: opzioni.assiInEvidenza });
@@ -812,6 +1043,57 @@ const Disegno = (function () {
         'font-size': dimTesto
       });
       t.textContent = testo;
+      gruppo.appendChild(t);
+    }
+  }
+
+  // Triedro di riferimento in assonometria: i tre piani di proiezione come
+  // angolo entro cui sta il solido, con gli assi lungo i loro spigoli. Serve a
+  // leggere la posizione del solido nello spazio, non solo la sua forma.
+  function disegnaTriedro(gruppo, solido, vista, dimTesto) {
+    const b = limiti(solido);
+    const estX = Math.max(b.x1, 1) * 1.25;
+    const estY = Math.max(b.y1, 1) * 1.25;
+    const estZ = Math.max(b.z1, 1) * 1.25;
+
+    const piani = [
+      { punti: [[0, 0, 0], [estX, 0, 0], [estX, estY, 0], [0, estY, 0]], sigla: 'P.O.' },
+      { punti: [[0, 0, 0], [estX, 0, 0], [estX, 0, estZ], [0, 0, estZ]], sigla: 'P.V.' },
+      { punti: [[0, 0, 0], [0, estY, 0], [0, estY, estZ], [0, 0, estZ]], sigla: 'P.L.' }
+    ];
+    for (const piano of piani) {
+      const punti = piano.punti.map(p => {
+        const q = vista.project(p);
+        return q[0].toFixed(2) + ',' + q[1].toFixed(2);
+      }).join(' ');
+      gruppo.appendChild(el('polygon', { points: punti, class: 'piano-proiezione' }));
+    }
+
+    const assi = [
+      { v: [estX * 1.12, 0, 0], nome: 'x' },
+      { v: [0, estY * 1.12, 0], nome: 'y' },
+      { v: [0, 0, estZ * 1.12], nome: 'z' }
+    ];
+    const origine = vista.project([0, 0, 0]);
+    for (const a of assi) {
+      const p = vista.project(a.v);
+      gruppo.appendChild(linea(origine[0], origine[1], p[0], p[1], 'asse-riferimento'));
+      const t = el('text', {
+        x: p[0] + dimTesto * 0.3, y: p[1] - dimTesto * 0.2,
+        class: 'etichetta-asse', 'font-size': dimTesto
+      });
+      t.textContent = a.nome;
+      gruppo.appendChild(t);
+    }
+
+    for (const piano of piani) {
+      const centro = piano.punti.reduce((s, p) => Geo.add(s, p), [0, 0, 0]).map(c => c / 4);
+      const q = vista.project(centro);
+      const t = el('text', {
+        x: q[0], y: q[1], class: 'etichetta-piano', 'font-size': dimTesto * 0.9,
+        'text-anchor': 'middle'
+      });
+      t.textContent = piano.sigla;
       gruppo.appendChild(t);
     }
   }
@@ -915,7 +1197,7 @@ const Disegno = (function () {
     disegnaAssonometria,
     disegnaProspettiva,
     disegnaFiguraPiana,
-    collocaDietroIlQuadro,
+    collocaPerProspettiva,
     puntiDiFuga,
     segmentiProiettati,
     limiti

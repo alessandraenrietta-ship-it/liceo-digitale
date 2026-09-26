@@ -53,15 +53,13 @@
 
 
 Sinonimi e contrari | Lingua e letteratura italiana | docenti | italiano-sinonimi-e-contrari | Cerca sinonimi e contrari di una parola, divisi per significato, e indica quale gruppo si adatta alla frase in cui la parola è usata. Richiede una chiave personale di accesso al servizio.
-DA COMPILARE | Lingua e cultura straniera - inglese | docenti | inglese-DACOMPILARE | DA COMPILARE
+Tense Battle | Lingua e cultura straniera - inglese | docenti | inglese-tense-battle | Gioco a squadre sui tempi verbali, da proiettare sulla LIM: ogni squadra sceglie la risposta giusta e spiega il perché, poi una ruota di domande per parlare in inglese. Nomi veri non servono: le squadre hanno nomi di fantasia.
 Il detective degli esperimenti | Scienze naturali | entrambi | scienze-detective-degli-esperimenti | Quattordici casi in cui progettare passo per passo l'esperimento che scopre chi ha ragione, con il Sistema Internazionale e un allenamento a convertire le unità di misura.
-Triedro - metodi di rappresentazione | Disegno e storia dell'arte | entrambi | arte-triedro | Un solido rappresentato con i diversi metodi: proiezioni ortogonali, assonometria, prospettiva e sezioni. Con l'Esploratore si osserva e si modifica, con la Palestra ci si esercita.
-DA COMPILARE | Informatica | docenti | informatica-DACOMPILARE | DA COMPILARE
+Triedro - metodi di rappresentazione | Disegno e storia dell'arte | entrambi | arte-triedro | Un solido rappresentato con i diversi metodi: proiezioni ortogonali, assonometria, prospettiva e sezioni. Con l'Esploratore si osserva e si modifica, con la Palestra ci si esercita. Il testo si può ingrandire e distanziare, e le consegne della Palestra si possono ascoltare.
 Aureolissima - Punti Paradiso | Religione cattolica | docenti | religione-aureolissima | Gioco a punti per la classe: il docente assegna i Punti Paradiso, gli studenti li chiedono e li guadagnano con quiz e domande a sorpresa. Nomi veri non servono: si usano nickname. Tutto resta sul computer di chi la usa.
 Il Regolamento in Gioco | Educazione civica | entrambi | edcivica-regolamento-in-gioco | Gioco a squadre sul regolamento d'istituto: cinque casi da risolvere cercando sanzione, organo competente e procedura, con cronometro e bacheca delle risposte. Si conduce dallo schermo proiettato.
 
-# Riga non confermata: da togliere se la disciplina non viene coperta.
-DA COMPILARE | Diritto | docenti | diritto-DACOMPILARE | DA COMPILARE
+Diritto in pratica | Diritto | docenti | diritto-in-pratica | Bacheca con quattro attività: per il primo anno la piramide delle fonti e che cosa si può fare a ogni età, per il secondo anno il viaggio di una legge e i compiti degli organi dello Stato.
 
 
 # STRUMENTI DI LAVORO
@@ -74,6 +72,11 @@ Annotazioni sul registro | | docenti | docenti-annotazioni | Compone annotazioni
 Orario e aule | | docenti | docenti-orario-aule | Cerca una classe o un insegnante e mostra l'orario della settimana con l'aula di ogni ora. L'orario pubblicato è di esempio: chi usa la pagina può caricare il proprio, che resta sul suo computer.
 
 Il giudizio di Minosse | | docenti | docenti-giudizio-di-minosse | Estrae chi viene interrogato, da proiettare sulla LIM: Minosse avvolge la coda e manda un'anima nel baratro. Estrazione equa, senza ripetizioni fino a fine giro. Le classi si incollano dal registro e si possono salvare sul proprio computer.
+
+# Prototipo: le prenotazioni restano sul computer di chi prova la
+# pagina. Quando la versione vera sarà pubblicata su Google, questa
+# riga andrà cambiata.
+Prenotazione Chromebook | | docenti | docenti-carrello-chromebook | Prototipo per prenotare il carrello dei Chromebook: si sceglie il giorno e l'ora della settimana, e ogni ora la può avere una classe sola. Nomi, indirizzi e classi sono inventati, e le prenotazioni di prova restano sul computer di chi apre la pagina.
 
 # Il campo disciplina resta vuoto per gli strumenti che non
 # appartengono a una disciplina.

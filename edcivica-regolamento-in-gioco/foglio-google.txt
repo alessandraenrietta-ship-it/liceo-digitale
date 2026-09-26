@@ -1,0 +1,25 @@
+# ==================================================================
+# LE RISPOSTE DAI TELEFONI: L'INDIRIZZO DEL FOGLIO GOOGLE
+#
+# Le righe che cominciano con # sono spiegazioni: la pagina non le
+# legge.
+#
+# Qui sotto, su una riga da sola, va l'indirizzo della web app del
+# Foglio Google delle risposte: quello che comincia con
+# https://script.google.com/ e finisce con /exec.
+# Come si crea il foglio e dove si trova l'indirizzo: e' spiegato nel
+# file ISTRUZIONI.md, nella cartella foglio-google qui accanto.
+#
+# FINCHE' LA RIGA QUI SOTTO E' VUOTA
+# il gioco funziona come prima: dal telefono si legge e si cerca, e la
+# risposta si detta all'insegnante, che la registra sullo schermo
+# proiettato.
+#
+# QUANDO C'E' L'INDIRIZZO
+# i gruppi scrivono la risposta sul telefono e la inviano, e questa
+# compare da sola nella Bacheca dello schermo proiettato.
+#
+# Per tornare come prima basta cancellare l'indirizzo.
+# ==================================================================
+
+https://script.google.com/macros/s/AKfycbxmuAtPhy0FSvhPc8THyP7AdtJdGAnT5eyv0OSXyz9UorXMn6QyTa6i1VyTc717ziM/exec

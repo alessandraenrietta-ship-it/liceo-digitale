@@ -1,0 +1,210 @@
+# ============================================================
+# SECONDO ANNO - CHI FA CHE COSA?
+# ============================================================
+#
+# Questo file contiene i testi di un'attività della bacheca di
+# Diritto. Puoi modificarlo con il Blocco note e salvarlo: la
+# pagina cambia da sola, non serve toccare il codice.
+#
+# COME È FATTO
+# ------------
+# In cima ci sono le righe che descrivono l'attività nella
+# bacheca: titolo, icona, argomento, descrizione. La riga
+# premessa è il testo che si legge aprendo l'attività.
+#
+# Poi vengono gli organi dello Stato, ognuno in un blocco che
+# comincia con la riga [ORGANO]:
+#
+#   nome:    il nome dell'organo
+#   icona:   una emoji (facoltativa)
+#   potere:  il potere o la funzione che esercita
+#
+# Infine i compiti da assegnare, ognuno in un blocco che comincia
+# con la riga [COMPITO]:
+#
+#   testo:        il compito, breve
+#   organo:       chi lo svolge. Va scritto esattamente come il
+#                 nome di uno degli organi qui sopra
+#   spiegazione:  compare quando lo studente trova l'organo giusto
+#
+# ALTRE COSE DA SAPERE
+# --------------------
+# - Le righe che iniziano con # sono commenti: il sito le ignora.
+# - Se un testo è lungo puoi andare a capo: le righe che non
+#   iniziano con una parola chiave si attaccano alla precedente.
+# - Se una riga è scritta male il sito non si blocca: la salta e
+#   in cima all'attività dice quale riga rivedere.
+# - I compiti vengono mescolati: l'ordine in cui li scrivi non
+#   conta.
+# ============================================================
+
+titolo: Chi fa che cosa?
+icona: 🏛️
+argomento: Gli organi costituzionali e la separazione dei poteri
+descrizione: Assegna ogni compito all'organo dello Stato che lo svolge e costruisci, un tassello alla volta, la mappa dei poteri.
+premessa: Nella Repubblica italiana il potere non sta tutto nelle
+mani di una sola persona o di un solo organo: è diviso, perché
+ciascuno possa controllare gli altri. È la separazione dei poteri.
+Leggi il compito e scegli l'organo che lo svolge: ogni risposta
+giusta va al suo posto nella mappa.
+
+
+# ------------------------------------------------------------
+# GLI ORGANI
+# ------------------------------------------------------------
+
+[ORGANO]
+nome: Parlamento
+icona: 🏛️
+potere: Potere legislativo
+
+[ORGANO]
+nome: Governo
+icona: 🏢
+potere: Potere esecutivo
+
+[ORGANO]
+nome: Magistratura
+icona: ⚖️
+potere: Potere giudiziario
+
+[ORGANO]
+nome: Presidente della Repubblica
+icona: 🎖️
+potere: Organo di garanzia
+
+[ORGANO]
+nome: Corte costituzionale
+icona: 📘
+potere: Organo di garanzia
+
+
+# ------------------------------------------------------------
+# I COMPITI
+# ------------------------------------------------------------
+
+[COMPITO]
+testo: Approva le leggi
+organo: Parlamento
+spiegazione: La funzione legislativa spetta alle due Camere insieme,
+Camera dei deputati e Senato (articolo 70).
+
+[COMPITO]
+testo: Dà o toglie la fiducia al Governo
+organo: Parlamento
+spiegazione: Il Governo, per restare in carica, deve avere la
+fiducia di entrambe le Camere (articolo 94).
+
+[COMPITO]
+testo: Approva ogni anno il bilancio dello Stato
+organo: Parlamento
+spiegazione: Il Governo prepara il bilancio, ma è il Parlamento che
+lo approva con una legge (articolo 81).
+
+[COMPITO]
+testo: Elegge il Presidente della Repubblica
+organo: Parlamento
+spiegazione: Lo elegge il Parlamento in seduta comune, cioè deputati
+e senatori insieme, con l'aggiunta di tre delegati per ogni Regione
+(articolo 83).
+
+[COMPITO]
+testo: In casi straordinari di necessità e urgenza, adotta i decreti-legge
+organo: Governo
+spiegazione: Il decreto-legge ha subito forza di legge, ma il
+Parlamento deve convertirlo in legge entro sessanta giorni
+(articolo 77).
+
+[COMPITO]
+testo: Dirige la politica generale del Paese e la pubblica amministrazione
+organo: Governo
+spiegazione: Il Presidente del Consiglio dirige la politica generale
+del Governo, e i ministri guidano ciascuno il proprio ministero
+(articolo 95).
+
+[COMPITO]
+testo: Prepara il progetto di bilancio dello Stato
+organo: Governo
+spiegazione: Il Governo presenta ogni anno alle Camere il disegno
+di legge di bilancio, che poi le Camere discutono e approvano.
+
+[COMPITO]
+testo: Promulga le leggi
+organo: Presidente della Repubblica
+spiegazione: Con la promulgazione il Presidente firma la legge e ne
+ordina la pubblicazione. Prima può rinviarla una volta alle Camere
+(articoli 73, 74 e 87).
+
+[COMPITO]
+testo: Nomina il Presidente del Consiglio dei ministri
+organo: Presidente della Repubblica
+spiegazione: Dopo le consultazioni con i partiti, il Presidente della
+Repubblica nomina il Presidente del Consiglio e, su sua proposta, i
+ministri (articolo 92).
+
+[COMPITO]
+testo: Può sciogliere le Camere prima della fine della legislatura
+organo: Presidente della Repubblica
+spiegazione: Lo può fare dopo aver sentito i Presidenti delle due
+Camere, ma non negli ultimi sei mesi del suo mandato (articolo 88).
+
+[COMPITO]
+testo: Concede la grazia
+organo: Presidente della Repubblica
+spiegazione: La grazia cancella o riduce la pena di una singola
+persona condannata (articolo 87).
+
+[COMPITO]
+testo: Presiede il Consiglio superiore della magistratura
+organo: Presidente della Repubblica
+spiegazione: Il Consiglio superiore della magistratura garantisce
+l'indipendenza dei giudici, e il Presidente della Repubblica lo
+presiede (articolo 104).
+
+[COMPITO]
+testo: Applica le leggi ai casi concreti e risolve le liti fra le persone
+organo: Magistratura
+spiegazione: È la funzione giurisdizionale. I giudici sono soggetti
+soltanto alla legge (articolo 101).
+
+[COMPITO]
+testo: Giudica le persone accusate di aver commesso un reato
+organo: Magistratura
+spiegazione: Il processo penale si svolge davanti a un giudice
+imparziale, e l'accusato non è considerato colpevole fino alla
+condanna definitiva (articoli 27 e 111).
+
+[COMPITO]
+testo: Amministra la giustizia in nome del popolo
+organo: Magistratura
+spiegazione: Lo dice l'articolo 101: la giustizia è amministrata in
+nome del popolo. Per questo le sentenze iniziano con le parole "In
+nome del popolo italiano".
+
+[COMPITO]
+testo: Decide se una legge rispetta la Costituzione
+organo: Corte costituzionale
+spiegazione: Se una legge va contro la Costituzione, la Corte la
+dichiara illegittima e la legge non si applica più (articoli 134 e
+136).
+
+[COMPITO]
+testo: Risolve i conflitti fra i poteri dello Stato
+organo: Corte costituzionale
+spiegazione: Quando due poteri dello Stato si contendono una
+competenza, per esempio il Governo e la Magistratura, decide la
+Corte costituzionale (articolo 134).
+
+[COMPITO]
+testo: Decide se un referendum abrogativo si può fare
+organo: Corte costituzionale
+spiegazione: Prima del voto, la Corte controlla che il referendum
+non riguardi materie escluse dalla Costituzione, come le leggi
+tributarie o i trattati internazionali (articolo 75).
+
+[COMPITO]
+testo: Giudica il Presidente della Repubblica accusato di alto tradimento
+organo: Corte costituzionale
+spiegazione: Il Presidente può essere messo sotto accusa dal
+Parlamento in seduta comune; a giudicarlo è la Corte costituzionale
+(articoli 90 e 134).

@@ -1,0 +1,203 @@
+# ============================================================
+# TENSE BATTLE - I TESTI DELLE ISTRUZIONI PER IL DOCENTE
+# ============================================================
+#
+# Questo file contiene i testi della pagina istruzioni.html.
+# Puoi modificarlo con un qualsiasi editor di testo (Blocco note
+# va benissimo) e salvarlo: la pagina cambia subito.
+#
+# COME È FATTO
+# ------------
+# La guida è divisa in fasi, che si sfogliano una alla volta.
+# Ogni fase comincia con la riga che contiene solo la parola
+# FASE fra parentesi quadre, e poi contiene:
+#
+#   titolo:     il nome della fase
+#   schermata:  (facoltativa) quale immagine del gioco mostrare.
+#               Scrivi una di queste parole:
+#                 ingaggio, squadre, domanda, risposta,
+#                 risultati, ruota
+#               Le immagini stanno nella cartella "immagini".
+#   testo:      un paragrafo. Scrivi una riga testo: per ogni
+#               paragrafo che vuoi
+#   1:  2:  3:  la spiegazione del punto con quel numero. Sulla
+#               schermata il numero compare sopra il pulsante
+#               giusto
+#   consiglio:  (facoltativo) un suggerimento, in un riquadro
+#   esempio:    (facoltativo) una riga di esempio, scritta come
+#               nel Blocco note. Scrivi una riga esempio: per ogni
+#               riga dell'esempio
+#
+# ALTRE COSE DA SAPERE
+# --------------------
+# - Le righe che iniziano con # sono commenti: il sito le ignora.
+# - Le righe vuote servono solo a rendere il file leggibile.
+# - Se un testo è lungo puoi andare a capo: una riga che non
+#   comincia con una delle parole qui sopra si attacca a quella
+#   prima.
+# - Le parole fra due asterischi, *così*, compaiono in grassetto.
+# - Dove stanno i numeri sulle schermate lo decide la pagina,
+#   non questo file. Se sposti o togli un punto, i numeri non
+#   corrispondono più.
+#
+# ============================================================
+
+
+[FASE]
+titolo: Prima di cominciare
+schermata: ingaggio
+testo: *Tense Battle* è un gioco a squadre sui tempi verbali, da
+proiettare sulla LIM. Ha due parti: la battaglia, in cui le squadre
+scelgono la risposta giusta e ne spiegano il motivo, e la ruota, in
+cui le squadre parlano in inglese.
+testo: *Cosa fanno gli studenti.* Lavorano in squadra. Nella
+battaglia leggono la frase proiettata, si mettono d'accordo prima che
+finisca il timer e rispondono alzando un post-it: quello del colore
+della risposta scelta, uno per squadra. Poi spiegano a voce il perché
+della loro scelta. Nella ruota rispondono a voce, in inglese, alla
+domanda uscita.
+testo: Ti serve la LIM o un proiettore e, per ogni squadra, tre
+post-it di colori diversi: uno per la risposta A, uno per la B e uno
+per la C. I colori si scelgono nella fase successiva.
+testo: La prima schermata serve ad assegnare i ruoli dentro ogni
+squadra.
+1: I tre ruoli: chi dà la parola a tutti e guarda il tempo
+(*Conversation manager*), chi aiuta con le parole senza rispondere
+al posto degli altri (*Language tutor*), chi ascolta e segna i tempi
+verbali usati (*Checker*).
+2: Gli studenti si candidano completando questa frase in inglese.
+L'ultima parola spetta a te.
+3: Quando i ruoli sono assegnati, si passa a preparare le squadre.
+consiglio: Se formi le squadre prima della lezione, in classe resta
+più tempo per giocare.
+
+[FASE]
+titolo: Le squadre
+schermata: squadre
+1: Quante squadre giocano: da 3 a 7.
+2: I nomi delle squadre. Ce ne sono già di pronti, e si possono
+cambiare cliccandoci sopra. Usa nomi di fantasia, mai i nomi degli
+studenti.
+3: I colori delle risposte A, B e C. Scegli gli stessi colori dei
+post-it che darai alle squadre: così dal fondo dell'aula si
+riconosce subito la risposta.
+4: Quanto tempo hanno le squadre per mettersi d'accordo: 15, 20 o
+30 secondi.
+5: Le regole del gioco, da leggere insieme alla classe: risposta
+giusta un punto, motivo giusto un altro punto.
+6: Quando è tutto pronto, si comincia.
+consiglio: Durante la partita, squadre e punti vengono salvati solo
+nel browser di questo computer: non vanno su internet. Se la pagina si
+chiude per sbaglio, riaprendola compare il riquadro *A game is in
+progress*: con *Resume* si riprende da dove si era rimasti, con *New
+game* si ricomincia da zero. Dopo tre ore la partita salvata si
+cancella da sola, così la classe dell'ora dopo parte pulita.
+
+[FASE]
+titolo: La domanda
+schermata: domanda
+testo: Leggi la frase alla classe. Le squadre si consultano finché
+dura il timer, poi ognuna alza il post-it della risposta scelta.
+1: Il timer. Parte quando premi il pulsante e negli ultimi secondi
+suona. Un secondo clic lo mette in pausa.
+2: Le domande, una per puntino. Quello rosa è la domanda di adesso,
+i verdi sono già fatti, i gialli sono le domande *sfida*.
+3: Le tre risposte, con i colori dei post-it.
+4: Per ogni squadra clicca la lettera del post-it che ha alzato.
+Se sbagli, un clic su un'altra lettera la cambia, e un clic sulla
+stessa lettera la toglie.
+5: Qui vedi quante squadre hanno già risposto.
+6: Quando hanno risposto tutte, mostra la soluzione.
+7: *Teams* riporta alla pagina delle squadre, per esempio per
+correggere un nome. I punti restano, e con *Let's play!* si riprende
+dalla domanda in cui si era rimasti.
+
+[FASE]
+titolo: La soluzione e i punti
+schermata: risposta
+1: La risposta giusta entra nella frase. Il colore dice la famiglia
+del tempo: blu per i tempi *simple*, verde per i *continuous*, ocra
+per i *perfect*.
+2: Il nome del tempo verbale.
+3: La domanda guida e la spiegazione. Usale per chiedere alle
+squadre il perché della loro scelta.
+4: La trappola, quando c'è: l'errore tipico di chi parla italiano.
+5: Il punto della risposta si assegna da solo. Bordo verde vuol
+dire risposta giusta, bordo rosa risposta sbagliata. La lettera
+giusta ha il contorno tratteggiato.
+6: Il punto del motivo lo dai tu: se la squadra spiega bene il
+perché, premi *reason*. Un secondo clic lo toglie.
+consiglio: Il punto del motivo non dipende dalla risposta: puoi
+darlo anche a una squadra che ha scelto la lettera sbagliata ma ha
+ragionato bene. Se torni a una domanda già fatta, scelte e punti
+restano com'erano.
+
+[FASE]
+titolo: I risultati
+schermata: risultati
+testo: Il pulsante *Results*, in alto a destra, porta qui in ogni
+momento. Alla fine delle domande ci si arriva da soli.
+1: Il podio. Le squadre a pari punti condividono il posto.
+2: Le altre squadre, con il loro punteggio.
+3: Si torna alle domande, con i punti com'erano.
+4: Si passa alla ruota per parlare. I punti continuano a sommarsi a
+quelli della battaglia.
+
+[FASE]
+titolo: La ruota per parlare
+schermata: ruota
+testo: Nella seconda parte le squadre parlano in inglese. Le regole
+sono scritte in alto: ognuno risponde con due, tre o quattro frasi,
+chi parla dopo fa una domanda per approfondire, e con *Pass!* si
+salta il turno.
+1: *SPIN* fa girare la ruota. Esce sempre una domanda nuova, e lo
+spicchio già uscito diventa grigio. Quando sono uscite tutte, un
+altro SPIN le rimette in gioco.
+2: La domanda, con il tempo verbale da usare nella risposta.
+3: Gli aiuti: come cominciare la risposta, e alcune domande per
+approfondire.
+4: Il tempo: due minuti per pensare (*THINK*), poi partono da soli
+quattro minuti per parlare (*TALK*). Il pulsante Start mette in
+pausa e fa ripartire.
+5: Aggiunge un minuto.
+6: I punti di ogni giro: *everyone spoke* se nella squadra hanno
+parlato tutti, *best sentence* per la frase più riuscita. Un punto
+ciascuno.
+
+[FASE]
+titolo: I tasti rapidi
+testo: Durante le domande puoi usare la tastiera invece del mouse.
+1: *Freccia a destra*: la domanda successiva.
+2: *Freccia a sinistra*: la domanda precedente.
+3: *Barra spaziatrice*: mostra o nasconde la soluzione. Nella ruota,
+fa girare la ruota.
+4: *T*: fa partire o mette in pausa il timer.
+consiglio: I tasti non funzionano mentre stai scrivendo il nome di
+una squadra, così puoi usare lo spazio nei nomi.
+
+[FASE]
+titolo: Cambiare le domande
+testo: Le domande non stanno dentro il gioco ma in due file di testo,
+nella cartella del gioco: *domande.txt* per la battaglia e
+*ruota.txt* per la ruota. Si aprono con il Blocco note, e in cima a
+ciascuno ci sono le istruzioni complete.
+testo: Ecco com'è fatta una domanda in domande.txt:
+esempio: [DOMANDA]
+esempio: frase: In our practical lessons, I usually ___ with the lathe.
+esempio: A: have worked
+esempio: B: work
+esempio: C: am working
+esempio: giusta: B
+esempio: tempo: Present simple
+esempio: famiglia: simple
+esempio: domanda guida: Is it a habit, a routine or a fact?
+esempio: spiegazione: *usually* = a habit.
+testo: Per aggiungerne una, copia un blocco intero, dalla riga
+[DOMANDA] fino alla riga vuota, incollalo dove vuoi e cambia i
+testi. I tre trattini bassi ___ segnano il buco nella frase.
+testo: Per la ruota basta aggiungere una riga che comincia con
+*domanda:* nel gruppo del tempo verbale giusto.
+consiglio: Se una riga è scritta male il gioco non si blocca: la
+salta e, nella pagina delle squadre, scrive in rosso quale riga
+rivedere. Dopo aver salvato il file, la modifica va pubblicata sul
+sito come tutte le altre.

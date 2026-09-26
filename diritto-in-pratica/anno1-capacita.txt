@@ -1,0 +1,156 @@
+# ============================================================
+# PRIMO ANNO - CHE COSA POSSO FARE ALLA MIA ETÀ?
+# ============================================================
+#
+# Questo file contiene i testi di un'attività della bacheca di
+# Diritto. Puoi modificarlo con il Blocco note e salvarlo: la
+# pagina cambia da sola, non serve toccare il codice.
+#
+# COME È FATTO
+# ------------
+# In cima ci sono le righe che descrivono l'attività nella
+# bacheca: titolo, icona, argomento, descrizione. La riga
+# premessa è il testo che si legge aprendo l'attività.
+#
+# Poi vengono le azioni. Ognuna comincia con la riga [AZIONE]:
+#
+#   azione:       che cosa si vuole fare, breve
+#   icona:        una emoji (facoltativa)
+#   da:           l'età, solo il numero, da cui si può fare da soli
+#   prima:        (facoltativa) l'età da cui lo si può fare a certe
+#                 condizioni, poi la barra | e quali sono le
+#                 condizioni. Esempio:
+#                 prima: 16 | Con l'autorizzazione del tribunale
+#   spiegazione:  perché la legge fissa quell'età
+#
+# Se un'azione si può fare fin dalla nascita, scrivi  da: 0
+#
+# ALTRE COSE DA SAPERE
+# --------------------
+# - Le righe che iniziano con # sono commenti: il sito le ignora.
+# - Se un testo è lungo puoi andare a capo: le righe che non
+#   iniziano con una parola chiave si attaccano alla precedente.
+# - Se una riga è scritta male il sito non si blocca: la salta e
+#   in cima all'attività dice quale riga rivedere.
+# - Il cursore dell'età arriva fino a 60 anni.
+# ============================================================
+
+titolo: Che cosa posso fare alla mia età?
+icona: 🎂
+argomento: Le persone fisiche: capacità giuridica e capacità di agire
+descrizione: Sposta il cursore dell'età e scopri che cosa una persona può fare da sola, a certe condizioni o non ancora. Poi mettiti alla prova.
+premessa: Ogni persona ha la capacità giuridica fin dalla nascita
+(articolo 1 del Codice civile): può avere diritti e doveri, per
+esempio essere proprietaria di una casa ricevuta in eredità. La
+capacità di agire, cioè il potere di esercitare quei diritti da
+soli, si acquista invece a 18 anni (articolo 2). Prima dei 18 anni
+la legge concede alcune cose un po' alla volta.
+
+
+[AZIONE]
+azione: Essere proprietario di un bene ricevuto in eredità
+icona: 🏠
+da: 0
+spiegazione: Si può essere eredi fin dalla nascita: è la capacità
+giuridica, che tutti hanno. Finché si è minorenni, però, i documenti
+per accettare l'eredità li firmano i genitori.
+
+[AZIONE]
+azione: Iscriversi da solo a un social network
+icona: 📱
+da: 14
+spiegazione: In Italia, dai 14 anni si può dare da soli il consenso
+all'uso dei propri dati personali per i servizi online. Prima serve
+il consenso dei genitori. Alcuni social fissano poi, nelle loro
+regole, un'età minima propria.
+
+[AZIONE]
+azione: Guidare un ciclomotore
+icona: 🛵
+da: 14
+spiegazione: Dai 14 anni si può prendere la patente AM, che permette
+di guidare i ciclomotori fino a 50 di cilindrata.
+
+[AZIONE]
+azione: Rispondere penalmente di un reato
+icona: ⚖️
+da: 18
+prima: 14 | Dai 14 ai 18 anni il tribunale per i minorenni valuta
+caso per caso se la persona era capace di capire e di volere quello
+che faceva.
+spiegazione: Chi ha meno di 14 anni non è mai imputabile: non può
+essere condannato per un reato. Dai 18 anni si risponde pienamente
+delle proprie azioni.
+
+[AZIONE]
+azione: Lavorare con un contratto
+icona: 🧰
+da: 16
+spiegazione: L'età minima per lavorare è 16 anni, e solo dopo aver
+frequentato almeno dieci anni di scuola (l'obbligo di istruzione).
+Da quel momento il lavoratore può esercitare da solo i diritti che
+nascono dal suo contratto.
+
+[AZIONE]
+azione: Guidare un'automobile
+icona: 🚗
+da: 18
+prima: 17 | A 17 anni, se si ha già la patente AM, si può chiedere
+l'autorizzazione alla guida accompagnata: si guida solo con accanto
+un adulto con la patente da almeno dieci anni.
+spiegazione: La patente B, che permette di guidare da soli, si può
+prendere dai 18 anni.
+
+[AZIONE]
+azione: Sposarsi
+icona: 💍
+da: 18
+prima: 16 | Dai 16 anni ci si può sposare solo con l'autorizzazione
+del tribunale per i minorenni, per gravi motivi e se la persona è
+abbastanza matura.
+spiegazione: Con il matrimonio il minorenne diventa emancipato: può
+compiere da solo gli atti di ordinaria amministrazione.
+
+[AZIONE]
+azione: Firmare da solo un contratto di affitto
+icona: ✍️
+da: 18
+spiegazione: I contratti importanti richiedono la capacità di agire,
+che si acquista a 18 anni. Un contratto firmato da un minorenne da
+solo si può annullare.
+
+[AZIONE]
+azione: Fare testamento
+icona: 📜
+da: 18
+spiegazione: Il testamento lo può fare solo chi ha la piena capacità
+di agire, quindi chi ha compiuto 18 anni.
+
+[AZIONE]
+azione: Votare per eleggere il Parlamento
+icona: 🗳️
+da: 18
+spiegazione: Dai 18 anni si vota sia per la Camera dei deputati sia
+per il Senato (per il Senato è così dal 2021; prima servivano 25
+anni).
+
+[AZIONE]
+azione: Essere eletto deputato
+icona: 🏛️
+da: 25
+spiegazione: Per essere eletti alla Camera dei deputati servono 25
+anni (articolo 56 della Costituzione).
+
+[AZIONE]
+azione: Essere eletto senatore
+icona: 🏛️
+da: 40
+spiegazione: Per essere eletti al Senato servono 40 anni (articolo
+58 della Costituzione).
+
+[AZIONE]
+azione: Essere eletto Presidente della Repubblica
+icona: 🎖️
+da: 50
+spiegazione: Il Presidente della Repubblica deve avere almeno 50
+anni (articolo 84 della Costituzione).

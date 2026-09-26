@@ -1,0 +1,222 @@
+# ============================================================
+# TENSE BATTLE - LE DOMANDE DEL GIOCO A SQUADRE
+# ============================================================
+#
+# Questo file contiene le domande della prima parte del gioco.
+# Puoi modificarlo con un qualsiasi editor di testo (Blocco note
+# va benissimo) e salvarlo: il sito cambia subito, non serve
+# toccare il codice.
+#
+# COME SI SCRIVE UNA DOMANDA
+# --------------------------
+# Ogni domanda comincia con la riga [DOMANDA] e contiene:
+#
+#   frase:          la frase da completare. Il buco si scrive con
+#                   tre trattini bassi: ___
+#                   Se i buchi sono due, nelle risposte si separano
+#                   le due parti con una barra: have been / have done
+#   A:              la prima risposta
+#   B:              la seconda risposta
+#   C:              la terza risposta
+#   giusta:         la lettera della risposta giusta (A, B oppure C)
+#   tempo:          il nome del tempo verbale, come compare sul sito
+#   famiglia:       decide il colore della spiegazione. Scrivi una
+#                   di queste tre parole:
+#                     simple      (blu)
+#                     continuous  (verde)
+#                     perfect     (ocra)
+#   domanda guida:  la domanda che aiuta a trovare il motivo
+#   spiegazione:    perché la risposta è quella giusta. Le parole
+#                   tra due asterischi, *così*, compaiono in grassetto
+#   trappola:       (facoltativa) l'errore tipico di chi parla
+#                   italiano
+#   sfida:          (facoltativa) scrivi "sì" se è una domanda
+#                   sfida: sul sito ha l'etichetta CHALLENGE
+#
+# ALTRE COSE DA SAPERE
+# --------------------
+# - Le righe che iniziano con # sono commenti: il sito le ignora.
+# - Le righe vuote servono solo a rendere il file leggibile.
+# - Le domande compaiono nell'ordine in cui sono scritte qui.
+# - Se sbagli a scrivere una domanda il sito non si blocca: la
+#   salta e, nella pagina delle squadre, ti dice quale rivedere.
+#
+# ============================================================
+
+
+[DOMANDA]
+frase: In our practical lessons, I usually ___ with the lathe.
+A: have worked
+B: work
+C: am working
+giusta: B
+tempo: Present simple
+famiglia: simple
+domanda guida: Is it a habit, a routine or a fact?
+spiegazione: *usually* = a habit.
+
+[DOMANDA]
+frase: At the moment I ___ on a project about automation.
+A: am working
+B: work
+C: was working
+giusta: A
+tempo: Present continuous
+famiglia: continuous
+domanda guida: Is it happening now?
+spiegazione: *at the moment* = now, in progress.
+
+[DOMANDA]
+frase: Last year I ___ a work placement in a local company.
+A: have done
+B: do
+C: did
+giusta: C
+tempo: Past simple
+famiglia: simple
+domanda guida: Is it finished, and do we say when?
+spiegazione: *last year* = we say when. Finished.
+
+[DOMANDA]
+frase: I ___ mechanics at this school for five years.
+A: have been studying
+B: am studying
+C: study
+giusta: A
+tempo: Present perfect continuous
+famiglia: perfect
+domanda guida: Did it start in the past, and is it still going on?
+spiegazione: Started five years ago and still going on: *for five years*.
+trappola: Italian trap: studio da cinque anni ≠ I study / I am studying
+
+[DOMANDA]
+frase: So far, I ___ two projects with my team.
+A: completed
+B: am completing
+C: have completed
+giusta: C
+tempo: Present perfect
+famiglia: perfect
+domanda guida: Is it an experience or a result, without saying when?
+spiegazione: *so far* = up to now. No finished time.
+
+[DOMANDA]
+frase: I ___ a machine when a sensor stopped working.
+A: was testing
+B: tested
+C: have tested
+giusta: A
+tempo: Past continuous
+famiglia: continuous
+domanda guida: Was it in progress when something else happened?
+spiegazione: Long action in progress (*was testing*) + short action that interrupts it (*stopped*).
+
+[DOMANDA]
+frase: How long ___ here? – For two months.
+A: are you working
+B: do you work
+C: have you been working
+giusta: C
+tempo: Present perfect continuous
+famiglia: perfect
+domanda guida: Did it start in the past, and is it still going on?
+spiegazione: *How long…?* + still working here now.
+trappola: Italian trap: Da quanto lavori qui? ≠ How long are you working here?
+
+[DOMANDA]
+frase: This week I ___ in the maintenance department, because my tutor is on holiday.
+A: work
+B: am working
+C: have worked
+giusta: B
+tempo: Present continuous
+famiglia: continuous
+domanda guida: Is it happening only for a while?
+spiegazione: *this week* = a temporary situation.
+
+[DOMANDA]
+frase: I ___ the safety course, so now I can use the machines.
+A: already finish
+B: am already finishing
+C: have already finished
+giusta: C
+tempo: Present perfect
+famiglia: perfect
+domanda guida: Is it an experience or a result, without saying when?
+spiegazione: *already* + a result that matters now: I can use the machines.
+
+[DOMANDA]
+frase: During my placement last summer, I ___ how to use a lathe.
+A: learn
+B: learned
+C: have learned
+giusta: B
+tempo: Past simple
+famiglia: simple
+domanda guida: Is it finished, and do we say when?
+spiegazione: *last summer*: the placement is over.
+
+
+# ------------------------------------------------------------
+# LE DOMANDE SFIDA
+# ------------------------------------------------------------
+
+[DOMANDA]
+sfida: sì
+frase: I ___ three job interviews this month, and it's only the 20th!
+A: had
+B: have had
+C: was having
+giusta: B
+tempo: Present perfect
+famiglia: perfect
+domanda guida: Is the time period finished?
+spiegazione: *this month* is not finished yet, so we use the present perfect. Compare: *last month* I had three.
+
+[DOMANDA]
+sfida: sì
+frase: How long ___ your placement? – Two months. It ended in June.
+A: did it last
+B: has it lasted
+C: has it been lasting
+giusta: A
+tempo: Past simple
+famiglia: simple
+domanda guida: Is it finished, and do we know when?
+spiegazione: *How long…?* but the placement is over (*it ended in June*). Compare with question 7: still working = present perfect continuous.
+
+[DOMANDA]
+sfida: sì
+frase: When I arrived at the workshop, the technician ___ the engine, so I watched him.
+A: repaired
+B: has repaired
+C: was repairing
+giusta: C
+tempo: Past continuous
+famiglia: continuous
+domanda guida: Was it already in progress at that moment?
+spiegazione: He started before I arrived and I watched him work. *When I arrived, he repaired it* = he started after I arrived.
+
+[DOMANDA]
+sfida: sì
+frase: I ___ engines all morning, and so far I ___ three.
+A: have repaired / have been repairing
+B: have been repairing / have repaired
+C: was repairing / repaired
+giusta: B
+tempo: Pres. perf. continuous + pres. perfect
+famiglia: perfect
+domanda guida: The activity, or the result?
+spiegazione: *all morning* = the activity, still going on → continuous. *three so far* = the result, a number → simple.
+
+[DOMANDA]
+sfida: sì
+frase: Sorry, I ___ what you mean. Can you say it again?
+A: don't understand
+B: am not understanding
+C: haven't been understanding
+giusta: A
+tempo: Present simple
+famiglia: simple
+domanda guida: Is it a state, not an action?
+spiegazione: *understand, know, like, need, want* are states: we don't normally use them with -ing.

@@ -150,8 +150,7 @@ window.ChiavePersonale = (function () {
            quando c'è davvero qualcosa da dire. */
         '<p class="chiave-spiegazione">Serve una chiave gratuita di ' +
         '<a href="https://aistudio.google.com/apikey" target="_blank" ' +
-        'rel="noopener">Google AI Studio</a>: resta in questo browser. ' +
-        'Google può usare i testi inviati.</p>' +
+        'rel="noopener">Google AI Studio</a>.</p>' +
         inPiu +
         '<div class="chiave-riga">' +
         '  <label class="chiave-etichetta solo-lettori" for="chiave-campo">La tua chiave di accesso</label>' +
