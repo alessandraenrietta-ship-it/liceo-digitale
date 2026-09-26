@@ -1,67 +1,39 @@
 <!DOCTYPE html>
-<html lang="it" data-tema="auto">
+<html lang="it">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Il detective degli esperimenti</title>
-<meta name="description" content="Due strumenti per una prima di liceo scientifico: progettare esperimenti passo per passo e imparare a convertire le unità di misura.">
-<link rel="stylesheet" href="stile.css">
+<title>Il detective degli esperimenti si è trasferito</title>
+<meta name="description" content="Il detective degli esperimenti ora è la prima stazione del Laboratorio digitale di scienze naturali.">
+<!-- Questa pagina resta qui apposta: il detective è diventato la prima
+     stazione del Laboratorio, ma chi aveva salvato il vecchio indirizzo
+     deve continuare a trovarlo. Dopo qualche secondo si va da sola. -->
+<meta http-equiv="refresh" content="6; url=../scienze-laboratorio-digitale/stazioni/detective/">
+<style>
+  body { font-family: Georgia, "Times New Roman", serif; background: #f4f2ea;
+         color: #1e1b16; margin: 0; padding: 3rem 1.5rem; line-height: 1.6; }
+  .foglio { max-width: 34rem; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin: 0 0 1rem; }
+  a { color: #1f5f8b; }
+  .bottoni { margin-top: 1.8rem; }
+  .bottone { display: inline-block; background: #1f5f8b; color: #fff;
+             text-decoration: none; padding: 0.7rem 1.1rem; border-radius: 6px;
+             margin: 0 0.6rem 0.6rem 0; }
+  .minuto { font-size: 0.9rem; color: #6b645a; margin-top: 1.6rem; }
+</style>
 </head>
 <body>
-
-<!-- Aggiunto per il sito Liceo digitale: collegamento per tornare
-     alla pagina iniziale del sito. -->
-<p class="ritorno"><a href="../index.html" aria-label="Torna a Liceo digitale"><span class="freccia" aria-hidden="true">&larr;</span></a></p>
-
-<header class="intestazione">
-  <div class="intestazione-titolo">
-    <span class="lente" aria-hidden="true">🔍</span>
-    <div>
-      <h1>Il detective degli esperimenti</h1>
-      <p class="sottotitolo">Progettare esperimenti · Misurare e convertire</p>
-    </div>
+<div class="foglio">
+  <h1>Il detective degli esperimenti si è trasferito</h1>
+  <p>Non è sparito: è diventato la <strong>prima stazione</strong> del
+     Laboratorio digitale di scienze naturali, insieme ad altre ventisei
+     simulazioni di chimica, biologia e scienze della Terra.</p>
+  <p>Fra qualche secondo ci arrivi da solo. Se hai fretta:</p>
+  <div class="bottoni">
+    <a class="bottone" href="../scienze-laboratorio-digitale/stazioni/detective/">Vai al detective</a>
+    <a class="bottone" href="../scienze-laboratorio-digitale/">Vedi tutto il laboratorio</a>
   </div>
-  <button id="bottone-tema" class="bottone-icona" type="button" aria-label="Cambia tema chiaro o scuro">
-    <span id="icona-tema">🌙</span>
-  </button>
-</header>
-
-<nav class="navigazione" aria-label="Scegli lo strumento">
-  <button type="button" data-sezione="detective" aria-selected="true">🔍 I casi</button>
-  <button type="button" data-sezione="si" aria-selected="false">🧭 Il Sistema Internazionale</button>
-  <button type="button" data-sezione="unita" aria-selected="false">📐 Convertire</button>
-</nav>
-
-<main>
-  <section id="sezione-detective">
-    <div id="applicazione">
-      <p class="caricamento">Carico i casi…</p>
-    </div>
-  </section>
-
-  <section id="sezione-si" hidden>
-    <div id="si-contenuto">
-      <p class="caricamento">Carico il Sistema Internazionale…</p>
-    </div>
-  </section>
-
-  <section id="sezione-unita" hidden>
-    <div id="unita-contenuto">
-      <p class="caricamento">Carico le unità di misura…</p>
-    </div>
-  </section>
-</main>
-
-<footer class="pie">
-  <p>I contenuti di questa pagina stanno in tre file di testo:
-  <code>casi.txt</code> per i casi, <code>unita.txt</code> per le conversioni
-  e <code>si.txt</code> per il Sistema Internazionale.
-  Aprili con un editor di testo per modificarli o aggiungerne di nuovi.</p>
-</footer>
-
-<script src="comune.js"></script>
-<script src="detective.js"></script>
-<script src="unita.js"></script>
-<script src="si.js"></script>
+  <p class="minuto"><a href="../index.html">Torna alla pagina iniziale di Liceo digitale</a></p>
+</div>
 </body>
 </html>

@@ -1,7 +1,7 @@
 /* ============================================================
-   Il detective degli esperimenti — foglio di stile
+   Laboratorio digitale di scienze naturali — foglio di stile
    Tutti i colori sono definiti una volta sola qui sotto:
-   per cambiare l'aspetto del sito basta modificare questi valori.
+   per cambiare l'aspetto di tutte le stazioni basta modificare questi valori.
    ============================================================ */
 
 :root {
@@ -515,48 +515,6 @@ h2 { font-size: 1.3rem; margin: 0 0 10px; letter-spacing: -.01em; }
   .carta-caso:hover { transform: none; }
 }
 
-/* ============================================================
-   Barra per passare da uno strumento all'altro
-   ============================================================ */
-
-.navigazione {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-  padding: 10px 12px 0;
-  background: var(--sfondo-trama);
-  border-bottom: 1px solid var(--bordo);
-}
-
-.navigazione button {
-  appearance: none;
-  border: 1px solid transparent;
-  border-bottom: none;
-  border-radius: 10px 10px 0 0;
-  background: transparent;
-  color: var(--testo-tenue);
-  font: inherit;
-  font-size: .95rem;
-  padding: 10px 18px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-@media (max-width: 620px) {
-  .navigazione button { padding: 9px 11px; font-size: .86rem; }
-}
-
-.navigazione button:hover { color: var(--testo); }
-
-.navigazione button.attivo {
-  background: var(--sfondo);
-  border-color: var(--bordo);
-  color: var(--testo);
-  font-weight: 700;
-  margin-bottom: -1px;
-  padding-bottom: 11px;
-}
 
 /* schede interne (La scala / Allenamento) */
 
@@ -1402,9 +1360,11 @@ h2 { font-size: 1.3rem; margin: 0 0 10px; letter-spacing: -.01em; }
   margin-top: 2px;
 }
 
-/* ---------- ritorno al sito Liceo digitale ----------
-   Aggiunto quando la pagina è entrata nel sito Liceo digitale:
-   disegna il collegamento "Torna alla pagina iniziale" in cima. */
+/* ============================================================
+   La pagina iniziale del laboratorio
+   ============================================================ */
+
+/* il collegamento per tornare indietro, in cima a ogni stazione */
 
 .ritorno {
   margin: 0;
@@ -1425,7 +1385,7 @@ h2 { font-size: 1.3rem; margin: 0 0 10px; letter-spacing: -.01em; }
 }
 
 /* La freccia tonda e' alta 44 pixel: la misura minima perche' un
-   dito la centri sul telefono. Stessa forma in tutto il sito. */
+   dito la centri sul telefono senza sbagliare. */
 .ritorno .freccia {
   display: inline-flex;
   align-items: center;
@@ -1439,4 +1399,532 @@ h2 { font-size: 1.3rem; margin: 0 0 10px; letter-spacing: -.01em; }
 }
 
 .ritorno a:hover { text-decoration: underline; }
-.ritorno a:hover .freccia { background: var(--accento); color: #fff; }
+.ritorno a:hover .freccia { background: var(--accento); color: var(--testo-su-accento); }
+
+/* il filtro per anno di corso */
+
+.filtro-anni {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 26px;
+}
+
+.filtro-etichetta {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .85rem;
+  color: var(--testo-tenue);
+}
+
+/* i gruppi per disciplina */
+
+.titolo-disciplina {
+  font-size: 1.15rem;
+  margin: 26px 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--bordo);
+}
+
+.griglia-stazioni {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 620px) {
+  .griglia-stazioni { grid-template-columns: 1fr 1fr; }
+}
+
+/* la scheda di una stazione */
+
+.carta-stazione {
+  display: block;
+  background: var(--superficie);
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  padding: 16px;
+  color: inherit;
+  text-decoration: none;
+  box-shadow: var(--ombra);
+  transition: border-color .15s, transform .15s;
+}
+
+a.carta-stazione:hover,
+a.carta-stazione:focus-visible {
+  border-color: var(--accento);
+  transform: translateY(-2px);
+}
+
+/* le stazioni non ancora costruite: si vedono ma sono spente */
+.carta-stazione.in-arrivo {
+  background: transparent;
+  border-style: dashed;
+  box-shadow: none;
+  opacity: .62;
+}
+
+.carta-stazione-testata {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+}
+
+.carta-stazione-icona { font-size: 1.7rem; line-height: 1.2; flex: none; }
+.carta-stazione-titoli { min-width: 0; }
+.carta-stazione-titolo { font-size: 1.05rem; font-weight: 700; line-height: 1.25; }
+
+.carta-stazione-anni {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .74rem;
+  color: var(--testo-tenue);
+  margin-top: 2px;
+}
+
+.targa-arrivo {
+  margin-left: auto;
+  flex: none;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .64rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--testo-tenue);
+  border: 1px solid var(--bordo-forte);
+  border-radius: 999px;
+  padding: 3px 9px;
+  white-space: nowrap;
+}
+
+.carta-stazione-testo {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .86rem;
+  color: var(--testo-tenue);
+  margin: 10px 0 0;
+}
+
+.conto-stazioni {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .82rem;
+  color: var(--testo-tenue);
+  text-align: center;
+  margin-top: 30px;
+}
+
+/* ============================================================
+   Le simulazioni: pezzi comuni a tutte le stazioni
+   ============================================================ */
+
+.scatola-particelle,
+.scatola-grafico {
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  overflow: hidden;
+  background: var(--superficie-alt);
+  box-shadow: var(--ombra);
+  margin-bottom: 16px;
+  line-height: 0;
+}
+
+.tela { display: block; width: 100%; }
+
+/* le letture degli strumenti */
+
+.letture {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 560px) {
+  .letture { grid-template-columns: repeat(3, 1fr); }
+}
+
+.lettura {
+  background: var(--superficie);
+  border: 1px solid var(--bordo);
+  border-radius: 12px;
+  padding: 11px 12px;
+  text-align: center;
+}
+
+.lettura-valore {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accento);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.lettura-nome {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .72rem;
+  color: var(--testo-tenue);
+  margin-top: 3px;
+}
+
+/* il riquadro che racconta che cosa sta succedendo */
+
+.riquadro-fase {
+  background: var(--superficie-alt);
+  border-left: 4px solid var(--bordo-forte);
+  border-radius: 0 10px 10px 0;
+  padding: 13px 15px;
+  margin-bottom: 18px;
+  transition: border-color .25s, background .25s;
+}
+
+/* durante un passaggio di stato il riquadro si accende:
+   e' il momento che deve saltare all'occhio */
+.riquadro-fase.in-passaggio {
+  border-left-color: var(--accento);
+  background: var(--accento-chiaro);
+}
+
+.spiegazione-fase {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .92rem;
+}
+
+/* i comandi */
+
+.comandi {
+  background: var(--superficie);
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  padding: 16px 18px;
+  box-shadow: var(--ombra);
+  margin-bottom: 20px;
+}
+
+.comandi .bottoni { margin-top: 0; margin-bottom: 16px; }
+
+.cursore { margin-bottom: 14px; }
+.cursore:last-child { margin-bottom: 0; }
+
+.cursore-testa {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .85rem;
+  margin-bottom: 5px;
+}
+
+.cursore-nome { color: var(--testo-tenue); }
+.cursore-valore { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.cursore input[type="range"] {
+  width: 100%;
+  height: 34px;
+  accent-color: var(--accento);
+  cursor: pointer;
+}
+
+/* i limiti del modello, richiudibili */
+
+.limiti {
+  border: 1px dashed var(--bordo-forte);
+  border-radius: var(--raggio);
+  margin-top: 22px;
+}
+
+.limiti summary {
+  cursor: pointer;
+  padding: 13px 16px;
+  font-weight: 700;
+  font-size: .9rem;
+  list-style: none;
+  color: var(--testo-tenue);
+}
+
+.limiti summary::-webkit-details-marker { display: none; }
+.limiti summary::before { content: "⚠️ "; }
+.limiti[open] summary { border-bottom: 1px dashed var(--bordo-forte); }
+
+.limiti-corpo {
+  padding: 4px 16px 14px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .86rem;
+  color: var(--testo-tenue);
+}
+
+.limiti-corpo p { margin: 10px 0 0; }
+
+/* i pulsanti rapidi dentro i comandi di una simulazione */
+.preset {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin: -6px 0 12px;
+}
+
+/* ============================================================
+   Trovare l'epicentro
+   ============================================================ */
+
+.sismogrammi { margin-bottom: 20px; }
+
+.riga-sismica {
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  background: var(--superficie);
+  box-shadow: var(--ombra);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.scatola-sismogramma { line-height: 0; background: var(--superficie-alt); }
+
+.sotto-sismogramma {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--bordo);
+}
+
+.dato-sismico { display: flex; align-items: baseline; gap: 8px; }
+
+.dato-nome {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .8rem;
+  color: var(--testo-tenue);
+}
+
+.dato-valore {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--accento);
+  font-variant-numeric: tabular-nums;
+}
+
+.campo-distanza { display: flex; align-items: center; gap: 8px; }
+.campo-distanza .campo-valore { flex: 0 0 96px; min-width: 0; font-size: 1.05rem; }
+
+/* ============================================================
+   Dal DNA alla proteina
+   ============================================================ */
+
+.zona-sequenze { margin-bottom: 20px; }
+
+.etichetta-filamento {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  margin: 18px 0 6px;
+}
+
+.etichetta-nome {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accento);
+}
+
+.etichetta-nota {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .76rem;
+  color: var(--testo-tenue);
+}
+
+.filamento {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 32px;
+  border: 1px solid var(--bordo);
+  border-radius: 5px;
+  background: var(--superficie);
+  color: var(--testo);
+  font: inherit;
+  font-size: .95rem;
+  font-weight: 700;
+  font-family: Consolas, Menlo, monospace;
+}
+
+button.base { cursor: pointer; }
+button.base:hover { border-color: var(--accento); }
+button.base.scelta { box-shadow: 0 0 0 2px var(--accento); }
+
+.base-A { color: #1d6b45; }
+.base-T { color: #9b2f24; }
+.base-G { color: #1f5f8b; }
+.base-C { color: #8f6fd0; }
+.base-spenta { background: transparent; color: var(--testo-tenue); opacity: .6; }
+.base-rna { background: var(--superficie-alt); }
+.tripletta-alterna { background: var(--accento-chiaro); }
+
+.catena { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.amminoacido {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid var(--bordo-forte);
+  border-radius: 8px;
+  padding: 5px 9px;
+  background: var(--superficie);
+  min-width: 56px;
+}
+
+.amminoacido.inizio { border-color: var(--giusto); }
+.amminoacido-sigla { font-weight: 700; font-size: .92rem; }
+
+.amminoacido-nome {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .6rem;
+  color: var(--testo-tenue);
+  margin-top: 1px;
+}
+
+.griglia-codice {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 14px 18px;
+}
+
+@media (min-width: 560px) {
+  .griglia-codice { grid-template-columns: repeat(8, 1fr); }
+}
+
+.voce-codice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid var(--bordo);
+  border-radius: 6px;
+  padding: 4px 2px;
+  font-size: .72rem;
+}
+
+.voce-codice.fine { border-color: var(--sbagliato); background: var(--sbagliato-sfondo); }
+.voce-tripletta { font-family: Consolas, Menlo, monospace; font-weight: 700; }
+.voce-sigla { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: .64rem; color: var(--testo-tenue); }
+
+/* ============================================================
+   Gli incroci di Mendel
+   ============================================================ */
+
+.scelta-genitore { margin-bottom: 14px; }
+.scelta-genitore:last-child { margin-bottom: 0; }
+.scelta-genitore .dato-nome { display: block; margin-bottom: 6px; }
+
+.gruppo-genotipi { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.gruppo-genotipi .pillola {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 7px 14px;
+}
+
+.genotipo { font-family: Consolas, Menlo, monospace; font-weight: 700; font-size: 1rem; }
+
+.fenotipo-breve {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .64rem;
+  color: var(--testo-tenue);
+}
+
+.pillola.attiva .fenotipo-breve { color: var(--testo-su-accento); opacity: .85; }
+
+.punnett { border-collapse: collapse; margin: 0 auto; }
+
+.punnett th.gamete {
+  background: var(--accento-chiaro);
+  color: var(--accento);
+  font-family: Consolas, Menlo, monospace;
+  font-weight: 700;
+  font-size: .95rem;
+  padding: 7px 10px;
+  border: 1px solid var(--bordo);
+}
+
+.punnett th.angolo { border: none; background: transparent; }
+
+.cella-punnett {
+  border: 1px solid var(--bordo);
+  background: var(--superficie);
+  padding: 8px 10px;
+  text-align: center;
+  min-width: 74px;
+}
+
+.cella-punnett .genotipo { display: block; }
+.cella-punnett .fenotipo-breve { display: block; margin-top: 2px; }
+
+/* ============================================================
+   Gli esperimenti guidati
+   ============================================================ */
+
+.griglia-esperimenti {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr;
+  margin-bottom: 18px;
+}
+
+@media (min-width: 560px) {
+  .griglia-esperimenti { grid-template-columns: 1fr 1fr; }
+}
+
+.carta-esperimento {
+  text-align: left;
+  border: 1px solid var(--bordo-forte);
+  border-radius: var(--raggio);
+  background: var(--superficie);
+  padding: 13px 15px;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color .15s, transform .15s;
+}
+
+.carta-esperimento:hover { border-color: var(--accento); transform: translateY(-2px); }
+
+.carta-esperimento.scelta {
+  border-color: var(--accento);
+  background: var(--accento-chiaro);
+  box-shadow: 0 0 0 1px var(--accento);
+}
+
+.esperimento-titolo { font-weight: 700; font-size: 1rem; }
+
+.esperimento-sottotitolo {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .8rem;
+  color: var(--testo-tenue);
+  margin-top: 3px;
+}
+
+/* la conclusione che compare a esperimento finito */
+
+.conclusione {
+  background: var(--giusto-sfondo);
+  border-left: 4px solid var(--giusto);
+  border-radius: 0 10px 10px 0;
+  padding: 14px 16px;
+  margin: 16px 0 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: .93rem;
+}

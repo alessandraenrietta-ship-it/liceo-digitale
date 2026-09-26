@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it" data-tema="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laboratorio digitale di scienze naturali</title>
+<meta name="description" content="Simulazioni e strumenti di scienze naturali per il liceo scientifico: metodo scientifico, chimica, biologia e scienze della Terra.">
+<link rel="stylesheet" href="stile.css?v=21">
+</head>
+<body>
+
+<!-- La freccia in alto a sinistra riporta
+     alla pagina iniziale del sito. -->
+<p class="ritorno"><a href="../index.html" aria-label="Torna a Liceo digitale"><span class="freccia" aria-hidden="true">&larr;</span></a></p>
+
+<header class="intestazione">
+  <div class="intestazione-titolo">
+    <span class="lente" aria-hidden="true">🔬</span>
+    <div>
+      <h1>Laboratorio digitale di scienze naturali</h1>
+      <p class="sottotitolo">Liceo scientifico delle scienze applicate</p>
+    </div>
+  </div>
+  <button id="bottone-tema" class="bottone-icona" type="button" aria-label="Cambia tema chiaro o scuro">
+    <span id="icona-tema">🌙</span>
+  </button>
+</header>
+
+<main>
+  <p class="guida">
+    Ogni stazione è un piccolo esperimento da fare sullo schermo: si muovono
+    le manopole e si guarda che cosa succede. Non serve installare nulla né
+    registrarsi, e funziona anche dal telefono.
+  </p>
+
+  <div id="elenco-stazioni">
+    <p class="caricamento">Carico le stazioni…</p>
+  </div>
+</main>
+
+<footer class="pie">
+  <p>L'elenco delle stazioni sta nel file <code>stazioni.txt</code>, e i contenuti di
+  ciascuna in file di testo dentro la sua cartella. Si aprono con un editor di
+  testo e si modificano senza toccare il codice.</p>
+</footer>
+
+<script src="comune.js?v=21"></script>
+<script src="home.js?v=21"></script>
+</body>
+</html>
