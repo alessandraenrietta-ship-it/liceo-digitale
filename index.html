@@ -651,6 +651,12 @@
     }
     .scheda-accesso:has(> [id^="area-"]:not([hidden])) > h2 { color: var(--giallo); }
 
+    /* Quando uno dei due riquadri e' nascosto (oggi quello degli
+       studenti), quello che resta prende tutta la riga invece di
+       occuparne meta' lasciando un buco accanto. */
+    .accessi:has(> .scheda-accesso[hidden]) { grid-template-columns: minmax(0, 1fr); }
+    .scheda-accesso[hidden] { display: none; }
+
     /* ---- Le caselle dentro le sezioni aperte ---- */
 
     /* Il colore delle caselle: un verde piu' scuro della fascia, per
@@ -858,7 +864,12 @@
       <h2 id="titolo-accessi" class="solo-lettori">Da dove vuoi entrare?</h2>
 
       <div class="accessi">
-        <section class="scheda-accesso scheda-studenti" aria-labelledby="titolo-studenti">
+        <!-- Il riquadro Studenti per ora e' nascosto: il sito lo usa solo
+             la docente, proiettato sulla LIM. Per farlo ricomparire basta
+             cancellare la parola hidden nella riga qui sotto.
+             Nascosto non vuol dire chiuso: le cartelle degli strumenti
+             restano raggiungibili da chiunque ne conosca l'indirizzo. -->
+        <section class="scheda-accesso scheda-studenti" aria-labelledby="titolo-studenti" hidden>
           <h2 id="titolo-studenti">Studenti</h2>
 
           <div id="accesso-studenti" class="accesso">
