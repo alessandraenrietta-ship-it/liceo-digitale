@@ -280,6 +280,147 @@
       color: var(--teal);
     }
 
+    /* ---- La scheda a schermo intero di una disciplina ----
+       Si apre cliccando il nome di una disciplina e copre tutta la
+       pagina. I caratteri sono piu' grandi del resto del sito, perche'
+       la pagina si proietta sulla LIM e deve leggersi da fondo aula.
+       I colori sono solo quelli di stile.css: cosi' la scheda segue da
+       sola il tema chiaro e quello scuro. */
+    .scheda-grande {
+      width: 100%;
+      max-width: none;
+      height: 100%;
+      max-height: none;
+      margin: 0;
+      padding: 2.5rem 3rem 3rem;
+      border: 0;
+      overflow-y: auto;
+      font-size: 1.5rem;
+      line-height: 1.45;
+      color: var(--testo-su-scuro);
+      background: var(--sfondo);
+      overflow-wrap: break-word;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+    }
+
+    .scheda-grande::backdrop { background: var(--blu-notte); }
+
+    /* Mentre la scheda e' aperta, la pagina sotto resta ferma. */
+    html:has(.scheda-grande[open]) { overflow: hidden; }
+
+    /* In alto: il nome della disciplina a sinistra, Chiudi a destra */
+    .scheda-grande-testata {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .scheda-grande-testata h2 {
+      margin: 0;
+      font-family: var(--titolo-grande);
+      font-size: clamp(2.4rem, 5vw, 4.5rem);
+      line-height: 1.05;
+      text-transform: uppercase;
+      color: var(--giallo);
+    }
+
+    /* Il pulsante Chiudi: una pillola gialla grande, come "Guarda la
+       presentazione", che si trova al primo colpo d'occhio. */
+    .scheda-grande-chiudi {
+      flex-shrink: 0;
+      padding: 0.45em 1.6em;
+      font-size: 1.6rem;
+      color: var(--blu-notte);
+      background: var(--giallo);
+      border-radius: 999px;
+    }
+
+    .scheda-grande-chiudi:hover {
+      color: var(--blu-notte);
+      background: var(--testo-su-scuro);
+    }
+
+    /* Uno strumento per riga, uno sotto l'altro: cosi' anche quando
+       gli strumenti aumentano si vedono tutti insieme. In ogni riga il
+       titolo sta a sinistra e la descrizione a destra, di solito su
+       due righe al massimo. */
+    .scheda-grande-elenco {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .scheda-grande-elenco li {
+      display: grid;
+      grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+      gap: 0.3rem 2rem;
+      align-items: baseline;
+      padding: 0.8rem 1.4rem;
+      color: var(--testo);
+      background: var(--fondo-lettura);
+      border: 2px solid var(--verde);
+      border-left-width: 10px;
+      border-radius: 16px;
+    }
+
+    .scheda-grande-elenco .artefatto-titolo {
+      font-size: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .scheda-grande-elenco a.artefatto-titolo { color: var(--verde); }
+
+    .scheda-grande-elenco .artefatto-descrizione {
+      margin: 0;
+      font-size: 1.25rem;
+      line-height: 1.4;
+    }
+
+    /* Le righe si prendono e si spostano su e giu', come le caselle
+       delle discipline: la manina aperta si vede su tutta la riga, e
+       quella che si ha in mano segue il puntatore, tratteggiata. */
+    .scheda-grande-elenco li { cursor: grab; }
+
+    .scheda-grande-elenco.si-sposta,
+    .scheda-grande-elenco.si-sposta li,
+    .scheda-grande-elenco.si-sposta a {
+      cursor: grabbing;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .scheda-grande-elenco.si-sposta li.in-mano {
+      position: relative;
+      z-index: 5;
+      opacity: 0.92;
+      border-style: dashed;
+      outline: 3px dashed var(--giallo);
+      outline-offset: 3px;
+      pointer-events: none;
+    }
+
+    /* Su uno schermo stretto la descrizione va sotto al titolo */
+    @media (max-width: 52rem) {
+      .scheda-grande-elenco li { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    /* Gli strumenti non ancora pronti: tratteggiati, come le discipline
+       in costruzione, e il titolo non si clicca. */
+    .scheda-grande-elenco li:not(.pronto) {
+      border-style: dashed;
+      border-color: var(--teal);
+      border-left-width: 2px;
+    }
+
+    .scheda-grande-elenco li:not(.pronto) .artefatto-titolo { color: var(--teal); }
+
     /* Il riquadro della presentazione: testo e pulsante al centro,
        come il titolo. */
     .presentazione-testo { text-align: center; }
@@ -922,7 +1063,7 @@
     <div class="fascia-interno">Liceo digitale · I.I.S. Giulio Natta di Rivoli</div>
   </footer>
 
-  <script src="js/home.js?v=23"></script>
+  <script src="js/home.js?v=24"></script>
   <script>Tema.interruttore("interruttore-tema");</script>
 
   <!-- Qui prima c'era lo script che caricava la presentazione dentro

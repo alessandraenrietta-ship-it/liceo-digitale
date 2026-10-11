@@ -269,8 +269,6 @@
     var testata = document.createElement("button");
     testata.className = "disciplina-testata";
     testata.type = "button";
-    testata.setAttribute("aria-expanded", "false");
-    testata.setAttribute("aria-controls", identificativo);
 
     var nomeAttivo = document.createElement("span");
     nomeAttivo.className = "disciplina-nome";
@@ -302,22 +300,124 @@
       ? "in preparazione"
       : (pronti === 1 ? "1 strumento pronto" : pronti + " strumenti pronti")));
 
-    var elenco = document.createElement("ul");
-    elenco.className = "elenco-artefatti";
-    elenco.id = identificativo;
-    elenco.hidden = true;
-    artefatti.forEach(function (artefatto) {
-      elenco.appendChild(vocePerArtefatto(artefatto, inRilievo));
-    });
+    /* Gli Strumenti generali restano come prima: l'elenco sta dentro
+       il riquadro, che si apre e si chiude da solo. */
+    if (inRilievo) {
+      testata.setAttribute("aria-expanded", "false");
+      testata.setAttribute("aria-controls", identificativo);
 
-    testata.addEventListener("click", function () {
-      var aperto = !elenco.hidden;
-      elenco.hidden = aperto;
-      testata.setAttribute("aria-expanded", String(!aperto));
-    });
+      var elenco = document.createElement("ul");
+      elenco.className = "elenco-artefatti";
+      elenco.id = identificativo;
+      elenco.hidden = true;
+      artefatti.forEach(function (artefatto) {
+        elenco.appendChild(vocePerArtefatto(artefatto, inRilievo));
+      });
+
+      testata.addEventListener("click", function () {
+        var aperto = !elenco.hidden;
+        elenco.hidden = aperto;
+        testata.setAttribute("aria-expanded", String(!aperto));
+      });
+
+      scheda.appendChild(testata);
+      scheda.appendChild(elenco);
+      return scheda;
+    }
+
+    /* Le discipline invece si aprono in una scheda a schermo intero,
+       sopra la pagina: il sito si proietta sulla LIM, e da fondo aula
+       un riquadro piccolo non si legge. La scheda si costruisce ogni
+       volta che si apre e si butta via quando si chiude. */
+    testata.setAttribute("aria-haspopup", "dialog");
+
+    function apriSchedaGrande() {
+      var finestra = document.createElement("dialog");
+      finestra.className = "scheda-grande";
+      finestra.setAttribute("aria-labelledby", identificativo + "-titolo");
+
+      /* In alto il nome della disciplina e il pulsante Chiudi */
+      var intestazione = document.createElement("div");
+      intestazione.className = "scheda-grande-testata";
+
+      var titolo = document.createElement("h2");
+      titolo.id = identificativo + "-titolo";
+      titolo.textContent = nome;
+      intestazione.appendChild(titolo);
+
+      var chiudi = document.createElement("button");
+      chiudi.type = "button";
+      chiudi.className = "scheda-grande-chiudi";
+      chiudi.textContent = "Chiudi";
+      chiudi.addEventListener("click", chiudiScheda);
+      intestazione.appendChild(chiudi);
+
+      finestra.appendChild(intestazione);
+
+      /* Sotto, uno strumento per riga. Il titolo è lo stesso della
+         pagina (cliccabile se lo strumento è pronto, spento se no), ma
+         qui la descrizione si scrive per intero: sulla LIM non si passa
+         col mouse, e il suggerimento non lo vedrebbe nessuno. */
+      var strumenti = document.createElement("ul");
+      strumenti.className = "scheda-grande-elenco";
+      ordinaStrumenti(nome, artefatti).forEach(function (artefatto) {
+        var voce = vocePerArtefatto(artefatto, false);
+        voce.setAttribute("data-chiave", chiaveStrumento(artefatto));
+        var primo = voce.firstChild;
+        if (primo) {
+          primo.removeAttribute("title");
+          primo.removeAttribute("aria-label");
+        }
+        if (artefatto.descrizione && !daCompilare(artefatto.descrizione)) {
+          var descrizione = document.createElement("p");
+          descrizione.className = "artefatto-descrizione";
+          descrizione.textContent = artefatto.descrizione;
+          voce.appendChild(descrizione);
+        }
+        strumenti.appendChild(voce);
+      });
+      finestra.appendChild(strumenti);
+      rendiStrumentiSpostabili(nome, strumenti);
+
+      /* Qualunque sia il modo in cui si chiude (Chiudi, Esc, Indietro),
+         succede sempre questo, e una volta sola: si toglie il passo
+         aggiunto alla cronologia, se c'è ancora, si butta via la scheda
+         e la selezione della tastiera torna sul nome della disciplina. */
+      var chiusa = false;
+      function chiudiScheda() {
+        if (chiusa) { return; }
+        chiusa = true;
+        window.removeEventListener("popstate", chiudiScheda);
+        if (finestra.open) { finestra.close(); }
+        if (history.state && history.state.schedaGrande) { history.back(); }
+        finestra.remove();
+        testata.focus();
+      }
+
+      /* Esc: il browser chiuderebbe la scheda da solo, ma passando di
+         qui si fa anche il resto. Si aspetta un istante perche', mentre
+         gestisce l'Esc, il browser ignora il passo indietro nella
+         cronologia. "close" resta come riserva, per qualunque altro
+         modo in cui il browser la chiuda. */
+      finestra.addEventListener("cancel", function (evento) {
+        evento.preventDefault();
+        setTimeout(chiudiScheda, 0);
+      });
+      finestra.addEventListener("close", chiudiScheda);
+
+      /* Il tasto Indietro del browser deve chiudere la scheda, non
+         uscire dal sito: aprendola si aggiunge un passo alla
+         cronologia, e premendo Indietro si torna a quel passo. */
+      document.body.appendChild(finestra);
+      history.pushState({ schedaGrande: true }, "");
+      window.addEventListener("popstate", chiudiScheda);
+      /* showModal la mette sopra a tutto il resto della pagina. */
+      finestra.showModal();
+    }
+
+    testata.addEventListener("click", apriSchedaGrande);
 
     scheda.appendChild(testata);
-    scheda.appendChild(elenco);
     return scheda;
   }
 
@@ -562,6 +662,182 @@
           testata.focus();
         });
       }
+    });
+  }
+
+  /* ------------------------------------------------------------------
+     SPOSTARE GLI STRUMENTI DENTRO LA SCHEDA DI UNA DISCIPLINA
+
+     Funziona come per le caselle: col mouse si trascina una riga su o
+     giù; sul telefono si tiene premuto un istante e poi si trascina;
+     con la tastiera si tiene premuto Ctrl e si usano le frecce su e giù.
+     Anche questo ordine si salva da solo, e vale solo sul computer di
+     chi lo fa. Si ricorda separatamente per ogni disciplina.
+     ------------------------------------------------------------------ */
+
+  /* Ogni strumento si riconosce dalla sua cartella e dal suo titolo:
+     cosi' aggiungere uno strumento nuovo al registro non scombina
+     l'ordine degli altri. Quelli nuovi finiscono in fondo. */
+  function chiaveStrumento(artefatto) {
+    return artefatto.cartella + "|" + artefatto.titolo;
+  }
+
+  function ordinaStrumenti(nome, artefatti) {
+    var mio = null;
+    try {
+      mio = JSON.parse(localStorage.getItem("strumenti-" + nome));
+    } catch (errore) {
+      mio = null;
+    }
+    if (!Array.isArray(mio)) { return artefatti; }
+
+    return artefatti.slice().sort(function (a, b) {
+      var posA = mio.indexOf(chiaveStrumento(a));
+      var posB = mio.indexOf(chiaveStrumento(b));
+      if (posA === -1 && posB === -1) {
+        return artefatti.indexOf(a) - artefatti.indexOf(b);
+      }
+      if (posA === -1) { return 1; }
+      if (posB === -1) { return -1; }
+      return posA - posB;
+    });
+  }
+
+  function rendiStrumentiSpostabili(nome, elenco) {
+    var ATTESA_TOCCO = 300;   /* millesimi da tenere premuto, sul telefono */
+    var SOGLIA = 6;           /* pixel di movimento prima di cominciare */
+
+    function salva() {
+      var chiavi = Array.prototype.map.call(elenco.children, function (voce) {
+        return voce.getAttribute("data-chiave");
+      });
+      try {
+        localStorage.setItem("strumenti-" + nome, JSON.stringify(chiavi));
+      } catch (errore) {
+        /* pazienza: vale solo per questa visita */
+      }
+    }
+
+    Array.prototype.forEach.call(elenco.children, function (voce) {
+      var inizio = null;
+      var inMano = false;
+      var attesa = null;
+      var spostata = false;        /* l'ha davvero cambiata di posto */
+      var appenaSpostata = false;  /* per non aprire lo strumento subito dopo */
+      var presa = null;            /* dove l'ha presa dentro la riga */
+
+      /* Il titolo e' un collegamento, e il browser lo trascinerebbe per
+         conto suo come un indirizzo: qui deve muoversi la riga intera. */
+      var collegamento = voce.querySelector("a");
+      if (collegamento) { collegamento.setAttribute("draggable", "false"); }
+
+      function comincia() {
+        inMano = true;
+        attesa = null;
+        spostata = false;
+        var dov = voce.getBoundingClientRect();
+        presa = { x: inizio.x - dov.left, y: inizio.y - dov.top };
+        voce.classList.add("in-mano");
+        elenco.classList.add("si-sposta");
+        voce.style.touchAction = "none";
+        segui(inizio.x, inizio.y);
+      }
+
+      /* La riga viene disegnata sotto al puntatore, come le caselle */
+      function segui(x, y) {
+        voce.style.transform = "";
+        var ferma = voce.getBoundingClientRect();
+        voce.style.transform = "translate("
+          + Math.round(x - presa.x - ferma.left) + "px, "
+          + Math.round(y - presa.y - ferma.top) + "px)";
+      }
+
+      function finisci() {
+        document.removeEventListener("pointermove", muovi);
+        document.removeEventListener("pointerup", finisci);
+        document.removeEventListener("pointercancel", finisci);
+        if (attesa) { clearTimeout(attesa); attesa = null; }
+        if (inMano) {
+          voce.classList.remove("in-mano");
+          elenco.classList.remove("si-sposta");
+          voce.style.touchAction = "";
+          voce.style.transform = "";
+          salva();
+          /* Chi ha appena trascinato una riga non voleva aprire lo
+             strumento: il clic che arriva subito dopo si lascia cadere. */
+          appenaSpostata = spostata;
+          setTimeout(function () { appenaSpostata = false; }, 400);
+        }
+        inMano = false;
+        inizio = null;
+      }
+
+      voce.addEventListener("pointerdown", function (evento) {
+        if (evento.button && evento.button !== 0) { return; }
+        inizio = { x: evento.clientX, y: evento.clientY, dito: evento.pointerId };
+        document.addEventListener("pointermove", muovi);
+        document.addEventListener("pointerup", finisci);
+        document.addEventListener("pointercancel", finisci);
+        if (evento.pointerType === "touch") {
+          attesa = setTimeout(comincia, ATTESA_TOCCO);
+        }
+      });
+
+      function muovi(evento) {
+        if (!inizio || evento.pointerId !== inizio.dito) { return; }
+        var spostamento = Math.abs(evento.clientX - inizio.x)
+          + Math.abs(evento.clientY - inizio.y);
+
+        if (!inMano) {
+          if (evento.pointerType === "touch") {
+            /* Si è mosso prima del tempo: sta scorrendo, non spostando. */
+            if (spostamento > 10) { finisci(); }
+            return;
+          }
+          if (spostamento < SOGLIA) { return; }
+          comincia();
+        }
+
+        evento.preventDefault();
+        segui(evento.clientX, evento.clientY);
+
+        /* Si guarda quale riga sta sotto al puntatore e ci si mette
+           sopra o sotto, a seconda di che meta' se ne tocca. */
+        var sotto = document.elementFromPoint(evento.clientX, evento.clientY);
+        var vicina = sotto && sotto.closest ? sotto.closest("li") : null;
+        if (!vicina || vicina === voce || vicina.parentNode !== elenco) { return; }
+
+        var dimensioni = vicina.getBoundingClientRect();
+        var oltreLaMeta = (evento.clientY - dimensioni.top) > dimensioni.height / 2;
+        elenco.insertBefore(voce, oltreLaMeta ? vicina.nextSibling : vicina);
+        spostata = true;
+        segui(evento.clientX, evento.clientY);
+      }
+
+      voce.addEventListener("click", function (evento) {
+        if (!appenaSpostata) { return; }
+        appenaSpostata = false;
+        evento.preventDefault();
+        evento.stopPropagation();
+      }, true);
+
+      /* Con la tastiera: Ctrl e le frecce su e giu'. Le righe degli
+         strumenti non ancora pronti non hanno un collegamento, quindi
+         si rendono raggiungibili con il tasto Tab. */
+      if (!collegamento) { voce.tabIndex = 0; }
+      voce.addEventListener("keydown", function (evento) {
+        if (!evento.ctrlKey) { return; }
+        var passo = evento.key === "ArrowUp" ? -1
+          : (evento.key === "ArrowDown" ? 1 : 0);
+        if (!passo) { return; }
+        evento.preventDefault();
+        var vicina = passo < 0 ? voce.previousElementSibling : voce.nextElementSibling;
+        if (!vicina) { return; }
+        if (passo < 0) { elenco.insertBefore(voce, vicina); }
+        else { elenco.insertBefore(vicina, voce); }
+        salva();
+        (collegamento || voce).focus();
+      });
     });
   }
 
