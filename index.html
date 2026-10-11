@@ -95,6 +95,18 @@
       overflow: hidden;
     }
 
+    /* Le parole molto lunghe (per esempio "rappresentazione") in una
+       casella stretta uscivano dal bordo e venivano tagliate a metà.
+       Ora, se una parola non ci sta, va a capo spezzandosi, con il
+       trattino nel punto giusto: niente resta più fuori dalla casella,
+       nemmeno da telefono o con le scritte ingrandite. */
+    .disciplina,
+    .disciplina * {
+      overflow-wrap: break-word;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+    }
+
     /* Le discipline ancora in costruzione: righe basse, su una riga
        sola, con il nome in tono minore. Sono tante, e da piene
        occupavano piu' spazio di quelle che si possono davvero usare. */

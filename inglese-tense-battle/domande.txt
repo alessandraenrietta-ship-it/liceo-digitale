@@ -175,10 +175,10 @@ spiegazione: *this month* is not finished yet, so we use the present perfect. Co
 
 [DOMANDA]
 sfida: sì
-frase: How long ___ your placement? – Two months. It ended in June.
-A: did it last
-B: has it lasted
-C: has it been lasting
+frase: How long ___ your placement ___? – Two months. It ended in June.
+A: did / last
+B: has / lasted
+C: has / been lasting
 giusta: A
 tempo: Past simple
 famiglia: simple
